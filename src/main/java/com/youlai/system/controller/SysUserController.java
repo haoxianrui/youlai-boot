@@ -18,6 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,6 +63,7 @@ public class SysUserController {
 
     @ApiOperation(value = "新增用户")
     @PostMapping
+    @PreAuthorize("hasAuthority('sys:user:add')")
     public Result saveUser(
             @RequestBody @Valid UserForm userForm
     ) {
@@ -71,6 +73,7 @@ public class SysUserController {
 
     @ApiOperation(value = "修改用户")
     @PutMapping(value = "/{userId}")
+    @PreAuthorize("hasAuthority('sys:user:edit')")
     public Result updateUser(
             @ApiParam("用户ID") @PathVariable Long userId,
             @RequestBody @Validated UserForm userForm) {
@@ -80,6 +83,7 @@ public class SysUserController {
 
     @ApiOperation(value = "删除用户")
     @DeleteMapping("/{ids}")
+    @PreAuthorize("hasAuthority('sys:user:delete')")
     public Result deleteUsers(
             @ApiParam("用户ID，多个以英文逗号(,)分割") @PathVariable String ids
     ) {

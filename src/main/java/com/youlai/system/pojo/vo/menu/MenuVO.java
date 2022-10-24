@@ -35,6 +35,9 @@ public class MenuVO {
     @ApiModelProperty("菜单类型")
     private MenuTypeEnum type;
 
+    @ApiModelProperty("按钮权限标识")
+    private String perm;
+
     @JsonInclude(value = JsonInclude.Include.NON_NULL)
     private List<MenuVO> children;
 

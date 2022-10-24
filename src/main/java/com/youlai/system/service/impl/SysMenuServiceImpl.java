@@ -50,16 +50,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         Set<Long> cacheMenuIds = menus.stream().map(menu -> menu.getId()).collect(Collectors.toSet());
 
-        List<MenuVO> tableMenus = menus.stream().map(menu -> {
+        List<MenuVO> list = menus.stream().map(menu -> {
             Long parentId = menu.getParentId();
             // parentId不在当前菜单ID的列表，说明为顶级菜单ID，根据此ID作为递归的开始条件节点
             if (!cacheMenuIds.contains(parentId)) {
                 cacheMenuIds.add(parentId);
-                return recurTableMenus(parentId, menus);
+                return recurMenus(parentId, menus);
             }
             return new LinkedList<MenuVO>();
         }).collect(ArrayList::new, ArrayList::addAll, ArrayList::addAll);
-        return tableMenus;
+        return list;
     }
 
 
@@ -91,7 +91,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<Option> listMenuOptions() {
         List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>().orderByAsc(SysMenu::getSort));
-        List<Option> menus = recurMenus(SystemConstants.ROOT_NODE_ID, menuList);
+        List<Option> menus = recurMenuOptions(SystemConstants.ROOT_NODE_ID, menuList);
         return menus;
     }
 
@@ -182,28 +182,31 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public Set<String> listRolePerms(Set<String> roles) {
-        Set<String> perms= this.baseMapper.listRolePerms(roles);
+        Set<String> perms = this.baseMapper.listRolePerms(roles);
         return perms;
     }
 
     /**
-     * 递归生成菜单表格层级列表
+     * 递归生成菜单列表
      *
      * @param parentId 父级ID
      * @param menuList 菜单列表
      * @return
      */
-    private List<MenuVO> recurTableMenus(Long parentId, List<SysMenu> menuList) {
-        List<MenuVO> tableMenus = Optional.ofNullable(menuList).orElse(new ArrayList<>())
-                .stream()
+    private List<MenuVO> recurMenus(Long parentId, List<SysMenu> menuList) {
+        if (CollectionUtil.isEmpty(menuList)) {
+            return Collections.EMPTY_LIST;
+        }
+
+        List<MenuVO> menus = menuList.stream()
                 .filter(menu -> menu.getParentId().equals(parentId))
                 .map(entity -> {
                     MenuVO menuVO = menuConverter.entity2VO(entity);
-                    List<MenuVO> children = recurTableMenus(entity.getId(), menuList);
+                    List<MenuVO> children = recurMenus(entity.getId(), menuList);
                     menuVO.setChildren(children);
                     return menuVO;
                 }).collect(Collectors.toList());
-        return tableMenus;
+        return menus;
     }
 
     /**
@@ -213,10 +216,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @param menuList 菜单列表
      * @return
      */
-    private static List<Option> recurMenus(Long parentId, List<SysMenu> menuList) {
-        List<Option> menus = Optional.ofNullable(menuList).orElse(new ArrayList<>()).stream()
+    private static List<Option> recurMenuOptions(Long parentId, List<SysMenu> menuList) {
+        if (CollectionUtil.isEmpty(menuList)) {
+            return Collections.EMPTY_LIST;
+        }
+
+        List<Option> menus = menuList.stream()
                 .filter(menu -> menu.getParentId().equals(parentId))
-                .map(menu -> new Option(menu.getId(), menu.getName(), recurMenus(menu.getId(), menuList)))
+                .map(menu -> new Option(menu.getId(), menu.getName(), recurMenuOptions(menu.getId(), menuList)))
                 .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
         return menus;
     }
@@ -229,7 +236,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @return
      */
     private static List<ResourceVO> recurResources(Long parentId, List<SysMenu> menuList) {
-        List<ResourceVO> menus = Optional.ofNullable(menuList).orElse(new ArrayList<>()).stream()
+        if (CollectionUtil.isEmpty(menuList)) {
+            return Collections.EMPTY_LIST;
+        }
+
+        List<ResourceVO> menus = menuList.stream()
                 .filter(menu -> menu.getParentId().equals(parentId))
                 .map(menu -> {
                     ResourceVO resourceVO = new ResourceVO();
