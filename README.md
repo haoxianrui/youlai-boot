@@ -87,7 +87,7 @@
 
 参考 [阿里Java开发手册](https://developer.aliyun.com/topic/java2020?utm_content=g_1000113416)
 
-### Git 提交规范
+## Git 提交规范
 
 
 参考 ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular)) 社区规范，建议 IDEA 安装 Git Commit Template 插件
