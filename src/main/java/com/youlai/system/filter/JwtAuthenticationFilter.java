@@ -1,15 +1,19 @@
-package com.youlai.system.security.jwt;
+package com.youlai.system.filter;
 
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.result.ResultCode;
+import com.youlai.system.security.jwt.JwtTokenManager;
 import com.youlai.system.util.ResponseUtils;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * jwt auth token filter.
@@ -27,8 +31,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) {
-
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+        if(HttpMethod.OPTIONS.matches(request.getMethod()) ){
+            chain.doFilter(request, response);
+            return;
+        }
         String jwt = resolveToken(request);
         if (StrUtil.isNotBlank(jwt) && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
