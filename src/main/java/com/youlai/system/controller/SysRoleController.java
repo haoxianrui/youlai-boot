@@ -83,8 +83,8 @@ public class SysRoleController {
         return Result.judge(result);
     }
 
-    @ApiOperation(value = "获取角色的资源ID集合", notes = "资源包括菜单和权限ID")
-    @GetMapping("/{roleId}/resources")
+    @ApiOperation(value = "获取角色的资源ID集合")
+    @GetMapping("/{roleId}/resourceIds")
     public Result<RoleResourceForm> getRoleResources(
             @ApiParam("角色ID") @PathVariable Long roleId
     ) {
@@ -96,7 +96,7 @@ public class SysRoleController {
     @PutMapping("/{roleId}/resources")
     public Result updateRoleResource(
             @PathVariable Long roleId,
-            @RequestBody RoleResourceForm roleResourceForm
+            @RequestBody List<> roleResourceForm
     ) {
         boolean result = sysRoleService.updateRoleResource(roleId,roleResourceForm);
         return Result.judge(result);
