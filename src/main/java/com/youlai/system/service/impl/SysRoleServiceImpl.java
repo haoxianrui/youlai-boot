@@ -164,30 +164,26 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @return
      */
     @Override
-    public RoleResourceForm getRoleResources(Long roleId) {
-        RoleResourceForm roleResources = new RoleResourceForm();
-
+    public List<Long> getRoleMenuIds(Long roleId) {
         // 获取角色拥有的菜单ID集合
         List<Long> menuIds = sysRoleMenuService.listMenuIdsByRoleId(roleId);
-        roleResources.setMenuIds(menuIds);
-        return roleResources;
+        return menuIds;
     }
 
     /**
      * 修改角色的资源权限
      *
      * @param roleId
-     * @param roleResourceForm
+     * @param menuIds
      * @return
      */
     @Override
     @Transactional
     @CacheEvict(cacheNames = "system", key = "'routes'")
-    public boolean updateRoleResource(Long roleId, RoleResourceForm roleResourceForm) {
+    public boolean updateRoleMenus(Long roleId, List<Long> menuIds) {
         // 删除角色菜单
         sysRoleMenuService.remove(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, roleId));
         // 新增角色菜单
-        List<Long> menuIds = roleResourceForm.getMenuIds();
         if (CollectionUtil.isNotEmpty(menuIds)) {
             List<SysRoleMenu> roleMenus = menuIds.stream()
                     .map(menuId -> new SysRoleMenu(roleId, menuId))
