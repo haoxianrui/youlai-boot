@@ -3,6 +3,7 @@ package com.youlai.system.controller;
 import com.youlai.system.common.model.Option;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.pojo.entity.SysMenu;
+import com.youlai.system.pojo.query.MenuQuery;
 import com.youlai.system.pojo.vo.menu.MenuVO;
 import com.youlai.system.pojo.vo.menu.ResourceVO;
 import com.youlai.system.pojo.vo.menu.RouteVO;
@@ -42,10 +43,8 @@ public class SysMenuController {
 
     @ApiOperation(value = "菜单列表")
     @GetMapping
-    public Result listMenus(
-            @ApiParam("菜单名称") String name
-    ) {
-        List<MenuVO> menuList = menuService.listMenus(name);
+    public Result listMenus(MenuQuery queryParams) {
+        List<MenuVO> menuList = menuService.listMenus(queryParams);
         return Result.success(menuList);
     }
 

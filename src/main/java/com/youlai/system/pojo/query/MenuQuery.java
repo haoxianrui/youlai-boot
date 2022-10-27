@@ -5,19 +5,19 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * 部门查询对象
+ * 菜单查询对象
  *
  * @author haoxr
- * @date 2022/6/11
+ * @date 2022/10/28
  */
 @ApiModel("部门分页查询对象")
 @Data
-public class DeptQuery {
+public class MenuQuery {
 
-    @ApiModelProperty("关键字(部门名称)")
+    @ApiModelProperty("关键字(菜单名称)")
     private String keywords;
 
-    @ApiModelProperty("状态(1->正常；0->禁用)")
+    @ApiModelProperty("状态(1->显示；0->隐藏)")
     private Integer status;
 
 }

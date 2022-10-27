@@ -14,6 +14,7 @@ import com.youlai.system.converter.MenuConverter;
 import com.youlai.system.mapper.SysMenuMapper;
 import com.youlai.system.pojo.entity.SysMenu;
 import com.youlai.system.pojo.po.RoutePO;
+import com.youlai.system.pojo.query.MenuQuery;
 import com.youlai.system.pojo.vo.menu.MenuVO;
 import com.youlai.system.pojo.vo.menu.ResourceVO;
 import com.youlai.system.pojo.vo.menu.RouteVO;
@@ -42,9 +43,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * 菜单表格树形列表
      */
     @Override
-    public List<MenuVO> listMenus(String name) {
+    public List<MenuVO> listMenus(MenuQuery queryParams) {
         List<SysMenu> menus = this.list(new LambdaQueryWrapper<SysMenu>()
-                .like(StrUtil.isNotBlank(name), SysMenu::getName, name)
+                .like(StrUtil.isNotBlank(queryParams.getKeywords()), SysMenu::getName, queryParams.getKeywords())
                 .orderByAsc(SysMenu::getSort)
         );
 
