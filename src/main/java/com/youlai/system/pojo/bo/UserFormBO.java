@@ -1,4 +1,4 @@
-package com.youlai.system.pojo.po;
+package com.youlai.system.pojo.bo;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @date 2022/6/10
  */
 @Data
-public class UserFormPO {
+public class UserFormBO {
 
     /**
      * 用户ID

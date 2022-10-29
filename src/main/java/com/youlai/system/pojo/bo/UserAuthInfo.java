@@ -1,4 +1,4 @@
-package com.youlai.system.pojo.po;
+package com.youlai.system.pojo.bo;
 
 import lombok.Data;
 

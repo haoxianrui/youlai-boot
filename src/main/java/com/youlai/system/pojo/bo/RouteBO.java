@@ -1,9 +1,7 @@
-package com.youlai.system.pojo.po;
+package com.youlai.system.pojo.bo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.youlai.system.common.base.BaseEntity;
 import com.youlai.system.common.enums.MenuTypeEnum;
 import lombok.Data;
 
@@ -13,7 +11,7 @@ import java.util.List;
  * 路由
  */
 @Data
-public class RoutePO {
+public class RouteBO {
     /**
      * 
      */

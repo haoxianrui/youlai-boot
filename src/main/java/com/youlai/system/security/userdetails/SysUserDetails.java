@@ -2,8 +2,7 @@ package com.youlai.system.security.userdetails;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
-import com.youlai.system.pojo.po.UserAuthInfo;
+import com.youlai.system.pojo.bo.UserAuthInfo;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

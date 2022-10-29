@@ -1,10 +1,10 @@
 package com.youlai.system.converter;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.youlai.system.pojo.bo.UserBO;
 import com.youlai.system.pojo.entity.SysUser;
 import com.youlai.system.pojo.form.UserForm;
-import com.youlai.system.pojo.po.UserFormPO;
-import com.youlai.system.pojo.po.UserPO;
+import com.youlai.system.pojo.bo.UserFormBO;
 import com.youlai.system.pojo.vo.user.UserLoginVO;
 import com.youlai.system.pojo.vo.user.UserVO;
 import org.mapstruct.InheritInverseConfiguration;
@@ -24,11 +24,11 @@ public interface UserConverter {
     @Mappings({
             @Mapping(target = "genderLabel", expression = "java(com.youlai.system.common.base.IBaseEnum.getLabelByValue(po.getGender(), com.youlai.system.common.enums.GenderEnum.class))")
     })
-    UserVO po2Vo(UserPO po);
+    UserVO po2Vo(UserBO po);
 
-    Page<UserVO> po2Vo(Page<UserPO> po);
+    Page<UserVO> po2Vo(Page<UserBO> po);
 
-    UserForm po2Form(UserFormPO po);
+    UserForm po2Form(UserFormBO po);
 
     UserForm entity2Form(SysUser entity);
 

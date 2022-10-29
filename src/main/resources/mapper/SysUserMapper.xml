@@ -5,7 +5,7 @@
 <mapper namespace="com.youlai.system.mapper.SysUserMapper">
 
     <!-- 用户分页列表 -->
-    <select id="listUserPages" resultType="com.youlai.system.pojo.po.UserPO">
+    <select id="listUserPages" resultType="com.youlai.system.pojo.bo.UserBO">
         SELECT
             u.id,
             u.username,
@@ -42,7 +42,7 @@
     </select>
 
     <!-- 用户表单信息映射 -->
-    <resultMap id="UserFormMap" type="com.youlai.system.pojo.po.UserFormPO">
+    <resultMap id="UserFormMap" type="com.youlai.system.pojo.bo.UserFormBO">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="username" column="username" jdbcType="VARCHAR"/>
         <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
@@ -77,7 +77,7 @@
     </select>
 
     <!-- 用户认证信息映射 -->
-    <resultMap id="UserAuthMap" type="com.youlai.system.pojo.po.UserAuthInfo">
+    <resultMap id="UserAuthMap" type="com.youlai.system.pojo.bo.UserAuthInfo">
         <id property="userId" column="userId" jdbcType="BIGINT"/>
         <result property="username" column="username" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>

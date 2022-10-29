@@ -13,7 +13,7 @@ import com.youlai.system.common.model.Option;
 import com.youlai.system.converter.MenuConverter;
 import com.youlai.system.mapper.SysMenuMapper;
 import com.youlai.system.pojo.entity.SysMenu;
-import com.youlai.system.pojo.po.RoutePO;
+import com.youlai.system.pojo.bo.RouteBO;
 import com.youlai.system.pojo.query.MenuQuery;
 import com.youlai.system.pojo.vo.menu.MenuVO;
 import com.youlai.system.pojo.vo.menu.ResourceVO;
@@ -63,7 +63,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return list;
     }
 
-
     /**
      * 保存菜单
      */
@@ -102,7 +101,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     @Cacheable(cacheNames = "system", key = "'routes'")
     public List<RouteVO> listRoutes() {
-        List<RoutePO> menuList = this.baseMapper.listRoutes();
+        List<RouteBO> menuList = this.baseMapper.listRoutes();
         List<RouteVO> routeList = recurRoutes(SystemConstants.ROOT_NODE_ID, menuList);
         return routeList;
     }
@@ -114,7 +113,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @param menuList 菜单列表
      * @return
      */
-    private List<RouteVO> recurRoutes(Long parentId, List<RoutePO> menuList) {
+    private List<RouteVO> recurRoutes(Long parentId, List<RouteBO> menuList) {
         List<RouteVO> list = new ArrayList<>();
         Optional.ofNullable(menuList).ifPresent(menus -> menus.stream()
                 .filter(menu -> menu.getParentId().equals(parentId))

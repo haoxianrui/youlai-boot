@@ -1,4 +1,4 @@
-package com.youlai.system.pojo.po;
+package com.youlai.system.pojo.bo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -12,7 +12,7 @@ import java.util.Date;
  * @date 2022/6/10
  */
 @Data
-public class UserPO {
+public class UserBO {
 
     /**
      * 用户ID

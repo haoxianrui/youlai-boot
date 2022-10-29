@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.youlai.system.pojo.dto.UserImportDTO;
 import com.youlai.system.pojo.entity.SysUser;
 import com.youlai.system.pojo.form.UserForm;
-import com.youlai.system.pojo.po.UserAuthInfo;
+import com.youlai.system.pojo.bo.UserAuthInfo;
 import com.youlai.system.pojo.query.UserPageQuery;
 import com.youlai.system.pojo.vo.user.UserExportVO;
 import com.youlai.system.pojo.vo.user.UserLoginVO;

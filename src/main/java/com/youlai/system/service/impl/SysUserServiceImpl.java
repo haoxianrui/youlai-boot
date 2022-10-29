@@ -19,13 +19,13 @@ import com.youlai.system.common.enums.GenderEnum;
 import com.youlai.system.converter.UserConverter;
 import com.youlai.system.listener.UserImportListener;
 import com.youlai.system.mapper.SysUserMapper;
+import com.youlai.system.pojo.bo.UserBO;
 import com.youlai.system.pojo.dto.UserImportDTO;
 import com.youlai.system.pojo.entity.SysUser;
 import com.youlai.system.pojo.entity.SysUserRole;
 import com.youlai.system.pojo.form.UserForm;
-import com.youlai.system.pojo.po.UserAuthInfo;
-import com.youlai.system.pojo.po.UserFormPO;
-import com.youlai.system.pojo.po.UserPO;
+import com.youlai.system.pojo.bo.UserAuthInfo;
+import com.youlai.system.pojo.bo.UserFormBO;
 import com.youlai.system.pojo.query.UserPageQuery;
 import com.youlai.system.pojo.vo.user.UserExportVO;
 import com.youlai.system.pojo.vo.user.UserLoginVO;
@@ -35,7 +35,6 @@ import com.youlai.system.service.SysUserRoleService;
 import com.youlai.system.service.SysUserService;
 import com.youlai.system.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,10 +79,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 参数构建
         int pageNum = queryParams.getPageNum();
         int pageSize = queryParams.getPageSize();
-        Page<UserPO> page = new Page<>(pageNum, pageSize);
+        Page<UserBO> page = new Page<>(pageNum, pageSize);
 
         // 查询数据
-        Page<UserPO> userPoPage = this.baseMapper.listUserPages(page, queryParams);
+        Page<UserBO> userPoPage = this.baseMapper.listUserPages(page, queryParams);
 
         // 实体转换
         Page<UserVO> userVoPage = userConverter.po2Vo(userPoPage);
@@ -99,9 +98,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public UserForm getUserFormData(Long userId) {
-        UserFormPO userFormPO = this.baseMapper.getUserDetail(userId);
+        UserFormBO userFormBO = this.baseMapper.getUserDetail(userId);
         // 实体转换po->form
-        UserForm userForm = userConverter.po2Form(userFormPO);
+        UserForm userForm = userConverter.po2Form(userFormBO);
         return userForm;
     }
 
