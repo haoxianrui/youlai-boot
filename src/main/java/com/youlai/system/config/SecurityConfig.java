@@ -1,7 +1,10 @@
 package com.youlai.system.config;
 
 import com.youlai.system.filter.JwtAuthenticationFilter;
+import com.youlai.system.security.exception.MyAccessDeniedHandler;
+import com.youlai.system.security.exception.MyAuthenticationEntryPoint;
 import com.youlai.system.security.jwt.JwtTokenManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,15 +25,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final MyAuthenticationEntryPoint myAuthenticationEntryPoint;
+    private final MyAccessDeniedHandler myAccessDeniedHandler;
     private final JwtTokenManager jwtTokenManager;
-
-    public SecurityConfig(
-            JwtTokenManager jwtTokenManager
-    ) {
-        this.jwtTokenManager = jwtTokenManager;
-    }
 
 
     @Bean
@@ -39,8 +39,13 @@ public class SecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeHttpRequests(auth -> auth.antMatchers("/**").permitAll()
-                .anyRequest().authenticated());
+                .authorizeHttpRequests()
+                .anyRequest().authenticated()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(myAuthenticationEntryPoint)
+                .accessDeniedHandler(myAccessDeniedHandler)
+        ;
 
         // disable cache
         http.headers().cacheControl();
@@ -53,7 +58,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .antMatchers("/api/v1/auth/login","/webjars/**", "/doc.html", "/swagger-resources/**", "/v3/api-docs");
+                .antMatchers("/api/v1/auth/login", "/webjars/**", "/doc.html", "/swagger-resources/**", "/v3/api-docs");
     }
 
     @Bean

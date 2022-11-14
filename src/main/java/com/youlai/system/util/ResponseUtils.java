@@ -4,6 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.common.result.ResultCode;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class ResponseUtils {
      * @param response
      * @param resultCode
      */
-    public static void writeErrMsg(HttpServletResponse response, ResultCode resultCode) {
+    public static void writeErrMsg(HttpServletResponse response, ResultCode resultCode) throws IOException {
         switch (resultCode) {
             case ACCESS_UNAUTHORIZED:
             case TOKEN_INVALID_OR_EXPIRED:
@@ -36,15 +37,9 @@ public class ResponseUtils {
                 response.setStatus(HttpStatus.BAD_REQUEST.value());
                 break;
         }
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
-        try {
-            String bodyJsonStr = JSONUtil.toJsonStr(Result.failed(resultCode));
-            PrintWriter printWriter = response.getWriter();
-            printWriter.print(bodyJsonStr);
-            printWriter.flush();
-            printWriter.close();
-        } catch (IOException e) {
-        }
+        response.getWriter().print(JSONUtil.toJsonStr(Result.failed(resultCode)));
     }
 
 

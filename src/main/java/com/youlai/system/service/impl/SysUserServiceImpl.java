@@ -211,11 +211,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public UserAuthInfo getUserAuthInfo(String username) {
         UserAuthInfo userAuthInfo = this.baseMapper.getUserAuthInfo(username);
-
-        Set<String> roles = userAuthInfo.getRoles();
-        if(CollectionUtil.isNotEmpty(roles)){
-           Set<String> perms= menuService.listRolePerms(roles);
-            userAuthInfo.setPerms(perms);
+        if(userAuthInfo!=null){
+            Set<String> roles = userAuthInfo.getRoles();
+            if(CollectionUtil.isNotEmpty(roles)){
+                Set<String> perms= menuService.listRolePerms(roles);
+                userAuthInfo.setPerms(perms);
+            }
         }
         return userAuthInfo;
     }
