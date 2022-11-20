@@ -42,4 +42,13 @@ auth:
     # token 有效期(单位:秒)
     token_validity: 18000
 
+# MinIO 分布式文件系统
+minio:
+  endpoint: http://localhost:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  # 存储桶名称
+  bucket-name: default
+  # 自定义域名(非必须)，Nginx配置反向代理转发文件路径
+  custom-domain:
 
