@@ -58,14 +58,14 @@
 
 ### 实体命名
 
-|名称|定义|示例|
-|---|---|---|
-|entity|映射数据库实体，字段属性完全对应|SysUser|
-|po|多表关联查询的实体|UserPO|
-|query|查询传参，建议参数≥3使用|UserQuery|
-|form|表单对象|UserForm|
-|dto|RPC调用，可替代VO|UserDTO|
-|vo|视图层对象|UserVO|
+| 名称     | 定义               | 示例        |
+|--------|------------------|-----------|
+| entity | 映射数据库实体，字段属性完全对应 | SysUser   |
+| bo     | 多表关联查询的业务实体      | UserBO    |
+| query  | 查询传参，建议参数≥3使用    | UserQuery |
+| form   | 表单对象             | UserForm  |
+| dto    | RPC调用，可替代VO      | UserDTO   |
+| vo     | 视图层对象            | UserVO    |
 
 ### API规范
 在RESTFul架构中，每个URL代表一种资源，所以不能有动词，只能有名词，而且所用的名词往往与数据库的表格名对应。一般来说，数据库中的表都是同种记录的"集合"，所以API中的名词也应该使用复数。

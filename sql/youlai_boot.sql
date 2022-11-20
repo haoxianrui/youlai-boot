@@ -126,6 +126,9 @@ INSERT INTO `sys_menu` VALUES (30, 26, 'document', 3, 'https://www.cnblogs.com/h
 INSERT INTO `sys_menu` VALUES (31, 2, '用户新增', 4, '', NULL, 'sys:user:add', 1, 1, '', '', '2022-10-23 11:04:08', '2022-10-23 11:04:11');
 INSERT INTO `sys_menu` VALUES (32, 2, '用户编辑', 4, '', NULL, 'sys:user:edit', 1, 2, '', '', '2022-10-23 11:04:08', '2022-10-23 11:04:11');
 INSERT INTO `sys_menu` VALUES (33, 2, '用户删除', 4, '', NULL, 'sys:user:delete', 1, 3, '', '', '2022-10-23 11:04:08', '2022-10-23 11:04:11');
+INSERT INTO `sys_menu` VALUES (36, 0, '组件封装', 2, '/component', 'Layout', NULL, 1, 10, 'menu', '', '2022-10-31 09:18:44', '2022-10-31 09:18:47');
+INSERT INTO `sys_menu` VALUES (37, 36, '富文本编辑器', 1, 'editor', 'component/editor', NULL, 1, 1, '', '', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (38, 36, '上传组件', 1, 'uploader', 'component/uploader', NULL, 1, 2, '', '', '2022-11-20 23:16:30', '2022-11-20 23:16:32');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -195,6 +198,8 @@ INSERT INTO `sys_role_menu` VALUES (2, 34);
 INSERT INTO `sys_role_menu` VALUES (2, 26);
 INSERT INTO `sys_role_menu` VALUES (2, 30);
 INSERT INTO `sys_role_menu` VALUES (2, 31);
+INSERT INTO `sys_role_menu` VALUES (2, 38);
+
 
 -- ----------------------------
 -- Table structure for sys_user
