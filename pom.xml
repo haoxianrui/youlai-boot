@@ -6,7 +6,7 @@
 
     <groupId>com.youlai</groupId>
     <artifactId>youlai-boot</artifactId>
-    <version>1.1.1</version>
+    <version>1.2.0</version>
     <name>SpringBoot单体应用</name>
     <description>基于SpringBoot快速构建的后台权限管理系统</description>
 
@@ -30,7 +30,7 @@
 
         <knife4j.version>3.0.2</knife4j.version>
 
-        <spring.boot.version>2.7.3</spring.boot.version>
+        <spring.boot.version>2.7.5</spring.boot.version>
 
         <mapstruct.version>1.5.2.Final</mapstruct.version>
 
