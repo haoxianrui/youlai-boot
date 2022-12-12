@@ -1,6 +1,6 @@
 package com.youlai.system.config;
 
-import com.youlai.system.filter.JwtAuthenticationFilter;
+import com.youlai.system.security.filter.JwtAuthenticationFilter;
 import com.youlai.system.security.exception.MyAccessDeniedHandler;
 import com.youlai.system.security.exception.MyAuthenticationEntryPoint;
 import com.youlai.system.security.jwt.JwtTokenManager;

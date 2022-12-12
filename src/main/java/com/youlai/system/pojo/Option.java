@@ -1,4 +1,4 @@
-package com.youlai.system.common.model;
+package com.youlai.system.pojo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;

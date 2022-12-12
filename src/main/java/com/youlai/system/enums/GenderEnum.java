@@ -1,18 +1,18 @@
-package com.youlai.system.common.enums;
+package com.youlai.system.enums;
 
 import com.youlai.system.common.base.IBaseEnum;
 import lombok.Getter;
 
 /**
- * 状态枚举
+ * 性别枚举
  *
  * @author haoxr
  * @date 2022/10/14
  */
-public enum StatusEnum implements IBaseEnum<Integer> {
+public enum GenderEnum implements IBaseEnum<Integer> {
 
-    ENABLE(1, "启用"),
-    DISABLE (0, "禁用");
+    MALE(1, "男"),
+    FEMALE (2, "女");
 
     @Getter
     private Integer value;
@@ -20,7 +20,7 @@ public enum StatusEnum implements IBaseEnum<Integer> {
     @Getter
     private String label;
 
-    StatusEnum(Integer value, String label) {
+    GenderEnum(Integer value, String label) {
         this.value = value;
         this.label = label;
     }

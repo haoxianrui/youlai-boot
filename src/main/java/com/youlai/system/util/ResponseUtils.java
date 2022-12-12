@@ -27,7 +27,7 @@ public class ResponseUtils {
     public static void writeErrMsg(HttpServletResponse response, ResultCode resultCode) throws IOException {
         switch (resultCode) {
             case ACCESS_UNAUTHORIZED:
-            case TOKEN_INVALID_OR_EXPIRED:
+            case TOKEN_INVALID:
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
                 break;
             case TOKEN_ACCESS_FORBIDDEN:

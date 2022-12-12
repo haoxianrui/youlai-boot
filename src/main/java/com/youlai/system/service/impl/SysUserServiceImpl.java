@@ -15,8 +15,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import com.youlai.system.common.base.IBaseEnum;
 import com.youlai.system.common.constant.SystemConstants;
-import com.youlai.system.common.enums.GenderEnum;
 import com.youlai.system.converter.UserConverter;
+import com.youlai.system.enums.GenderEnum;
 import com.youlai.system.listener.UserImportListener;
 import com.youlai.system.mapper.SysUserMapper;
 import com.youlai.system.pojo.bo.UserBO;
@@ -31,15 +31,16 @@ import com.youlai.system.pojo.vo.user.UserExportVO;
 import com.youlai.system.pojo.vo.user.UserLoginVO;
 import com.youlai.system.pojo.vo.user.UserVO;
 import com.youlai.system.service.SysMenuService;
+import com.youlai.system.service.SysRoleService;
 import com.youlai.system.service.SysUserRoleService;
 import com.youlai.system.service.SysUserService;
 import com.youlai.system.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -62,10 +63,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private final SysUserRoleService userRoleService;
     private final UserImportListener userImportListener;
 
-    @Resource
-    private  UserConverter userConverter;
+    private final UserConverter userConverter;
 
     private final SysMenuService menuService;
+
+    private final SysRoleService roleService;
+
+    private final RedisTemplate redisTemplate;
 
     /**
      * 获取用户分页列表
@@ -122,7 +126,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser entity = userConverter.form2Entity(userForm);
 
         // 设置默认加密密码
-        String defaultEncryptPwd = passwordEncoder.encode(SystemConstants.DEFAULT_USER_PASSWORD);
+        String defaultEncryptPwd = passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD);
         entity.setPassword(defaultEncryptPwd);
 
         // 新增用户
@@ -211,12 +215,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public UserAuthInfo getUserAuthInfo(String username) {
         UserAuthInfo userAuthInfo = this.baseMapper.getUserAuthInfo(username);
-        if(userAuthInfo!=null){
+        if (userAuthInfo != null) {
             Set<String> roles = userAuthInfo.getRoles();
-            if(CollectionUtil.isNotEmpty(roles)){
-                Set<String> perms= menuService.listRolePerms(roles);
+            if (CollectionUtil.isNotEmpty(roles)) {
+                Set<String> perms = menuService.listRolePerms(roles);
                 userAuthInfo.setPerms(perms);
             }
+
+            // 获取最大范围的数据权限
+            Integer dataScope = roleService.getMaximumDataScope(roles);
+            userAuthInfo.setDataScope(dataScope);
         }
         return userAuthInfo;
     }
@@ -281,7 +289,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             user.setEmail(userItem.getEmail());
             user.setDeptId(deptId);
             // 默认密码
-            user.setPassword(passwordEncoder.encode(SystemConstants.DEFAULT_USER_PASSWORD));
+            user.setPassword(passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));
             // 性别转换
             Integer gender = (Integer) IBaseEnum.getValueByLabel(userItem.getGender(), GenderEnum.class);
             user.setGender(gender);
@@ -349,7 +357,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         userLoginVO.setRoles(roles);
 
         // 用户权限集合
-        Set<String> perms = SecurityUtils.getPerms();
+        Set<String> perms = (Set<String>)redisTemplate.opsForValue().get("USER_PERMS:" + user.getId());
         userLoginVO.setPerms(perms);
 
         return userLoginVO;

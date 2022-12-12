@@ -17,7 +17,7 @@ public interface SystemConstants {
     /**
      * 系统默认密码
      */
-    String DEFAULT_USER_PASSWORD = "123456";
+    String DEFAULT_PASSWORD = "123456";
 
     /**
      * 超级管理员角色编码

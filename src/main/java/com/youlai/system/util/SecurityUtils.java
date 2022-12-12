@@ -1,15 +1,14 @@
 package com.youlai.system.util;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.security.userdetails.SysUserDetails;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.PatternMatchUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -35,22 +34,53 @@ public class SecurityUtils {
     }
 
     /**
+     * 获取用户ID
+     *
+     * @return
+     */
+    public static Long getUserId() {
+        Long userId = Convert.toLong(getUser().getUserId());
+        return userId;
+    }
+
+    /**
+     * 获取部门ID
+     *
+     * @return
+     */
+    public static Long getDeptId() {
+        Long userId = Convert.toLong(getUser().getDeptId());
+        return userId;
+    }
+
+    /**
+     * 获取数据权限范围
+     *
+     * @return DataScope
+     */
+    public static Integer getDataScope() {
+        Integer dataScope = Convert.toInt(getUser().getDataScope());
+        return dataScope;
+    }
+
+
+    /**
      * 获取用户角色集合
      *
      * @return
      */
     public static Set<String> getRoles() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Set<String> roles = null;
-        if (CollectionUtil.isNotEmpty(authorities)) {
-            roles = authorities.stream().filter(item -> item.getAuthority().startsWith("ROLE_"))
-                    .map(item -> StrUtil.removePrefix(item.getAuthority(), "ROLE_"))
-                    .collect(Collectors.toSet());
-        } else {
-            roles = Collections.EMPTY_SET;
+        if (authentication != null) {
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            if (CollectionUtil.isNotEmpty(authorities)) {
+                Set<String> roles = authorities.stream().filter(item -> item.getAuthority().startsWith("ROLE_"))
+                        .map(item -> StrUtil.removePrefix(item.getAuthority(), "ROLE_"))
+                        .collect(Collectors.toSet());
+                return roles;
+            }
         }
-        return roles;
+        return Collections.EMPTY_SET;
     }
 
     /**
@@ -60,16 +90,16 @@ public class SecurityUtils {
      */
     public static Set<String> getPerms() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Set<String> perms = null;
-        if (CollectionUtil.isNotEmpty(authorities)) {
-            perms = authorities.stream().filter(item -> !item.getAuthority().startsWith("ROLE_"))
-                    .map(item -> item.getAuthority())
-                    .collect(Collectors.toSet());
-        } else {
-            perms = Collections.EMPTY_SET;
+        if (authentication != null) {
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            if (CollectionUtil.isNotEmpty(authorities)) {
+                Set<String> perms = authorities.stream().filter(item -> !item.getAuthority().startsWith("ROLE_"))
+                        .map(item -> item.getAuthority())
+                        .collect(Collectors.toSet());
+                return perms;
+            }
         }
-        return perms;
+        return Collections.EMPTY_SET;
     }
 
     /**

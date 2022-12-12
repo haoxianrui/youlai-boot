@@ -1,7 +1,7 @@
 package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.system.common.model.Option;
+import com.youlai.system.pojo.Option;
 import com.youlai.system.pojo.entity.SysDept;
 import com.youlai.system.pojo.form.DeptForm;
 import com.youlai.system.pojo.query.DeptQuery;

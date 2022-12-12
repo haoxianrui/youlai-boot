@@ -3,14 +3,14 @@ package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.system.common.model.Option;
+import com.youlai.system.pojo.Option;
 import com.youlai.system.pojo.entity.SysRole;
 import com.youlai.system.pojo.form.RoleForm;
-import com.youlai.system.pojo.form.RoleResourceForm;
 import com.youlai.system.pojo.query.RolePageQuery;
 import com.youlai.system.pojo.vo.role.RolePageVO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 角色业务接口层
@@ -78,4 +78,12 @@ public interface SysRoleService extends IService<SysRole> {
      * @return
      */
     boolean updateRoleMenus(Long roleId, List<Long> menuIds);
+
+    /**
+     * 获取最大范围的数据权限
+     *
+     * @param roles
+     * @return
+     */
+    Integer getMaximumDataScope(Set<String> roles);
 }

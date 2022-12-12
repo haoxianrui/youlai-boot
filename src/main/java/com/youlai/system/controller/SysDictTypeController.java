@@ -1,7 +1,7 @@
 package com.youlai.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.system.common.model.Option;
+import com.youlai.system.pojo.Option;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.pojo.form.DictTypeForm;

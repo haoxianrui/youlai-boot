@@ -58,4 +58,9 @@ public class SysRole implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 数据权限
+     */
+    private Integer dataScope;
 }

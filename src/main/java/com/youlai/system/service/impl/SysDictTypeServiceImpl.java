@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.system.common.model.Option;
+import com.youlai.system.pojo.Option;
 import com.youlai.system.converter.DictTypeConverter;
 import com.youlai.system.mapper.SysDictTypeMapper;
 import com.youlai.system.pojo.entity.SysDictItem;

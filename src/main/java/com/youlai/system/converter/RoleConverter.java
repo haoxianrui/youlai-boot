@@ -1,7 +1,7 @@
 package com.youlai.system.converter;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.system.common.model.Option;
+import com.youlai.system.pojo.Option;
 import com.youlai.system.pojo.entity.SysRole;
 import com.youlai.system.pojo.form.RoleForm;
 import com.youlai.system.pojo.vo.role.RolePageVO;

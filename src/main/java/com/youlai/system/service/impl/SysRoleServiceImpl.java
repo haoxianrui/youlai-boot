@@ -8,14 +8,13 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SystemConstants;
-import com.youlai.system.common.model.Option;
+import com.youlai.system.pojo.Option;
 import com.youlai.system.converter.RoleConverter;
 import com.youlai.system.mapper.SysRoleMapper;
 import com.youlai.system.pojo.entity.SysRole;
 import com.youlai.system.pojo.entity.SysRoleMenu;
 import com.youlai.system.pojo.entity.SysUserRole;
 import com.youlai.system.pojo.form.RoleForm;
-import com.youlai.system.pojo.form.RoleResourceForm;
 import com.youlai.system.pojo.query.RolePageQuery;
 import com.youlai.system.pojo.vo.role.RolePageVO;
 import com.youlai.system.service.SysRoleMenuService;
@@ -27,10 +26,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -191,6 +187,18 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             sysRoleMenuService.saveBatch(roleMenus);
         }
         return true;
+    }
+
+    /**
+     * 获取最大范围的数据权限
+     *
+     * @param roles
+     * @return
+     */
+    @Override
+    public Integer getMaximumDataScope(Set<String> roles) {
+        Integer dataScope = this.baseMapper.getMaximumDataScope(roles);
+        return dataScope;
     }
 
 }

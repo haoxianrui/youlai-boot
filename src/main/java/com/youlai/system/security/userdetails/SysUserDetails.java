@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 /**
  * Spring Security
+ *
  * @author haoxr
  */
 @Data
@@ -30,9 +31,11 @@ public class SysUserDetails implements UserDetails {
 
     private Collection<SimpleGrantedAuthority> authorities;
 
-    private String authorityStr;
-
     private Set<String> perms;
+
+    private Long deptId;
+
+    private Integer dataScope;
 
     public SysUserDetails() {
 
@@ -53,7 +56,9 @@ public class SysUserDetails implements UserDetails {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.enabled = ObjectUtil.equal(user.getStatus(), 1);
-        this.perms=user.getPerms();
+        this.perms = user.getPerms();
+        this.deptId = user.getDeptId();
+        this.dataScope = user.getDataScope();
     }
 
     public Long getUserId() {

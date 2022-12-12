@@ -63,7 +63,7 @@ public class SysUserController {
 
     @ApiOperation(value = "新增用户")
     @PostMapping
-    @PreAuthorize("hasAuthority('sys:user:add')")
+    @PreAuthorize("@pms.hasPermission('sys:user:add')")
     public Result saveUser(
             @RequestBody @Valid UserForm userForm
     ) {
@@ -73,7 +73,7 @@ public class SysUserController {
 
     @ApiOperation(value = "修改用户")
     @PutMapping(value = "/{userId}")
-    @PreAuthorize("hasAuthority('sys:user:edit')")
+    @PreAuthorize("@pms.hasPermission('sys:user:edit')")
     public Result updateUser(
             @ApiParam("用户ID") @PathVariable Long userId,
             @RequestBody @Validated UserForm userForm) {
@@ -83,7 +83,7 @@ public class SysUserController {
 
     @ApiOperation(value = "删除用户")
     @DeleteMapping("/{ids}")
-    @PreAuthorize("hasAuthority('sys:user:delete')")
+    @PreAuthorize("@pms.hasPermission('sys:user:delete')")
     public Result deleteUsers(
             @ApiParam("用户ID，多个以英文逗号(,)分割") @PathVariable String ids
     ) {
@@ -152,6 +152,7 @@ public class SysUserController {
         response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
 
         List<UserExportVO> exportUserList = userService.listExportUsers(queryParams);
-        EasyExcel.write(response.getOutputStream(), UserExportVO.class).sheet("用户列表").doWrite(exportUserList);
+        EasyExcel.write(response.getOutputStream(), UserExportVO.class).sheet("用户列表")
+                .doWrite(exportUserList);
     }
 }

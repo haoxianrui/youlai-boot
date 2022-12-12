@@ -15,5 +15,4 @@ public interface MenuConverter {
 
     MenuVO entity2VO(SysMenu entity);
 
-
 }
