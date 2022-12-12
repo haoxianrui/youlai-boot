@@ -1,4 +1,4 @@
-package com.youlai.system.filter;
+package com.youlai.system.security.filter;
 
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.result.ResultCode;
@@ -16,9 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * jwt auth token filter.
+ * JWT token校验拦截器
  *
  * @author haoxr
+ * @date 2022/10/1
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -39,15 +40,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwt = resolveToken(request);
         if (StrUtil.isNotBlank(jwt) && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
+                // 验证token
                 this.tokenManager.validateToken(jwt);
+
+                // JWT验证有效获取Authentication存入Security上下文
                 Authentication authentication = this.tokenManager.getAuthentication(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
                 chain.doFilter(request, response);
             }catch (Exception e){
-                ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID_OR_EXPIRED);
+                ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
             }
         }else{
-            ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID_OR_EXPIRED);
+            ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
         }
     }
 

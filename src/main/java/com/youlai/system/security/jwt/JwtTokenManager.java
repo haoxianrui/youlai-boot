@@ -16,9 +16,7 @@
 
 package com.youlai.system.security.jwt;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.util.StrUtil;
 import com.youlai.system.security.userdetails.SysUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
@@ -31,13 +29,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -45,7 +42,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * JWT token manager.
+ * JWT token manager
  *
  * @author haoxr
  * @date 2022/10/22
@@ -93,40 +90,24 @@ public class JwtTokenManager {
         SysUserDetails userDetails = (SysUserDetails) authentication.getPrincipal();
         claims.put("userId", userDetails.getUserId());
         claims.put("username", claims.getSubject());
+        claims.put("deptId", userDetails.getDeptId());
+        claims.put("dataScope", userDetails.getDataScope());
+
+        // 角色放入JWT的claims
         Set<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority()).collect(Collectors.toSet());
-        Set<String> authorities = userDetails.getPerms();
-        authorities.addAll(roles);
-        redisTemplate.opsForValue().set("USER_PERMS:" + userDetails.getUserId(), authorities);
-        return Jwts.builder().setClaims(claims).setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, Keys.hmacShaKeyFor(this.getSecretKeyBytes())).compact();
-    }
+        claims.put("authorities", roles);
 
-    /**
-     * Create token.
-     *
-     * @param userName auth info
-     * @return token
-     */
-    public String createToken(String userName) {
-
-        long now = System.currentTimeMillis();
-
-        Date validity;
-
-        validity = new Date(now + tokenValidity * 1000L);
-
-        Claims claims = Jwts.claims().setSubject(userName);
+        // 权限数据多放入Redis
+        Set<String> perms = userDetails.getPerms();
+        redisTemplate.opsForValue().set("USER_PERMS:" + userDetails.getUserId(), perms);
 
         return Jwts.builder().setClaims(claims).setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, Keys.hmacShaKeyFor(this.getSecretKeyBytes())).compact();
     }
 
     /**
-     * Get auth Info.
-     *
-     * @param token token
-     * @return auth info
+     * 获取认证信息
      */
     public Authentication getAuthentication(String token) {
         if (jwtParser == null) {
@@ -134,28 +115,22 @@ public class JwtTokenManager {
         }
         Claims claims = jwtParser.parseClaimsJws(token).getBody();
 
-        List<GrantedAuthority> authorities = AuthorityUtils
-                .commaSeparatedStringToAuthorityList((String) claims.get("authorities"));
-
         SysUserDetails principal = new SysUserDetails();
         principal.setUserId(Convert.toLong(claims.get("userId")));
         principal.setUsername(Convert.toStr(claims.get("username")));
+        principal.setDeptId(Convert.toLong(claims.get("deptId")));
+        principal.setDataScope(Convert.toInt(claims.get("dataScope")));
 
-        // 权限数据过多放置在redis
-        Set<String> perms = (Set<String>) redisTemplate.opsForValue().get("USER_PERMS:" + claims.get("userId"));
-        if (CollectionUtil.isNotEmpty(perms)) {
-            List<GrantedAuthority> permAuthorities = perms.stream()
-                    .map(perm -> new SimpleGrantedAuthority(perm))
-                    .collect(Collectors.toList());
-            authorities.addAll(permAuthorities);
-        }
+        List<SimpleGrantedAuthority> authorities = ((ArrayList<String>) claims.get("authorities"))
+                .stream()
+                .map(role -> new SimpleGrantedAuthority(role))
+                .collect(Collectors.toList());
+
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
     /**
-     * validate token.
-     *
-     * @param token token
+     * 验证token
      */
     public void validateToken(String token) {
         if (jwtParser == null) {
