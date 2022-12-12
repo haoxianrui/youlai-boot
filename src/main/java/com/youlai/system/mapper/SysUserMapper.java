@@ -2,6 +2,7 @@ package com.youlai.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.youlai.system.common.annotation.DataPermission;
 import com.youlai.system.pojo.bo.UserBO;
 import com.youlai.system.pojo.entity.SysUser;
 import com.youlai.system.pojo.bo.UserAuthInfo;
@@ -28,6 +29,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param queryParams 查询参数
      * @return
      */
+    @DataPermission(deptAlias = "u")
     Page<UserBO> listUserPages(Page<UserBO> page, UserPageQuery queryParams);
 
     /**
@@ -52,5 +54,6 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param queryParams
      * @return
      */
+    @DataPermission(deptAlias = "u")
     List<UserExportVO> listExportUsers(UserPageQuery queryParams);
 }
