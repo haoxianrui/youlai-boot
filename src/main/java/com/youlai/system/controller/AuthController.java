@@ -2,7 +2,8 @@ package com.youlai.system.controller;
 
 
 import com.youlai.system.common.result.Result;
-import com.youlai.system.security.jwt.JwtTokenManager;
+import com.youlai.system.pojo.dto.TokenResult;
+import com.youlai.system.security.JwtTokenManager;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -17,24 +18,27 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
-
     private final AuthenticationManager authenticationManager;
-
     private final JwtTokenManager jwtTokenManager;
 
-    @ApiOperation(value = "登录",notes = "生成token")
+    @ApiOperation(value = "登录")
     @PostMapping("/login")
-    public Result login(
+    public Result<TokenResult> login(
             @RequestParam String username,
             @RequestParam String password
     ) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
-                password);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                username.toLowerCase().trim(),
+                password
+        );
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // 生成token
-        String token = jwtTokenManager.createToken(authentication);
-        return Result.success("Bearer " + token);
+        String accessToken = "Bearer " + jwtTokenManager.createToken(authentication);
+        TokenResult tokenResult = TokenResult.builder()
+                .accessToken(accessToken)
+                .build();
+        return Result.success(tokenResult);
     }
 
     @ApiOperation(value = "注销")
