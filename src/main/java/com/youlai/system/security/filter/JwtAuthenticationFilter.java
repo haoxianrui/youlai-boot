@@ -2,8 +2,8 @@ package com.youlai.system.security.filter;
 
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.result.ResultCode;
-import com.youlai.system.security.jwt.JwtTokenManager;
-import com.youlai.system.util.ResponseUtils;
+import com.youlai.system.security.JwtTokenManager;
+import com.youlai.system.common.util.ResponseUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
