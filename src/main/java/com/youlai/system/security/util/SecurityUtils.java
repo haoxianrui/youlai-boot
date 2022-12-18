@@ -1,4 +1,4 @@
-package com.youlai.system.util;
+package com.youlai.system.security.util;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.convert.Convert;

@@ -21,6 +21,12 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 
 
+/**
+ * MinIO 文件实现类
+ *
+ * @author haoxr
+ * @date 2022/12/17
+ */
 @Component
 @ConfigurationProperties(prefix = "minio")
 @Slf4j

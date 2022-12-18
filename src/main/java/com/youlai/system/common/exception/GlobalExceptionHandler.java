@@ -28,12 +28,11 @@ import java.util.stream.Collectors;
 
 /**
  * 全局系统异常处理
+ *
  * 调整异常处理的HTTP状态码，丰富异常处理类型
  *
- * @author hxrui
  * @author Gadfly
  * @date 2020-02-25 13:54
- * <p>
  **/
 @RestControllerAdvice
 @Slf4j
@@ -166,12 +165,10 @@ public class GlobalExceptionHandler {
     }
 
 
-
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BusinessException.class)
     public <T> Result<T> handleBizException(BusinessException e) {
-        log.error("业务异常，异常原因：{}", e.getMessage(), e);
+        log.error("biz exception,{}", e.getMessage());
         if (e.getResultCode() != null) {
             return Result.failed(e.getResultCode());
         }
@@ -181,6 +178,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Exception.class)
     public <T> Result<T> handleException(Exception e) {
+        log.error("unknown exception, {}", e.getMessage());
         return Result.failed(e.getLocalizedMessage());
     }
 
