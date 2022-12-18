@@ -7,13 +7,13 @@
     <groupId>com.youlai</groupId>
     <artifactId>youlai-boot</artifactId>
     <version>1.2.0</version>
-    <name>SpringBoot单体应用</name>
+    <name>有来权限管理系统(单体)</name>
     <description>基于SpringBoot快速构建的后台权限管理系统</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.5</version>
+        <version>2.7.6</version>
         <relativePath/>
     </parent>
 
@@ -30,7 +30,7 @@
 
         <knife4j.version>3.0.2</knife4j.version>
 
-        <spring.boot.version>2.7.5</spring.boot.version>
+        <spring.boot.version>2.7.6</spring.boot.version>
 
         <mapstruct.version>1.5.2.Final</mapstruct.version>
 
@@ -95,7 +95,6 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
