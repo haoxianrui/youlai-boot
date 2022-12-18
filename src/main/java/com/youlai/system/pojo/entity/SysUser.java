@@ -1,20 +1,15 @@
 package com.youlai.system.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.util.Date;
+import com.youlai.system.common.base.BaseEntity;
 import lombok.Data;
 
 /**
- * 用户信息表
- * @TableName sys_user
+ * 用户表
  */
-@TableName(value ="sys_user")
 @Data
-public class SysUser implements Serializable {
+public class SysUser extends BaseEntity {
     /**
      * 
      */
@@ -71,16 +66,4 @@ public class SysUser implements Serializable {
      */
     private Integer deleted;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }

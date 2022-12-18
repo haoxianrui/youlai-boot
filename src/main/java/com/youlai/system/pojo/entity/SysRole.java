@@ -1,20 +1,17 @@
 package com.youlai.system.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.util.Date;
+import com.youlai.system.common.base.BaseEntity;
 import lombok.Data;
 
 /**
  * 角色表
- * @TableName sys_role
  */
 @TableName(value ="sys_role")
 @Data
-public class SysRole implements Serializable {
+public class SysRole extends BaseEntity {
     /**
      * 
      */
@@ -45,19 +42,6 @@ public class SysRole implements Serializable {
      * 逻辑删除标识(0-未删除；1-已删除)
      */
     private Integer deleted;
-
-    /**
-     * 更新时间
-     */
-    private Date createTime;
-
-    /**
-     * 创建时间
-     */
-    private Date updateTime;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 
     /**
      * 数据权限

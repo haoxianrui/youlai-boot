@@ -1,20 +1,18 @@
 package com.youlai.system.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 
 /**
  * 角色和菜单关联表
- * @TableName sys_role_menu
  */
-@TableName(value ="sys_role_menu")
 @Data
 @AllArgsConstructor
-public class SysRoleMenu implements Serializable {
+@NoArgsConstructor
+public class SysRoleMenu  {
     /**
      * 角色ID
      */
