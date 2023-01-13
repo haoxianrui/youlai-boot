@@ -1,4 +1,4 @@
-package com.youlai.system.util;
+package com.youlai.system.common.util;
 
 import cn.hutool.json.JSONUtil;
 import com.youlai.system.common.result.Result;
@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * response 响应工具类

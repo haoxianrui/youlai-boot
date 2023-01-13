@@ -1,20 +1,21 @@
 package com.youlai.system.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 
 /**
  * 用户和角色关联表
- * @TableName sys_user_role
+ *
+ * @author haoxr
+ * @date 2022/12/17
  */
-@TableName(value ="sys_user_role")
 @Data
 @AllArgsConstructor
-public class SysUserRole implements Serializable {
+@NoArgsConstructor
+public class SysUserRole {
     /**
      * 用户ID
      */

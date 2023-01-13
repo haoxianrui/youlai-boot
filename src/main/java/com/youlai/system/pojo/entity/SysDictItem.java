@@ -10,7 +10,9 @@ import lombok.Data;
 
 /**
  * 字典数据表
- * @TableName sys_dict_item
+ *
+ * @author haoxr
+ * @date 2022/12/17
  */
 @TableName(value ="sys_dict_item")
 @Data
@@ -56,15 +58,6 @@ public class SysDictItem implements Serializable {
      */
     private String remark;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

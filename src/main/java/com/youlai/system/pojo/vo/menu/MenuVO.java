@@ -1,7 +1,7 @@
 package com.youlai.system.pojo.vo.menu;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.youlai.system.enums.MenuTypeEnum;
+import com.youlai.system.common.enums.MenuTypeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
 import com.youlai.system.common.annotation.DataPermission;
 import com.youlai.system.common.base.IBaseEnum;
-import com.youlai.system.enums.DataScopeEnum;
-import com.youlai.system.util.SecurityUtils;
+import com.youlai.system.common.enums.DataScopeEnum;
+import com.youlai.system.security.util.SecurityUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
@@ -55,7 +55,7 @@ public class MyDataPermissionHandler implements DataPermissionHandler {
     public static Expression dataScopeFilter(String deptAlias, String deptIdColumnName, String userAlias, String userIdColumnName, Expression where) {
 
 
-        String deptColumnName = StrUtil.isNotBlank(deptAlias) ? (deptAlias +StringPool.DOT+ deptIdColumnName) : deptIdColumnName;
+        String deptColumnName = StrUtil.isNotBlank(deptAlias) ? (deptAlias + StringPool.DOT + deptIdColumnName) : deptIdColumnName;
         String userColumnName = StrUtil.isNotBlank(userAlias) ? (userAlias + StringPool.DOT + userIdColumnName) : userIdColumnName;
 
         // 获取当前用户的数据权限
@@ -70,11 +70,11 @@ public class MyDataPermissionHandler implements DataPermissionHandler {
                 return where;
             case DEPT:
                 deptId = SecurityUtils.getDeptId();
-                appendSqlStr = deptColumnName + StringPool.EQUALS+ deptId;
+                appendSqlStr = deptColumnName + StringPool.EQUALS + deptId;
                 break;
             case SELF:
                 userId = SecurityUtils.getUserId();
-                appendSqlStr = userColumnName +  StringPool.EQUALS + userId;
+                appendSqlStr = userColumnName + StringPool.EQUALS + userId;
                 break;
             // 默认部门及子部门数据权限
             default:
@@ -87,9 +87,9 @@ public class MyDataPermissionHandler implements DataPermissionHandler {
             return where;
         }
 
-        Expression appendExpression =CCJSqlParserUtil.parseCondExpression(appendSqlStr);
+        Expression appendExpression = CCJSqlParserUtil.parseCondExpression(appendSqlStr);
 
-        if(where==null){
+        if (where == null) {
             return appendExpression;
         }
 

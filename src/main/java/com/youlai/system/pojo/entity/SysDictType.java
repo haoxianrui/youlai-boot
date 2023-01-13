@@ -6,15 +6,18 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+
+import com.youlai.system.common.base.BaseEntity;
 import lombok.Data;
 
 /**
  * 字典类型表
- * @TableName sys_dict_type
+ *
+ * @author haoxr
+ * @date 2022/12/17
  */
-@TableName(value ="sys_dict_type")
 @Data
-public class SysDictType implements Serializable {
+public class SysDictType extends BaseEntity {
     /**
      * 主键 
      */
@@ -40,17 +43,4 @@ public class SysDictType implements Serializable {
      * 备注
      */
     private String remark;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }

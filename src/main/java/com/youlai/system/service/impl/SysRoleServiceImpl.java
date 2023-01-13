@@ -20,7 +20,7 @@ import com.youlai.system.pojo.vo.role.RolePageVO;
 import com.youlai.system.service.SysRoleMenuService;
 import com.youlai.system.service.SysRoleService;
 import com.youlai.system.service.SysUserRoleService;
-import com.youlai.system.util.SecurityUtils;
+import com.youlai.system.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
