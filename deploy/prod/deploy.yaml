@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: Deployment # 无状态部署
 metadata: # 资源元数据
   name: youlai-boot
-  namespace: youlai-boot
+  namespace: youlai-bootnfckx
   labels: # 资源标签 k8s核心分组机制，通过label selector 能够识别一组有共同特征或属性的资源对象， kubectl get pod -l app=youlai-boot --show-labels 过滤出所有
     app: youlai-boot
 spec: # Deployment 规格说明
@@ -52,7 +52,7 @@ metadata:
   labels:
     app: youlai-boot
   name: youlai-boot
-  namespace: youlai-boot
+  namespace: youlai-bootnfckx
 spec:
   ports:
     - name: http
