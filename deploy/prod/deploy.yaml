@@ -56,7 +56,7 @@ spec:
       port: 8989
       protocol: TCP
       targetPort: 8989
-      nodePort: 8989 # 外部访问端口
+      nodePort: 30000 # 外部访问端口 The range of valid ports is 30000-32767
   selector:
     app: youlai-boot
   sessionAffinity: None
