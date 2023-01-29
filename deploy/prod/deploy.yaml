@@ -27,7 +27,7 @@ spec: # Deployment 规格说明
           image: registry.cn-hangzhou.aliyuncs.com/youlaitech/youlai-boot:latest # 必须
           imagePullPolicy: Always
           ports:
-            - containerPort: 8989
+            - containerPort: 8989 # 容器内端口
               protocol: TCP
           env:
             - name: spring.profiles.active # 容器端口
@@ -56,6 +56,7 @@ spec:
       port: 8989
       protocol: TCP
       targetPort: 8989
+      nodePort: 8989 # 外部访问端口
   selector:
     app: youlai-boot
   sessionAffinity: None
