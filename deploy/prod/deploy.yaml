@@ -34,9 +34,6 @@ spec: # Deployment 规格说明
               value: prod
             - name: TZ
               value: Asia/Shanghai
-          volumeMounts:
-            - mountPath: /logs/youlai-boot
-              name: log-path
           resources: # 资源限制
             limits:
               cpu: 256m
