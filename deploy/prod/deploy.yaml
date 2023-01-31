@@ -1,63 +1,66 @@
 ---
-# 定义工作负载
 apiVersion: apps/v1
 kind: Deployment # 无状态部署
 metadata: # 资源元数据
   name: youlai-boot
   namespace: youlai-bootnfckx
-  labels: # 资源标签 k8s核心分组机制，通过label selector 能够识别一组有共同特征或属性的资源对象， kubectl get pod -l app=youlai-boot --show-labels 过滤出所有
+  labels:
     app: youlai-boot
-spec: # Deployment 规格说明
-  replicas: 1 # 副本数量
-  strategy: # 更新策略
+spec: # 资源规约
+  replicas: 1 # 告知 Deployment 运行 1 个与该模板匹配的 Pod (默认1)
+  strategy:
     type: RollingUpdate # Recreate:停止所有原来启动新的，适用开发环境；RollingUpdate: 滚动升级，启动新的完成后才停止旧的，保证业务连贯性，如果新的版本发布错误则会保持老的版本
     rollingUpdate:
       maxSurge: 25% # 100个pod，可启动25个新的pod
       maxUnavailable: 25% # 100个pod，可关闭25旧的个pod
-  selector:
+  selector: # 圈定Deployment管理的Pod范围
     matchLabels:
-      app: youlai-boot
-  template: # pod基本信息
-    metadata: # pod元数据
-      labels: # 至少需要定义一个label用于service识别转发pod
-        app: youlai-boot # 完全匹配spec.selector.matchLabels
-    spec:  # pod规格
+      app: youlai-boot # 必须匹配 spec.template.metadata.labels
+  template:
+    metadata:
+      labels:
+        app: youlai-boot #必须匹配 spec.selector.matchLabels
+    spec:
       containers:
-        - name: youlai-boot # 必须
-          image: registry.cn-hangzhou.aliyuncs.com/youlaitech/youlai-boot:latest # 必须
-          imagePullPolicy: Always
+        - name: youlai-boot # 容器名称
+          image: registry.cn-hangzhou.aliyuncs.com/youlaitech/youlai-boot:latest # 容器镜像地址 (常用镜像仓库：aliyun容器镜像服务/Docker Hub/Harbor企业级私有镜像)
+          imagePullPolicy: Always # 镜像拉取策略（Always-总是拉取镜像（默认）；IfNotPresent：本地有则不拉取镜像；Never：只使用本地镜像从不拉取）
           ports:
-            - containerPort: 8989 # 容器内端口
-              protocol: TCP
+            - containerPort: 8989
           env:
-            - name: spring.profiles.active # 容器端口
+            - name: spring.profiles.active
               value: prod
             - name: TZ
               value: Asia/Shanghai
-          resources: # 资源限制
+          resources: # 资源管理
             limits:
-              cpu: 256m
-              memory: 512Mi
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
+              cpu: 256m # CPU 1核心 = 1000m
+              memory: 512Mi # 内存 1G = 1000Mi
+          volumeMounts: # 容器目录挂载配置
+            - mountPath: /logs/youlai-boot # 容器要挂载的目录
+              name: log-volume # 日志数据卷名称，和下文 volumes 配置的名称需一致
+
+      volumes: # 数据卷
+        - name: log-volume # 日志数据卷名称
+          hostPath:
+            path: /logs/youlai-boot # 宿主机目录
+            type: DirectoryOrCreate # 目录不存在则创建
 
 ---
-# 定义服务
 apiVersion: v1
 kind: Service
 metadata:
+  name: youlai-boot
   labels:
     app: youlai-boot
-  name: youlai-boot
   namespace: youlai-bootnfckx
 spec:
-  ports:
-    - name: http
-      port: 8989
-      protocol: TCP
-      targetPort: 8989
-      nodePort: 30000 # 外部访问端口 The range of valid ports is 30000-32767
   selector:
     app: youlai-boot
-  sessionAffinity: None
-  type: NodePort
+  ports:
+    - name: http # 端口名称
+      protocol: TCP # 协议类型
+      port: 8989
+      targetPort: 8989
+      nodePort: 30000 # 节点端口，可以让service接收来自k8s集群外的请求， The range of valid ports is 30000-32767
+  type: NodePort # Service类型：ClusterIP(默认)/NodePort/LoaderBalancer
