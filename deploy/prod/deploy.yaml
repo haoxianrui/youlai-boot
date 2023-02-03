@@ -62,5 +62,4 @@ spec:
       protocol: TCP # 协议类型
       port: 8989
       targetPort: 8989
-      nodePort: 30000 # 节点端口，可以让service接收来自k8s集群外的请求， The range of valid ports is 30000-32767
-  type: NodePort # Service类型：ClusterIP(默认)/NodePort/LoaderBalancer
+  type: ClusterIP # Service类型：ClusterIP(默认)/NodePort/LoaderBalancer
