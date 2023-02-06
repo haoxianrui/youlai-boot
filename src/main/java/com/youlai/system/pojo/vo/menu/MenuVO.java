@@ -2,13 +2,13 @@ package com.youlai.system.pojo.vo.menu;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.youlai.system.common.enums.MenuTypeEnum;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
 
-@ApiModel("菜单视图对象")
+@Schema(description ="菜单视图对象")
 @Data
 public class MenuVO {
 
@@ -32,10 +32,10 @@ public class MenuVO {
 
     private String redirect;
 
-    @ApiModelProperty("菜单类型")
+    @Schema(description="菜单类型")
     private MenuTypeEnum type;
 
-    @ApiModelProperty("按钮权限标识")
+    @Schema(description="按钮权限标识")
     private String perm;
 
     @JsonInclude(value = JsonInclude.Include.NON_NULL)

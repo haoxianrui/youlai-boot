@@ -1,7 +1,7 @@
 package com.youlai.system.pojo.query;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -10,14 +10,14 @@ import lombok.Data;
  * @author haoxr
  * @date 2022/6/11
  */
-@ApiModel("部门分页查询对象")
+@Schema(description ="部门分页查询对象")
 @Data
 public class DeptQuery {
 
-    @ApiModelProperty("关键字(部门名称)")
+    @Schema(description="关键字(部门名称)")
     private String keywords;
 
-    @ApiModelProperty("状态(1->正常；0->禁用)")
+    @Schema(description="状态(1->正常；0->禁用)")
     private Integer status;
 
 }

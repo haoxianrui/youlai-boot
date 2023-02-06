@@ -1,7 +1,7 @@
 package com.youlai.system.pojo.vo.perm;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -10,26 +10,26 @@ import lombok.Data;
  * @author haoxr
  * @date 2021/10/30 10:54
  */
-@ApiModel("权限视图对象")
+@Schema(description ="权限视图对象")
 @Data
 public class PermPageVO {
 
-    @ApiModelProperty("权限ID")
+    @Schema(description="权限ID")
     private Long id;
 
-    @ApiModelProperty("权限名称")
+    @Schema(description="权限名称")
     private String name;
 
-    @ApiModelProperty("URL权限标识-服务名称")
+    @Schema(description="URL权限标识-服务名称")
     private String serviceName;
 
-    @ApiModelProperty("URL权限标识-请求标识")
+    @Schema(description="URL权限标识-请求标识")
     private String requestMethod;
 
-    @ApiModelProperty("URL权限标识-请求方式")
+    @Schema(description="URL权限标识-请求方式")
     private String requestPath;
 
-    @ApiModelProperty("按钮权限标识")
+    @Schema(description="按钮权限标识")
     private String btnPerm;
 
 }

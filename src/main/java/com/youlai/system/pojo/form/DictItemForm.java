@@ -1,30 +1,31 @@
 package com.youlai.system.pojo.form;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-@ApiModel("字典数据项")
+@Schema(description = "字典数据项")
 @Data
 public class DictItemForm {
 
-    @ApiModelProperty("数据项ID")
+    @Schema(description="数据项ID")
     private Long id;
 
-    @ApiModelProperty("类型编码")
+    @Schema(description="类型编码")
     private String typeCode;
 
-    @ApiModelProperty("数据项名称")
+    @Schema(description="数据项名称")
     private String name;
 
-    @ApiModelProperty("值")
+    @Schema(description="值")
     private String value;
 
-    @ApiModelProperty("状态：1->启用;0->禁用")
+    @Schema(description="状态：1->启用;0->禁用")
     private Integer status;
 
-    @ApiModelProperty("排序")
+    @Schema(description="排序")
     private Integer sort;
 
 }

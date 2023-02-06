@@ -1,8 +1,8 @@
 package com.youlai.system.pojo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * @author haoxr
  * @date 2022/1/22
  */
-@ApiModel("下拉选项对象")
+@Schema(description ="下拉选项对象")
 @Data
 @NoArgsConstructor
 public class Option<T> {
@@ -30,10 +30,10 @@ public class Option<T> {
         this.children= children;
     }
 
-    @ApiModelProperty("选项的值")
+    @Schema(description="选项的值")
     private T value;
 
-    @ApiModelProperty("选项的标签")
+    @Schema(description="选项的标签")
     private String label;
 
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)

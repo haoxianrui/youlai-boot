@@ -1,7 +1,7 @@
 package com.youlai.system.pojo.query;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -10,14 +10,14 @@ import lombok.Data;
  * @author haoxr
  * @date 2022/10/28
  */
-@ApiModel("部门分页查询对象")
+@Schema(description ="部门分页查询对象")
 @Data
 public class MenuQuery {
 
-    @ApiModelProperty("关键字(菜单名称)")
+    @Schema(description="关键字(菜单名称)")
     private String keywords;
 
-    @ApiModelProperty("状态(1->显示；0->隐藏)")
+    @Schema(description="状态(1->显示；0->隐藏)")
     private Integer status;
 
 }

@@ -1,7 +1,7 @@
 package com.youlai.system.pojo.query;
 
 import com.youlai.system.common.base.BasePageQuery;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -14,6 +14,6 @@ import lombok.Data;
 @Data
 public class RolePageQuery extends BasePageQuery {
 
-    @ApiModelProperty("关键字(角色名称/角色编码)")
+    @Schema(description="关键字(角色名称/角色编码)")
     private String keywords;
 }

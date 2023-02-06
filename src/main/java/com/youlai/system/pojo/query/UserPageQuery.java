@@ -1,8 +1,8 @@
 package com.youlai.system.pojo.query;
 
 import com.youlai.system.common.base.BasePageQuery;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -11,17 +11,17 @@ import lombok.Data;
  * @author haoxr
  * @date 2022/1/14
  */
-@ApiModel
+@Schema 
 @Data
 public class UserPageQuery extends BasePageQuery {
 
-    @ApiModelProperty("关键字(用户名/昵称/手机号)")
+    @Schema(description="关键字(用户名/昵称/手机号)")
     private String keywords;
 
-    @ApiModelProperty("用户状态")
+    @Schema(description="用户状态")
     private Integer status;
 
-    @ApiModelProperty("部门ID")
+    @Schema(description="部门ID")
     private Long deptId;
 
 }

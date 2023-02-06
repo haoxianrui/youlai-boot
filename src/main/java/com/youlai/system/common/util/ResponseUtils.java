@@ -3,10 +3,12 @@ package com.youlai.system.common.util;
 import cn.hutool.json.JSONUtil;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.common.result.ResultCode;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import javax.servlet.http.HttpServletResponse;
+// import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**

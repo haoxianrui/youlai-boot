@@ -1,7 +1,7 @@
 package com.youlai.system.pojo.vo.user;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
@@ -12,38 +12,38 @@ import java.util.List;
  * @author haoxr
  * @date 2022/8/25
  */
-@ApiModel
+@Schema 
 @Data
 public class UserDetailVO {
 
-    @ApiModelProperty("用户ID")
+    @Schema(description="用户ID")
     private Long id;
 
-    @ApiModelProperty("用户名")
+    @Schema(description="用户名")
     private String username;
 
-    @ApiModelProperty("昵称")
+    @Schema(description="昵称")
     private String nickname;
 
-    @ApiModelProperty("")
+    @Schema(description="")
     private String mobile;
 
-    @ApiModelProperty("性别")
+    @Schema(description="性别")
     private Integer gender;
 
-    @ApiModelProperty("用户头像")
+    @Schema(description="用户头像")
     private String avatar;
 
-    @ApiModelProperty("邮箱")
+    @Schema(description="邮箱")
     private String email;
 
-    @ApiModelProperty("用户状态(1:正常;0:禁用)")
+    @Schema(description="用户状态(1:正常;0:禁用)")
     private Integer status;
 
-    @ApiModelProperty("部门ID")
+    @Schema(description="部门ID")
     private Long deptId;
 
-    @ApiModelProperty("角色ID集合")
+    @Schema(description="角色ID集合")
     private List<Long> roleIds;
 
 }

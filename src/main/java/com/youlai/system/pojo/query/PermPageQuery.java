@@ -1,8 +1,8 @@
 package com.youlai.system.pojo.query;
 
 import com.youlai.system.common.base.BasePageQuery;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,13 +12,13 @@ import lombok.Data;
  * @date 2022/1/14 22:22
  */
 @Data
-@ApiModel
+@Schema 
 public class PermPageQuery extends BasePageQuery {
 
-    @ApiModelProperty("权限名称")
+    @Schema(description="权限名称")
     private String name;
 
-    @ApiModelProperty("菜单ID")
+    @Schema(description="菜单ID")
     private Long menuId;
 
 }
