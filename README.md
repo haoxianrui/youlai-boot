@@ -25,7 +25,7 @@
 
 ### 1. 数据库创建
 
-执行 [youlai_boot.sql](sql/youlai_boot.sql) 脚本完成数据库创建、表结构和基础数据的初始化。
+执行 [youlai_boot.sql](script/sql/youlai_boot.sql) 脚本完成数据库创建、表结构和基础数据的初始化。
 
 ### 2. 配置修改
 
