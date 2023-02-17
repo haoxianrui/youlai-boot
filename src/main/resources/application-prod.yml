@@ -8,18 +8,19 @@ spring:
     url: jdbc:mysql://www.youlai.tech:3306/youlai_boot?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true&allowMultiQueries=true
     username: youlai
     password: 123456
-  redis:
-    database: 6
-    host: www.youlai.tech
-    port: 6379
-    password: 123456
-    timeout: 10s
-    lettuce:
-      pool:
-        min-idle: 0
-        max-idle: 8
-        max-active: 8
-        max-wait: -1ms
+  data:
+    redis:
+      database: 6
+      host: www.youlai.tech
+      port: 6379
+      password: 123456
+      timeout: 10s
+      lettuce:
+        pool:
+          min-idle: 0
+          max-idle: 8
+          max-active: 8
+          max-wait: -1ms
 
 mybatis-plus:
   global-config:
