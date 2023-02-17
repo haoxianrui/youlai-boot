@@ -20,7 +20,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
+ * Spring Security 权限配置
+ *
  * @author haoxr
+ * @date 2023/2/17
  */
 @Configuration
 @EnableWebSecurity
@@ -31,7 +34,6 @@ public class SecurityConfig {
     private final MyAuthenticationEntryPoint myAuthenticationEntryPoint;
     private final MyAccessDeniedHandler myAccessDeniedHandler;
     private final JwtTokenManager jwtTokenManager;
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -57,12 +59,20 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/api/v1/auth/login", "/webjars/**", "/doc.html",
-                "/swagger-resources/**",
-                "/v3/api-docs/swagger-config",
-                "/v3/api-docs");
+        return (web) -> web.ignoring()
+                .requestMatchers(
+                        "/api/v1/auth/login",
+                        "/webjars/**",
+                        "/doc.html",
+                        "/swagger-resources/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**"
+                );
     }
 
+    /**
+     * 密码编码器
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
