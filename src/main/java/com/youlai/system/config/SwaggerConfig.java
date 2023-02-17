@@ -1,54 +1,74 @@
 package com.youlai.system.config;
 
-import cn.hutool.core.util.RandomUtil;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
+import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springdoc.core.customizers.OperationCustomizer;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 
-import java.util.HashMap;
-import java.util.Map;
-
-
+/**
+ * 接口文档配置
+ *
+ * @author haoxr
+ * @date 2023/2/17
+ */
 @Configuration
 public class SwaggerConfig {
 
+
     /**
-     * 根据@Tag 上的排序，写入x-order
+     * 接口分组-系统接口
      *
-     * @return the global open api customizer
+     * @param operationCustomizer
+     * @return
      */
     @Bean
-    public GlobalOpenApiCustomizer orderGlobalOpenApiCustomizer() {
-        return openApi -> {
-            if (openApi.getTags() != null) {
-                openApi.getTags().forEach(tag -> {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("x-order", RandomUtil.randomInt(0, 100));
-                    tag.setExtensions(map);
-                });
-            }
-            if (openApi.getPaths() != null) {
-                openApi.addExtension("x-test123", "333");
-                openApi.getPaths().addExtension("x-abb", RandomUtil.randomInt(1, 100));
-            }
-
-        };
+    public GroupedOpenApi systemApi(OperationCustomizer operationCustomizer) {
+        return GroupedOpenApi.builder()
+                .group("系统接口")
+                .packagesToScan("com.youlai.system.controller")
+                .pathsToMatch( "/api/**")
+                .addOperationCustomizer(operationCustomizer)
+                .build();
     }
 
+    /**
+     * 鉴权
+     *
+     * @return
+     */
     @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("XXX用户系统API")
-                        .version("1.0")
+    public OperationCustomizer operationCustomizer() {
+        return (operation, handlerMethod) -> operation.addParametersItem(
+                new Parameter()
+                        .in(SecurityScheme.In.HEADER.toString())
+                        .name(HttpHeaders.AUTHORIZATION)
+                        .required(true)
+                        .description("token 校验"));
+    }
 
-                        .description("Knife4j集成springdoc-openapi示例")
-                        .termsOfService("http://doc.xiaominfo.com")
+
+    /**
+     * 接口信息
+     *
+     * @return
+     */
+    @Bean
+    public OpenAPI apiInfo() {
+        return new OpenAPI().info(
+                new Info()
+                        .title("youlai-boot接口文档")
+                        .version("0.0.1")
+                        .description("youlai-boot接口文档")
                         .license(new License().name("Apache 2.0")
-                                .url("http://doc.xiaominfo.com")));
+                                .url("https://www.youlai.tech")
+                        )
+        );
     }
 
 }
