@@ -67,7 +67,7 @@ public class MyDataPermissionHandler implements DataPermissionHandler {
         String appendSqlStr;
         switch (dataScopeEnum) {
             case ALL:
-                return where;
+                return  where;
             case DEPT:
                 deptId = SecurityUtils.getDeptId();
                 appendSqlStr = deptColumnName + StringPool.EQUALS + deptId;
