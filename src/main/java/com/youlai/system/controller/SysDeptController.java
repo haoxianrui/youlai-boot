@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation; 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -32,7 +33,9 @@ public class SysDeptController {
 
     @Operation(summary = "获取部门列表")
     @GetMapping
-    public Result<List<DeptVO>> listDepartments(DeptQuery queryParams) {
+    public Result<List<DeptVO>> listDepartments(
+            @ParameterObject DeptQuery queryParams
+    ) {
         List<DeptVO> list = deptService.listDepartments(queryParams);
         return Result.success(list);
     }

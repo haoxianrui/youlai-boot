@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +45,7 @@ public class SysMenuController {
 
     @Operation(summary = "菜单列表")
     @GetMapping
-    public Result listMenus(MenuQuery queryParams) {
+    public Result listMenus( @ParameterObject MenuQuery queryParams) {
         List<MenuVO> menuList = menuService.listMenus(queryParams);
         return Result.success(menuList);
     }

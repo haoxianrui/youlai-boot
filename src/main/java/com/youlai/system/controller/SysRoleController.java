@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation; 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -29,7 +30,9 @@ public class SysRoleController {
 
     @Operation(summary = "角色分页列表")
     @GetMapping("/pages")
-    public PageResult<RolePageVO> listRolePages(RolePageQuery queryParams) {
+    public PageResult<RolePageVO> listRolePages(
+            @ParameterObject RolePageQuery queryParams
+    ) {
         Page<RolePageVO> result = roleService.listRolePages(queryParams);
         return PageResult.success(result);
     }

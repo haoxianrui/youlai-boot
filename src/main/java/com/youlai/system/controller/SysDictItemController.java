@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation; 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "字典数据接口")
@@ -25,7 +26,7 @@ public class SysDictItemController {
     @Operation(summary = "字典数据分页列表")
     @GetMapping("/pages")
     public PageResult<DictItemPageVO> listDictItemPages(
-            DictItemPageQuery queryParams
+            @ParameterObject DictItemPageQuery queryParams
     ) {
         Page<DictItemPageVO> result = dictItemService.listDictItemPages(queryParams);
         return PageResult.success(result);

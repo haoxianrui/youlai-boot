@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation; 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,9 @@ public class SysUserController {
 
     @Operation(summary = "用户分页列表")
     @GetMapping("/pages")
-    public PageResult<UserVO> listUserPages(UserPageQuery queryParams) {
+    public PageResult<UserVO> listUserPages(
+            @ParameterObject UserPageQuery queryParams
+    ) {
         IPage<UserVO> result = userService.listUserPages(queryParams);
         return PageResult.success(result);
     }

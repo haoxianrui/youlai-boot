@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation; 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +28,9 @@ public class SysDictTypeController {
 
     @Operation(summary = "字典类型分页列表")
     @GetMapping("/pages")
-    public PageResult<DictTypePageVO> listDictTypePages(DictTypePageQuery queryParams) {
+    public PageResult<DictTypePageVO> listDictTypePages(
+            @ParameterObject DictTypePageQuery queryParams
+    ) {
         Page<DictTypePageVO> result = dictTypeService.listDictTypePages(queryParams);
         return PageResult.success(result);
     }
