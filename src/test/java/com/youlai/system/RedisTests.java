@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
 /**
- * Redis单元测试
+ * Redis 单元测试
  *
  * @author: haoxr
  * @date: 2023/02/17
@@ -21,7 +21,7 @@ public class RedisTests {
     private  RedisTemplate redisTemplate;
 
     /**
-     * Redis 序列化配置
+     * Redis 序列化测试
      */
     @Test
     public void testRedisSerializer() {
@@ -29,7 +29,10 @@ public class RedisTests {
         SysUser user = new SysUser();
         user.setId(1l);
         user.setNickname("张三");
+        // 写
         redisTemplate.opsForValue().set("user", user);
+
+        // 读
         SysUser userCache = (SysUser)redisTemplate.opsForValue().get("user");
         log.info("userCache:{}", userCache);
 
