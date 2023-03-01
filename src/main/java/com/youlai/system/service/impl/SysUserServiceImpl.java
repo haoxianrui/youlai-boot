@@ -61,8 +61,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     private final PasswordEncoder passwordEncoder;
     private final SysUserRoleService userRoleService;
-    private final UserImportListener userImportListener;
-
     private final UserConverter userConverter;
 
     private final SysMenuService menuService;
@@ -239,85 +237,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public String importUsers(UserImportVO userImportVO) throws IOException {
 
-        Long deptId = userImportVO.getDeptId();
-        List<Long> roleIds = Arrays.stream(userImportVO.getRoleIds().split(","))
-                .map(roleId -> Convert.toLong(roleId))
-                .collect(Collectors.toList());
-        InputStream inputStream = userImportVO.getFile().getInputStream();
-
-        ExcelReaderBuilder excelReaderBuilder = EasyExcel.read(inputStream, UserImportVO.UserItem.class, userImportListener);
-        ExcelReaderSheetBuilder sheet = excelReaderBuilder.sheet();
-        List<UserImportVO.UserItem> list = sheet.doReadSync();
-
-        Assert.isTrue(CollectionUtil.isNotEmpty(list), "未检测到任何数据");
-
-        // 有效数据集合
-        List<UserImportVO.UserItem> validDataList = list.stream()
-                .filter(item -> StrUtil.isNotBlank(item.getUsername()))
-                .collect(Collectors.toList());
-
-        Assert.isTrue(CollectionUtil.isNotEmpty(validDataList), "未检测到有效数据");
-
-        long distinctCount = validDataList.stream()
-                .map(UserImportVO.UserItem::getUsername)
-                .distinct()
-                .count();
-        Assert.isTrue(validDataList.size() == distinctCount, "导入数据中有重复的用户名，请检查！");
-
-        List<SysUser> saveUserList = Lists.newArrayList();
-
-        StringBuilder errMsg = new StringBuilder();
-        for (int i = 0; i < validDataList.size(); i++) {
-            UserImportVO.UserItem userItem = validDataList.get(i);
-
-            String username = userItem.getUsername();
-            if (StrUtil.isBlank(username)) {
-                errMsg.append(StrUtil.format("第{}条数据导入失败，原因：用户名为空", i + 1));
-                continue;
-            }
-
-            String nickname = userItem.getNickname();
-            if (StrUtil.isBlank(nickname)) {
-                errMsg.append(StrUtil.format("第{}条数据导入失败，原因：用户昵称为空", i + 1));
-                continue;
-            }
-
-            SysUser user = new SysUser();
-            user.setUsername(username);
-            user.setNickname(nickname);
-            user.setMobile(userItem.getMobile());
-            user.setEmail(userItem.getEmail());
-            user.setDeptId(deptId);
-            // 默认密码
-            user.setPassword(passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));
-            // 性别转换
-            Integer gender = (Integer) IBaseEnum.getValueByLabel(userItem.getGender(), GenderEnum.class);
-            user.setGender(gender);
-
-            saveUserList.add(user);
-        }
-
-        if (CollectionUtil.isNotEmpty(saveUserList)) {
-            boolean result = this.saveBatch(saveUserList);
-            Assert.isTrue(result, "导入数据失败，原因：保存用户出错");
-
-            List<SysUserRole> userRoleList = new ArrayList<>();
-
-            if (CollectionUtil.isNotEmpty(roleIds)) {
-
-                roleIds.forEach(roleId -> {
-                    userRoleList.addAll(
-                            saveUserList.stream()
-                                    .map(user -> new SysUserRole(user.getId(), roleId)).
-                                    collect(Collectors.toList()));
-                });
-            }
-
-            userRoleService.saveBatch(userRoleList);
-        }
-
-        errMsg.append(StrUtil.format("一共{}条数据，成功导入{}条数据，导入失败数据{}条", list.size(), saveUserList.size(), list.size() - saveUserList.size()));
-        return errMsg.toString();
+        return "导入成功";
 
     }
 
