@@ -1,11 +1,11 @@
 package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.system.pojo.Option;
+import com.youlai.system.pojo.vo.Option;
 import com.youlai.system.pojo.entity.SysDept;
 import com.youlai.system.pojo.form.DeptForm;
 import com.youlai.system.pojo.query.DeptQuery;
-import com.youlai.system.pojo.vo.dept.DeptVO;
+import com.youlai.system.pojo.vo.DeptVO;
 
 import java.util.List;
 

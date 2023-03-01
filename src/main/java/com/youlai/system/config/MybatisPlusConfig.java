@@ -1,20 +1,18 @@
 package com.youlai.system.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
-import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.DataPermissionInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.youlai.system.handler.*;
-import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.TypeHandlerRegistry;
+import com.youlai.system.framework.mybatisplus.MyDataPermissionHandler;
+import com.youlai.system.framework.mybatisplus.MyMetaObjectHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * Mybatis-Plus配置类
+ * mybatis-plus 配置类
  *
  * @author haoxr
  * @date 2022/7/2
@@ -35,17 +33,6 @@ public class MybatisPlusConfig {
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
 
         return interceptor;
-    }
-
-    @Bean
-    public ConfigurationCustomizer configurationCustomizer() {
-        return configuration -> {
-            // 全局注册自定义TypeHandler
-            TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
-            typeHandlerRegistry.register(String[].class, JdbcType.OTHER, StringArrayJsonTypeHandler.class);
-            typeHandlerRegistry.register(Long[].class, JdbcType.OTHER, LongArrayJsonTypeHandler.class);
-            typeHandlerRegistry.register(Integer[].class, JdbcType.OTHER, IntegerArrayJsonTypeHandler.class);
-        };
     }
 
     /**

@@ -1,12 +1,12 @@
 package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.system.pojo.Option;
+import com.youlai.system.pojo.vo.Option;
 import com.youlai.system.pojo.entity.SysMenu;
 import com.youlai.system.pojo.query.MenuQuery;
-import com.youlai.system.pojo.vo.menu.MenuVO;
-import com.youlai.system.pojo.vo.menu.ResourceVO;
-import com.youlai.system.pojo.vo.menu.RouteVO;
+import com.youlai.system.pojo.vo.MenuVO;
+import com.youlai.system.pojo.vo.ResourceVO;
+import com.youlai.system.pojo.vo.RouteVO;
 
 import java.util.List;
 import java.util.Set;

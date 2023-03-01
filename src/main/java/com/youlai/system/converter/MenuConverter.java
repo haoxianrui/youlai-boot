@@ -1,7 +1,7 @@
 package com.youlai.system.converter;
 
 import com.youlai.system.pojo.entity.SysMenu;
-import com.youlai.system.pojo.vo.menu.MenuVO;
+import com.youlai.system.pojo.vo.MenuVO;
 import org.mapstruct.Mapper;
 
 /**

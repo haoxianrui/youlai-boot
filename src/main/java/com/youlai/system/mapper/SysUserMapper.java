@@ -8,7 +8,7 @@ import com.youlai.system.pojo.entity.SysUser;
 import com.youlai.system.pojo.bo.UserAuthInfo;
 import com.youlai.system.pojo.bo.UserFormBO;
 import com.youlai.system.pojo.query.UserPageQuery;
-import com.youlai.system.pojo.vo.user.UserExportVO;
+import com.youlai.system.pojo.vo.UserExportVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

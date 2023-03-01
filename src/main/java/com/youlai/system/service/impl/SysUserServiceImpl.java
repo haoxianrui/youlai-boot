@@ -20,21 +20,21 @@ import com.youlai.system.common.enums.GenderEnum;
 import com.youlai.system.listener.UserImportListener;
 import com.youlai.system.mapper.SysUserMapper;
 import com.youlai.system.pojo.bo.UserBO;
-import com.youlai.system.pojo.dto.UserImportDTO;
+import com.youlai.system.pojo.vo.UserImportVO;
 import com.youlai.system.pojo.entity.SysUser;
 import com.youlai.system.pojo.entity.SysUserRole;
 import com.youlai.system.pojo.form.UserForm;
 import com.youlai.system.pojo.bo.UserAuthInfo;
 import com.youlai.system.pojo.bo.UserFormBO;
 import com.youlai.system.pojo.query.UserPageQuery;
-import com.youlai.system.pojo.vo.user.UserExportVO;
-import com.youlai.system.pojo.vo.user.UserLoginVO;
-import com.youlai.system.pojo.vo.user.UserVO;
+import com.youlai.system.pojo.vo.UserExportVO;
+import com.youlai.system.pojo.vo.UserInfoVO;
+import com.youlai.system.pojo.vo.UserPageVO;
 import com.youlai.system.service.SysMenuService;
 import com.youlai.system.service.SysRoleService;
 import com.youlai.system.service.SysUserRoleService;
 import com.youlai.system.service.SysUserService;
-import com.youlai.system.security.util.SecurityUtils;
+import com.youlai.system.framework.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -78,7 +78,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return
      */
     @Override
-    public IPage<UserVO> listUserPages(UserPageQuery queryParams) {
+    public IPage<UserPageVO> listUserPages(UserPageQuery queryParams) {
 
         // 参数构建
         int pageNum = queryParams.getPageNum();
@@ -89,7 +89,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Page<UserBO> userPoPage = this.baseMapper.listUserPages(page, queryParams);
 
         // 实体转换
-        Page<UserVO> userVoPage = userConverter.po2Vo(userPoPage);
+        Page<UserPageVO> userVoPage = userConverter.po2Vo(userPoPage);
 
         return userVoPage;
     }
@@ -232,34 +232,34 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 导入用户
      *
-     * @param userImportDTO
+     * @param userImportVO
      * @return
      */
     @Transactional
     @Override
-    public String importUsers(UserImportDTO userImportDTO) throws IOException {
+    public String importUsers(UserImportVO userImportVO) throws IOException {
 
-        Long deptId = userImportDTO.getDeptId();
-        List<Long> roleIds = Arrays.stream(userImportDTO.getRoleIds().split(","))
+        Long deptId = userImportVO.getDeptId();
+        List<Long> roleIds = Arrays.stream(userImportVO.getRoleIds().split(","))
                 .map(roleId -> Convert.toLong(roleId))
                 .collect(Collectors.toList());
-        InputStream inputStream = userImportDTO.getFile().getInputStream();
+        InputStream inputStream = userImportVO.getFile().getInputStream();
 
-        ExcelReaderBuilder excelReaderBuilder = EasyExcel.read(inputStream, UserImportDTO.UserItem.class, userImportListener);
+        ExcelReaderBuilder excelReaderBuilder = EasyExcel.read(inputStream, UserImportVO.UserItem.class, userImportListener);
         ExcelReaderSheetBuilder sheet = excelReaderBuilder.sheet();
-        List<UserImportDTO.UserItem> list = sheet.doReadSync();
+        List<UserImportVO.UserItem> list = sheet.doReadSync();
 
         Assert.isTrue(CollectionUtil.isNotEmpty(list), "未检测到任何数据");
 
         // 有效数据集合
-        List<UserImportDTO.UserItem> validDataList = list.stream()
+        List<UserImportVO.UserItem> validDataList = list.stream()
                 .filter(item -> StrUtil.isNotBlank(item.getUsername()))
                 .collect(Collectors.toList());
 
         Assert.isTrue(CollectionUtil.isNotEmpty(validDataList), "未检测到有效数据");
 
         long distinctCount = validDataList.stream()
-                .map(UserImportDTO.UserItem::getUsername)
+                .map(UserImportVO.UserItem::getUsername)
                 .distinct()
                 .count();
         Assert.isTrue(validDataList.size() == distinctCount, "导入数据中有重复的用户名，请检查！");
@@ -268,7 +268,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         StringBuilder errMsg = new StringBuilder();
         for (int i = 0; i < validDataList.size(); i++) {
-            UserImportDTO.UserItem userItem = validDataList.get(i);
+            UserImportVO.UserItem userItem = validDataList.get(i);
 
             String username = userItem.getUsername();
             if (StrUtil.isBlank(username)) {
@@ -339,7 +339,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return
      */
     @Override
-    public UserLoginVO getUserLoginInfo() {
+    public UserInfoVO getUserLoginInfo() {
         // 登录用户entity
         SysUser user = this.getOne(new LambdaQueryWrapper<SysUser>()
                 .eq(SysUser::getUsername, SecurityUtils.getUser().getUsername())
@@ -350,17 +350,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 )
         );
         // entity->VO
-        UserLoginVO userLoginVO = userConverter.entity2LoginUser(user);
+        UserInfoVO userInfoVO = userConverter.entity2LoginUser(user);
 
         // 用户角色集合
         Set<String> roles = SecurityUtils.getRoles();
-        userLoginVO.setRoles(roles);
+        userInfoVO.setRoles(roles);
 
         // 用户权限集合
         Set<String> perms = (Set<String>)redisTemplate.opsForValue().get("USER_PERMS:" + user.getId());
-        userLoginVO.setPerms(perms);
+        userInfoVO.setPerms(perms);
 
-        return userLoginVO;
+        return userInfoVO;
     }
 
 

@@ -2,10 +2,11 @@ package com.youlai.system.controller;
 
 
 import com.youlai.system.common.result.Result;
-import com.youlai.system.pojo.dto.TokenResult;
-import com.youlai.system.security.JwtTokenManager;
+import com.youlai.system.pojo.dto.LoginResult;
+import com.youlai.system.framework.security.JwtTokenManager;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation; 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,9 +24,9 @@ public class AuthController {
 
     @Operation(summary = "登录")
     @PostMapping("/login")
-    public Result<TokenResult> login(
-            @RequestParam String username,
-            @RequestParam String password
+    public Result<LoginResult> login(
+            @Parameter(name = "用户名",example = "admin") @RequestParam String username,
+            @Parameter(name = "密码") @RequestParam String password
     ) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 username.toLowerCase().trim(),
@@ -35,10 +36,10 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // 生成token
         String accessToken = "Bearer " + jwtTokenManager.createToken(authentication);
-        TokenResult tokenResult = TokenResult.builder()
+        LoginResult loginResult = LoginResult.builder()
                 .accessToken(accessToken)
                 .build();
-        return Result.success(tokenResult);
+        return Result.success(loginResult);
     }
 
     @Operation(summary = "注销")

@@ -7,7 +7,6 @@ import com.youlai.system.common.result.ResultCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-// import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -20,7 +19,7 @@ import java.io.IOException;
 public class ResponseUtils {
 
     /**
-     * 异常消息返回(适用过滤器异常响应)
+     * 异常消息返回(适用过滤器中处理异常响应)
      *
      * @param response
      * @param resultCode

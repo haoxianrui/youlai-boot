@@ -10,7 +10,7 @@ import com.youlai.system.mapper.SysDictItemMapper;
 import com.youlai.system.pojo.entity.SysDictItem;
 import com.youlai.system.pojo.form.DictItemForm;
 import com.youlai.system.pojo.query.DictItemPageQuery;
-import com.youlai.system.pojo.vo.dict.DictItemPageVO;
+import com.youlai.system.pojo.vo.DictItemPageVO;
 import com.youlai.system.service.SysDictItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

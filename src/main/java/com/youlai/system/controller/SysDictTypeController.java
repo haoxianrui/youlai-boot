@@ -1,16 +1,15 @@
 package com.youlai.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.system.pojo.Option;
+import com.youlai.system.pojo.vo.Option;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.pojo.form.DictTypeForm;
 import com.youlai.system.pojo.query.DictTypePageQuery;
-import com.youlai.system.pojo.vo.dict.DictTypePageVO;
+import com.youlai.system.pojo.vo.DictTypePageVO;
 import com.youlai.system.service.SysDictTypeService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation; 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;

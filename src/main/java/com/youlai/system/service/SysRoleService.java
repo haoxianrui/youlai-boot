@@ -3,11 +3,11 @@ package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.system.pojo.Option;
+import com.youlai.system.pojo.vo.Option;
 import com.youlai.system.pojo.entity.SysRole;
 import com.youlai.system.pojo.form.RoleForm;
 import com.youlai.system.pojo.query.RolePageQuery;
-import com.youlai.system.pojo.vo.role.RolePageVO;
+import com.youlai.system.pojo.vo.RolePageVO;
 
 import java.util.List;
 import java.util.Set;

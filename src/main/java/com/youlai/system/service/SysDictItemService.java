@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.youlai.system.pojo.entity.SysDictItem;
 import com.youlai.system.pojo.form.DictItemForm;
 import com.youlai.system.pojo.query.DictItemPageQuery;
-import com.youlai.system.pojo.vo.dict.DictItemPageVO;
+import com.youlai.system.pojo.vo.DictItemPageVO;
 
 /**
  *

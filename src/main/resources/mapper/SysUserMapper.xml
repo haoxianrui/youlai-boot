@@ -107,7 +107,7 @@
     </select>
 
     <!-- 获取用户导出列表 -->
-    <select id="listExportUsers" resultType="com.youlai.system.pojo.vo.user.UserExportVO">
+    <select id="listExportUsers" resultType="com.youlai.system.pojo.vo.UserExportVO">
         SELECT
             u.username,
             u.nickname,

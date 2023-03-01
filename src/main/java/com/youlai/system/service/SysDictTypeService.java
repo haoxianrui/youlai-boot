@@ -2,11 +2,11 @@ package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.system.pojo.Option;
+import com.youlai.system.pojo.vo.Option;
 import com.youlai.system.pojo.entity.SysDictType;
 import com.youlai.system.pojo.form.DictTypeForm;
 import com.youlai.system.pojo.query.DictTypePageQuery;
-import com.youlai.system.pojo.vo.dict.DictTypePageVO;
+import com.youlai.system.pojo.vo.DictTypePageVO;
 
 import java.util.List;
 

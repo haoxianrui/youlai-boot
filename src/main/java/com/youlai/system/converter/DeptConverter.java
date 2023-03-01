@@ -2,7 +2,7 @@ package com.youlai.system.converter;
 
 import com.youlai.system.pojo.entity.SysDept;
 import com.youlai.system.pojo.form.DeptForm;
-import com.youlai.system.pojo.vo.dept.DeptVO;
+import com.youlai.system.pojo.vo.DeptVO;
 import org.mapstruct.Mapper;
 
 /**

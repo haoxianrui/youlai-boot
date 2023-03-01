@@ -5,7 +5,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
-import com.youlai.system.pojo.vo.file.FileInfo;
+import com.youlai.system.pojo.vo.FileInfoVO;
 import com.youlai.system.service.FileService;
 import io.minio.*;
 import io.minio.http.Method;
@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
-
 
 /**
  * MinIO 文件实现类
@@ -86,7 +85,7 @@ public class MinioServiceImpl implements FileService, InitializingBean {
      */
     @Override
     @SneakyThrows
-    public FileInfo uploadFile(MultipartFile file) {
+    public FileInfoVO uploadFile(MultipartFile file) {
         // 存储桶不存在则创建
         createBucketIfAbsent(bucketName);
 
@@ -120,10 +119,10 @@ public class MinioServiceImpl implements FileService, InitializingBean {
             fileUrl = customDomain + '/' + bucketName + "/" + fileName;
         }
 
-        FileInfo fileInfo=new FileInfo();
-        fileInfo.setName(fileName);
-        fileInfo.setUrl(fileUrl);
-        return fileInfo;
+        FileInfoVO fileInfoVO = new FileInfoVO();
+        fileInfoVO.setName(fileName);
+        fileInfoVO.setUrl(fileUrl);
+        return fileInfoVO;
     }
 
 

@@ -1,16 +1,15 @@
 package com.youlai.system.controller;
 
-import com.youlai.system.pojo.Option;
+import com.youlai.system.pojo.vo.Option;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.pojo.entity.SysMenu;
 import com.youlai.system.pojo.query.MenuQuery;
-import com.youlai.system.pojo.vo.menu.MenuVO;
-import com.youlai.system.pojo.vo.menu.ResourceVO;
-import com.youlai.system.pojo.vo.menu.RouteVO;
+import com.youlai.system.pojo.vo.MenuVO;
+import com.youlai.system.pojo.vo.ResourceVO;
+import com.youlai.system.pojo.vo.RouteVO;
 import com.youlai.system.service.SysMenuService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation; 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

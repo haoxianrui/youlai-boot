@@ -3,14 +3,14 @@ package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.system.pojo.dto.UserImportDTO;
+import com.youlai.system.pojo.vo.UserImportVO;
 import com.youlai.system.pojo.entity.SysUser;
 import com.youlai.system.pojo.form.UserForm;
 import com.youlai.system.pojo.bo.UserAuthInfo;
 import com.youlai.system.pojo.query.UserPageQuery;
-import com.youlai.system.pojo.vo.user.UserExportVO;
-import com.youlai.system.pojo.vo.user.UserLoginVO;
-import com.youlai.system.pojo.vo.user.UserVO;
+import com.youlai.system.pojo.vo.UserExportVO;
+import com.youlai.system.pojo.vo.UserInfoVO;
+import com.youlai.system.pojo.vo.UserPageVO;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,7 +28,7 @@ public interface SysUserService extends IService<SysUser> {
      *
      * @return
      */
-    IPage<UserVO> listUserPages(UserPageQuery queryParams);
+    IPage<UserPageVO> listUserPages(UserPageQuery queryParams);
 
 
     /**
@@ -88,10 +88,10 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 导入用户
      *
-     * @param userImportDTO
+     * @param userImportVO
      * @return
      */
-    String importUsers(UserImportDTO userImportDTO) throws IOException;
+    String importUsers(UserImportVO userImportVO) throws IOException;
 
     /**
      * 获取导出用户列表
@@ -107,5 +107,5 @@ public interface SysUserService extends IService<SysUser> {
      *
      * @return
      */
-    UserLoginVO getUserLoginInfo();
+    UserInfoVO getUserLoginInfo();
 }

@@ -5,8 +5,8 @@ import com.youlai.system.pojo.bo.UserBO;
 import com.youlai.system.pojo.entity.SysUser;
 import com.youlai.system.pojo.form.UserForm;
 import com.youlai.system.pojo.bo.UserFormBO;
-import com.youlai.system.pojo.vo.user.UserLoginVO;
-import com.youlai.system.pojo.vo.user.UserVO;
+import com.youlai.system.pojo.vo.UserInfoVO;
+import com.youlai.system.pojo.vo.UserPageVO;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,9 +24,9 @@ public interface UserConverter {
     @Mappings({
             @Mapping(target = "genderLabel", expression = "java(com.youlai.system.common.base.IBaseEnum.getLabelByValue(po.getGender(), com.youlai.system.common.enums.GenderEnum.class))")
     })
-    UserVO po2Vo(UserBO po);
+    UserPageVO po2Vo(UserBO po);
 
-    Page<UserVO> po2Vo(Page<UserBO> po);
+    Page<UserPageVO> po2Vo(Page<UserBO> po);
 
     UserForm po2Form(UserFormBO po);
 
@@ -38,7 +38,7 @@ public interface UserConverter {
     @Mappings({
             @Mapping(target = "userId", source = "id")
     })
-    UserLoginVO entity2LoginUser(SysUser entity);
+    UserInfoVO entity2LoginUser(SysUser entity);
 
 
 }

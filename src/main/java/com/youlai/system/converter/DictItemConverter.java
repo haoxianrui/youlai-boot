@@ -3,7 +3,7 @@ package com.youlai.system.converter;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.system.pojo.entity.SysDictItem;
 import com.youlai.system.pojo.form.DictItemForm;
-import com.youlai.system.pojo.vo.dict.DictItemPageVO;
+import com.youlai.system.pojo.vo.DictItemPageVO;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 
