@@ -21,6 +21,14 @@
 | 后端工程 | https://gitee.com/youlaiorg/youlai-boot        |
 | 前端工程 | https://gitee.com/youlaiorg/vue3-element-admin |
 
+
+
+## 接口文档
+
+- `knife4j` 接口文档：[http://localhost:8989/doc.html](http://localhost:8989/doc.html)
+
+- `swagger` 接口文档：[http://localhost:8989/swagger-ui/index.html](http://localhost:8989/swagger-ui/index.html)
+
 ## 项目运行
 
 ### 1. 数据库创建
@@ -38,7 +46,7 @@
 
 ### 4. 前端启动
 
-参考前端工程说明文档：[README.md](https://gitee.com/youlaiorg/vue3-element-admin#%E9%A1%B9%E7%9B%AE%E5%90%AF%E5%8A%A8)
+文档：[README.md](https://gitee.com/youlaiorg/vue3-element-admin#%E9%A1%B9%E7%9B%AE%E5%90%AF%E5%8A%A8)
 
 ## 开发规范
 

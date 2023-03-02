@@ -19,7 +19,6 @@ import com.youlai.system.pojo.entity.SysUser;
 import com.youlai.system.pojo.form.UserForm;
 import com.youlai.system.pojo.query.UserPageQuery;
 import com.youlai.system.pojo.vo.UserExportVO;
-import com.youlai.system.pojo.vo.UserImportVO;
 import com.youlai.system.pojo.vo.UserInfoVO;
 import com.youlai.system.pojo.vo.UserPageVO;
 import com.youlai.system.service.SysMenuService;
@@ -32,7 +31,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -49,7 +47,9 @@ import java.util.stream.Collectors;
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
     private final PasswordEncoder passwordEncoder;
+
     private final SysUserRoleService userRoleService;
+
     private final UserConverter userConverter;
 
     private final SysMenuService menuService;
@@ -73,10 +73,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Page<UserBO> page = new Page<>(pageNum, pageSize);
 
         // 查询数据
-        Page<UserBO> userPoPage = this.baseMapper.listUserPages(page, queryParams);
+        Page<UserBO> userBoPage = this.baseMapper.listUserPages(page, queryParams);
 
         // 实体转换
-        Page<UserPageVO> userVoPage = userConverter.po2Vo(userPoPage);
+        Page<UserPageVO> userVoPage = userConverter.bo2Vo(userBoPage);
 
         return userVoPage;
     }
@@ -91,7 +91,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public UserForm getUserFormData(Long userId) {
         UserFormBO userFormBO = this.baseMapper.getUserDetail(userId);
         // 实体转换po->form
-        UserForm userForm = userConverter.po2Form(userFormBO);
+        UserForm userForm = userConverter.bo2Form(userFormBO);
         return userForm;
     }
 
@@ -216,19 +216,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return userAuthInfo;
     }
 
-    /**
-     * 导入用户
-     *
-     * @param userImportVO
-     * @return
-     */
-    @Transactional
-    @Override
-    public String importUsers(UserImportVO userImportVO) throws IOException {
-
-        return "导入成功";
-
-    }
 
     /**
      * 获取导出用户列表
@@ -259,14 +246,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 )
         );
         // entity->VO
-        UserInfoVO userInfoVO = userConverter.entity2LoginUser(user);
+        UserInfoVO userInfoVO = userConverter.entity2UserInfoVo(user);
 
         // 用户角色集合
         Set<String> roles = SecurityUtils.getRoles();
         userInfoVO.setRoles(roles);
 
         // 用户权限集合
-        Set<String> perms = (Set<String>)redisTemplate.opsForValue().get("USER_PERMS:" + user.getId());
+        Set<String> perms = (Set<String>) redisTemplate.opsForValue().get("USER_PERMS:" + user.getId());
         userInfoVO.setPerms(perms);
 
         return userInfoVO;

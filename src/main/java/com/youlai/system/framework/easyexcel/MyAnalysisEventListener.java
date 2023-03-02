@@ -9,5 +9,7 @@ import com.alibaba.excel.event.AnalysisEventListener;
  * @date: 2023/03/01
  */
 public abstract class MyAnalysisEventListener<T> extends AnalysisEventListener<T> {
-    public abstract ExcelResult<T> getResult();
+
+    private String msg;
+    public abstract String getMsg();
 }

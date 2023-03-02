@@ -53,3 +53,11 @@ minio:
   # 自定义域名(非必须)，Nginx配置反向代理转发文件路径
   custom-domain:
 
+
+# 接口文档
+springdoc:
+  swagger-ui:
+    enabled: true
+  api-docs:
+    enabled: true
+

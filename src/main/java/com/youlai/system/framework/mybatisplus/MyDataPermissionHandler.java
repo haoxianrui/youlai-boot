@@ -79,7 +79,7 @@ public class MyDataPermissionHandler implements DataPermissionHandler {
             // 默认部门及子部门数据权限
             default:
                 deptId = SecurityUtils.getDeptId();
-                appendSqlStr = deptColumnName + " IN ( SELECT id FROM sys_dept WHERE id = " + deptId + " or find_in_set( " + deptId + " , tree_path ) )";
+                appendSqlStr = deptColumnName + " IN ( SELECT id FROM sys_dept WHERE id = " + deptId + " OR FIND_IN_SET( " + deptId + " , tree_path ) )";
                 break;
         }
 
