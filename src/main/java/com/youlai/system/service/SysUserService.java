@@ -85,13 +85,6 @@ public interface SysUserService extends IService<SysUser> {
 
     UserAuthInfo getUserAuthInfo(String username);
 
-    /**
-     * 导入用户
-     *
-     * @param userImportVO
-     * @return
-     */
-    String importUsers(UserImportVO userImportVO) throws IOException;
 
     /**
      * 获取导出用户列表

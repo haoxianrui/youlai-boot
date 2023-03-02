@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.common.util.ExcelUtils;
-import com.youlai.system.framework.easyexcel.ExcelResult;
 import com.youlai.system.listener.UserImportListener;
 import com.youlai.system.pojo.vo.UserImportVO;
 import com.youlai.system.pojo.form.UserForm;
@@ -149,8 +148,8 @@ public class SysUserController {
     @PostMapping("/_import")
     public Result importUsers(@Parameter(name = "部门ID") Long deptId, MultipartFile file) throws IOException {
         UserImportListener listener = new UserImportListener(deptId);
-        ExcelResult excelResult = ExcelUtils.importExcel(file.getInputStream(), UserImportVO.class, listener);
-        return Result.success(excelResult.getMsg());
+        String msg = ExcelUtils.importExcel(file.getInputStream(), UserImportVO.class, listener);
+        return Result.success(msg);
     }
 
     @Operation(summary = "导出用户")
