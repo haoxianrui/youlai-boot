@@ -1,31 +1,23 @@
 package com.youlai.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.read.builder.ExcelReaderBuilder;
-import com.alibaba.excel.read.builder.ExcelReaderSheetBuilder;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.collect.Lists;
-import com.youlai.system.common.base.IBaseEnum;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.converter.UserConverter;
-import com.youlai.system.common.enums.GenderEnum;
+import com.youlai.system.framework.security.util.SecurityUtils;
 import com.youlai.system.listener.UserImportListener;
 import com.youlai.system.mapper.SysUserMapper;
-import com.youlai.system.pojo.bo.UserBO;
-import com.youlai.system.pojo.vo.UserImportVO;
-import com.youlai.system.pojo.entity.SysUser;
-import com.youlai.system.pojo.entity.SysUserRole;
-import com.youlai.system.pojo.form.UserForm;
 import com.youlai.system.pojo.bo.UserAuthInfo;
+import com.youlai.system.pojo.bo.UserBO;
 import com.youlai.system.pojo.bo.UserFormBO;
+import com.youlai.system.pojo.entity.SysUser;
+import com.youlai.system.pojo.form.UserForm;
 import com.youlai.system.pojo.query.UserPageQuery;
 import com.youlai.system.pojo.vo.UserExportVO;
 import com.youlai.system.pojo.vo.UserInfoVO;
@@ -34,16 +26,12 @@ import com.youlai.system.service.SysMenuService;
 import com.youlai.system.service.SysRoleService;
 import com.youlai.system.service.SysUserRoleService;
 import com.youlai.system.service.SysUserService;
-import com.youlai.system.framework.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -60,8 +48,8 @@ import java.util.stream.Collectors;
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
     private final PasswordEncoder passwordEncoder;
+
     private final SysUserRoleService userRoleService;
-    private final UserImportListener userImportListener;
 
     private final UserConverter userConverter;
 
@@ -86,10 +74,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Page<UserBO> page = new Page<>(pageNum, pageSize);
 
         // 查询数据
-        Page<UserBO> userPoPage = this.baseMapper.listUserPages(page, queryParams);
+        Page<UserBO> userBoPage = this.baseMapper.listUserPages(page, queryParams);
 
         // 实体转换
-        Page<UserPageVO> userVoPage = userConverter.po2Vo(userPoPage);
+        Page<UserPageVO> userVoPage = userConverter.bo2Vo(userBoPage);
 
         return userVoPage;
     }
@@ -104,7 +92,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public UserForm getUserFormData(Long userId) {
         UserFormBO userFormBO = this.baseMapper.getUserDetail(userId);
         // 实体转换po->form
-        UserForm userForm = userConverter.po2Form(userFormBO);
+        UserForm userForm = userConverter.bo2Form(userFormBO);
         return userForm;
     }
 
@@ -229,97 +217,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return userAuthInfo;
     }
 
-    /**
-     * 导入用户
-     *
-     * @param userImportVO
-     * @return
-     */
-    @Transactional
-    @Override
-    public String importUsers(UserImportVO userImportVO) throws IOException {
-
-        Long deptId = userImportVO.getDeptId();
-        List<Long> roleIds = Arrays.stream(userImportVO.getRoleIds().split(","))
-                .map(roleId -> Convert.toLong(roleId))
-                .collect(Collectors.toList());
-        InputStream inputStream = userImportVO.getFile().getInputStream();
-
-        ExcelReaderBuilder excelReaderBuilder = EasyExcel.read(inputStream, UserImportVO.UserItem.class, userImportListener);
-        ExcelReaderSheetBuilder sheet = excelReaderBuilder.sheet();
-        List<UserImportVO.UserItem> list = sheet.doReadSync();
-
-        Assert.isTrue(CollectionUtil.isNotEmpty(list), "未检测到任何数据");
-
-        // 有效数据集合
-        List<UserImportVO.UserItem> validDataList = list.stream()
-                .filter(item -> StrUtil.isNotBlank(item.getUsername()))
-                .collect(Collectors.toList());
-
-        Assert.isTrue(CollectionUtil.isNotEmpty(validDataList), "未检测到有效数据");
-
-        long distinctCount = validDataList.stream()
-                .map(UserImportVO.UserItem::getUsername)
-                .distinct()
-                .count();
-        Assert.isTrue(validDataList.size() == distinctCount, "导入数据中有重复的用户名，请检查！");
-
-        List<SysUser> saveUserList = Lists.newArrayList();
-
-        StringBuilder errMsg = new StringBuilder();
-        for (int i = 0; i < validDataList.size(); i++) {
-            UserImportVO.UserItem userItem = validDataList.get(i);
-
-            String username = userItem.getUsername();
-            if (StrUtil.isBlank(username)) {
-                errMsg.append(StrUtil.format("第{}条数据导入失败，原因：用户名为空", i + 1));
-                continue;
-            }
-
-            String nickname = userItem.getNickname();
-            if (StrUtil.isBlank(nickname)) {
-                errMsg.append(StrUtil.format("第{}条数据导入失败，原因：用户昵称为空", i + 1));
-                continue;
-            }
-
-            SysUser user = new SysUser();
-            user.setUsername(username);
-            user.setNickname(nickname);
-            user.setMobile(userItem.getMobile());
-            user.setEmail(userItem.getEmail());
-            user.setDeptId(deptId);
-            // 默认密码
-            user.setPassword(passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));
-            // 性别转换
-            Integer gender = (Integer) IBaseEnum.getValueByLabel(userItem.getGender(), GenderEnum.class);
-            user.setGender(gender);
-
-            saveUserList.add(user);
-        }
-
-        if (CollectionUtil.isNotEmpty(saveUserList)) {
-            boolean result = this.saveBatch(saveUserList);
-            Assert.isTrue(result, "导入数据失败，原因：保存用户出错");
-
-            List<SysUserRole> userRoleList = new ArrayList<>();
-
-            if (CollectionUtil.isNotEmpty(roleIds)) {
-
-                roleIds.forEach(roleId -> {
-                    userRoleList.addAll(
-                            saveUserList.stream()
-                                    .map(user -> new SysUserRole(user.getId(), roleId)).
-                                    collect(Collectors.toList()));
-                });
-            }
-
-            userRoleService.saveBatch(userRoleList);
-        }
-
-        errMsg.append(StrUtil.format("一共{}条数据，成功导入{}条数据，导入失败数据{}条", list.size(), saveUserList.size(), list.size() - saveUserList.size()));
-        return errMsg.toString();
-
-    }
 
     /**
      * 获取导出用户列表
@@ -350,14 +247,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 )
         );
         // entity->VO
-        UserInfoVO userInfoVO = userConverter.entity2LoginUser(user);
+        UserInfoVO userInfoVO = userConverter.entity2UserInfoVo(user);
 
         // 用户角色集合
         Set<String> roles = SecurityUtils.getRoles();
         userInfoVO.setRoles(roles);
 
         // 用户权限集合
-        Set<String> perms = (Set<String>)redisTemplate.opsForValue().get("USER_PERMS:" + user.getId());
+        Set<String> perms = (Set<String>) redisTemplate.opsForValue().get("USER_PERMS:" + user.getId());
         userInfoVO.setPerms(perms);
 
         return userInfoVO;
