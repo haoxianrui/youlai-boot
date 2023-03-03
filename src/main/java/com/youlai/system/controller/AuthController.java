@@ -25,8 +25,8 @@ public class AuthController {
     @Operation(summary = "登录")
     @PostMapping("/login")
     public Result<LoginResult> login(
-            @Parameter( description= "用户名",example = "admin") @RequestParam String username,
-            @Parameter(description = "密码") @RequestParam String password
+            @Parameter(description = "用户名", example = "admin") @RequestParam String username,
+            @Parameter(description = "密码",example = "123456") @RequestParam String password
     ) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 username.toLowerCase().trim(),
