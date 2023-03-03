@@ -1,24 +1,31 @@
 package com.youlai.system.listener;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.util.ListUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.youlai.system.common.base.IBaseEnum;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.common.enums.GenderEnum;
+import com.youlai.system.common.enums.StatusEnum;
 import com.youlai.system.converter.UserConverter;
 import com.youlai.system.framework.easyexcel.MyAnalysisEventListener;
+import com.youlai.system.pojo.entity.SysRole;
 import com.youlai.system.pojo.entity.SysUser;
+import com.youlai.system.pojo.entity.SysUserRole;
 import com.youlai.system.pojo.vo.UserImportVO;
+import com.youlai.system.service.SysRoleService;
+import com.youlai.system.service.SysUserRoleService;
 import com.youlai.system.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 /**
  * 用户导入监听器
@@ -31,28 +38,17 @@ import java.util.List;
 @Slf4j
 public class UserImportListener extends MyAnalysisEventListener<UserImportVO> {
 
-    /**
-     * 每隔5条存储数据库，实际使用中可以100条，然后清理list ，方便内存回收
-     */
-    private static final int BATCH_COUNT = 100;
 
+    // 有效条数
     private int validCount;
 
+    // 无效条数
     private int invalidCount;
 
-    private int currentIndex;
-
+    // 导入返回信息
     StringBuilder msg = new StringBuilder();
 
-
-    /**
-     * 缓存的数据
-     */
-    private List<SysUser> cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
-
-    /**
-     * 部门ID
-     */
+    // 部门ID
     private final Long deptId;
 
     private final SysUserService userService;
@@ -61,76 +57,102 @@ public class UserImportListener extends MyAnalysisEventListener<UserImportVO> {
 
     private final UserConverter userConverter;
 
+    private final SysRoleService roleService;
+
+    private final SysUserRoleService userRoleService;
+
     public UserImportListener(Long deptId) {
         this.deptId = deptId;
         this.userService = SpringUtil.getBean(SysUserService.class);
         this.passwordEncoder = SpringUtil.getBean(PasswordEncoder.class);
+        this.roleService = SpringUtil.getBean(SysRoleService.class);
+        this.userRoleService = SpringUtil.getBean(SysUserRoleService.class);
         this.userConverter = SpringUtil.getBean(UserConverter.class);
     }
 
     /**
      * 每一条数据解析都会来调用
+     * <p>
+     * 1. 数据校验；全字段校验
+     * 2. 数据持久化；
      *
-     * @param userImportVO  一行数据，类似于 {@link AnalysisContext#readRowHolder()}
+     * @param userImportVO    一行数据，类似于 {@link AnalysisContext#readRowHolder()}
      * @param analysisContext
      */
     @Override
     public void invoke(UserImportVO userImportVO, AnalysisContext analysisContext) {
         log.info("解析到一条用户数据:{}", JSONUtil.toJsonStr(userImportVO));
-        currentIndex++;
-        StringBuilder rowMsg = new StringBuilder();
-        boolean rowFlag = true;
         // 校验数据
+        StringBuilder validationMsg = new StringBuilder();
 
         String username = userImportVO.getUsername();
         if (StrUtil.isBlank(username)) {
-            rowFlag = false;
-            rowMsg.append("用户名为空；");
+            validationMsg.append("用户名为空；");
         } else {
             long count = userService.count(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username));
             if (count > 0) {
-                rowFlag = false;
-                rowMsg.append("用户名已存在；");
+                validationMsg.append("用户名已存在；");
             }
         }
 
         String nickname = userImportVO.getNickname();
         if (StrUtil.isBlank(nickname)) {
-            rowFlag = false;
-            rowMsg.append("用户昵称为空；");
+            validationMsg.append("用户昵称为空；");
         }
-
 
         String mobile = userImportVO.getMobile();
         if (StrUtil.isBlank(mobile)) {
-            rowFlag = false;
-            rowMsg.append("手机号码为空；");
+            validationMsg.append("手机号码为空；");
         } else {
             if (!Validator.isMobile(mobile)) {
-                rowFlag = false;
-                rowMsg.append("手机号码不正确；");
+                validationMsg.append("手机号码不正确；");
             }
         }
 
-        if (rowFlag) {
-            validCount++;
+        if (validationMsg.length() == 0) {
+            // 校验通过，持久化至数据库
             SysUser entity = userConverter.importVo2Entity(userImportVO);
-            // 默认密码
-            entity.setPassword(passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));
-            // 性别转换
-            Integer gender = (Integer) IBaseEnum.getValueByLabel(userImportVO.getGender(), GenderEnum.class);
-            entity.setGender(gender);
-            entity.setDeptId(deptId);
+            entity.setDeptId(deptId);   // 部门
+            entity.setPassword(passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));   // 默认密码
+            // 性别翻译
+            String genderLabel = userImportVO.getGender();
+            if (StrUtil.isNotBlank(genderLabel)) {
+                Integer genderValue = (Integer) IBaseEnum.getValueByLabel(genderLabel, GenderEnum.class);
+                entity.setGender(genderValue);
+            }
 
-            cachedDataList.add(entity);
+            // 角色解析
+            String roleCodes = userImportVO.getRoleCodes();
+            List<Long> roleIds = null;
+            if (StrUtil.isNotBlank(roleCodes)) {
+                roleIds = roleService.list(
+                                new LambdaQueryWrapper<SysRole>()
+                                        .in(SysRole::getCode, roleCodes.split(","))
+                                        .eq(SysRole::getStatus, StatusEnum.ENABLE.getValue())
+                                        .select(SysRole::getId)
+                        ).stream()
+                        .map(role -> role.getId())
+                        .collect(Collectors.toList());
+            }
+
+
+            boolean saveResult = userService.save(entity);
+            if (saveResult) {
+                validCount++;
+                // 保存用户角色关联
+                if (CollectionUtil.isNotEmpty(roleIds)) {
+                    List<SysUserRole> userRoles = roleIds.stream()
+                            .map(roleId -> new SysUserRole(entity.getId(), roleId))
+                            .collect(Collectors.toList());
+                    userRoleService.saveBatch(userRoles);
+                }
+            } else {
+                invalidCount++;
+                msg.append("第" + (validCount + invalidCount) + "行数据保存失败；<br/>");
+            }
         } else {
             invalidCount++;
-            msg.append("第" + currentIndex + "行数据校验失败：").append(rowMsg + "<br/>");
-        }
-
-        if (cachedDataList.size() > BATCH_COUNT) {
-            saveData();
-            cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
+            msg.append("第" + (validCount + invalidCount) + "行数据校验失败：").append(validationMsg + "<br/>");
         }
     }
 
@@ -142,20 +164,14 @@ public class UserImportListener extends MyAnalysisEventListener<UserImportVO> {
      */
     @Override
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
-        // 这里也要保存数据，确保最后遗留的数据也存储到数据库
-        saveData();
-        msg = new StringBuilder("导入用户结束：成功" + validCount + "条；失败" + invalidCount + "条<br/>").append(msg);
+
     }
 
-    /**
-     * 存储数据库
-     */
-    private void saveData() {
-        userService.saveBatch(cachedDataList);
-    }
 
     @Override
     public String getMsg() {
-        return this.msg.toString();
+        // 总结信息
+        String summaryMsg = StrUtil.format("导入用户结束：成功{}条，失败{}条；<br/>{}", validCount, invalidCount, msg);
+        return summaryMsg;
     }
 }

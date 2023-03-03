@@ -15,7 +15,7 @@ public class UserImportVO {
     @ExcelProperty(value = "用户名")
     private String username;
 
-    @ExcelProperty(value = "用户昵称")
+    @ExcelProperty(value = "昵称")
     private String nickname;
 
     @ExcelProperty(value = "性别")
@@ -26,5 +26,8 @@ public class UserImportVO {
 
     @ExcelProperty(value = "邮箱")
     private String email;
+
+    @ExcelProperty("角色")
+    private String roleCodes;
 
 }
