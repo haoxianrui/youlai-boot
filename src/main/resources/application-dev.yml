@@ -53,11 +53,12 @@ minio:
   # 自定义域名(非必须)，Nginx配置反向代理转发文件路径
   custom-domain:
 
-
-# 接口文档
+# springdoc配置： https://springdoc.org/properties.html
 springdoc:
   swagger-ui:
     enabled: true
+    operationsSorter: alpha
+    tags-sorter: alpha
   api-docs:
     enabled: true
 
