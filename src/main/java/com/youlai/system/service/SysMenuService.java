@@ -1,11 +1,11 @@
 package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.youlai.system.pojo.form.MenuForm;
 import com.youlai.system.pojo.vo.Option;
 import com.youlai.system.pojo.entity.SysMenu;
 import com.youlai.system.pojo.query.MenuQuery;
 import com.youlai.system.pojo.vo.MenuVO;
-import com.youlai.system.pojo.vo.ResourceVO;
 import com.youlai.system.pojo.vo.RouteVO;
 
 import java.util.List;
@@ -40,12 +40,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * @param menu
      * @return
      */
-    boolean saveMenu(SysMenu menu);
-
-    /**
-     * 清理路由缓存
-     */
-    void cleanCache();
+    boolean saveMenu(MenuForm menu);
 
     /**
      * 获取路由列表
@@ -53,13 +48,6 @@ public interface SysMenuService extends IService<SysMenu> {
      * @return
      */
     List<RouteVO> listRoutes();
-
-    /**
-     * 资源(菜单+权限)树形列表
-     *
-     * @return
-     */
-    List<ResourceVO> listResources();
 
     /**
      * 修改菜单显示状态
@@ -77,4 +65,20 @@ public interface SysMenuService extends IService<SysMenu> {
      * @return
      */
     Set<String> listRolePerms(Set<String> roles);
+
+    /**
+     * 获取菜单表单数据
+     *
+     * @param id 菜单ID
+     * @return
+     */
+    MenuForm getMenuForm(Long id);
+
+    /**
+     * 删除菜单
+     *
+     * @param id
+     * @return
+     */
+    boolean deleteMenu(Long id);
 }
