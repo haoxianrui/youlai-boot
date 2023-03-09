@@ -1,16 +1,14 @@
 package com.youlai.system.pojo.form;
 
-import com.youlai.system.common.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 @Schema(description = "部门表单对象")
 @Data
-public class DeptForm extends BaseEntity {
+public class DeptForm {
 
-    @Schema(description="部门ID(新增不填)")
+    @Schema(description="部门ID")
     private Long id;
 
     @Schema(description="部门名称")
@@ -20,10 +18,10 @@ public class DeptForm extends BaseEntity {
     @NotNull(message = "父部门ID不能为空")
     private Long parentId;
 
-    @Schema(description="状态")
+    @Schema(description="状态(1:启用;0:禁用)")
     private Integer status;
 
-    @Schema(description="排序")
+    @Schema(description="排序(数字越小排名越靠前)")
     private Integer sort;
 
 }
