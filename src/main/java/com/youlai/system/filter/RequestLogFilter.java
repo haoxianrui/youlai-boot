@@ -24,7 +24,7 @@ public class RequestLogFilter extends CommonsRequestLoggingFilter {
     @Override
     protected void beforeRequest(HttpServletRequest request, String message) {
         String requestURI = request.getRequestURI();
-        log.info("request uri：{}", requestURI);
+        log.info("request uri: {}", requestURI);
         super.beforeRequest(request, message);
     }
 
