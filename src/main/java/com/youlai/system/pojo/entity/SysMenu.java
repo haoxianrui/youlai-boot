@@ -9,13 +9,16 @@ import com.youlai.system.common.enums.MenuTypeEnum;
 import lombok.Data;
 
 /**
- * 菜单表实体
+ * 菜单实体对象
+ *
+ * @author haoxr
+ * @date 2023/3/6
  */
 @TableName(value ="sys_menu")
 @Data
 public class SysMenu extends BaseEntity {
     /**
-     * 
+     * 菜单ID
      */
     @TableId(type = IdType.AUTO)
     private Long id;
@@ -66,8 +69,8 @@ public class SysMenu extends BaseEntity {
     private String icon;
 
     /**
-     * 外链路径
+     * 跳转路径
      */
-    private String redirectUrl;
+    private String redirect;
 
 }

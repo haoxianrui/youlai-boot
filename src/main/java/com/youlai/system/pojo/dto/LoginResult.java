@@ -12,6 +12,9 @@ public class LoginResult {
     @Schema(description = "访问token")
     private String accessToken;
 
+    @Schema(description = "token 类型",example = "Bearer")
+    private String tokenType;
+
     @Schema(description = "刷新token")
     private String refreshToken;
 

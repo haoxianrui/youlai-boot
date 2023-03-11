@@ -24,7 +24,7 @@ public interface SysDictTypeService extends IService<SysDictType> {
      * @param queryParams 分页查询对象
      * @return
      */
-    Page<DictTypePageVO> listDictTypePages(DictTypePageQuery queryParams);
+    Page<DictTypePageVO> getDictTypePage(DictTypePageQuery queryParams);
 
 
     /**
@@ -33,7 +33,7 @@ public interface SysDictTypeService extends IService<SysDictType> {
      * @param id 字典类型ID
      * @return
      */
-    DictTypeForm getDictTypeFormData(Long id);
+    DictTypeForm getDictTypeForm(Long id);
 
 
     /**

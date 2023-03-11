@@ -56,7 +56,7 @@
 
 |作用|示例|
 |---|---|
-|分页查询|listUserPages|
+|分页查询|getUserPage|
 |列表查询|listUsers|
 |单个查询|getUser/getUserDetail/getUserInfo ...|
 |新增|saveUser|

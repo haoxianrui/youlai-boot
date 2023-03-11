@@ -7,6 +7,7 @@ import com.youlai.system.pojo.query.DeptQuery;
 import com.youlai.system.pojo.vo.DeptVO;
 import com.youlai.system.service.SysDeptService;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +23,13 @@ import java.util.List;
  * @author haoxr
  * @date 2020/11/6
  */
-@Tag(name = "部门接口")
+@Tag(name = "05.部门接口")
 @RestController
 @RequestMapping("/api/v1/dept")
 @RequiredArgsConstructor
 public class SysDeptController {
-
     private final SysDeptService deptService;
-
-    @Operation(summary = "获取部门列表")
+    @Operation(summary = "获取部门列表", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping
     public Result<List<DeptVO>> listDepartments(
             @ParameterObject DeptQuery queryParams
@@ -39,23 +38,23 @@ public class SysDeptController {
         return Result.success(list);
     }
 
-    @Operation(summary = "获取部门下拉选项")
+    @Operation(summary = "获取部门下拉选项", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping("/options")
     public Result<List<Option>> listDeptOptions() {
         List<Option> list = deptService.listDeptOptions();
         return Result.success(list);
     }
 
-    @Operation(summary = "获取部门详情")
+    @Operation(summary = "获取部门详情", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping("/{deptId}/form")
     public Result<DeptForm> getDeptForm(
-            @Parameter(name ="部门ID") @PathVariable Long deptId
+            @Parameter(description ="部门ID") @PathVariable Long deptId
     ) {
         DeptForm deptForm = deptService.getDeptForm(deptId);
         return Result.success(deptForm);
     }
 
-    @Operation(summary = "新增部门")
+    @Operation(summary = "新增部门", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping
     public Result saveDept(
             @Valid @RequestBody DeptForm formData
@@ -64,7 +63,7 @@ public class SysDeptController {
         return Result.success(id);
     }
 
-    @Operation(summary = "修改部门")
+    @Operation(summary = "修改部门", security = {@SecurityRequirement(name = "Authorization")})
     @PutMapping(value = "/{deptId}")
     public Result updateDept(
             @PathVariable Long deptId,
@@ -74,10 +73,10 @@ public class SysDeptController {
         return Result.success(deptId);
     }
 
-    @Operation(summary = "删除部门")
+    @Operation(summary = "删除部门", security = {@SecurityRequirement(name = "Authorization")})
     @DeleteMapping("/{ids}")
     public Result deleteDepartments(
-            @Parameter(name ="部门ID，多个以英文逗号(,)分割") @PathVariable("ids") String ids
+            @Parameter(description ="部门ID，多个以英文逗号(,)分割") @PathVariable("ids") String ids
     ) {
         boolean result = deptService.deleteByIds(ids);
         return Result.judge(result);

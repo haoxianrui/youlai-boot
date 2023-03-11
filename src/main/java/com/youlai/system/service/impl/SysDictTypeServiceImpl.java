@@ -7,15 +7,15 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.youlai.system.pojo.entity.SysDict;
 import com.youlai.system.pojo.vo.Option;
 import com.youlai.system.converter.DictTypeConverter;
 import com.youlai.system.mapper.SysDictTypeMapper;
-import com.youlai.system.pojo.entity.SysDictItem;
 import com.youlai.system.pojo.entity.SysDictType;
 import com.youlai.system.pojo.form.DictTypeForm;
 import com.youlai.system.pojo.query.DictTypePageQuery;
 import com.youlai.system.pojo.vo.DictTypePageVO;
-import com.youlai.system.service.SysDictItemService;
+import com.youlai.system.service.SysDictService;
 import com.youlai.system.service.SysDictTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDictType> implements SysDictTypeService {
 
 
-    private final SysDictItemService dictItemService;
+    private final SysDictService dictItemService;
     private final DictTypeConverter dictTypeConverter;
 
     /**
@@ -46,7 +46,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
      * @return
      */
     @Override
-    public Page<DictTypePageVO> listDictTypePages(DictTypePageQuery queryParams) {
+    public Page<DictTypePageVO> getDictTypePage(DictTypePageQuery queryParams) {
         // 查询参数
         int pageNum = queryParams.getPageNum();
         int pageSize = queryParams.getPageSize();
@@ -74,7 +74,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
      * @return
      */
     @Override
-    public DictTypeForm getDictTypeFormData(Long id) {
+    public DictTypeForm getDictTypeForm(Long id) {
         // 获取entity
         SysDictType entity = this.getOne(new LambdaQueryWrapper<SysDictType>()
                 .eq(SysDictType::getId, id)
@@ -128,9 +128,9 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
             String oldCode = sysDictType.getCode();
             String newCode = dictTypeForm.getCode();
             if (!StrUtil.equals(oldCode, newCode)) {
-                dictItemService.update(new LambdaUpdateWrapper<SysDictItem>()
-                        .eq(SysDictItem::getTypeCode, oldCode)
-                        .set(SysDictItem::getTypeCode, newCode)
+                dictItemService.update(new LambdaUpdateWrapper<SysDict>()
+                        .eq(SysDict::getTypeCode, oldCode)
+                        .set(SysDict::getTypeCode, newCode)
                 );
             }
         }
@@ -162,8 +162,8 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
                 .collect(Collectors.toList()
                 );
         if (CollectionUtil.isNotEmpty(dictTypeCodes)) {
-            dictItemService.remove(new LambdaQueryWrapper<SysDictItem>()
-                    .in(SysDictItem::getTypeCode, dictTypeCodes));
+            dictItemService.remove(new LambdaQueryWrapper<SysDict>()
+                    .in(SysDict::getTypeCode, dictTypeCodes));
         }
         // 删除字典类型
         boolean result = this.removeByIds(ids);
@@ -179,9 +179,9 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
     @Override
     public List<Option> listDictItemsByTypeCode(String typeCode) {
         // 数据字典项
-        List<SysDictItem> dictItems = dictItemService.list(new LambdaQueryWrapper<SysDictItem>()
-                .eq(SysDictItem::getTypeCode, typeCode)
-                .select(SysDictItem::getValue, SysDictItem::getName)
+        List<SysDict> dictItems = dictItemService.list(new LambdaQueryWrapper<SysDict>()
+                .eq(SysDict::getTypeCode, typeCode)
+                .select(SysDict::getValue, SysDict::getName)
         );
 
         // 转换下拉数据

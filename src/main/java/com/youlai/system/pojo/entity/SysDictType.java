@@ -1,17 +1,12 @@
 package com.youlai.system.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.util.Date;
-
 import com.youlai.system.common.base.BaseEntity;
 import lombok.Data;
 
 /**
- * 字典类型表
+ * 字典类型实体
  *
  * @author haoxr
  * @date 2022/12/17

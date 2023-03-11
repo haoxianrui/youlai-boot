@@ -2,12 +2,11 @@ package com.youlai.system.pojo.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Schema(description ="角色分页视图对象")
+@Schema(description ="角色分页对象")
 @Data
 public class RolePageVO {
 

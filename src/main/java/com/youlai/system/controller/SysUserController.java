@@ -17,6 +17,7 @@ import com.youlai.system.pojo.vo.UserInfoVO;
 import com.youlai.system.pojo.vo.UserPageVO;
 import com.youlai.system.service.SysUserService;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ import java.util.List;
  * @author haoxr
  * @date 2022/10/16
  */
-@Tag(name = "用户接口")
+@Tag(name = "02.用户接口")
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -50,25 +51,16 @@ public class SysUserController {
 
     private final SysUserService userService;
 
-    @Operation(summary = "用户分页列表")
-    @GetMapping("/pages")
-    public PageResult<UserPageVO> listUserPages(
+    @Operation(summary = "用户分页列表", security = {@SecurityRequirement(name = "Authorization")})
+    @GetMapping("/page")
+    public PageResult<UserPageVO> getUserPage(
             @ParameterObject UserPageQuery queryParams
     ) {
-        IPage<UserPageVO> result = userService.listUserPages(queryParams);
+        IPage<UserPageVO> result = userService.getUserPage(queryParams);
         return PageResult.success(result);
     }
 
-    @Operation(summary = "用户表单数据")
-    @GetMapping("/{userId}/form")
-    public Result<UserForm> getUserForm(
-            @Parameter(name = "用户ID") @PathVariable Long userId
-    ) {
-        UserForm formData = userService.getUserFormData(userId);
-        return Result.success(formData);
-    }
-
-    @Operation(summary = "新增用户")
+    @Operation(summary = "新增用户", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping
     @PreAuthorize("@pms.hasPermission('sys:user:add')")
     public Result saveUser(
@@ -78,41 +70,50 @@ public class SysUserController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "修改用户")
+    @Operation(summary = "用户表单数据", security = {@SecurityRequirement(name = "Authorization")})
+    @GetMapping("/{userId}/form")
+    public Result<UserForm> getUserForm(
+            @Parameter(description = "用户ID") @PathVariable Long userId
+    ) {
+        UserForm formData = userService.getUserFormData(userId);
+        return Result.success(formData);
+    }
+
+    @Operation(summary = "修改用户", security = {@SecurityRequirement(name = "Authorization")})
     @PutMapping(value = "/{userId}")
     @PreAuthorize("@pms.hasPermission('sys:user:edit')")
     public Result updateUser(
-            @Parameter(name = "用户ID") @PathVariable Long userId,
+            @Parameter(description = "用户ID") @PathVariable Long userId,
             @RequestBody @Validated UserForm userForm) {
         boolean result = userService.updateUser(userId, userForm);
         return Result.judge(result);
     }
 
-    @Operation(summary = "删除用户")
+    @Operation(summary = "删除用户", security = {@SecurityRequirement(name = "Authorization")})
     @DeleteMapping("/{ids}")
     @PreAuthorize("@pms.hasPermission('sys:user:delete')")
     public Result deleteUsers(
-            @Parameter(name = "用户ID，多个以英文逗号(,)分割") @PathVariable String ids
+            @Parameter(description = "用户ID，多个以英文逗号(,)分割") @PathVariable String ids
     ) {
         boolean result = userService.deleteUsers(ids);
         return Result.judge(result);
     }
 
-    @Operation(summary = "修改用户密码")
+    @Operation(summary = "修改用户密码", security = {@SecurityRequirement(name = "Authorization")})
     @PatchMapping(value = "/{userId}/password")
     public Result updatePassword(
-            @Parameter(name = "用户ID") @PathVariable Long userId,
+            @Parameter(description = "用户ID") @PathVariable Long userId,
             @RequestParam String password
     ) {
         boolean result = userService.updatePassword(userId, password);
         return Result.judge(result);
     }
 
-    @Operation(summary = "修改用户状态")
+    @Operation(summary = "修改用户状态", security = {@SecurityRequirement(name = "Authorization")})
     @PatchMapping(value = "/{userId}/status")
     public Result updatePassword(
-            @Parameter(name = "用户ID") @PathVariable Long userId,
-            @Parameter(name = "用户状态(1:启用;0:禁用)") @RequestParam Integer status
+            @Parameter(description = "用户ID") @PathVariable Long userId,
+            @Parameter(description = "用户状态(1:启用;0:禁用)") @RequestParam Integer status
     ) {
         boolean result = userService.update(new LambdaUpdateWrapper<SysUser>()
                 .eq(SysUser::getId, userId)
@@ -121,14 +122,14 @@ public class SysUserController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "获取当前登录用户信息")
+    @Operation(summary = "获取当前登录用户信息", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping("/me")
     public Result<UserInfoVO> getUserLoginInfo() {
         UserInfoVO userInfoVO = userService.getUserLoginInfo();
         return Result.success(userInfoVO);
     }
 
-    @Operation(summary = "用户导入模板下载")
+    @Operation(summary = "用户导入模板下载", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping("/template")
     public void downloadTemplate(HttpServletResponse response) throws IOException {
         String fileName = "用户导入模板.xlsx";
@@ -144,15 +145,15 @@ public class SysUserController {
         excelWriter.finish();
     }
 
-    @Operation(summary = "导入用户")
+    @Operation(summary = "导入用户", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping("/_import")
-    public Result importUsers(@Parameter(name = "部门ID") Long deptId, MultipartFile file) throws IOException {
+    public Result importUsers(@Parameter(description = "部门ID") Long deptId, MultipartFile file) throws IOException {
         UserImportListener listener = new UserImportListener(deptId);
         String msg = ExcelUtils.importExcel(file.getInputStream(), UserImportVO.class, listener);
         return Result.success(msg);
     }
 
-    @Operation(summary = "导出用户")
+    @Operation(summary = "导出用户", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping("/_export")
     public void exportUsers(UserPageQuery queryParams, HttpServletResponse response) throws IOException {
         String fileName = "用户列表.xlsx";

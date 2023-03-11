@@ -65,7 +65,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
                 Long parentId = dept.getParentId();
                 // 不在缓存ID列表的parentId是顶级节点ID，以此作为递归开始
                 if (cacheDeptIds.contains(parentId) == false) {
-                    list.addAll(recurDepartments(parentId, deptList));
+                    list.addAll(recurDeptList(parentId, deptList));
                     cacheDeptIds.add(parentId); // 避免重复递归
                 }
             }
@@ -85,18 +85,18 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     }
 
     /**
-     * 递归生成部门层级列表
+     * 递归生成部门树形列表
      *
      * @param parentId
      * @param deptList
      * @return
      */
-    public List<DeptVO> recurDepartments(Long parentId, List<SysDept> deptList) {
+    public List<DeptVO> recurDeptList(Long parentId, List<SysDept> deptList) {
         List<DeptVO> list = deptList.stream()
                 .filter(dept -> dept.getParentId().equals(parentId))
                 .map(dept -> {
                     DeptVO deptVO = deptConverter.entity2Vo(dept);
-                    List<DeptVO> children = recurDepartments(dept.getId(), deptList);
+                    List<DeptVO> children = recurDeptList(dept.getId(), deptList);
                     deptVO.setChildren(children);
                     return deptVO;
                 }).collect(Collectors.toList());
@@ -181,13 +181,15 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Override
     public boolean deleteByIds(String ids) {
         // 删除部门及子部门
-        Optional.ofNullable(Arrays.stream(ids.split(",")))
-                .ifPresent(deptIds -> deptIds.forEach(deptId ->
-                        this.remove(new LambdaQueryWrapper<SysDept>()
-                                .eq(SysDept::getId, deptId)
-                                .or()
-                                .apply("concat (',',tree_path,',') like concat('%,',{0},',%')", deptId))
-                ));
+        if (StrUtil.isNotBlank(ids)) {
+            String[] menuIds = ids.split(",");
+            for (String deptId : menuIds) {
+                this.remove(new LambdaQueryWrapper<SysDept>()
+                        .eq(SysDept::getId, deptId)
+                        .or()
+                        .apply("CONCAT (',',tree_path,',') LIKE CONCAT('%,',{0},',%')", deptId));
+            }
+        }
         return true;
     }
 

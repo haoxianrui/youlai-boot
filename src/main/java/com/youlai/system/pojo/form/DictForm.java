@@ -2,30 +2,31 @@ package com.youlai.system.pojo.form;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-@Schema(description = "字典数据项")
+@Schema(description = "字典表单对象")
 @Data
-public class DictItemForm {
+public class DictForm {
 
-    @Schema(description="数据项ID")
+    @Schema(description="字典ID")
     private Long id;
 
     @Schema(description="类型编码")
     private String typeCode;
 
-    @Schema(description="数据项名称")
+    @Schema(description="字典名称")
     private String name;
 
-    @Schema(description="值")
+    @Schema(description="字典值")
     private String value;
 
-    @Schema(description="状态：1->启用;0->禁用")
+    @Schema(description="状态(1:启用;0:禁用)")
     private Integer status;
 
     @Schema(description="排序")
     private Integer sort;
+
+    @Schema(description = "字典备注")
+    private String remark;
 
 }

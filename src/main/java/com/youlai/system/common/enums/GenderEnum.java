@@ -1,6 +1,7 @@
 package com.youlai.system.common.enums;
 
 import com.youlai.system.common.base.IBaseEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 /**
@@ -9,6 +10,7 @@ import lombok.Getter;
  * @author haoxr
  * @date 2022/10/14
  */
+@Schema(enumAsRef = true)
 public enum GenderEnum implements IBaseEnum<Integer> {
 
     MALE(1, "男"),

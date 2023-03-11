@@ -12,7 +12,7 @@ import java.util.Date;
  * @author haoxr
  * @date 2022/1/15 9:41
  */
-@Schema(description ="用户分页视图对象")
+@Schema(description ="用户分页对象")
 @Data
 public class UserPageVO {
 

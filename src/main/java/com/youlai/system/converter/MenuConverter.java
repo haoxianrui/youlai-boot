@@ -1,6 +1,7 @@
 package com.youlai.system.converter;
 
 import com.youlai.system.pojo.entity.SysMenu;
+import com.youlai.system.pojo.form.MenuForm;
 import com.youlai.system.pojo.vo.MenuVO;
 import org.mapstruct.Mapper;
 
@@ -13,6 +14,11 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface MenuConverter {
 
-    MenuVO entity2VO(SysMenu entity);
+    MenuVO entity2Vo(SysMenu entity);
+
+
+    MenuForm entity2Form(SysMenu entity);
+
+    SysMenu form2Entity(MenuForm menuForm);
 
 }

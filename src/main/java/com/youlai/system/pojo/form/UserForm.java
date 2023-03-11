@@ -14,7 +14,7 @@ import java.util.List;
  * @author haoxr
  * @date 2022/4/12 11:04
  */
-@Schema 
+@Schema(description = "用户表单对象")
 @Data
 public class UserForm {
 

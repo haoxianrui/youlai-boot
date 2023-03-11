@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-import java.util.Date;
+
 import lombok.Data;
 
 /**
@@ -14,9 +14,8 @@ import lombok.Data;
  * @author haoxr
  * @date 2022/12/17
  */
-@TableName(value ="sys_dict_item")
 @Data
-public class SysDictItem implements Serializable {
+public class SysDict implements Serializable {
     /**
      * 主键
      */

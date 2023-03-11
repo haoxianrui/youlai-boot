@@ -50,7 +50,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @return
      */
     @Override
-    public Page<RolePageVO> listRolePages(RolePageQuery queryParams) {
+    public Page<RolePageVO> getRolePage(RolePageQuery queryParams) {
         // 查询参数
         int pageNum = queryParams.getPageNum();
         int pageSize = queryParams.getPageSize();
@@ -88,11 +88,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         );
 
         // 实体转换
-        List<Option> list = roleConverter.roles2Options(roleList);
+        List<Option> list = roleConverter.entities2Options(roleList);
         return list;
     }
 
     /**
+     * 保存角色
+     *
      * @param roleForm
      * @return
      */
@@ -117,11 +119,24 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     /**
+     * 获取角色表单数据
+     *
+     * @param roleId 角色ID
+     * @return  {@link RoleForm} – 角色表单数据
+     */
+    @Override
+    public RoleForm getRoleForm(Long roleId) {
+        SysRole entity = this.getById(roleId);
+        RoleForm roleForm = roleConverter.entity2Form(entity);
+        return roleForm;
+    }
+
+    /**
      * 修改角色状态
      *
-     * @param roleId
-     * @param status
-     * @return
+     * @param roleId 角色ID
+     * @param status 角色状态(1:启用；0:禁用)
+     * @return {@link Boolean}
      */
     @Override
     public boolean updateRoleStatus(Long roleId, Integer status) {
@@ -134,7 +149,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     /**
      * 批量删除角色
      *
-     * @param ids
+     * @param ids 角色ID，多个使用英文逗号(,)分割
      * @return
      */
     @Override
@@ -154,14 +169,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     /**
-     * 获取角色的资源ID集合,资源包括菜单和权限
+     * 获取角色的菜单ID集合
      *
-     * @param roleId
-     * @return
+     * @param roleId 角色ID
+     * @return 菜单ID集合(包括按钮权限ID)
      */
     @Override
     public List<Long> getRoleMenuIds(Long roleId) {
-        // 获取角色拥有的菜单ID集合
         List<Long> menuIds = sysRoleMenuService.listMenuIdsByRoleId(roleId);
         return menuIds;
     }
