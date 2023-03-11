@@ -123,7 +123,7 @@ public class SysDictController {
     }
 
     @Operation(summary = "删除字典类型", security = {@SecurityRequirement(name = "Authorization")})
-    @DeleteMapping("/{ids}")
+    @DeleteMapping("/types/{ids}")
     public Result deleteDictTypes(
             @Parameter(description ="字典类型ID，多个以英文逗号(,)分割") @PathVariable String ids
     ) {
