@@ -26,7 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 /**
  * 用户导入监听器
  * <p>
