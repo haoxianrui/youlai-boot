@@ -1,5 +1,6 @@
 package com.youlai.system.framework.security.config;
 
+import com.youlai.system.framework.security.constant.SecurityConstants;
 import com.youlai.system.framework.security.filter.JwtAuthenticationFilter;
 import com.youlai.system.framework.security.exception.MyAccessDeniedHandler;
 import com.youlai.system.framework.security.exception.MyAuthenticationEntryPoint;
@@ -43,27 +44,27 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
+                .requestMatchers(SecurityConstants.LOGIN_PATH).permitAll() // 登录接口放行但会走过滤器链-验证码校验
                 .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginProcessingUrl("/api/v1/auth/login").permitAll()
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(myAuthenticationEntryPoint)
                 .accessDeniedHandler(myAccessDeniedHandler)
         ;
 
-        // disable cache
-        http.headers().cacheControl();
-
         // 验证码校验过滤器
-        http.addFilterAt(new VerifyCodeFilter(),UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new VerifyCodeFilter(),UsernamePasswordAuthenticationFilter.class);
         // JWT 校验过滤器
         http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenManager), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
+    /**
+     * 不走过滤器链的放行配置
+     *
+     * @return
+     */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()

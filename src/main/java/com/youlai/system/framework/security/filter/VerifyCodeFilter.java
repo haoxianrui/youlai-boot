@@ -6,13 +6,13 @@ import cn.hutool.extra.spring.SpringUtil;
 import com.youlai.system.common.constant.CacheConstants;
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.common.util.ResponseUtils;
+import com.youlai.system.framework.security.constant.SecurityConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -25,10 +25,6 @@ import java.io.IOException;
  */
 public class VerifyCodeFilter extends OncePerRequestFilter {
 
-    /**
-     * 拦截路径
-     */
-    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/api/v1/auth/login", "POST");
     public static final String VERIFY_CODE = "verifyCode";
     public static final String VERIFY_CODE_KEY = "verifyCodeKey";
 
@@ -40,13 +36,17 @@ public class VerifyCodeFilter extends OncePerRequestFilter {
 
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        if (!DEFAULT_ANT_PATH_REQUEST_MATCHER.matches(request)) {
-            // 非登录接口放行
-            chain.doFilter(request, response);
-        } else {
+        // 检验登录接口的验证码
+        if (SecurityConstants.LOGIN_PATH.equals(request.getRequestURI())) {
             // 请求中的验证码
             String requestVerifyCode = request.getParameter(VERIFY_CODE);
 
+            // TODO 兼容 2.0.0 无验证码版本，后续移除
+            if (StrUtil.isBlank(requestVerifyCode)) {
+                // 非登录接口放行
+                chain.doFilter(request, response);
+                return;
+            }
             // 缓存中的验证码
             String verifyCodeKey = request.getParameter(VERIFY_CODE_KEY);
             Object cacheVerifyCode = redisTemplate.opsForValue().get(CacheConstants.VERIFY_CODE_CACHE_PREFIX + verifyCodeKey);
@@ -60,6 +60,9 @@ public class VerifyCodeFilter extends OncePerRequestFilter {
                     ResponseUtils.writeErrMsg(response, ResultCode.VERIFY_CODE_ERROR);
                 }
             }
+        } else {
+            // 非登录接口放行
+            chain.doFilter(request, response);
         }
     }
 

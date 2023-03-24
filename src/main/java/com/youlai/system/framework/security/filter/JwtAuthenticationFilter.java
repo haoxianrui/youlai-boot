@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.common.util.ResponseUtils;
 import com.youlai.system.framework.security.JwtTokenManager;
+import com.youlai.system.framework.security.constant.SecurityConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,8 +24,6 @@ import java.io.IOException;
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/api/v1/auth/login", "POST");
-
     private static final String TOKEN_PREFIX = "Bearer ";
 
     private final JwtTokenManager tokenManager;
@@ -35,28 +34,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (DEFAULT_ANT_PATH_REQUEST_MATCHER.matches(request)) {
-            // 非登录接口放行
+        if (SecurityConstants.LOGIN_PATH.equals(request.getRequestURI())) {
+            // 登录接口放行
             chain.doFilter(request, response);
-            return;
-        }
+        }else{
+            String jwt = resolveToken(request);
+            if (StrUtil.isNotBlank(jwt) && SecurityContextHolder.getContext().getAuthentication() == null) {
+                try {
+                    // 验证JWT
+                    this.tokenManager.validateToken(jwt);
 
-        String jwt = resolveToken(request);
-        if (StrUtil.isNotBlank(jwt) && SecurityContextHolder.getContext().getAuthentication() == null) {
-            try {
-                // 验证JWT
-                this.tokenManager.validateToken(jwt);
+                    // JWT验证有效获取Authentication存入Security上下文
+                    Authentication authentication = this.tokenManager.getAuthentication(jwt);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                // JWT验证有效获取Authentication存入Security上下文
-                Authentication authentication = this.tokenManager.getAuthentication(jwt);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-
-                chain.doFilter(request, response);
-            }catch (Exception e){
+                    chain.doFilter(request, response);
+                }catch (Exception e){
+                    ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
+                }
+            }else{
                 ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
             }
-        }else{
-            ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
         }
     }
 

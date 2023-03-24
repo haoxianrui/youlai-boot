@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import java.awt.*;
 
 /**
+ * EasyCaptcha 配置类
+ * 
  * @author: haoxr
  * @date: 2023/03/24
  */
