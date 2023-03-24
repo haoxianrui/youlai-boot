@@ -53,11 +53,15 @@ minio:
   # 自定义域名(非必须)，Nginx配置反向代理转发文件路径
   custom-domain: https://oss.youlai.tech
 
-
-
 # 接口文档
 springdoc:
   swagger-ui:
     enabled: true
   api-docs:
     enabled: true
+
+# 验证码配置
+easycaptcha:
+  verifyCodeType: arithmetic
+  enable: true
+  ttl: 120
