@@ -45,7 +45,7 @@ public class SysDeptController {
         return Result.success(list);
     }
 
-    @Operation(summary = "获取部门详情", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "获取部门表单数据", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping("/{deptId}/form")
     public Result<DeptForm> getDeptForm(
             @Parameter(description ="部门ID") @PathVariable Long deptId

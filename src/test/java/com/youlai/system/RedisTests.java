@@ -1,11 +1,15 @@
 package com.youlai.system;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.NumberUtil;
 import com.youlai.system.pojo.entity.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
+
+import java.math.BigDecimal;
 
 /**
  * Redis 单元测试
@@ -25,7 +29,6 @@ public class RedisTests {
      */
     @Test
     public void testRedisSerializer() {
-
         SysUser user = new SysUser();
         user.setId(1l);
         user.setNickname("张三");

@@ -1,9 +1,10 @@
-package com.youlai.system.config;
+package com.youlai.system.framework.security.config;
 
 import com.youlai.system.framework.security.filter.JwtAuthenticationFilter;
 import com.youlai.system.framework.security.exception.MyAccessDeniedHandler;
 import com.youlai.system.framework.security.exception.MyAuthenticationEntryPoint;
 import com.youlai.system.framework.security.JwtTokenManager;
+import com.youlai.system.framework.security.filter.VerifyCodeFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +45,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .anyRequest().authenticated()
                 .and()
+                .formLogin()
+                .loginProcessingUrl("/api/v1/auth/login").permitAll()
+                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(myAuthenticationEntryPoint)
                 .accessDeniedHandler(myAccessDeniedHandler)
@@ -52,6 +56,9 @@ public class SecurityConfig {
         // disable cache
         http.headers().cacheControl();
 
+        // 验证码校验过滤器
+        http.addFilterAt(new VerifyCodeFilter(),UsernamePasswordAuthenticationFilter.class);
+        // JWT 校验过滤器
         http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenManager), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -61,7 +68,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .requestMatchers(
-                        "/api/v1/auth/login",
+                        "/api/v1/auth/captcha",
                         "/webjars/**",
                         "/doc.html",
                         "/swagger-resources/**",

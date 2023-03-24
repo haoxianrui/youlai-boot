@@ -1,6 +1,8 @@
 package com.youlai.system.controller;
 
 import com.youlai.system.common.result.Result;
+import com.youlai.system.framework.easycaptcha.service.EasyCaptchaService;
+import com.youlai.system.pojo.dto.CaptchaResult;
 import com.youlai.system.pojo.dto.LoginResult;
 import com.youlai.system.framework.security.JwtTokenManager;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,13 +16,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "01.认证管理")
+@Tag(name = "01.认证中心")
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenManager jwtTokenManager;
+    private final EasyCaptchaService easyCaptchaService;
 
     @Operation(summary = "登录")
     @PostMapping("/login")
@@ -48,6 +51,13 @@ public class AuthController {
     public Result login() {
         SecurityContextHolder.clearContext();
         return Result.success("注销成功");
+    }
+
+    @Operation(summary = "获取验证码")
+    @GetMapping("/captcha")
+    public Result getCaptcha() {
+        CaptchaResult captcha = easyCaptchaService.getCaptcha();
+        return Result.success(captcha);
     }
 
 }

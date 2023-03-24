@@ -4,6 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.youlai.system.common.constant.ExcelConstants;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.common.util.ExcelUtils;
@@ -136,7 +137,7 @@ public class SysUserController {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
 
-        String fileClassPath = "excel-templates" + File.separator + fileName;
+        String fileClassPath = ExcelConstants.EXCEL_TEMPLATE_DIR + File.separator + fileName;
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(fileClassPath);
 
         ServletOutputStream outputStream = response.getOutputStream();

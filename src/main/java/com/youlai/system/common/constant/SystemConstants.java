@@ -23,4 +23,6 @@ public interface SystemConstants {
      * 超级管理员角色编码
      */
     String ROOT_ROLE_CODE = "ROOT";
+
+
 }

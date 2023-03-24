@@ -36,6 +36,7 @@ mybatis-plus:
     # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+
 # 认证配置
 auth:
   token:
@@ -62,3 +63,8 @@ springdoc:
   api-docs:
     enabled: true
 
+# 验证码配置
+easycaptcha:
+  verifyCodeType: arithmetic
+  enable: true
+  ttl: 120

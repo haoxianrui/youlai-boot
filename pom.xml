@@ -21,11 +21,11 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <hutool.version>5.8.12</hutool.version>
+        <hutool.version>5.8.15</hutool.version>
 
-        <mysql.version>8.0.19</mysql.version>
+        <mysql.version>8.0.28</mysql.version>
         <druid.version>1.2.4</druid.version>
-        <mybatis-plus.version>3.5.3</mybatis-plus.version>
+        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
 
         <knife4j.version>4.0.0</knife4j.version>
 
@@ -37,8 +37,12 @@
 
         <easyexcel.version>3.2.1</easyexcel.version>
 
-        <minio.version>8.3.7</minio.version>
+        <!-- 分布式文件存储 -->
+        <minio.version>8.5.2</minio.version>
         <okhttp3.version>4.8.1</okhttp3.version>
+
+        <!-- 验证码 -->
+        <easy-captcha.version>1.6.2</easy-captcha.version>
     </properties>
 
 
@@ -159,6 +163,18 @@
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
             <version>${minio.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.whvcse</groupId>
+            <artifactId>easy-captcha</artifactId>
+            <version>${easy-captcha.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjdk.nashorn</groupId>
+            <artifactId>nashorn-core</artifactId>
+            <version>15.4</version>
         </dependency>
 
     </dependencies>

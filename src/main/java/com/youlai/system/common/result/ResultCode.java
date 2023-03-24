@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
+ * 响应码枚举
+ *
  * @author haoxr
  * @date 2020-06-23
  **/
@@ -25,6 +27,10 @@ public enum ResultCode implements IResultCode, Serializable {
     USERNAME_OR_PASSWORD_ERROR("A0210", "用户名或密码错误"),
     PASSWORD_ENTER_EXCEED_LIMIT("A0211", "用户输入密码次数超限"),
     CLIENT_AUTHENTICATION_FAILED("A0212", "客户端认证失败"),
+
+    VERIFY_CODE_TIMEOUT("A0213", "验证码已过期"),
+    VERIFY_CODE_ERROR("A0214", "验证码错误"),
+
     TOKEN_INVALID("A0230", "token无效或已过期"),
     TOKEN_ACCESS_FORBIDDEN("A0231", "token已被禁止访问"),
 
