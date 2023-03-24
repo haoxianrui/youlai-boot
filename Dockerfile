@@ -16,3 +16,5 @@ CMD java \
 EXPOSE 8989
 # 时区修改
 RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \&& echo 'Asia/Shanghai' >/etc/timezone
+
+RUN apk --no-cache add ttf-dejavu fontconfig
