@@ -6,7 +6,7 @@
 
     <groupId>com.youlai</groupId>
     <artifactId>youlai-boot</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
     <name>youlai-boot 单体权限管理应用</name>
     <description>基于 SpringBoot3 快速构建的权限管理系统</description>
 
