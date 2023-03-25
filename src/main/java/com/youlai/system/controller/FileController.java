@@ -12,7 +12,7 @@ import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@Tag(name = "08.文件接口")
+@Tag(name = "07.文件接口")
 @RestController
 @RequestMapping("/api/v1/files")
 @RequiredArgsConstructor

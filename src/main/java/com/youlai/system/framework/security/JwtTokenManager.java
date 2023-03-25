@@ -1,11 +1,10 @@
 package com.youlai.system.framework.security;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.IdUtil;
+import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.framework.security.userdetails.SysUserDetails;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.DecodingException;
 import io.jsonwebtoken.security.Keys;
@@ -15,15 +14,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-
 import jakarta.annotation.Resource;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 
 /**
  * JWT token manager
@@ -35,16 +33,16 @@ import java.util.stream.Collectors;
 public class JwtTokenManager {
 
     /**
-     * secret key.
+     * token加密密钥
      */
     @Value("${auth.token.secret_key}")
     private String secretKey;
 
     /**
-     * Token validity time(seconds).
+     * token有效期(单位:秒)
      */
-    @Value("${auth.token.token_validity}")
-    private long tokenValidity;
+    @Value("${auth.token.ttl}")
+    private Long tokenTtl;
 
     /**
      * secret key byte array.
@@ -63,13 +61,6 @@ public class JwtTokenManager {
      * @return token
      */
     public String createToken(Authentication authentication) {
-
-        long now = System.currentTimeMillis();
-
-        Date validity;
-
-        validity = new Date(now + tokenValidity * 1000L);
-
         Claims claims = Jwts.claims().setSubject(authentication.getName());
         SysUserDetails userDetails = (SysUserDetails) authentication.getPrincipal();
         claims.put("userId", userDetails.getUserId());
@@ -81,29 +72,32 @@ public class JwtTokenManager {
         Set<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority()).collect(Collectors.toSet());
         claims.put("authorities", roles);
+        claims.put("jti",IdUtil.fastSimpleUUID());
 
         // 权限数据多放入Redis
         Set<String> perms = userDetails.getPerms();
-        redisTemplate.opsForValue().set("USER_PERMS:" + userDetails.getUserId(), perms);
+        redisTemplate.opsForValue().set(SecurityConstants.USER_PERMS_CACHE_PREFIX + userDetails.getUserId(), perms);
 
-        return Jwts.builder().setClaims(claims).setExpiration(validity)
-                .signWith( Keys.hmacShaKeyFor(this.getSecretKeyBytes()),SignatureAlgorithm.HS256).compact();
+        // 过期时间
+        Date expirationTime = new Date(System.currentTimeMillis() + tokenTtl * 1000L);
+        return Jwts.builder()
+                //.setId(IdUtil.fastSimpleUUID()) TODO 设置jti无效
+                .setClaims(claims)
+                .setExpiration(expirationTime)
+                .signWith(Keys.hmacShaKeyFor(this.getSecretKeyBytes()), SignatureAlgorithm.HS256).compact();
     }
 
     /**
      * 获取认证信息
      */
     public Authentication getAuthentication(String token) {
-        if (jwtParser == null) {
-            jwtParser = Jwts.parserBuilder().setSigningKey(this.getSecretKeyBytes()).build();
-        }
-        Claims claims = jwtParser.parseClaimsJws(token).getBody();
+        Claims claims = this.getTokenClaims(token);
 
         SysUserDetails principal = new SysUserDetails();
-        principal.setUserId(Convert.toLong(claims.get("userId")));
-        principal.setUsername(Convert.toStr(claims.get("username")));
-        principal.setDeptId(Convert.toLong(claims.get("deptId")));
-        principal.setDataScope(Convert.toInt(claims.get("dataScope")));
+        principal.setUserId(Convert.toLong(claims.get("userId"))); // 用户ID
+        principal.setUsername(Convert.toStr(claims.get("username"))); // 用户名
+        principal.setDeptId(Convert.toLong(claims.get("deptId"))); // 部门ID
+        principal.setDataScope(Convert.toInt(claims.get("dataScope"))); // 数据权限
 
         List<SimpleGrantedAuthority> authorities = ((ArrayList<String>) claims.get("authorities"))
                 .stream()
@@ -114,13 +108,21 @@ public class JwtTokenManager {
     }
 
     /**
-     * 验证token
+     * 验证 token
      */
     public void validateToken(String token) {
         if (jwtParser == null) {
             jwtParser = Jwts.parserBuilder().setSigningKey(this.getSecretKeyBytes()).build();
         }
-        jwtParser.parseClaimsJws(token);
+        // 验证 JWT，无异常解析成功说明JWT有效
+        Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);
+        // 验证 JWT 是否在黑名单(注销场景会存入黑名单)
+        Claims claims = claimsJws.getBody();
+        Boolean isBlack = redisTemplate.hasKey(SecurityConstants.BLACK_TOKEN_CACHE_PREFIX + claims.get("jti"));
+
+        if (isBlack) {
+            throw new RuntimeException("token 已被禁用");
+        }
     }
 
     public byte[] getSecretKeyBytes() {
@@ -130,9 +132,19 @@ public class JwtTokenManager {
             } catch (DecodingException e) {
                 secretKeyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
             }
-
         }
         return secretKeyBytes;
     }
 
+
+    /**
+     * get token claims
+     */
+    public Claims getTokenClaims(String token) {
+        if (jwtParser == null) {
+            jwtParser = Jwts.parserBuilder().setSigningKey(this.getSecretKeyBytes()).build();
+        }
+        Claims claims = jwtParser.parseClaimsJws(token).getBody();
+        return claims;
+    }
 }

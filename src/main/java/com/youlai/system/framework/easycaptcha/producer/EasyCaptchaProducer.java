@@ -27,7 +27,7 @@ public class EasyCaptchaProducer {
         int length = easyCaptchaConfig.getLength();
         String fontName = easyCaptchaConfig.getFontName();
 
-        switch (easyCaptchaConfig.getVerifyCodeType()) {
+        switch (easyCaptchaConfig.getType()) {
             case ARITHMETIC:
                 captcha = new ArithmeticCaptcha(width, height);
                 //固定设置为两位，图片为算数运算表达式
@@ -50,7 +50,7 @@ public class EasyCaptchaProducer {
                 captcha.setLen(length);
                 break;
             default:
-                throw new RuntimeException("验证码配置信息错误！正确配置查看 VerifyCodeTypeEnum ");
+                throw new RuntimeException("验证码配置信息错误！正确配置查看 CaptchaTypeEnum ");
         }
         captcha.setFont(new Font(fontName, easyCaptchaConfig.getFontStyle(), easyCaptchaConfig.getFontSize()));
         return captcha;

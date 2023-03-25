@@ -2,7 +2,7 @@ package com.youlai.system.framework.easycaptcha.service;
 
 import cn.hutool.core.util.IdUtil;
 import com.wf.captcha.base.Captcha;
-import com.youlai.system.common.constant.CacheConstants;
+import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.framework.easycaptcha.config.EasyCaptchaConfig;
 import com.youlai.system.framework.easycaptcha.producer.EasyCaptchaProducer;
 import com.youlai.system.pojo.dto.CaptchaResult;
@@ -39,9 +39,9 @@ public class EasyCaptchaService {
         String captchaText = captcha.text(); // 验证码文本
         String captchaBase64 = captcha.toBase64(); // 验证码图片Base64字符串
 
-        // 验证码文本缓存至Redis，用于登录比较
+        // 验证码文本缓存至Redis，用于登录校验
         String verifyCodeKey = IdUtil.fastSimpleUUID();
-        redisTemplate.opsForValue().set(CacheConstants.VERIFY_CODE_CACHE_PREFIX + verifyCodeKey, captchaText,
+        redisTemplate.opsForValue().set(SecurityConstants.VERIFY_CODE_CACHE_PREFIX + verifyCodeKey, captchaText,
                 easyCaptchaConfig.getTtl(), TimeUnit.SECONDS);
 
         CaptchaResult captchaResult = CaptchaResult.builder()

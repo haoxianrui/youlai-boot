@@ -6,7 +6,7 @@ package com.youlai.system.framework.easycaptcha.enums;
  * @author: haoxr
  * @date: 2023/03/24
  */
-public enum VerifyCodeTypeEnum {
+public enum CaptchaTypeEnum {
 
     /**
      * 算数

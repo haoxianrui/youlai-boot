@@ -3,10 +3,9 @@ package com.youlai.system.framework.security.filter;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.youlai.system.common.constant.CacheConstants;
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.common.util.ResponseUtils;
-import com.youlai.system.framework.security.constant.SecurityConstants;
+import com.youlai.system.common.constant.SecurityConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,7 +48,7 @@ public class VerifyCodeFilter extends OncePerRequestFilter {
             }
             // 缓存中的验证码
             String verifyCodeKey = request.getParameter(VERIFY_CODE_KEY);
-            Object cacheVerifyCode = redisTemplate.opsForValue().get(CacheConstants.VERIFY_CODE_CACHE_PREFIX + verifyCodeKey);
+            Object cacheVerifyCode = redisTemplate.opsForValue().get(SecurityConstants.VERIFY_CODE_CACHE_PREFIX + verifyCodeKey);
             if (cacheVerifyCode == null) {
                 ResponseUtils.writeErrMsg(response, ResultCode.VERIFY_CODE_TIMEOUT);
             } else {

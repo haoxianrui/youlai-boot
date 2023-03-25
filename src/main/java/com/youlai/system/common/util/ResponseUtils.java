@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * response 响应工具类
+ * 响应工具类
  *
  * @author haoxr
  * @date 2022/10/18

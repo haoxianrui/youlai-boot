@@ -1,20 +1,29 @@
 package com.youlai.system.controller;
 
+import cn.hutool.core.util.StrUtil;
+import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.result.Result;
+import com.youlai.system.common.util.RequestUtils;
 import com.youlai.system.framework.easycaptcha.service.EasyCaptchaService;
 import com.youlai.system.pojo.dto.CaptchaResult;
 import com.youlai.system.pojo.dto.LoginResult;
 import com.youlai.system.framework.security.JwtTokenManager;
+import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Tag(name = "01.认证中心")
 @RestController
@@ -24,6 +33,8 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenManager jwtTokenManager;
     private final EasyCaptchaService easyCaptchaService;
+
+    private final RedisTemplate redisTemplate;
 
     @Operation(summary = "登录")
     @PostMapping("/login")
@@ -48,7 +59,22 @@ public class AuthController {
 
     @Operation(summary = "注销", security = {@SecurityRequirement(name = "Authorization")})
     @DeleteMapping("/logout")
-    public Result login() {
+    public Result login(HttpServletRequest request) {
+        String token = RequestUtils.resolveToken(request);
+        if (StrUtil.isNotBlank(token)) {
+            Claims claims = jwtTokenManager.getTokenClaims(token);
+            String jti = claims.get("jti", String.class);
+
+            Date expiration = claims.getExpiration();
+            if (expiration != null) {
+                // 有过期时间，在token有效时间内存入黑名单，超出时间移除黑名单节省内存占用
+                long ttl = (expiration.getTime() - System.currentTimeMillis()) ;
+                redisTemplate.opsForValue().set(SecurityConstants.BLACK_TOKEN_CACHE_PREFIX + jti, null, ttl, TimeUnit.MILLISECONDS);
+            } else {
+                // 无过期时间，永久加入黑名单
+                redisTemplate.opsForValue().set(SecurityConstants.BLACK_TOKEN_CACHE_PREFIX + jti, null);
+            }
+        }
         SecurityContextHolder.clearContext();
         return Result.success("注销成功");
     }

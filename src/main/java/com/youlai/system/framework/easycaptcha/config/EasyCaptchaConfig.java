@@ -1,6 +1,6 @@
 package com.youlai.system.framework.easycaptcha.config;
 
-import com.youlai.system.framework.easycaptcha.enums.VerifyCodeTypeEnum;
+import com.youlai.system.framework.easycaptcha.enums.CaptchaTypeEnum;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ public class EasyCaptchaConfig {
     /**
      * 验证码类型
      */
-    private VerifyCodeTypeEnum verifyCodeType = VerifyCodeTypeEnum.ARITHMETIC;
+    private CaptchaTypeEnum type = CaptchaTypeEnum.ARITHMETIC;
 
 
     /**

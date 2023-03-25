@@ -1,10 +1,11 @@
 package com.youlai.system.framework.security.filter;
 
 import cn.hutool.core.util.StrUtil;
+import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.result.ResultCode;
+import com.youlai.system.common.util.RequestUtils;
 import com.youlai.system.common.util.ResponseUtils;
 import com.youlai.system.framework.security.JwtTokenManager;
-import com.youlai.system.framework.security.constant.SecurityConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,8 +24,6 @@ import java.io.IOException;
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String TOKEN_PREFIX = "Bearer ";
-
     private final JwtTokenManager tokenManager;
 
     public JwtAuthenticationFilter(JwtTokenManager tokenManager) {
@@ -37,10 +36,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 登录接口放行
             chain.doFilter(request, response);
         }else{
-            String jwt = resolveToken(request);
+            String jwt = RequestUtils.resolveToken(request);
             if (StrUtil.isNotBlank(jwt) && SecurityContextHolder.getContext().getAuthentication() == null) {
                 try {
-                    // 验证JWT
+                    // 验证 JWT
                     this.tokenManager.validateToken(jwt);
 
                     // JWT验证有效获取Authentication存入Security上下文
@@ -55,16 +54,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
             }
         }
-    }
-
-    /**
-     * Get token from header.
-     */
-    private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
-            return bearerToken.substring(TOKEN_PREFIX.length());
-        }
-        return null;
     }
 }

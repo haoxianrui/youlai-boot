@@ -1,6 +1,6 @@
 package com.youlai.system.framework.security.config;
 
-import com.youlai.system.framework.security.constant.SecurityConstants;
+import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.framework.security.filter.JwtAuthenticationFilter;
 import com.youlai.system.framework.security.exception.MyAccessDeniedHandler;
 import com.youlai.system.framework.security.exception.MyAuthenticationEntryPoint;
