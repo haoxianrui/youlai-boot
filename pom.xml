@@ -7,13 +7,13 @@
     <groupId>com.youlai</groupId>
     <artifactId>youlai-boot</artifactId>
     <version>2.1.0</version>
-    <name>youlai-boot 单体权限管理应用</name>
+    <name>youlai-boot 单体权限管理系统</name>
     <description>基于 SpringBoot3 快速构建的权限管理系统</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.2</version> <!-- lookup parent from repository -->
+        <version>3.0.5</version> <!-- lookup parent from repository -->
         <relativePath/>
     </parent>
 
@@ -44,7 +44,6 @@
         <!-- 验证码 -->
         <easy-captcha.version>1.6.2</easy-captcha.version>
     </properties>
-
 
     <dependencies>
         <dependency>
