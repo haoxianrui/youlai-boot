@@ -128,9 +128,9 @@ INSERT INTO `sys_menu` VALUES (31, 2, '用户新增', 4, '', NULL, 'sys:user:add
 INSERT INTO `sys_menu` VALUES (32, 2, '用户编辑', 4, '', NULL, 'sys:user:edit', 1, 2, '', '', '', '2022-10-23 11:04:08', '2022-10-23 11:04:11');
 INSERT INTO `sys_menu` VALUES (33, 2, '用户删除', 4, '', NULL, 'sys:user:delete', 1, 3, '', '', '', '2022-10-23 11:04:08', '2022-10-23 11:04:11');
 INSERT INTO `sys_menu` VALUES (36, 0, '组件封装', 2, '/demo', 'Layout', NULL, 1, 10, 'menu', '', '', '2022-10-31 09:18:44', '2022-10-31 09:18:47');
-INSERT INTO `sys_menu` VALUES (37, 36, '富文本编辑器', 1, 'editor', 'demo/wangEditor', NULL, 1, 1, '', '', '', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (37, 36, '富文本编辑器', 1, 'wangEditor', 'demo/wangEditor', NULL, 1, 1, '', '', '', NULL, NULL);
 INSERT INTO `sys_menu` VALUES (38, 36, '上传组件', 1, 'uploader', 'demo/uploader', NULL, 1, 2, '', '', '', '2022-11-20 23:16:30', '2022-11-20 23:16:32');
-INSERT INTO `sys_menu` VALUES (39, 36, '图标选择器', 1, 'icon-selector', 'demo/IconSelect', NULL, 1, 3, '', '', '', '2022-11-20 23:16:30', '2022-11-20 23:16:32');
+INSERT INTO `sys_menu` VALUES (39, 36, '图标选择器', 1, 'IconSelector', 'demo/IconSelector', NULL, 1, 3, '', '', '', '2022-11-20 23:16:30', '2022-11-20 23:16:32');
 INSERT INTO `sys_menu` VALUES (40, 0, '接口', 2, '/api', 'Layout', NULL, 1, 7, 'api', '', '', '2022-02-17 22:51:20', '2022-02-17 22:51:20');
 INSERT INTO `sys_menu` VALUES (41, 40, '接口文档', 1, 'apidoc', 'demo/apidoc', NULL, 1, 1, 'api', '', '', '2022-02-17 22:51:20', '2022-02-17 22:51:20');
 
