@@ -33,7 +33,6 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenManager jwtTokenManager;
     private final EasyCaptchaService easyCaptchaService;
-
     private final RedisTemplate redisTemplate;
 
     @Operation(summary = "登录")
