@@ -3,6 +3,29 @@
 项目基于 Spring Boot 3.0 、Spring Security 6.0 、 JWT 、 Redis 、 Mybatis-Plus 、 Knife4j 等技术栈搭建的前后端分离开源权限管理系统。
 
 
+## 项目预览
+**在线预览地址**
+
+[http://vue3.youlai.tech/](http://vue3.youlai.tech/)
+
+**首页控制台**
+
+| ![image-20230326161901446](https://s2.loli.net/2023/03/26/oltnAHfFcbw18GL.png) |
+| ------------------------------------------------------------ |
+| ![暗黑模式](https://img-blog.csdnimg.cn/img_convert/14288e012e5275a547305bef789b8216.png) |
+
+**接口文档**
+
+![接口文档](https://img-blog.csdnimg.cn/img_convert/30d5c50c706fd1dd5b22d478766efc1c.png)
+
+**权限管理系统**
+
+| ![用户管理](https://s2.loli.net/2023/03/13/L9xgT5sSMVZukQj.png) | ![角色管理](https://s2.loli.net/2023/03/13/nQg6HmrtFUkPDYv.png) |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ![菜单管理](https://s2.loli.net/2023/03/13/C4fDRJeTuUO7gPI.png) | ![字典管理](https://s2.loli.net/2023/03/13/BzqjHpa64wfeWhE.png) |
+
+
+
 ## 项目特色
 - Spring Boot 3.0 + Vue3 前后端分离单体应用，适合快速开发；
 - Spring Security + JWT 认证鉴权方案；
@@ -114,7 +137,7 @@
 
 ## 联系我们
 
-> 欢迎添加开发者微信，备注「有来」进群，备注「无回」参与开发
+> 欢迎添加开发者微信，备注「有来」进群
 
 | ![郝先瑞](https://s2.loli.net/2022/04/06/yRx8uzj4emA5QVr.jpg) | ![张川](https://s2.loli.net/2022/04/06/cQihGv9uPsTjXk1.jpg) |
 | --- | --- |
