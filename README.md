@@ -10,13 +10,13 @@
 
 **首页控制台**
 
-| ![image-20230326161901446](https://s2.loli.net/2023/03/26/oltnAHfFcbw18GL.png) |
-| ------------------------------------------------------------ |
-| ![暗黑模式](https://img-blog.csdnimg.cn/img_convert/14288e012e5275a547305bef789b8216.png) |
+| ![明亮模式](https://s2.loli.net/2023/03/26/oltnAHfFcbw18GL.png) |
+|-------------------------------------------------------------|
+| ![暗黑模式](https://s2.loli.net/2023/03/13/QvjY4zf3VCGteNF.png) |
 
 **接口文档**
 
-![接口文档](https://img-blog.csdnimg.cn/img_convert/30d5c50c706fd1dd5b22d478766efc1c.png)
+![接口文档](https://s2.loli.net/2023/03/13/bH4J3O6WRgCUpwt.png)
 
 **权限管理系统**
 
