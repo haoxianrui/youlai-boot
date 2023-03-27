@@ -7,7 +7,7 @@ import com.youlai.system.framework.easycaptcha.config.EasyCaptchaConfig;
 import com.youlai.system.framework.easycaptcha.producer.EasyCaptchaProducer;
 import com.youlai.system.pojo.dto.CaptchaResult;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
@@ -24,7 +24,7 @@ public class EasyCaptchaService {
 
     private final EasyCaptchaProducer easyCaptchaProducer;
 
-    private final StringRedisTemplate redisTemplate;
+    private final RedisTemplate redisTemplate;
 
     private final EasyCaptchaConfig easyCaptchaConfig;
 

@@ -6,12 +6,14 @@ import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.common.util.RequestUtils;
 import com.youlai.system.common.util.ResponseUtils;
 import com.youlai.system.framework.security.JwtTokenManager;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -24,6 +26,8 @@ import java.io.IOException;
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private static final AntPathRequestMatcher LOGIN_PATH_REQUEST_MATCHER = new AntPathRequestMatcher(SecurityConstants.LOGIN_PATH, "POST");
+
     private final JwtTokenManager tokenManager;
 
     public JwtAuthenticationFilter(JwtTokenManager tokenManager) {
@@ -32,18 +36,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (SecurityConstants.LOGIN_PATH.equals(request.getRequestURI())) {
-            // 登录接口放行
+        // 登录接口放行是走过滤器链的方式(验证码校验过滤器)，这里拦截到登录接口需要手动放行
+        if (LOGIN_PATH_REQUEST_MATCHER.matches(request)) {
+            // 手动放行登录接口
             chain.doFilter(request, response);
         }else{
             String jwt = RequestUtils.resolveToken(request);
             if (StrUtil.isNotBlank(jwt) && SecurityContextHolder.getContext().getAuthentication() == null) {
                 try {
-                    // 验证 JWT
-                    this.tokenManager.validateToken(jwt);
+                    // 解析&验证 JWT
+                    Claims claims = this.tokenManager.parseAndValidateToken(jwt);
 
                     // JWT验证有效获取Authentication存入Security上下文
-                    Authentication authentication = this.tokenManager.getAuthentication(jwt);
+                    Authentication authentication = this.tokenManager.getAuthentication(claims);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
 
                     chain.doFilter(request, response);

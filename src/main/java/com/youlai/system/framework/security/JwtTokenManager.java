@@ -63,6 +63,7 @@ public class JwtTokenManager {
     public String createToken(Authentication authentication) {
         Claims claims = Jwts.claims().setSubject(authentication.getName());
         SysUserDetails userDetails = (SysUserDetails) authentication.getPrincipal();
+        claims.put("jti",IdUtil.fastSimpleUUID());
         claims.put("userId", userDetails.getUserId());
         claims.put("username", claims.getSubject());
         claims.put("deptId", userDetails.getDeptId());
@@ -72,7 +73,6 @@ public class JwtTokenManager {
         Set<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority()).collect(Collectors.toSet());
         claims.put("authorities", roles);
-        claims.put("jti",IdUtil.fastSimpleUUID());
 
         // 权限数据多放入Redis
         Set<String> perms = userDetails.getPerms();
@@ -90,9 +90,7 @@ public class JwtTokenManager {
     /**
      * 获取认证信息
      */
-    public Authentication getAuthentication(String token) {
-        Claims claims = this.getTokenClaims(token);
-
+    public Authentication getAuthentication( Claims claims) {
         SysUserDetails principal = new SysUserDetails();
         principal.setUserId(Convert.toLong(claims.get("userId"))); // 用户ID
         principal.setUsername(Convert.toStr(claims.get("username"))); // 用户名
@@ -108,21 +106,18 @@ public class JwtTokenManager {
     }
 
     /**
-     * 验证 token
+     * 解析 & 验证 token
      */
-    public void validateToken(String token) {
-        if (jwtParser == null) {
-            jwtParser = Jwts.parserBuilder().setSigningKey(this.getSecretKeyBytes()).build();
-        }
-        // 验证 JWT，无异常解析成功说明JWT有效
-        Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);
-        // 验证 JWT 是否在黑名单(注销场景会存入黑名单)
-        Claims claims = claimsJws.getBody();
+    public Claims parseAndValidateToken(String token) {
+        // 解析成功说明JWT有效
+        Claims claims = this.getTokenClaims(token);
+        // 验证JWT 是否在黑名单(注销场景会存入黑名单)
         Boolean isBlack = redisTemplate.hasKey(SecurityConstants.BLACK_TOKEN_CACHE_PREFIX + claims.get("jti"));
 
         if (isBlack) {
             throw new RuntimeException("token 已被禁用");
         }
+        return claims;
     }
 
     public byte[] getSecretKeyBytes() {
