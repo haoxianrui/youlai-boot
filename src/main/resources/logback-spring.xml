@@ -3,14 +3,14 @@
 <configuration>
 
     <!-- SpringBoot默认logback的配置 -->
-    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
     <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
-    <property name="LOG_HOME" value="/logs/${APP_NAME}" />
+    <property name="LOG_HOME" value="/logs/${APP_NAME}"/>
 
     <!--1. 输出到控制台-->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-       <!-- <withJansi>true</withJansi>-->
+        <!-- <withJansi>true</withJansi>-->
         <!--此日志appender是为开发使用，只配置最低级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>DEBUG</level>
@@ -39,26 +39,25 @@
             <!--日志文档保留天数-->
             <maxHistory>15</maxHistory>
         </rollingPolicy>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <!-- 临界值过滤器，输出大于INFO级别日志 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
         </filter>
     </appender>
 
     <!-- 开发环境输出至控制台 -->
     <springProfile name="dev">
         <root level="INFO">
-            <appender-ref ref="CONSOLE" />
-            <appender-ref ref="FILE" />
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
         </root>
     </springProfile>
 
     <!-- 生产环境输出至文件 -->
     <springProfile name="prod">
         <root level="INFO">
-            <appender-ref ref="CONSOLE" />
-            <appender-ref ref="FILE" />
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
         </root>
     </springProfile>
 </configuration>
