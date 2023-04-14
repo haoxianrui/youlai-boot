@@ -59,7 +59,13 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeMapper, SysDi
                         .like(StrUtil.isNotBlank(keywords), SysDictType::getName, keywords)
                         .or()
                         .like(StrUtil.isNotBlank(keywords), SysDictType::getCode, keywords)
-                        .select(SysDictType::getId, SysDictType::getName, SysDictType::getCode, SysDictType::getStatus)
+                        .select(
+                                SysDictType::getId,
+                                SysDictType::getName,
+                                SysDictType::getCode,
+                                SysDictType::getStatus,
+                                SysDictType::getRemark
+                        )
         );
 
         // 实体转换
