@@ -1,5 +1,6 @@
 package com.youlai.system.config;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -9,16 +10,16 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.Collections;
 
 /**
- * 开启CORS资源共享
+ * CORS资源共享配置
  *
  * @author haoxr
- * @date 2022/10/24
+ * @date 2023/4/17
  */
 @Configuration
 public class CorsConfig {
 
     @Bean
-    public CorsFilter corsFilter() {
+    public FilterRegistrationBean filterRegistrationBean() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         //1.允许任何来源
         corsConfiguration.setAllowedOriginPatterns(Collections.singletonList("*"));
@@ -31,7 +32,11 @@ public class CorsConfig {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
-        return new CorsFilter(source);
-    }
+        CorsFilter corsFilter = new CorsFilter(source);
 
+        FilterRegistrationBean<CorsFilter> filterRegistrationBean=new FilterRegistrationBean<>(corsFilter);
+        filterRegistrationBean.setOrder(-101);  // 小于 SpringSecurity Filter的 Order(-100) 即可
+
+        return filterRegistrationBean;
+    }
 }
