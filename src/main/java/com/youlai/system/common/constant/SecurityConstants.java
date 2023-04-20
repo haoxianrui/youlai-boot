@@ -13,7 +13,6 @@ public interface SecurityConstants {
      */
     String LOGIN_PATH = "/api/v1/auth/login";
 
-
     /**
      * Token 前缀
      */
@@ -23,7 +22,6 @@ public interface SecurityConstants {
      * 请求头Token的Key
      */
     String TOKEN_KEY = "Authorization";
-
 
     /**
      * 验证码缓存前缀
