@@ -17,4 +17,6 @@ EXPOSE 8989
 # 时区修改
 RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \&& echo 'Asia/Shanghai' >/etc/timezone
 
+RUN echo -e https://mirrors.ustc.edu.cn/alpine/v3.7/main/ > /etc/apk/repositories
+
 RUN apk --no-cache add ttf-dejavu fontconfig
