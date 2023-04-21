@@ -3,11 +3,25 @@ server:
 
 spring:
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://www.youlai.tech:3306/youlai_boot?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true&allowMultiQueries=true
-    username: youlai
-    password: 123456
+    # 动态切换数据源
+    dynamic:
+      # 默认库,默认master
+      primary: master
+      # 是否严格模式，默认false；严格模式下未匹配到数据源直接报错, 非严格模式下则使用默认数据源primary所设置的数据源
+      strict: false
+      datasource:
+        master:
+          type: com.alibaba.druid.pool.DruidDataSource
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://www.youlai.tech:3306/youlai_boot?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true&allowMultiQueries=true
+          username: youlai
+          password: 123456
+        slave:
+          type: com.alibaba.druid.pool.DruidDataSource
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://www.youlai.tech:3306/youlai_boot_slave?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true&allowMultiQueries=true
+          username: youlai
+          password: 123456
   data:
     redis:
       database: 6
