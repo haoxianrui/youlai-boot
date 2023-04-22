@@ -143,9 +143,6 @@ public class GlobalExceptionHandler {
         return Result.failed(errorMessage);
     }
 
-    /**
-     * TypeMismatchException
-     */
     @ExceptionHandler(TypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public <T> Result<T> processException(TypeMismatchException e) {
