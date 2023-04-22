@@ -2,6 +2,7 @@ package com.youlai.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -16,6 +17,7 @@ import com.youlai.system.pojo.bo.UserAuthInfo;
 import com.youlai.system.pojo.bo.UserBO;
 import com.youlai.system.pojo.bo.UserFormBO;
 import com.youlai.system.pojo.entity.SysUser;
+import com.youlai.system.pojo.form.RoleForm;
 import com.youlai.system.pojo.form.UserForm;
 import com.youlai.system.pojo.query.UserPageQuery;
 import com.youlai.system.pojo.vo.UserExportVO;
@@ -152,6 +154,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         boolean result = this.updateById(entity);
 
         if (result) {
+         /*   RoleForm roleForm = roleService.getRoleForm(12l);
+            roleForm.setName("测试角色_" + RandomUtil.randomString(RandomUtil.BASE_CHAR, 1));
+            roleService.saveRole(roleForm);*/
             // 保存用户角色
             userRoleService.saveUserRoles(entity.getId(), userForm.getRoleIds());
         }
