@@ -32,7 +32,7 @@
 
         <mapstruct.version>1.5.3.Final</mapstruct.version>
 
-        <xxl-job.version>2.3.1</xxl-job.version>
+        <xxl-job.version>2.4.0</xxl-job.version>
 
         <jjwt.version>0.11.5</jjwt.version>
 
@@ -44,6 +44,8 @@
 
         <!-- 验证码 -->
         <easy-captcha.version>1.6.2</easy-captcha.version>
+
+        <nashorn.version>15.4</nashorn.version>
     </properties>
 
     <dependencies>
@@ -176,7 +178,12 @@
             <version>${easy-captcha.version}</version>
         </dependency>
 
-
+        <!-- Java8 之后JavaScript引擎nashorn被移除导致验证码解析报错-->
+        <dependency>
+            <groupId>org.openjdk.nashorn</groupId>
+            <artifactId>nashorn-core</artifactId>
+            <version>15.4</version>
+        </dependency>
 
     </dependencies>
 
