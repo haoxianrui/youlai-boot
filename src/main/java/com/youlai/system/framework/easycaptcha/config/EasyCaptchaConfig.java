@@ -13,7 +13,7 @@ import java.awt.*;
  * @author: haoxr
  * @date: 2023/03/24
  */
-@ConfigurationProperties(prefix = "easycaptcha")
+@ConfigurationProperties(prefix = "easy-captcha")
 @Configuration
 @Data
 public class EasyCaptchaConfig {
