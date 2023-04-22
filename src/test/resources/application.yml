@@ -1,8 +1,0 @@
-spring:
-  application:
-    name: youlai-boot
-  profiles:
-    active: dev
-
-config:
-  name: application.yml
