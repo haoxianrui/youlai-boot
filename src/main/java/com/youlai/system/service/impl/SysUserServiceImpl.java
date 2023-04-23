@@ -154,9 +154,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         boolean result = this.updateById(entity);
 
         if (result) {
-         /*   RoleForm roleForm = roleService.getRoleForm(12l);
-            roleForm.setName("测试角色_" + RandomUtil.randomString(RandomUtil.BASE_CHAR, 1));
-            roleService.saveRole(roleForm);*/
             // 保存用户角色
             userRoleService.saveUserRoles(entity.getId(), userForm.getRoleIds());
         }

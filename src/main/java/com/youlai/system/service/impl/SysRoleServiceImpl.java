@@ -100,7 +100,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @return
      */
     @Override
-    //@DS("slave")
     public boolean saveRole(RoleForm roleForm) {
 
         Long roleId = roleForm.getId();
