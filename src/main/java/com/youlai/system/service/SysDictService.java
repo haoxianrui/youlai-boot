@@ -65,4 +65,13 @@ public interface SysDictService extends IService<SysDict> {
      * @return
      */
     List<Option> listDictOptions(String typeCode);
+
+    /**
+     * 修改字典类型编码
+     *
+     * @param originalTypeCode
+     * @param newTypeCode
+     * @return
+     */
+    boolean updateDictTypeCode(String originalTypeCode, String newTypeCode);
 }
