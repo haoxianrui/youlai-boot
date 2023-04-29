@@ -24,7 +24,7 @@ public class DynamicDataSourceSample {
 
 
     @Transactional
-    public boolean updateDictTypeCode(Long dictTypeId,String newTypeCode) {
+    public boolean updateMaster(Long dictTypeId,String newTypeCode) {
 
         SysDictType dictType = dictTypeService.getById(dictTypeId);
         String originalTypeCode = dictType.getCode();
@@ -32,7 +32,7 @@ public class DynamicDataSourceSample {
         boolean result = dictTypeService.updateById(dictType);
 
         if (result) {
-            result = dictService.updateDictTypeCode(originalTypeCode, newTypeCode);
+            result = dictService.updateSlave(originalTypeCode, newTypeCode);
         }
         return result;
     }

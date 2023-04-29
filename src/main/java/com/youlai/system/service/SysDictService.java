@@ -73,5 +73,5 @@ public interface SysDictService extends IService<SysDict> {
      * @param newTypeCode
      * @return
      */
-    boolean updateDictTypeCode(String originalTypeCode, String newTypeCode);
+    boolean updateSlave(String originalTypeCode, String newTypeCode);
 }

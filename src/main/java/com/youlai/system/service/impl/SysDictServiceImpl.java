@@ -170,7 +170,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
      */
     @DS("slave")
     @Override
-    public boolean updateDictTypeCode(String originalTypeCode, String newTypeCode) {
+    public boolean updateSlave(String originalTypeCode, String newTypeCode) {
         boolean result = this.update(new LambdaUpdateWrapper<SysDict>()
                 .eq(SysDict::getTypeCode, originalTypeCode)
                 .set(SysDict::getTypeCode, newTypeCode)
