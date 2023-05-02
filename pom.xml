@@ -7,13 +7,12 @@
     <groupId>com.youlai</groupId>
     <artifactId>youlai-boot</artifactId>
     <version>2.1.0</version>
-    <name>youlai-boot 单体权限管理系统</name>
     <description>基于 SpringBoot3 快速构建的权限管理系统</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.5</version> <!-- lookup parent from repository -->
+        <version>3.0.6</version> <!-- lookup parent from repository -->
         <relativePath/>
     </parent>
 
@@ -26,7 +25,6 @@
         <mysql.version>8.0.28</mysql.version>
         <druid.version>1.2.16</druid.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
-        <dynamic-datasource.version>3.6.1</dynamic-datasource.version>
 
         <knife4j.version>4.0.0</knife4j.version>
 
@@ -103,12 +101,6 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-            <version>${dynamic-datasource.version}</version>
         </dependency>
 
         <dependency>
