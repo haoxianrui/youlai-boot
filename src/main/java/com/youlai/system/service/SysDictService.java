@@ -66,12 +66,4 @@ public interface SysDictService extends IService<SysDict> {
      */
     List<Option> listDictOptions(String typeCode);
 
-    /**
-     * 修改字典类型编码
-     *
-     * @param originalTypeCode
-     * @param newTypeCode
-     * @return
-     */
-    boolean updateSlave(String originalTypeCode, String newTypeCode);
 }

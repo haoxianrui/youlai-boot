@@ -3,9 +3,7 @@ package com.youlai.system.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.converter.DictConverter;
@@ -160,24 +158,6 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
                 .collect(Collectors.toList());
         return options;
     }
-
-    /**
-     * 修改字典类型编码(多数据源测试)
-     *
-     * @param originalTypeCode
-     * @param newTypeCode
-     * @return
-     */
-    @DS("slave")
-    @Override
-    public boolean updateSlave(String originalTypeCode, String newTypeCode) {
-        boolean result = this.update(new LambdaUpdateWrapper<SysDict>()
-                .eq(SysDict::getTypeCode, originalTypeCode)
-                .set(SysDict::getTypeCode, newTypeCode)
-        );
-        return result;
-    }
-
 }
 
 
