@@ -22,18 +22,19 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import jakarta.servlet.ServletException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+
 import java.sql.SQLSyntaxErrorException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * 全局系统异常处理
- *
+ * 全局系统异常处理器
+ * <p>
  * 调整异常处理的HTTP状态码，丰富异常处理类型
  *
  * @author Gadfly
- * @date 2020-02-25 13:54
+ * @since 2020-02-25 13:54
  **/
 @RestControllerAdvice
 @Slf4j
@@ -152,7 +153,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadSqlGrammarException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public <T> Result<T>  handleBadSqlGrammarException(BadSqlGrammarException e) {
+    public <T> Result<T> handleBadSqlGrammarException(BadSqlGrammarException e) {
         log.error(e.getMessage(), e);
         String errorMsg = e.getMessage();
         if (StrUtil.isNotBlank(errorMsg) && errorMsg.contains("denied to user")) {
@@ -173,7 +174,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public <T> Result<T> handleBizException(BusinessException e) {
-        log.error("biz exception,{}", e.getMessage());
+        log.error("biz exception: {}", e.getMessage());
         if (e.getResultCode() != null) {
             return Result.failed(e.getResultCode());
         }
@@ -183,7 +184,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public <T> Result<T> handleException(Exception e) {
-        log.error("unknown exception, {}", e.getMessage());
+        log.error("unknown exception: {}", e.getMessage());
         return Result.failed(e.getLocalizedMessage());
     }
 
@@ -202,7 +203,7 @@ public class GlobalExceptionHandler {
         if (matcher.find()) {
             String matchString = matcher.group();
             matchString = matchString.replace("[", "").replace("]", "");
-            matchString = matchString.replaceAll("\\\"", "") + "字段类型错误";
+            matchString = "%s字段类型错误".formatted(matchString.replaceAll("\\\"", ""));
             group += matchString;
         }
         return group;
