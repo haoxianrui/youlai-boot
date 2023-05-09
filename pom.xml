@@ -42,8 +42,10 @@
 
         <!-- 验证码 -->
         <easy-captcha.version>1.6.2</easy-captcha.version>
-
         <nashorn.version>15.4</nashorn.version>
+
+        <!-- redisson 分布式锁 -->
+        <redisson.version>3.21.0</redisson.version>
     </properties>
 
     <dependencies>
@@ -78,6 +80,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
         <dependency>
@@ -174,7 +181,14 @@
         <dependency>
             <groupId>org.openjdk.nashorn</groupId>
             <artifactId>nashorn-core</artifactId>
-            <version>15.4</version>
+            <version>${nashorn.version}</version>
+        </dependency>
+
+        <!-- redisson 分布式锁 -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>${redisson.version}</version>
         </dependency>
 
     </dependencies>
