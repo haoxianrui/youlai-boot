@@ -8,6 +8,7 @@ import com.youlai.system.common.constant.ExcelConstants;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.common.util.ExcelUtils;
+import com.youlai.system.framework.resubmit.Resubmit;
 import com.youlai.system.listener.UserImportListener;
 import com.youlai.system.pojo.vo.UserImportVO;
 import com.youlai.system.pojo.form.UserForm;
@@ -64,6 +65,7 @@ public class SysUserController {
     @Operation(summary = "新增用户", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping
     @PreAuthorize("@pms.hasPermission('sys:user:add')")
+    @Resubmit
     public Result saveUser(
             @RequestBody @Valid UserForm userForm
     ) {

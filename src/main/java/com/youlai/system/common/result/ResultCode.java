@@ -18,6 +18,8 @@ public enum ResultCode implements IResultCode, Serializable {
     SUCCESS("00000", "一切ok"),
 
     USER_ERROR("A0001", "用户端错误"),
+    REPEAT_SUBMIT_ERROR("A0002", "您的请求已提交，请不要重复提交或等待片刻再尝试。"),
+
     USER_LOGIN_ERROR("A0200", "用户登录异常"),
 
     USER_NOT_EXIST("A0201", "用户不存在"),
