@@ -11,12 +11,12 @@ import org.springframework.util.PatternMatchUtils;
 import java.util.Set;
 
 /**
- * 权限校验
+ * SpringSecurity权限校验
  *
  * @author haoxr
  * @date 2022/2/22
  */
-@Service("pms")
+@Service("ss")
 @RequiredArgsConstructor
 public class PermissionService {
 
@@ -28,7 +28,7 @@ public class PermissionService {
      * @param perm 权限标识(eg: sys:user:add)
      * @return
      */
-    public boolean hasPermission(String perm) {
+    public boolean hasPerm(String perm) {
 
         if (StrUtil.isBlank(perm)) {
             return false;
