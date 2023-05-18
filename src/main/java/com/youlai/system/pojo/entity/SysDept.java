@@ -1,18 +1,14 @@
 package com.youlai.system.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 
 import com.youlai.system.common.base.BaseEntity;
 import lombok.Data;
 
 /**
  * 部门表
- * @TableName sys_dept
  */
-@TableName(value ="sys_dept")
 @Data
 public class SysDept extends BaseEntity {
     /**
@@ -51,7 +47,8 @@ public class SysDept extends BaseEntity {
      */
     private Integer deleted;
 
+    private Long createBy;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
+    private Long updateBy;
+
 }

@@ -48,7 +48,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         List<SysDept> deptList = this.list(
                 new LambdaQueryWrapper<SysDept>()
                         .like(StrUtil.isNotBlank(keywords), SysDept::getName, keywords)
-                        .eq(Validator.isNotNull(status), SysDept::getStatus, status)
+                        .eq(status != null, SysDept::getStatus, status)
                         .orderByAsc(SysDept::getSort)
         );
 
@@ -64,7 +64,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
             for (SysDept dept : deptList) {
                 Long parentId = dept.getParentId();
                 // 不在缓存ID列表的parentId是顶级节点ID，以此作为递归开始
-                if (cacheDeptIds.contains(parentId) == false) {
+                if (!cacheDeptIds.contains(parentId)) {
                     list.addAll(recurDeptList(parentId, deptList));
                     cacheDeptIds.add(parentId); // 避免重复递归
                 }
@@ -107,16 +107,30 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     /**
      * 部门下拉选项
      *
-     * @return
+     * @return 部门下拉List集合
      */
     @Override
     public List<Option> listDeptOptions() {
+        List<Option> options =new ArrayList<>();
+
         List<SysDept> deptList = this.list(new LambdaQueryWrapper<SysDept>()
                 .eq(SysDept::getStatus, StatusEnum.ENABLE.getValue())
                 .select(SysDept::getId, SysDept::getParentId, SysDept::getName)
                 .orderByAsc(SysDept::getSort)
         );
-        List<Option> options = recurDeptTreeOptions(SystemConstants.ROOT_NODE_ID, deptList);
+
+        Set<Long> parentIds = deptList.stream().map(SysDept::getParentId)
+                .collect(Collectors.toSet());
+
+        Set<Long> childrenIds = deptList.stream().map(SysDept::getId)
+                .collect(Collectors.toSet());
+
+        for (Long parentId : parentIds) {
+            if(!childrenIds.contains(parentId)){
+                options.addAll(recurDeptTreeOptions(parentId, deptList));
+            }
+        }
+
         return options;
     }
 
