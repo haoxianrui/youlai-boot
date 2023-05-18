@@ -90,3 +90,10 @@ xxl:
       port: 9999
       logpath: /data/applogs/xxl-job/jobhandler
       logretentiondays: 30
+
+# 系统配置
+system-config:
+  # 数据权限配置
+  data-permission:
+    # 数据权限开关
+    enabled: true
