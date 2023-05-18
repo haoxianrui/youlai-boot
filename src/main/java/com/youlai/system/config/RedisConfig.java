@@ -8,17 +8,20 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 
 /**
  * Redis 配置
+ *
+ * @author haoxr
+ * @since 2023/5/15
  */
 @Configuration
 public class RedisConfig {
 
     /**
-     * RedisTemplate 自定义序列化配置
+     * 自定义 RedisTemplate
      * <p>
-     * 默认 JdkSerializationRedisSerializer，修改为 JSON 序列化
+     * 修改 Redis 序列化方式，默认 JdkSerializationRedisSerializer
      *
-     * @param redisConnectionFactory
-     * @return
+     * @param redisConnectionFactory {@link RedisConnectionFactory}
+     * @return {@link RedisTemplate}
      */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
