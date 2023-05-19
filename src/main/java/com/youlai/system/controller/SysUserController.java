@@ -114,7 +114,7 @@ public class SysUserController {
 
     @Operation(summary = "修改用户状态", security = {@SecurityRequirement(name = "Authorization")})
     @PatchMapping(value = "/{userId}/status")
-    public Result updatePassword(
+    public Result updateUserStatus(
             @Parameter(description = "用户ID") @PathVariable Long userId,
             @Parameter(description = "用户状态(1:启用;0:禁用)") @RequestParam Integer status
     ) {
