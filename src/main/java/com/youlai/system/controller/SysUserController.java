@@ -104,6 +104,7 @@ public class SysUserController {
 
     @Operation(summary = "修改用户密码", security = {@SecurityRequirement(name = "Authorization")})
     @PatchMapping(value = "/{userId}/password")
+    @PreAuthorize("@ss.hasPerm('sys:user:reset_pwd')")
     public Result updatePassword(
             @Parameter(description = "用户ID") @PathVariable Long userId,
             @RequestParam String password

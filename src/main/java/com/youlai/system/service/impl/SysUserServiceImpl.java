@@ -2,13 +2,13 @@ package com.youlai.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.converter.UserConverter;
 import com.youlai.system.framework.security.util.SecurityUtils;
@@ -17,7 +17,6 @@ import com.youlai.system.pojo.bo.UserAuthInfo;
 import com.youlai.system.pojo.bo.UserBO;
 import com.youlai.system.pojo.bo.UserFormBO;
 import com.youlai.system.pojo.entity.SysUser;
-import com.youlai.system.pojo.form.RoleForm;
 import com.youlai.system.pojo.form.UserForm;
 import com.youlai.system.pojo.query.UserPageQuery;
 import com.youlai.system.pojo.vo.UserExportVO;
@@ -182,24 +181,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      *
      * @param userId   用户ID
      * @param password 用户密码
-     * @return
+     * @return true|false
      */
     @Override
     public boolean updatePassword(Long userId, String password) {
-        String encryptedPassword = passwordEncoder.encode(password);
-        boolean result = this.update(new LambdaUpdateWrapper<SysUser>()
+        return this.update(new LambdaUpdateWrapper<SysUser>()
                 .eq(SysUser::getId, userId)
-                .set(SysUser::getPassword, encryptedPassword)
+                .set(SysUser::getPassword, passwordEncoder.encode(password))
         );
-
-        return result;
     }
 
     /**
      * 根据用户名获取认证信息
      *
-     * @param username
-     * @return
+     * @param username 用户名
+     * @return 用户认证信息 {@link UserAuthInfo}
      */
     @Override
     public UserAuthInfo getUserAuthInfo(String username) {
@@ -255,7 +251,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         userInfoVO.setRoles(roles);
 
         // 用户权限集合
-        Set<String> perms = (Set<String>) redisTemplate.opsForValue().get("USER_PERMS:" + user.getId());
+        Set<String> perms = (Set<String>) redisTemplate.opsForValue().get(SecurityConstants.USER_PERMS_CACHE_PREFIX+ user.getId());
         userInfoVO.setPerms(perms);
 
         return userInfoVO;

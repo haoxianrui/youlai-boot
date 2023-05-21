@@ -1,5 +1,6 @@
 package com.youlai.system.controller;
 
+import com.youlai.system.framework.resubmit.Resubmit;
 import com.youlai.system.pojo.vo.Option;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.pojo.form.DeptForm;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -21,7 +23,7 @@ import java.util.List;
  * 部门控制器
  *
  * @author haoxr
- * @date 2020/11/6
+ * @since 2020/11/6
  */
 @Tag(name = "05.部门接口")
 @RestController
@@ -56,6 +58,8 @@ public class SysDeptController {
 
     @Operation(summary = "新增部门", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping
+    @PreAuthorize("@ss.hasPerm('sys:dept:add')")
+    @Resubmit
     public Result saveDept(
             @Valid @RequestBody DeptForm formData
     ) {
@@ -65,6 +69,7 @@ public class SysDeptController {
 
     @Operation(summary = "修改部门", security = {@SecurityRequirement(name = "Authorization")})
     @PutMapping(value = "/{deptId}")
+    @PreAuthorize("@ss.hasPerm('sys:dept:edit')")
     public Result updateDept(
             @PathVariable Long deptId,
             @Valid @RequestBody DeptForm formData
@@ -75,6 +80,7 @@ public class SysDeptController {
 
     @Operation(summary = "删除部门", security = {@SecurityRequirement(name = "Authorization")})
     @DeleteMapping("/{ids}")
+    @PreAuthorize("@ss.hasPerm('sys:dept:delete')")
     public Result deleteDepartments(
             @Parameter(description ="部门ID，多个以英文逗号(,)分割") @PathVariable("ids") String ids
     ) {

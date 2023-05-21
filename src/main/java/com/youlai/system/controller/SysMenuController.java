@@ -1,24 +1,24 @@
 package com.youlai.system.controller;
 
-import com.youlai.system.pojo.form.MenuForm;
-import com.youlai.system.pojo.vo.Option;
 import com.youlai.system.common.result.Result;
-import com.youlai.system.pojo.entity.SysMenu;
+import com.youlai.system.framework.resubmit.Resubmit;
+import com.youlai.system.pojo.form.MenuForm;
 import com.youlai.system.pojo.query.MenuQuery;
 import com.youlai.system.pojo.vo.MenuVO;
+import com.youlai.system.pojo.vo.Option;
 import com.youlai.system.pojo.vo.RouteVO;
 import com.youlai.system.service.SysMenuService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -68,6 +68,8 @@ public class SysMenuController {
 
     @Operation(summary = "新增菜单",security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping
+    @PreAuthorize("@ss.hasPerm('sys:menu:add')")
+    @Resubmit
     @CacheEvict(cacheNames = "system", key = "'routes'")
     public Result addMenu(@RequestBody MenuForm menuForm) {
         boolean result = menuService.saveMenu(menuForm);
@@ -76,6 +78,7 @@ public class SysMenuController {
 
     @Operation(summary = "修改菜单",security = {@SecurityRequirement(name = "Authorization")})
     @PutMapping(value = "/{id}")
+    @PreAuthorize("@ss.hasPerm('sys:menu:edit')")
     @CacheEvict(cacheNames = "system", key = "'routes'")
     public Result updateMenu(
             @RequestBody MenuForm menuForm
@@ -86,6 +89,7 @@ public class SysMenuController {
 
     @Operation(summary = "删除菜单",security = {@SecurityRequirement(name = "Authorization")})
     @DeleteMapping("/{id}")
+    @PreAuthorize("@ss.hasPerm('sys:menu:delete')")
     @CacheEvict(cacheNames = "system", key = "'routes'")
     public Result deleteMenu(
             @Parameter(description ="菜单ID，多个以英文(,)分割") @PathVariable("id") Long id
