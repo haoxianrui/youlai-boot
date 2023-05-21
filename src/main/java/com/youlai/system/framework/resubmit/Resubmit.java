@@ -4,7 +4,7 @@ package com.youlai.system.framework.resubmit;
 import java.lang.annotation.*;
 
 /**
- * 防重复提交注解
+ * 防重提交注解
  *
  * @author haoxr
  * @since 2023/5/9
