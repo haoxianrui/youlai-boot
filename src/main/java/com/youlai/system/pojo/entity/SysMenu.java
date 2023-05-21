@@ -73,4 +73,9 @@ public class SysMenu extends BaseEntity {
      */
     private String redirect;
 
+    /**
+     * 父节点路径，以英文逗号(,)分割
+     */
+    private String treePath;
+
 }

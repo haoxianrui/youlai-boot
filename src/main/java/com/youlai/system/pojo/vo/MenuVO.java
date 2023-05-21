@@ -20,14 +20,11 @@ public class MenuVO {
     @Schema(description = "菜单名称")
     private String name;
 
-    @Schema(description = "ICON")
-    private String icon;
+    @Schema(description="菜单类型")
+    private MenuTypeEnum type;
 
-    @Schema(description = "路由名称")
-    private String routeName;
-
-    @Schema(description = "路由相对路径")
-    private String routePath;
+    @Schema(description = "路由路径")
+    private String path;
 
     @Schema(description = "组件路径")
     private String component;
@@ -38,11 +35,11 @@ public class MenuVO {
     @Schema(description = "菜单是否可见(1:显示;0:隐藏)")
     private Integer visible;
 
+    @Schema(description = "ICON")
+    private String icon;
+
     @Schema(description = "跳转路径")
     private String redirect;
-
-    @Schema(description="菜单类型")
-    private MenuTypeEnum type;
 
     @Schema(description="按钮权限标识")
     private String perm;
