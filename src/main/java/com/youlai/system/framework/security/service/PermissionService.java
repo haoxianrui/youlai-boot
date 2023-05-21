@@ -2,8 +2,10 @@ package com.youlai.system.framework.security.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.framework.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.PatternMatchUtils;
@@ -14,10 +16,11 @@ import java.util.Set;
  * SpringSecurity权限校验
  *
  * @author haoxr
- * @date 2022/2/22
+ * @since 2022/2/22
  */
 @Service("ss")
 @RequiredArgsConstructor
+@Slf4j
 public class PermissionService {
 
     private final RedisTemplate redisTemplate;
@@ -40,13 +43,17 @@ public class PermissionService {
 
         Long userId = SecurityUtils.getUserId();
 
-        Set<String> perms = (Set<String>) redisTemplate.opsForValue().get("USER_PERMS:" + userId); // 权限数据用户登录成功节点存入redis，详见 JwtTokenManager#createToken()
+        Set<String> perms = (Set<String>) redisTemplate.opsForValue().get(SecurityConstants.USER_PERMS_CACHE_PREFIX + userId); // 权限数据用户登录成功节点存入redis，详见 JwtTokenManager#createToken()
 
         if (CollectionUtil.isEmpty(perms)) {
             return false;
         }
         boolean hasPermission = perms.stream()
                 .anyMatch(item -> PatternMatchUtils.simpleMatch(perm, item)); // *号匹配任意字符
+
+        if (!hasPermission) {
+            log.error("用户无访问权限");
+        }
         return hasPermission;
     }
 
