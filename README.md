@@ -1,6 +1,6 @@
 # 项目简述
 
-项目基于 Spring Boot 3.0 、Spring Security 6.0 、 JWT 、 Redis 、 Mybatis-Plus 、 Knife4j 等技术栈搭建的前后端分离开源权限管理系统。
+项目基于 SpringBoot3、SpringSecurity6 、 JWT 、 Redis 、 Mybatis-Plus 、 Knife4j 等技术栈搭建的前后端分离开源权限管理系统。
 
 
 ## 项目预览
