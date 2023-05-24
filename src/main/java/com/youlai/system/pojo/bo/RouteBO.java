@@ -64,9 +64,9 @@ public class RouteBO {
     private String icon;
 
     /**
-     * 外链路径
+     * 跳转路径
      */
-    private String redirectUrl;
+    private String redirect;
 
     /**
      * 拥有路由的权限
