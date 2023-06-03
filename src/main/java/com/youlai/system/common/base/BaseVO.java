@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 视图对象基类
  *
  * @author haoxr
- * @date 2022/10/22
+ * @since 2022/10/22
  */
 @Data
 @ToString

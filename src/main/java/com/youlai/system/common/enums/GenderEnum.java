@@ -8,7 +8,7 @@ import lombok.Getter;
  * 性别枚举
  *
  * @author haoxr
- * @date 2022/10/14
+ * @since 2022/10/14
  */
 @Schema(enumAsRef = true)
 public enum GenderEnum implements IBaseEnum<Integer> {

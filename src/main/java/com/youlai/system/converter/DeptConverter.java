@@ -1,15 +1,15 @@
 package com.youlai.system.converter;
 
-import com.youlai.system.pojo.entity.SysDept;
-import com.youlai.system.pojo.form.DeptForm;
-import com.youlai.system.pojo.vo.DeptVO;
+import com.youlai.system.model.entity.SysDept;
+import com.youlai.system.model.form.DeptForm;
+import com.youlai.system.model.vo.DeptVO;
 import org.mapstruct.Mapper;
 
 /**
  * 部门对象转换器
  *
  * @author haoxr
- * @date 2022/7/29
+ * @since 2022/7/29
  */
 @Mapper(componentModel = "spring")
 public interface DeptConverter {

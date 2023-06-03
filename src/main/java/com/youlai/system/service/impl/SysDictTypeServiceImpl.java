@@ -7,14 +7,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.system.pojo.entity.SysDict;
-import com.youlai.system.pojo.vo.Option;
+import com.youlai.system.model.entity.SysDict;
+import com.youlai.system.common.model.Option;
 import com.youlai.system.converter.DictTypeConverter;
 import com.youlai.system.mapper.SysDictTypeMapper;
-import com.youlai.system.pojo.entity.SysDictType;
-import com.youlai.system.pojo.form.DictTypeForm;
-import com.youlai.system.pojo.query.DictTypePageQuery;
-import com.youlai.system.pojo.vo.DictTypePageVO;
+import com.youlai.system.model.entity.SysDictType;
+import com.youlai.system.model.form.DictTypeForm;
+import com.youlai.system.model.query.DictTypePageQuery;
+import com.youlai.system.model.vo.DictTypePageVO;
 import com.youlai.system.service.SysDictService;
 import com.youlai.system.service.SysDictTypeService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * 数据字典类型业务实现类
  *
  * @author haoxr
- * @date 2022/10/12
+ * @since 2022/10/12
  */
 @Service
 @RequiredArgsConstructor

@@ -1,13 +1,13 @@
 package com.youlai.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.system.framework.resubmit.Resubmit;
-import com.youlai.system.pojo.vo.Option;
+import com.youlai.system.common.annotation.PreventDuplicateSubmit;
+import com.youlai.system.common.model.Option;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
-import com.youlai.system.pojo.form.RoleForm;
-import com.youlai.system.pojo.query.RolePageQuery;
-import com.youlai.system.pojo.vo.RolePageVO;
+import com.youlai.system.model.form.RoleForm;
+import com.youlai.system.model.query.RolePageQuery;
+import com.youlai.system.model.vo.RolePageVO;
 import com.youlai.system.service.SysRoleService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -48,7 +48,7 @@ public class SysRoleController {
     @Operation(summary = "新增角色",security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping
     @PreAuthorize("@ss.hasPerm('sys:role:add')")
-    @Resubmit
+    @PreventDuplicateSubmit
     public Result addRole(@Valid @RequestBody RoleForm roleForm) {
         boolean result = roleService.saveRole(roleForm);
         return Result.judge(result);

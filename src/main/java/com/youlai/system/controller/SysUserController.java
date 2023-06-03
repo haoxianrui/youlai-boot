@@ -8,15 +8,15 @@ import com.youlai.system.common.constant.ExcelConstants;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.common.util.ExcelUtils;
-import com.youlai.system.framework.resubmit.Resubmit;
-import com.youlai.system.listener.UserImportListener;
-import com.youlai.system.pojo.vo.UserImportVO;
-import com.youlai.system.pojo.form.UserForm;
-import com.youlai.system.pojo.entity.SysUser;
-import com.youlai.system.pojo.query.UserPageQuery;
-import com.youlai.system.pojo.vo.UserExportVO;
-import com.youlai.system.pojo.vo.UserInfoVO;
-import com.youlai.system.pojo.vo.UserPageVO;
+import com.youlai.system.common.annotation.PreventDuplicateSubmit;
+import com.youlai.system.listener.easyexcel.UserImportListener;
+import com.youlai.system.model.vo.UserImportVO;
+import com.youlai.system.model.form.UserForm;
+import com.youlai.system.model.entity.SysUser;
+import com.youlai.system.model.query.UserPageQuery;
+import com.youlai.system.model.vo.UserExportVO;
+import com.youlai.system.model.vo.UserInfoVO;
+import com.youlai.system.model.vo.UserPageVO;
 import com.youlai.system.service.SysUserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -43,7 +43,7 @@ import java.util.List;
  * 用户控制器
  *
  * @author haoxr
- * @date 2022/10/16
+ * @since 2022/10/16
  */
 @Tag(name = "02.用户接口")
 @RestController
@@ -65,7 +65,7 @@ public class SysUserController {
     @Operation(summary = "新增用户", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping
     @PreAuthorize("@ss.hasPerm('sys:user:add')")
-    @Resubmit
+    @PreventDuplicateSubmit
     public Result saveUser(
             @RequestBody @Valid UserForm userForm
     ) {

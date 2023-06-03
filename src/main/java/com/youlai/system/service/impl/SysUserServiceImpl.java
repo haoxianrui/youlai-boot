@@ -11,17 +11,17 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.converter.UserConverter;
-import com.youlai.system.framework.security.util.SecurityUtils;
+import com.youlai.system.common.util.SecurityUtils;
 import com.youlai.system.mapper.SysUserMapper;
-import com.youlai.system.pojo.bo.UserAuthInfo;
-import com.youlai.system.pojo.bo.UserBO;
-import com.youlai.system.pojo.bo.UserFormBO;
-import com.youlai.system.pojo.entity.SysUser;
-import com.youlai.system.pojo.form.UserForm;
-import com.youlai.system.pojo.query.UserPageQuery;
-import com.youlai.system.pojo.vo.UserExportVO;
-import com.youlai.system.pojo.vo.UserInfoVO;
-import com.youlai.system.pojo.vo.UserPageVO;
+import com.youlai.system.model.dto.UserAuthInfo;
+import com.youlai.system.model.bo.UserBO;
+import com.youlai.system.model.bo.UserFormBO;
+import com.youlai.system.model.entity.SysUser;
+import com.youlai.system.model.form.UserForm;
+import com.youlai.system.model.query.UserPageQuery;
+import com.youlai.system.model.vo.UserExportVO;
+import com.youlai.system.model.vo.UserInfoVO;
+import com.youlai.system.model.vo.UserPageVO;
 import com.youlai.system.service.SysMenuService;
 import com.youlai.system.service.SysRoleService;
 import com.youlai.system.service.SysUserRoleService;
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  * 用户业务实现类
  *
  * @author haoxr
- * @date 2022/1/14
+ * @since 2022/1/14
  */
 @Service
 @RequiredArgsConstructor

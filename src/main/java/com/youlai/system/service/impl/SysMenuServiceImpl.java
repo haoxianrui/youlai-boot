@@ -11,13 +11,13 @@ import com.youlai.system.common.enums.MenuTypeEnum;
 import com.youlai.system.common.enums.StatusEnum;
 import com.youlai.system.converter.MenuConverter;
 import com.youlai.system.mapper.SysMenuMapper;
-import com.youlai.system.pojo.bo.RouteBO;
-import com.youlai.system.pojo.entity.SysMenu;
-import com.youlai.system.pojo.form.MenuForm;
-import com.youlai.system.pojo.query.MenuQuery;
-import com.youlai.system.pojo.vo.MenuVO;
-import com.youlai.system.pojo.vo.Option;
-import com.youlai.system.pojo.vo.RouteVO;
+import com.youlai.system.model.bo.RouteBO;
+import com.youlai.system.model.entity.SysMenu;
+import com.youlai.system.model.form.MenuForm;
+import com.youlai.system.model.query.MenuQuery;
+import com.youlai.system.model.vo.MenuVO;
+import com.youlai.system.common.model.Option;
+import com.youlai.system.model.vo.RouteVO;
 import com.youlai.system.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * 菜单业务实现类
  *
  * @author haoxr
- * @date 2020/11/06
+ * @since 2020/11/06
  */
 @Service
 @RequiredArgsConstructor

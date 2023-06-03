@@ -3,8 +3,8 @@ package com.youlai.system.common.constant;
 /**
  * Excel 常量
  *
- * @author: haoxr
- * @date: 2023/03/24
+ * @author haoxr
+ * @since 2023/03/24
  */
 public interface ExcelConstants {
 

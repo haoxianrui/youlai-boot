@@ -1,12 +1,12 @@
 package com.youlai.system.controller;
 
 import com.youlai.system.common.result.Result;
-import com.youlai.system.framework.resubmit.Resubmit;
-import com.youlai.system.pojo.form.MenuForm;
-import com.youlai.system.pojo.query.MenuQuery;
-import com.youlai.system.pojo.vo.MenuVO;
-import com.youlai.system.pojo.vo.Option;
-import com.youlai.system.pojo.vo.RouteVO;
+import com.youlai.system.common.annotation.PreventDuplicateSubmit;
+import com.youlai.system.model.form.MenuForm;
+import com.youlai.system.model.query.MenuQuery;
+import com.youlai.system.model.vo.MenuVO;
+import com.youlai.system.common.model.Option;
+import com.youlai.system.model.vo.RouteVO;
 import com.youlai.system.service.SysMenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,7 +25,7 @@ import java.util.List;
  * 菜单控制器
  *
  * @author haoxr
- * @date 2020/11/06
+ * @since 2020/11/06
  */
 @Tag(name = "04.菜单接口")
 @RestController
@@ -69,7 +69,7 @@ public class SysMenuController {
     @Operation(summary = "新增菜单",security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping
     @PreAuthorize("@ss.hasPerm('sys:menu:add')")
-    @Resubmit
+    @PreventDuplicateSubmit
     @CacheEvict(cacheNames = "system", key = "'routes'")
     public Result addMenu(@RequestBody MenuForm menuForm) {
         boolean result = menuService.saveMenu(menuForm);

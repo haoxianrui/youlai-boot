@@ -1,10 +1,10 @@
 package com.youlai.system.converter;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.system.pojo.vo.Option;
-import com.youlai.system.pojo.entity.SysRole;
-import com.youlai.system.pojo.form.RoleForm;
-import com.youlai.system.pojo.vo.RolePageVO;
+import com.youlai.system.common.model.Option;
+import com.youlai.system.model.entity.SysRole;
+import com.youlai.system.model.form.RoleForm;
+import com.youlai.system.model.vo.RolePageVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -15,7 +15,7 @@ import java.util.List;
  * 角色对象转换器
  *
  * @author haoxr
- * @date 2022/5/29
+ * @since 2022/5/29
  */
 @Mapper(componentModel = "spring")
 public interface RoleConverter {

@@ -8,8 +8,8 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter;
 /**
  * 请求日志打印过滤器
  *
- * @author: haoxr
- * @date: 2023/03/03
+ * @author haoxr
+ * @since 2023/03/03
  */
 @Configuration
 @Slf4j

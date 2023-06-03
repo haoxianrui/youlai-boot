@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 响应码枚举
  *
  * @author haoxr
- * @date 2020-06-23
+ * @since 2020-06-23
  **/
 @AllArgsConstructor
 @NoArgsConstructor

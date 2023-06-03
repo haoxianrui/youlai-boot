@@ -9,8 +9,8 @@ import org.springframework.core.env.Environment;
 /**
  * SpringBoot 配置加载顺序单元测试类
  *
- * @author: haoxr
- * @date: 2023/02/23
+ * @author haoxr
+ * @since 2023/02/23
  */
 @SpringBootTest
 @Slf4j

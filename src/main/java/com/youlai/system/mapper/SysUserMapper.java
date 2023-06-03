@@ -2,13 +2,13 @@ package com.youlai.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.system.framework.mybatisplus.DataPermission;
-import com.youlai.system.pojo.bo.UserBO;
-import com.youlai.system.pojo.entity.SysUser;
-import com.youlai.system.pojo.bo.UserAuthInfo;
-import com.youlai.system.pojo.bo.UserFormBO;
-import com.youlai.system.pojo.query.UserPageQuery;
-import com.youlai.system.pojo.vo.UserExportVO;
+import com.youlai.system.common.annotation.DataPermission;
+import com.youlai.system.model.bo.UserBO;
+import com.youlai.system.model.entity.SysUser;
+import com.youlai.system.model.dto.UserAuthInfo;
+import com.youlai.system.model.bo.UserFormBO;
+import com.youlai.system.model.query.UserPageQuery;
+import com.youlai.system.model.vo.UserExportVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
  * 用户持久层
  *
  * @author haoxr
- * @date 2022/1/14
+ * @since 2022/1/14
  */
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUser> {

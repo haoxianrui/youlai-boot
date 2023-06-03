@@ -3,14 +3,14 @@ package com.youlai.system.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
-import com.youlai.system.framework.resubmit.Resubmit;
-import com.youlai.system.pojo.form.DictForm;
-import com.youlai.system.pojo.form.DictTypeForm;
-import com.youlai.system.pojo.query.DictPageQuery;
-import com.youlai.system.pojo.query.DictTypePageQuery;
-import com.youlai.system.pojo.vo.DictPageVO;
-import com.youlai.system.pojo.vo.DictTypePageVO;
-import com.youlai.system.pojo.vo.Option;
+import com.youlai.system.common.annotation.PreventDuplicateSubmit;
+import com.youlai.system.model.form.DictForm;
+import com.youlai.system.model.form.DictTypeForm;
+import com.youlai.system.model.query.DictPageQuery;
+import com.youlai.system.model.query.DictTypePageQuery;
+import com.youlai.system.model.vo.DictPageVO;
+import com.youlai.system.model.vo.DictTypePageVO;
+import com.youlai.system.common.model.Option;
 import com.youlai.system.service.SysDictService;
 import com.youlai.system.service.SysDictTypeService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -55,7 +55,7 @@ public class SysDictController {
     @Operation(summary = "新增字典", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping
     @PreAuthorize("@ss.hasPerm('sys:dict:add')")
-    @Resubmit
+    @PreventDuplicateSubmit
     public Result saveDict(
             @RequestBody DictForm DictForm
     ) {
@@ -117,7 +117,7 @@ public class SysDictController {
     @Operation(summary = "新增字典类型", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping("/types")
     @PreAuthorize("@ss.hasPerm('sys:dict_type:add')")
-    @Resubmit
+    @PreventDuplicateSubmit
     public Result saveDictType(@RequestBody DictTypeForm dictTypeForm) {
         boolean result = dictTypeService.saveDictType(dictTypeForm);
         return Result.judge(result);

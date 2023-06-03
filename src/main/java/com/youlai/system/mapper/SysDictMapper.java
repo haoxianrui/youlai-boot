@@ -1,7 +1,7 @@
 package com.youlai.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.youlai.system.pojo.entity.SysDict;
+import com.youlai.system.model.entity.SysDict;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

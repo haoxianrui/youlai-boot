@@ -3,11 +3,11 @@ package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.system.pojo.vo.Option;
-import com.youlai.system.pojo.entity.SysRole;
-import com.youlai.system.pojo.form.RoleForm;
-import com.youlai.system.pojo.query.RolePageQuery;
-import com.youlai.system.pojo.vo.RolePageVO;
+import com.youlai.system.common.model.Option;
+import com.youlai.system.model.entity.SysRole;
+import com.youlai.system.model.form.RoleForm;
+import com.youlai.system.model.query.RolePageQuery;
+import com.youlai.system.model.vo.RolePageVO;
 
 import java.util.List;
 import java.util.Set;
@@ -16,7 +16,7 @@ import java.util.Set;
  * 角色业务接口层
  *
  * @author haoxr
- * @date 2022/6/3
+ * @since 2022/6/3
  */
 public interface SysRoleService extends IService<SysRole> {
 

@@ -3,23 +3,21 @@ package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.system.pojo.vo.UserImportVO;
-import com.youlai.system.pojo.entity.SysUser;
-import com.youlai.system.pojo.form.UserForm;
-import com.youlai.system.pojo.bo.UserAuthInfo;
-import com.youlai.system.pojo.query.UserPageQuery;
-import com.youlai.system.pojo.vo.UserExportVO;
-import com.youlai.system.pojo.vo.UserInfoVO;
-import com.youlai.system.pojo.vo.UserPageVO;
+import com.youlai.system.model.entity.SysUser;
+import com.youlai.system.model.form.UserForm;
+import com.youlai.system.model.dto.UserAuthInfo;
+import com.youlai.system.model.query.UserPageQuery;
+import com.youlai.system.model.vo.UserExportVO;
+import com.youlai.system.model.vo.UserInfoVO;
+import com.youlai.system.model.vo.UserPageVO;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
  * 用户业务接口
  *
  * @author haoxr
- * @date 2022/1/14
+ * @since 2022/1/14
  */
 public interface SysUserService extends IService<SysUser> {
 

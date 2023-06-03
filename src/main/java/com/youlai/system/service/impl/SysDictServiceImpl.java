@@ -8,11 +8,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.converter.DictConverter;
 import com.youlai.system.mapper.SysDictMapper;
-import com.youlai.system.pojo.entity.SysDict;
-import com.youlai.system.pojo.form.DictForm;
-import com.youlai.system.pojo.query.DictPageQuery;
-import com.youlai.system.pojo.vo.DictPageVO;
-import com.youlai.system.pojo.vo.Option;
+import com.youlai.system.model.entity.SysDict;
+import com.youlai.system.model.form.DictForm;
+import com.youlai.system.model.query.DictPageQuery;
+import com.youlai.system.model.vo.DictPageVO;
+import com.youlai.system.common.model.Option;
 import com.youlai.system.service.SysDictService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * 数据字典项业务实现类
  *
  * @author haoxr
- * @date 2022/10/12
+ * @since 2022/10/12
  */
 @Service
 @RequiredArgsConstructor

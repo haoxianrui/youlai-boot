@@ -8,19 +8,19 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SystemConstants;
-import com.youlai.system.pojo.vo.Option;
+import com.youlai.system.common.model.Option;
 import com.youlai.system.converter.RoleConverter;
 import com.youlai.system.mapper.SysRoleMapper;
-import com.youlai.system.pojo.entity.SysRole;
-import com.youlai.system.pojo.entity.SysRoleMenu;
-import com.youlai.system.pojo.entity.SysUserRole;
-import com.youlai.system.pojo.form.RoleForm;
-import com.youlai.system.pojo.query.RolePageQuery;
-import com.youlai.system.pojo.vo.RolePageVO;
+import com.youlai.system.model.entity.SysRole;
+import com.youlai.system.model.entity.SysRoleMenu;
+import com.youlai.system.model.entity.SysUserRole;
+import com.youlai.system.model.form.RoleForm;
+import com.youlai.system.model.query.RolePageQuery;
+import com.youlai.system.model.vo.RolePageVO;
 import com.youlai.system.service.SysRoleMenuService;
 import com.youlai.system.service.SysRoleService;
 import com.youlai.system.service.SysUserRoleService;
-import com.youlai.system.framework.security.util.SecurityUtils;
+import com.youlai.system.common.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * 角色业务实现类
  *
  * @author haoxr
- * @date 2022/6/3
+ * @since 2022/6/3
  */
 @Service
 @RequiredArgsConstructor

@@ -10,10 +10,10 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.Collections;
 
 /**
- * CORS资源共享配置
+ * CORS 资源共享配置
  *
  * @author haoxr
- * @date 2023/4/17
+ * @since 2023/4/17
  */
 @Configuration
 public class CorsConfig {

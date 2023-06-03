@@ -2,11 +2,11 @@ package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.system.pojo.vo.Option;
-import com.youlai.system.pojo.entity.SysDictType;
-import com.youlai.system.pojo.form.DictTypeForm;
-import com.youlai.system.pojo.query.DictTypePageQuery;
-import com.youlai.system.pojo.vo.DictTypePageVO;
+import com.youlai.system.common.model.Option;
+import com.youlai.system.model.entity.SysDictType;
+import com.youlai.system.model.form.DictTypeForm;
+import com.youlai.system.model.query.DictTypePageQuery;
+import com.youlai.system.model.vo.DictTypePageVO;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * 数据字典类型业务接口
  *
  * @author haoxr
- * @date 2022/10/12
+ * @since 2022/10/12
  */
 public interface SysDictTypeService extends IService<SysDictType> {
 

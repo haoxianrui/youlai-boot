@@ -20,7 +20,7 @@ import java.util.TreeMap;
  * Spring Doc FAQ: https://springdoc.org/#faq
  *
  * @author haoxr
- * @date 2023/2/17
+ * @since 2023/2/17
  */
 @Configuration
 public class SwaggerConfig {

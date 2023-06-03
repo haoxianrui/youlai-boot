@@ -1,7 +1,7 @@
 package com.youlai.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.youlai.system.pojo.entity.SysRoleMenu;
+import com.youlai.system.model.entity.SysRoleMenu;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
  * 角色菜单持久层
  *
  * @author haoxr
- * @date 2022/6/4
+ * @since 2022/6/4
  */
 @Mapper
 public interface SysRoleMenuMapper extends BaseMapper<SysRoleMenu> {

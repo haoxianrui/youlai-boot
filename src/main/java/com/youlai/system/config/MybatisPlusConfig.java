@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.DataPermissionInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.youlai.system.framework.mybatisplus.MyDataPermissionHandler;
-import com.youlai.system.framework.mybatisplus.MyMetaObjectHandler;
+import com.youlai.system.handler.mybatisplus.MyDataPermissionHandler;
+import com.youlai.system.handler.mybatisplus.MyMetaObjectHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class MybatisPlusConfig {
 
 
-    @Value("${system-config.data-permission.enabled}")
+    @Value("${system.config.data-permission-enabled}")
     private Boolean dataPermissionEnabled;
 
     /**

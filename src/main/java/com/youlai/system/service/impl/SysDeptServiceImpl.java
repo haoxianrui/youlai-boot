@@ -8,11 +8,11 @@ import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.common.enums.StatusEnum;
 import com.youlai.system.converter.DeptConverter;
 import com.youlai.system.mapper.SysDeptMapper;
-import com.youlai.system.pojo.entity.SysDept;
-import com.youlai.system.pojo.form.DeptForm;
-import com.youlai.system.pojo.query.DeptQuery;
-import com.youlai.system.pojo.vo.DeptVO;
-import com.youlai.system.pojo.vo.Option;
+import com.youlai.system.model.entity.SysDept;
+import com.youlai.system.model.form.DeptForm;
+import com.youlai.system.model.query.DeptQuery;
+import com.youlai.system.model.vo.DeptVO;
+import com.youlai.system.common.model.Option;
 import com.youlai.system.service.SysDeptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * 部门业务实现类
  *
  * @author haoxr
- * @date 2021-08-22
+ * @since 2021-08-22
  */
 @Service
 @RequiredArgsConstructor

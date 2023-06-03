@@ -1,11 +1,11 @@
 package com.youlai.system.controller;
 
-import com.youlai.system.framework.resubmit.Resubmit;
-import com.youlai.system.pojo.vo.Option;
+import com.youlai.system.common.annotation.PreventDuplicateSubmit;
+import com.youlai.system.common.model.Option;
 import com.youlai.system.common.result.Result;
-import com.youlai.system.pojo.form.DeptForm;
-import com.youlai.system.pojo.query.DeptQuery;
-import com.youlai.system.pojo.vo.DeptVO;
+import com.youlai.system.model.form.DeptForm;
+import com.youlai.system.model.query.DeptQuery;
+import com.youlai.system.model.vo.DeptVO;
 import com.youlai.system.service.SysDeptService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -59,7 +59,7 @@ public class SysDeptController {
     @Operation(summary = "新增部门", security = {@SecurityRequirement(name = "Authorization")})
     @PostMapping
     @PreAuthorize("@ss.hasPerm('sys:dept:add')")
-    @Resubmit
+    @PreventDuplicateSubmit
     public Result saveDept(
             @Valid @RequestBody DeptForm formData
     ) {
