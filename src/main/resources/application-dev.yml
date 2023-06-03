@@ -73,9 +73,8 @@ oss:
     access-key-id: your-access-key-id
     # 凭据密钥
     access-key-secret: your-access-key-secret
+    # 存储桶名称
     bucket-name: default
-    # (可选)自定义域名，如果配置了域名，生成的文件URL是域名格式，未配置则URL则是IP格式 (eg: https://oss.youlai.tech)
-    custom-domain:
 
 
 
