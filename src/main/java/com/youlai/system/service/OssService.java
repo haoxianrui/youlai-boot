@@ -1,6 +1,6 @@
 package com.youlai.system.service;
 
-import com.youlai.system.pojo.vo.FileInfoVO;
+import com.youlai.system.model.dto.FileInfo;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -9,16 +9,16 @@ import org.springframework.web.multipart.MultipartFile;
  * 已实现 MinIO
  *
  * @author haoxr
- * @date 2022/11/19
+ * @since 2022/11/19
  */
-public interface FileService {
+public interface OssService {
 
     /**
      * 上传文件
      * @param file 表单文件对象
      * @return
      */
-    FileInfoVO uploadFile(MultipartFile file);
+    FileInfo uploadFile(MultipartFile file);
 
     /**
      * 删除文件

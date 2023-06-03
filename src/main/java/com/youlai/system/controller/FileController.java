@@ -1,8 +1,8 @@
 package com.youlai.system.controller;
 
 import com.youlai.system.common.result.Result;
-import com.youlai.system.pojo.vo.FileInfoVO;
-import com.youlai.system.service.FileService;
+import com.youlai.system.model.dto.FileInfo;
+import com.youlai.system.service.OssService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,15 +18,15 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class FileController {
 
-    private final FileService fileService;
+    private final OssService ossService;
 
     @PostMapping
     @Operation(summary = "文件上传", security = {@SecurityRequirement(name = "Authorization")})
-    public Result<FileInfoVO> uploadFile(
+    public Result<FileInfo> uploadFile(
             @Parameter(description ="表单文件对象") @RequestParam(value = "file") MultipartFile file
     ) {
-        FileInfoVO fileInfoVO = fileService.uploadFile(file);
-        return Result.success(fileInfoVO);
+        FileInfo fileInfo = ossService.uploadFile(file);
+        return Result.success(fileInfo);
     }
 
     @DeleteMapping
@@ -35,7 +35,7 @@ public class FileController {
     public Result deleteFile(
             @Parameter(description ="文件路径") @RequestParam String filePath
     ) {
-        boolean result = fileService.deleteFile(filePath);
+        boolean result = ossService.deleteFile(filePath);
         return Result.judge(result);
     }
 }

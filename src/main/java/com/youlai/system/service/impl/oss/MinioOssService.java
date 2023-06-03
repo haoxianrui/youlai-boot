@@ -1,81 +1,73 @@
-package com.youlai.system.service.impl;
+package com.youlai.system.service.impl.oss;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
-import com.youlai.system.pojo.vo.FileInfoVO;
-import com.youlai.system.service.FileService;
+import com.youlai.system.model.dto.FileInfo;
+import com.youlai.system.service.OssService;
 import io.minio.*;
+import io.minio.errors.*;
 import io.minio.http.Method;
-import lombok.Setter;
+import jakarta.annotation.PostConstruct;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 
 /**
- * MinIO 文件实现类
- *
  * @author haoxr
- * @date 2022/12/17
+ * @since 2023/6/2
  */
 @Component
-@ConfigurationProperties(prefix = "minio")
-@Slf4j
-public class MinioServiceImpl implements FileService, InitializingBean {
+@ConditionalOnProperty(value = "oss.type", havingValue = "minio")
+@ConfigurationProperties(prefix = "oss.minio")
+@RequiredArgsConstructor
+@Data
+public class MinioOssService implements OssService {
 
     /**
-     * MinIO的API地址
+     * 服务Endpoint
      */
-    @Setter
     private String endpoint;
-
     /**
-     * 用户名
+     * 访问凭据
      */
-    @Setter
     private String accessKey;
-
     /**
-     * 密钥
+     * 凭据密钥
      */
-    @Setter
     private String secretKey;
-
     /**
      * 存储桶名称
      */
-    @Setter
     private String bucketName;
-
     /**
-     * 自定义域名(非必须)
+     * 自定义域名
      */
-    @Setter
     private String customDomain;
-
 
     private MinioClient minioClient;
 
-    @Override
-    public void afterPropertiesSet() {
-        log.info("MinIO Client init...");
-        Assert.notBlank(endpoint, "MinIO endpoint can not be null");
-        Assert.notBlank(accessKey, "MinIO accessKey can not be null");
-        Assert.notBlank(secretKey, "MinIO secretKey can not be null");
-        Assert.notBlank(bucketName, "MinIO bucketName can not be null");
-        this.minioClient = MinioClient.builder()
+    // 依赖注入完成之后执行初始化
+    @PostConstruct
+    public void init() {
+        minioClient = MinioClient.builder()
                 .endpoint(endpoint)
                 .credentials(accessKey, secretKey)
                 .build();
     }
+
 
     /**
      * 上传文件
@@ -84,45 +76,44 @@ public class MinioServiceImpl implements FileService, InitializingBean {
      * @return
      */
     @Override
-    @SneakyThrows
-    public FileInfoVO uploadFile(MultipartFile file) {
-        // 存储桶不存在则创建
-        createBucketIfAbsent(bucketName);
+    public FileInfo uploadFile(MultipartFile file) {
 
         // 生成文件名(日期文件夹)
         String suffix = FileUtil.getSuffix(file.getOriginalFilename());
         String uuid = IdUtil.simpleUUID();
         String fileName = DateUtil.format(LocalDateTime.now(), "yyyy/MM/dd") + "/" + uuid + "." + suffix;
-
-        InputStream inputStream = file.getInputStream();
-
-        // 文件上传
-        PutObjectArgs putObjectArgs = PutObjectArgs.builder()
-                .bucket(bucketName)
-                .object(fileName)
-                .contentType(file.getContentType())
-                .stream(inputStream, inputStream.available(), -1)
-                .build();
-        minioClient.putObject(putObjectArgs);
-
-        // 返回文件路径
-        String fileUrl;
-        if (StrUtil.isBlank(customDomain)) { // 未配置自定义域名
-            GetPresignedObjectUrlArgs getPresignedObjectUrlArgs = GetPresignedObjectUrlArgs.builder()
-                    .bucket(bucketName).object(fileName)
-                    .method(Method.GET)
+        //  try-with-resource 语法糖自动释放流
+        try (InputStream inputStream = file.getInputStream()) {
+            // 文件上传
+            PutObjectArgs putObjectArgs = PutObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(fileName)
+                    .contentType(file.getContentType())
+                    .stream(inputStream, inputStream.available(), -1)
                     .build();
+            minioClient.putObject(putObjectArgs);
 
-            fileUrl = minioClient.getPresignedObjectUrl(getPresignedObjectUrlArgs);
-            fileUrl = fileUrl.substring(0, fileUrl.indexOf("?"));
-        } else { // 配置自定义文件路径域名
-            fileUrl = customDomain + '/' + bucketName + "/" + fileName;
+            // 返回文件路径
+            String fileUrl;
+            if (StrUtil.isBlank(customDomain)) { // 未配置自定义域名
+                GetPresignedObjectUrlArgs getPresignedObjectUrlArgs = GetPresignedObjectUrlArgs.builder()
+                        .bucket(bucketName).object(fileName)
+                        .method(Method.GET)
+                        .build();
+
+                fileUrl = minioClient.getPresignedObjectUrl(getPresignedObjectUrlArgs);
+                fileUrl = fileUrl.substring(0, fileUrl.indexOf("?"));
+            } else { // 配置自定义文件路径域名
+                fileUrl = customDomain + '/' + bucketName + "/" + fileName;
+            }
+
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.setName(fileName);
+            fileInfo.setUrl(fileUrl);
+            return fileInfo;
+        } catch (Exception e) {
+            throw new RuntimeException("文件上传失败");
         }
-
-        FileInfoVO fileInfoVO = new FileInfoVO();
-        fileInfoVO.setName(fileName);
-        fileInfoVO.setUrl(fileUrl);
-        return fileInfoVO;
     }
 
 
@@ -134,7 +125,6 @@ public class MinioServiceImpl implements FileService, InitializingBean {
      * @return
      */
     @Override
-    @SneakyThrows
     public boolean deleteFile(String filePath) {
         Assert.notBlank(filePath, "删除文件路径不能为空");
         String tempStr = "/" + bucketName + "/";
@@ -144,7 +134,13 @@ public class MinioServiceImpl implements FileService, InitializingBean {
                 .bucket(bucketName)
                 .object(fileName)
                 .build();
-        minioClient.removeObject(removeObjectArgs);
+        try {
+            minioClient.removeObject(removeObjectArgs);
+        } catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException |
+                 InvalidResponseException | IOException | NoSuchAlgorithmException | ServerException |
+                 XmlParserException e) {
+            throw new RuntimeException(e);
+        }
         return true;
     }
 
@@ -163,17 +159,15 @@ public class MinioServiceImpl implements FileService, InitializingBean {
          * Resource:  指定存储桶
          * Action: 操作行为
          */
-        StringBuilder builder = new StringBuilder();
-        builder.append("{\"Version\":\"2012-10-17\","
+
+        return "{\"Version\":\"2012-10-17\","
                 + "\"Statement\":[{\"Effect\":\"Allow\","
                 + "\"Principal\":{\"AWS\":[\"*\"]},"
                 + "\"Action\":[\"s3:ListBucketMultipartUploads\",\"s3:GetBucketLocation\",\"s3:ListBucket\"],"
                 + "\"Resource\":[\"arn:aws:s3:::" + bucketName + "\"]},"
                 + "{\"Effect\":\"Allow\"," + "\"Principal\":{\"AWS\":[\"*\"]},"
                 + "\"Action\":[\"s3:ListMultipartUploadParts\",\"s3:PutObject\",\"s3:AbortMultipartUpload\",\"s3:DeleteObject\",\"s3:GetObject\"],"
-                + "\"Resource\":[\"arn:aws:s3:::" + bucketName + "/*\"]}]}");
-
-        return builder.toString();
+                + "\"Resource\":[\"arn:aws:s3:::" + bucketName + "/*\"]}]}";
     }
 
     /**
@@ -198,5 +192,4 @@ public class MinioServiceImpl implements FileService, InitializingBean {
             minioClient.setBucketPolicy(setBucketPolicyArgs);
         }
     }
-
 }

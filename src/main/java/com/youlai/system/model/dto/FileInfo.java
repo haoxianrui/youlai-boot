@@ -1,11 +1,11 @@
-package com.youlai.system.pojo.vo;
+package com.youlai.system.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Schema(description = "文件对象")
 @Data
-public class FileInfoVO {
+public class FileInfo {
 
     @Schema(description = "文件名称")
     private String name;

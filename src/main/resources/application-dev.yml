@@ -30,8 +30,11 @@ mybatis-plus:
     db-config:
       # 主键ID类型
       id-type: none
+      # 逻辑删除字段名称
       logic-delete-field: deleted
+      # 逻辑删除-删除值
       logic-delete-value: 1
+      # 逻辑删除-未删除值
       logic-not-delete-value: 0
   configuration:
     # 驼峰下划线转换
@@ -47,15 +50,34 @@ auth:
     # token 有效期(单位:秒)
     ttl: 18000
 
-# MinIO 分布式文件系统
-minio:
-  endpoint: http://localhost:9000
-  access-key: minioadmin
-  secret-key: minioadmin
-  # 存储桶名称
-  bucket-name: default
-  # 自定义域名(非必须)，Nginx配置反向代理转发文件路径
-  custom-domain:
+oss:
+  # OSS 类型 (目前支持aliyun、minio)
+  type: minio
+  # MinIO 对象存储服务
+  minio:
+    # 服务Endpoint
+    endpoint: http://localhost:9000
+    # 访问凭据
+    access-key: minioadmin
+    # 凭据密钥
+    secret-key: minioadmin
+    # 存储桶名称
+    bucket-name: default
+    # (可选)自定义域名，如果配置了域名，生成的文件URL是域名格式，未配置则URL则是IP格式 (eg: https://oss.youlai.tech)
+    custom-domain:
+  # 阿里云OSS对象存储服务
+  aliyun:
+    # 服务Endpoint
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    # 访问凭据
+    access-key-id: your-access-key-id
+    # 凭据密钥
+    access-key-secret: your-access-key-secret
+    bucket-name: default
+    # (可选)自定义域名，如果配置了域名，生成的文件URL是域名格式，未配置则URL则是IP格式 (eg: https://oss.youlai.tech)
+    custom-domain:
+
+
 
 # springdoc配置： https://springdoc.org/properties.html
 springdoc:
@@ -68,7 +90,6 @@ springdoc:
 
 # 验证码配置
 easy-captcha:
-  enable: true
   # 验证码类型: arithmetic-算术
   type: arithmetic
   # 验证码有效时间(单位：秒)
@@ -77,8 +98,6 @@ easy-captcha:
 # xxl-job 定时任务配置
 xxl:
   job:
-    # xxl-job 开关
-    enabled: false
     admin:
       # 多个地址使用,分割
       addresses: http://127.0.0.1:8080/xxl-job-admin
@@ -92,8 +111,11 @@ xxl:
       logretentiondays: 30
 
 # 系统配置
-system-config:
-  # 数据权限配置
-  data-permission:
+system:
+  config:
     # 数据权限开关
-    enabled: true
+    data-permission-enabled: true
+    # 定时任务 xxl-job 开关
+    xxl-job-enabled: false
+    # WebSocket 开关
+    websocket-enabled: true
