@@ -8,7 +8,6 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
-import com.aliyun.oss.model.PutObjectResult;
 import com.youlai.system.model.dto.FileInfo;
 import com.youlai.system.service.OssService;
 import jakarta.annotation.PostConstruct;
@@ -69,33 +68,30 @@ public class AliyunOssService implements OssService {
         String fileName = DateUtil.format(LocalDateTime.now(), "yyyy/MM/dd") + "/" + uuid + "." + suffix;
         //  try-with-resource 语法糖自动释放流
         try (InputStream inputStream = file.getInputStream()) {
-            // 创建PutObjectRequest对象，指定Bucket名称、对象名称和输入流
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, inputStream);
 
             // 设置上传文件的元信息，例如Content-Type
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
-            putObjectRequest.setMetadata(metadata);
-
+            // 创建PutObjectRequest对象，指定Bucket名称、对象名称和输入流
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, inputStream, metadata);
             // 上传文件
-            PutObjectResult putObjectResult = aliyunOssClient.putObject(putObjectRequest);
-
-            // 获取文件访问路径
-            String fileUrl = "https://" + bucketName + ".oss-cn-hangzhou.aliyuncs.com/" + fileName;
-            FileInfo fileInfo = new FileInfo();
-            fileInfo.setName(fileName);
-            fileInfo.setUrl(fileUrl);
-            return fileInfo;
+            aliyunOssClient.putObject(putObjectRequest);
         } catch (Exception e) {
             throw new RuntimeException("文件上传失败");
         }
+        // 获取文件访问路径
+        String fileUrl = "https://" + bucketName + "." + endpoint + "/" + fileName;
+        FileInfo fileInfo = new FileInfo();
+        fileInfo.setName(fileName);
+        fileInfo.setUrl(fileUrl);
+        return fileInfo;
     }
 
     @Override
     public boolean deleteFile(String filePath) {
         Assert.notBlank(filePath, "删除文件路径不能为空");
-        String tempStr = "/" + bucketName + "/";
-        String fileName = filePath.substring(filePath.indexOf(tempStr) + tempStr.length()); // 2022/11/20/test.jpg
+        String fileHost = "https://" + bucketName + "." + endpoint; // 文件主机域名
+        String fileName = filePath.substring(fileHost.length() + 1); // +1 是/占一个字符，截断左闭右开
         aliyunOssClient.deleteObject(bucketName, fileName);
         return true;
     }

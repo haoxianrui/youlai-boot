@@ -37,7 +37,7 @@ import java.time.LocalDateTime;
 public class MinioOssService implements OssService {
 
     /**
-     * 服务Endpoint
+     * 服务Endpoint(http://localhost:9000)
      */
     private String endpoint;
     /**
@@ -53,7 +53,7 @@ public class MinioOssService implements OssService {
      */
     private String bucketName;
     /**
-     * 自定义域名
+     * 自定义域名(https://oss.youlai.tech)
      */
     private String customDomain;
 
@@ -81,7 +81,7 @@ public class MinioOssService implements OssService {
         // 生成文件名(日期文件夹)
         String suffix = FileUtil.getSuffix(file.getOriginalFilename());
         String uuid = IdUtil.simpleUUID();
-        String fileName = DateUtil.format(LocalDateTime.now(), "yyyy/MM/dd") + "/" + uuid + "." + suffix;
+        String fileName = DateUtil.format(LocalDateTime.now(), "yyyyMMdd") + "/" + uuid + "." + suffix;
         //  try-with-resource 语法糖自动释放流
         try (InputStream inputStream = file.getInputStream()) {
             // 文件上传
@@ -121,27 +121,33 @@ public class MinioOssService implements OssService {
      * 删除文件
      *
      * @param filePath 文件路径
-     *                 https://oss.youlai.tech/default/2022/11/20/test.jpg
+     *                 https://oss.youlai.tech/default/20221120/test.jpg
      * @return
      */
     @Override
     public boolean deleteFile(String filePath) {
         Assert.notBlank(filePath, "删除文件路径不能为空");
-        String tempStr = "/" + bucketName + "/";
-        String fileName = filePath.substring(filePath.indexOf(tempStr) + tempStr.length()); // 2022/11/20/test.jpg
-
-        RemoveObjectArgs removeObjectArgs = RemoveObjectArgs.builder()
-                .bucket(bucketName)
-                .object(fileName)
-                .build();
         try {
+            String fileName;
+            if (StrUtil.isNotBlank(customDomain)) {
+                // https://oss.youlai.tech/default/20221120/test.jpg → 20221120/test.jpg
+                fileName = filePath.substring(customDomain.length() + 1 + bucketName.length() + 1); // 两个/占了2个字符长度
+            } else {
+                // http://localhost:9000/default/20221120/test.jpg → 20221120/test.jpg
+                fileName = filePath.substring(endpoint.length() + 1 + bucketName.length() + 1);
+            }
+            RemoveObjectArgs removeObjectArgs = RemoveObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(fileName)
+                    .build();
+
             minioClient.removeObject(removeObjectArgs);
+            return true;
         } catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException |
                  InvalidResponseException | IOException | NoSuchAlgorithmException | ServerException |
                  XmlParserException e) {
             throw new RuntimeException(e);
         }
-        return true;
     }
 
 
