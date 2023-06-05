@@ -47,25 +47,18 @@ public class SwaggerConfig {
     }
 
     /**
-     * 接口分组-系统接口
-     *
-     * @return
+     * 系统接口分组
      */
     @Bean
-    public GroupedOpenApi groupedOpenApi() {
-        String paths[] = {"/api/**"};
-
-        String packagesToScan[] = {"com.youlai.system.controller"};
-        return GroupedOpenApi.builder().group("系统接口")
+    public GroupedOpenApi systemApi() {
+        String[] paths = {"/**"};
+        String[] packagesToScan = {"com.youlai.system.controller"};
+        return GroupedOpenApi.builder()
+                .group("系统接口")
                 .packagesToScan(packagesToScan)
                 .pathsToMatch(paths)
                 .build();
     }
-
-
-
-
-
 
 
 }
