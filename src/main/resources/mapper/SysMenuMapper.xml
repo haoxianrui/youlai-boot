@@ -41,6 +41,7 @@
                  LEFT JOIN sys_role t3 ON t2.role_id = t3.id
         WHERE
             t1.type != '${@com.youlai.system.common.enums.MenuTypeEnum@BUTTON.getValue()}'
+            AND t1.deleted = 0
         ORDER BY t1.sort asc
     </select>
 
@@ -54,6 +55,7 @@
                 INNER JOIN sys_role t3 ON t3.id = t2.role_id
         WHERE
             t1.type = '${@com.youlai.system.common.enums.MenuTypeEnum@BUTTON.getValue()}'
+          AND t1.deleted = 0
           AND t1.perm IS NOT NULL
           <choose>
             <when test="roles!=null and roles.size()>0">
