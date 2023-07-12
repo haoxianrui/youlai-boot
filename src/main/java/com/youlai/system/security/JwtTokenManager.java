@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import jakarta.annotation.Resource;
@@ -71,7 +72,7 @@ public class JwtTokenManager {
 
         // 角色放入JWT的claims
         Set<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority()).collect(Collectors.toSet());
+                .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
         claims.put("authorities", roles);
 
         // 权限数据多放入Redis

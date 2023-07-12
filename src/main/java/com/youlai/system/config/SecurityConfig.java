@@ -65,7 +65,6 @@ public class SecurityConfig {
 
     /**
      * 不走过滤器链的放行配置
-     *
      */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {

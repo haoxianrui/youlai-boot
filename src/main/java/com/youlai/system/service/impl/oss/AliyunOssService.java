@@ -65,7 +65,7 @@ public class AliyunOssService implements OssService {
         // 生成文件名(日期文件夹)
         String suffix = FileUtil.getSuffix(file.getOriginalFilename());
         String uuid = IdUtil.simpleUUID();
-        String fileName = DateUtil.format(LocalDateTime.now(), "yyyy/MM/dd") + "/" + uuid + "." + suffix;
+        String fileName = DateUtil.format(LocalDateTime.now(), "yyyyMMdd") + "/" + uuid + "." + suffix;
         //  try-with-resource 语法糖自动释放流
         try (InputStream inputStream = file.getInputStream()) {
 

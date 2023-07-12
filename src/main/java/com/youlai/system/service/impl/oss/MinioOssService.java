@@ -26,6 +26,8 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 
 /**
+ * MinIO 文件上传服务类
+ *
  * @author haoxr
  * @since 2023/6/2
  */
