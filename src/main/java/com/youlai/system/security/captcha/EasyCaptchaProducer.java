@@ -14,7 +14,6 @@ import java.awt.*;
  * @author haoxr
  * @since 2023/03/24
  */
-
 @Component
 @RequiredArgsConstructor
 public class EasyCaptchaProducer {
