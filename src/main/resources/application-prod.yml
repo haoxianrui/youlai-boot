@@ -48,14 +48,31 @@ auth:
     ttl: 18000
 
 
-# MinIO 分布式文件系统
-minio:
-  endpoint: http://www.youlai.tech:9000
-  access-key: minioadmin
-  secret-key: youlaitech
-  bucket-name: youlai-boot
-  # 自定义域名(非必须)，Nginx配置反向代理转发文件路径
-  custom-domain: https://oss.youlai.tech
+oss:
+  # OSS 类型 (目前支持aliyun、minio)
+  type: minio
+  # MinIO 对象存储服务
+  minio:
+    # 服务Endpoint
+    endpoint: http://www.youlai.tech:9000
+    # 访问凭据
+    access-key: minioadmin
+    # 凭据密钥
+    secret-key: youlaitech
+    # 存储桶名称
+    bucket-name: youlai-boot
+    # (可选)自定义域名，如果配置了域名，生成的文件URL是域名格式，未配置则URL则是IP格式 (eg: https://oss.youlai.tech)
+    custom-domain: https://oss.youlai.tech
+  # 阿里云OSS对象存储服务
+  aliyun:
+    # 服务Endpoint
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    # 访问凭据
+    access-key-id: your-access-key-id
+    # 凭据密钥
+    access-key-secret: your-access-key-secret
+    # 存储桶名称
+    bucket-name: default
 
 # 接口文档
 springdoc:
@@ -90,8 +107,11 @@ xxl:
       logretentiondays: 30
 
 # 系统配置
-system-config:
-  # 数据权限配置
-  data-permission:
+system:
+  config:
     # 数据权限开关
-    enabled: true
+    data-permission-enabled: true
+    # 定时任务 xxl-job 开关
+    xxl-job-enabled: false
+    # WebSocket 开关
+    websocket-enabled: true
