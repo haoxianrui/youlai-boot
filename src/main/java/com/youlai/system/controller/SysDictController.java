@@ -86,9 +86,9 @@ public class SysDictController {
 
 
     @Operation(summary = "字典下拉列表", security = {@SecurityRequirement(name = "Authorization")})
-    @GetMapping("/options")
+    @GetMapping("/{typeCode}/options")
     public Result<List<Option>> listDictOptions(
-            @Parameter(description ="字典类型编码") @RequestParam String typeCode
+            @Parameter(description ="字典类型编码") @PathVariable String typeCode
     ) {
         List<Option> list = dictService.listDictOptions(typeCode);
         return Result.success(list);
