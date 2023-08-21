@@ -153,6 +153,16 @@ INSERT INTO `sys_menu` VALUES (85, 6, '0,1,6', '字典数据新增', 4, '', NULL
 INSERT INTO `sys_menu` VALUES (86, 6, '0,1,6', '字典数据编辑', 4, '', NULL, 'sys:dict:edit', 1, 5, '', NULL, '2023-05-21 00:47:36', '2023-05-21 00:47:36');
 INSERT INTO `sys_menu` VALUES (87, 6, '0,1,6', '字典数据删除', 4, '', NULL, 'sys:dict:delete', 1, 6, '', NULL, '2023-05-21 00:48:10', '2023-05-21 00:48:20');
 INSERT INTO `sys_menu` VALUES (88, 2, '0,1,2', '重置密码', 4, '', NULL, 'sys:user:reset_pwd', 1, 4, '', NULL, '2023-05-21 00:49:18', '2023-05-21 00:49:18');
+INSERT INTO `sys_menu` VALUES (89, 0, '0', '功能演示', 2, '/function', 'Layout', NULL, 1, 11, 'menu', '', '2022-10-31 09:18:44', '2022-10-31 09:18:47');
+INSERT INTO `sys_menu` VALUES (90, 89, '0,89', 'Websocket', 1, 'websocket', 'demo/websocket', NULL, 1, 3, '', '', '2022-11-20 23:16:30', '2022-11-20 23:16:32');
+INSERT INTO `sys_menu` VALUES (91, 89, '0,89', '敬请期待...', 2, 'other', 'demo/other', NULL, 1, 4, '', '', '2022-11-20 23:16:30', '2022-11-20 23:16:32');
+INSERT INTO `sys_menu` VALUES (92, 36, '0,36', '标签输入框', 1, 'taginput', 'demo/taginput', NULL, 1, 5, '', '', '2022-11-20 23:16:30', '2022-11-20 23:16:32');
+INSERT INTO `sys_menu` VALUES (93, 36, '0,36', '签名', 1, 'signature', 'demo/signature', NULL, 1, 6, '', '', '2022-11-20 23:16:30', '2022-11-20 23:16:32');
+INSERT INTO `sys_menu` VALUES (94, 36, '0,36', '表格', 1, 'table', 'demo/table', NULL, 1, 7, '', '', '2022-11-20 23:16:30', '2022-11-20 23:16:32');
+INSERT INTO `sys_menu` VALUES (95, 36, '0,36', '字典组件', 1, 'dict-demo', 'demo/dict', NULL, 1, 4, '', '', '2022-11-20 23:16:30', '2022-11-20 23:16:32');
+INSERT INTO `sys_menu` VALUES (96, 89, '0,89', 'Permission', 1, 'permission', 'demo/permission/page', NULL, 1, 1, '', '', '2022-11-20 23:16:30', '2022-11-20 23:16:32');
+INSERT INTO `sys_menu` VALUES (97, 89, '0,89', 'Icons', 1, 'icon-demo', 'demo/icons', NULL, 1, 2, '', '', '2022-11-20 23:16:30', '2022-11-20 23:16:32');
+INSERT INTO `sys_menu` VALUES (102, 26, '0,26', '平台文档(内嵌)', 3, 'internal-doc', 'demo/internal-doc', NULL, 1, 1, 'document', '', '2022-02-18 00:01:40', '2022-02-18 00:01:40');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -273,6 +283,18 @@ INSERT INTO `sys_role_menu` VALUES (2, 85);
 INSERT INTO `sys_role_menu` VALUES (2, 86);
 INSERT INTO `sys_role_menu` VALUES (2, 87);
 INSERT INTO `sys_role_menu` VALUES (2, 88);
+INSERT INTO `youlai_boot`.`sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 89);
+INSERT INTO `youlai_boot`.`sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 90);
+INSERT INTO `youlai_boot`.`sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 91);
+INSERT INTO `youlai_boot`.`sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 92);
+INSERT INTO `youlai_boot`.`sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 93);
+INSERT INTO `youlai_boot`.`sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 94);
+INSERT INTO `youlai_boot`.`sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 95);
+INSERT INTO `youlai_boot`.`sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 96);
+INSERT INTO `youlai_boot`.`sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 97);
+INSERT INTO `youlai_boot`.`sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 102);
+
+
 
 -- ----------------------------
 -- Table structure for sys_user
