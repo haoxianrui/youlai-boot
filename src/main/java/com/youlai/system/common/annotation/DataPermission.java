@@ -5,10 +5,10 @@ import java.lang.annotation.*;
 /**
  * MP数据权限注解
  * <p>
- * https://gitee.com/baomidou/mybatis-plus/issues/I37I90
  *
- * @author <a href="mailto:2256222053@qq.com">zc</a>
- * @since 2021-12-10
+ * @author zc
+ * @link https://gitee.com/baomidou/mybatis-plus/issues/I37I90
+ * @since 2.0.0
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
