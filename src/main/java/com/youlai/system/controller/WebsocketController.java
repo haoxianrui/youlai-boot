@@ -1,6 +1,5 @@
 package com.youlai.system.controller;
 
-import cn.hutool.json.JSONUtil;
 import com.youlai.system.common.result.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,13 +47,12 @@ public class WebsocketController {
     /**
      * 点对点发送消息
      *
-     * @param userId 用户ID
+     * @param username 用户名
      */
-    @PostMapping("/sendToUser/{userId}")
-    public Result sendToUser(@PathVariable Long userId, String message) {
-        log.info("【点对点请求接收】用户：{};消息：{}", userId, JSONUtil.toJsonStr(message));
+    @PostMapping("/sendToUser/{username}")
+    public Result sendToUser(@PathVariable String username) {
         // 发送主题目的(destination)= /user/{userId}/message
-        messagingTemplate.convertAndSendToUser(String.valueOf(userId), "/message", message);
+        messagingTemplate.convertAndSendToUser(username, "/queue/user", "hello "+username);
         return Result.success("点对点消息发送成功");
     }
 
