@@ -1,4 +1,4 @@
-package com.youlai.system.controller;
+package com.youlai.system.controller.demo;
 
 import com.youlai.system.common.result.Result;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class WebsocketController {
      */
     @PostMapping("/sendToAll")
     // @SendTo("/topic/all")  // 使用SimpMessagingTemplate发送消息给所有订阅了"/topic/all"目标的客户端
-    public Result sendToAll(String message) {
+    public void sendToAll(String message) {
         log.info("【广播消息请求接收】消息：{}", message);
         // 处理接收到的消息逻辑
         // ...
@@ -41,7 +41,6 @@ public class WebsocketController {
         // 使用SimpMessagingTemplate发送消息给所有订阅了"/topic/all"目标的客户端
         messagingTemplate.convertAndSend("/topic/all", content);
 
-        return Result.success("广播消息发送成功");
     }
 
     /**
