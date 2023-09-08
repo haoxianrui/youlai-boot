@@ -3,6 +3,9 @@ package com.youlai.system.controller.demo;
 import com.youlai.system.common.result.Result;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,38 +24,28 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class WebsocketController {
 
-    private final SimpMessagingTemplate messagingTemplate;
-
     /**
      * 广播发送消息
      *
      * @param message 消息内容
      */
-    @PostMapping("/sendToAll")
-    // @SendTo("/topic/all")  // 使用SimpMessagingTemplate发送消息给所有订阅了"/topic/all"目标的客户端
-    public void sendToAll(String message) {
-        log.info("【广播消息请求接收】消息：{}", message);
-        // 处理接收到的消息逻辑
-        // ...
-
-        // 构造要发送的消息内容
-        String content = "服务端广播消息： " + message;
-
-        // 使用SimpMessagingTemplate发送消息给所有订阅了"/topic/all"目标的客户端
-        messagingTemplate.convertAndSend("/topic/all", content);
-
+    @MessageMapping("/sendToAll")
+    @SendTo("/topic/all")
+    public String sendToAll(String message) {
+        // 处理消息
+        return "Hello, " + message + "!";
     }
 
     /**
      * 点对点发送消息
-     *
-     * @param username 用户名
      */
-    @PostMapping("/sendToUser/{username}")
-    public Result sendToUser(@PathVariable String username) {
-        // 发送主题目的(destination)= /user/{userId}/message
-        messagingTemplate.convertAndSendToUser(username, "/queue/user", "hello "+username);
-        return Result.success("点对点消息发送成功");
+    // 处理发送到"/app/sendToUser/{username}"的消息
+    @MessageMapping("/sendToUser/{username}")
+    // 将消息处理器的返回值发送到指定用户
+    @SendTo("/queue/user")
+    public String sendToUser(@DestinationVariable("username") String username, String message) {
+        // 处理消息
+        return "Hello, " + username + ", your message is: " + message;
     }
 
 }
