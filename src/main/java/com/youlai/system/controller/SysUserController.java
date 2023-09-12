@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.youlai.system.common.constant.ExcelConstants;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
-import com.youlai.system.common.util.ExcelUtils;
+import com.youlai.system.util.ExcelUtils;
 import com.youlai.system.common.annotation.PreventDuplicateSubmit;
 import com.youlai.system.listener.easyexcel.UserImportListener;
 import com.youlai.system.model.vo.UserImportVO;
@@ -128,8 +128,8 @@ public class SysUserController {
 
     @Operation(summary = "获取当前登录用户信息", security = {@SecurityRequirement(name = "Authorization")})
     @GetMapping("/me")
-    public Result<UserInfoVO> getUserLoginInfo() {
-        UserInfoVO userInfoVO = userService.getUserLoginInfo();
+    public Result<UserInfoVO> getCurrentUserInfo() {
+        UserInfoVO userInfoVO = userService.getCurrentUserInfo();
         return Result.success(userInfoVO);
     }
 

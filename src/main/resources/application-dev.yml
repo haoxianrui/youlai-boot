@@ -81,8 +81,6 @@ oss:
     # 存储桶名称
     bucket-name: default
 
-
-
 # springdoc配置： https://springdoc.org/properties.html
 springdoc:
   swagger-ui:
@@ -91,13 +89,6 @@ springdoc:
     tags-sorter: alpha
   api-docs:
     enabled: true
-
-# 验证码配置
-easy-captcha:
-  # 验证码类型: arithmetic-算术
-  type: arithmetic
-  # 验证码有效时间(单位：秒)
-  ttl: 120
 
 # xxl-job 定时任务配置
 xxl:

@@ -1,4 +1,4 @@
-package com.youlai.system.common.util;
+package com.youlai.system.util;
 
 import cn.hutool.json.JSONUtil;
 import com.youlai.system.common.result.Result;
@@ -14,7 +14,7 @@ import java.io.IOException;
  * 响应工具类
  *
  * @author haoxr
- * @since 2022/10/18
+ * @since 2.0.0
  */
 public class ResponseUtils {
 

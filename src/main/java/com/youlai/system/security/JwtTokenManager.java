@@ -3,7 +3,7 @@ package com.youlai.system.security;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.IdUtil;
 import com.youlai.system.common.constant.SecurityConstants;
-import com.youlai.system.security.userdetails.SysUserDetails;
+import com.youlai.system.security.model.SysUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.DecodingException;

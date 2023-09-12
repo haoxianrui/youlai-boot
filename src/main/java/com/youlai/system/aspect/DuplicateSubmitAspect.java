@@ -1,9 +1,9 @@
 package com.youlai.system.aspect;
 
 import cn.hutool.core.util.StrUtil;
-import com.youlai.system.common.exception.BusinessException;
+import com.youlai.system.exception.BusinessException;
 import com.youlai.system.common.result.ResultCode;
-import com.youlai.system.common.util.RequestUtils;
+import com.youlai.system.util.RequestUtils;
 import com.youlai.system.common.annotation.PreventDuplicateSubmit;
 import com.youlai.system.security.JwtTokenManager;
 import jakarta.servlet.http.HttpServletRequest;

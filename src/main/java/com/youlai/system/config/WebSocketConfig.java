@@ -1,28 +1,32 @@
 package com.youlai.system.config;
 
+import com.youlai.system.interceptor.AuthChannelInterceptor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 /**
- * WebSocket 配置类
- * <p>
- * STOMP 不是一个传输协议，而是一个简单的文本消息协议，定义消息格式和交换规则
+ * WebSocket 配置
  *
  * @author haoxr
- * @since 2.3.0
+ * @since 2.4.0
  */
 @Configuration
 @ConditionalOnProperty(name = "system.config.websocket-enabled")// system.config.websocket-enabled = true 才会自动装配
 @EnableWebSocketMessageBroker // 启用WebSocket消息代理功能和配置STOMP协议，实现实时双向通信和消息传递
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    private final AuthChannelInterceptor authChannelInterceptor;
 
     /**
-     * 配置和注册WebSocket端点(endpoints)
+     *  注册一个端点，客户端通过这个端点进行连接
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -35,9 +39,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 
     /**
-     * 配置消息代理(Message Broker)
-     * <p>
-     * 设置消息传输的规则和前缀
+     * 配置消息代理
      */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
@@ -51,4 +53,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setUserDestinationPrefix("/user");
     }
 
+
+    /**
+     * 配置客户端入站通道拦截器
+     *
+     * @param registration 通道注册器
+     */
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(authChannelInterceptor);
+    }
 }

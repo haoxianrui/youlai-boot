@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.result.ResultCode;
-import com.youlai.system.common.util.ResponseUtils;
+import com.youlai.system.util.ResponseUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

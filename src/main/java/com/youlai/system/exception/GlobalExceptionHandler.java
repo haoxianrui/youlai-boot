@@ -1,4 +1,4 @@
-package com.youlai.system.common.exception;
+package com.youlai.system.exception;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;

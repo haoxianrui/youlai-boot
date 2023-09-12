@@ -98,5 +98,5 @@ public interface SysUserService extends IService<SysUser> {
      *
      * @return
      */
-    UserInfoVO getUserLoginInfo();
+    UserInfoVO getCurrentUserInfo();
 }

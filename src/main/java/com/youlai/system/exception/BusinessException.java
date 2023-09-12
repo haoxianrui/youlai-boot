@@ -1,4 +1,4 @@
-package com.youlai.system.common.exception;
+package com.youlai.system.exception;
 
 import com.youlai.system.common.result.IResultCode;
 import lombok.Getter;

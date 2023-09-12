@@ -4,7 +4,7 @@ package com.youlai.system.common.constant;
  * Security 常量
  *
  * @author haoxr
- * @since 3.0.0
+ * @since 2.0.0
  */
 public interface SecurityConstants {
 

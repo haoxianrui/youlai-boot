@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.converter.UserConverter;
-import com.youlai.system.common.util.SecurityUtils;
+import com.youlai.system.util.SecurityUtils;
 import com.youlai.system.mapper.SysUserMapper;
 import com.youlai.system.model.dto.UserAuthInfo;
 import com.youlai.system.model.bo.UserBO;
@@ -233,25 +233,29 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return
      */
     @Override
-    public UserInfoVO getUserLoginInfo() {
-        // 登录用户entity
+    public UserInfoVO getCurrentUserInfo() {
+
+        String username = SecurityUtils.getUser().getUsername(); // 登录用户名
+
+        // 获取登录用户基础信息
         SysUser user = this.getOne(new LambdaQueryWrapper<SysUser>()
-                .eq(SysUser::getUsername, SecurityUtils.getUser().getUsername())
+                .eq(SysUser::getUsername, username)
                 .select(
                         SysUser::getId,
+                        SysUser::getUsername,
                         SysUser::getNickname,
                         SysUser::getAvatar
                 )
         );
         // entity->VO
-        UserInfoVO userInfoVO = userConverter.entity2UserInfoVo(user);
+        UserInfoVO userInfoVO = userConverter.toUserInfoVo(user);
 
         // 用户角色集合
         Set<String> roles = SecurityUtils.getRoles();
         userInfoVO.setRoles(roles);
 
         // 用户权限集合
-        Set<String> perms = (Set<String>) redisTemplate.opsForValue().get(SecurityConstants.USER_PERMS_CACHE_PREFIX+ user.getId());
+        Set<String> perms = (Set<String>) redisTemplate.opsForValue().get(SecurityConstants.USER_PERMS_CACHE_PREFIX + user.getId());
         userInfoVO.setPerms(perms);
 
         return userInfoVO;
