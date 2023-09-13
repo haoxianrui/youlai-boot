@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.converter.UserConverter;
-import com.youlai.system.util.SecurityUtils;
+import com.youlai.system.common.util.SecurityUtils;
 import com.youlai.system.mapper.SysUserMapper;
 import com.youlai.system.model.dto.UserAuthInfo;
 import com.youlai.system.model.bo.UserBO;

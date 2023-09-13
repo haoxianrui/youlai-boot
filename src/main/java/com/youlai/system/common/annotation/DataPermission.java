@@ -4,10 +4,8 @@ import java.lang.annotation.*;
 
 /**
  * MP数据权限注解
- * <p>
  *
  * @author zc
- * @link https://gitee.com/baomidou/mybatis-plus/issues/I37I90
  * @since 2.0.0
  */
 @Documented

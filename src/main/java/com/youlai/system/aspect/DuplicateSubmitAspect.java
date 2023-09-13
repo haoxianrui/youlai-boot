@@ -1,11 +1,10 @@
 package com.youlai.system.aspect;
 
 import cn.hutool.core.util.StrUtil;
-import com.youlai.system.exception.BusinessException;
-import com.youlai.system.common.result.ResultCode;
-import com.youlai.system.util.RequestUtils;
 import com.youlai.system.common.annotation.PreventDuplicateSubmit;
-import com.youlai.system.security.JwtTokenManager;
+import com.youlai.system.common.result.ResultCode;
+import com.youlai.system.exception.BusinessException;
+import com.youlai.system.security.jwt.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  * 处理重复提交的切面
  *
  * @author haoxr
- * @since 3.0.0
+ * @since 2.3.0
  */
 @Aspect
 @Component
@@ -35,7 +34,7 @@ public class DuplicateSubmitAspect {
 
     private final RedissonClient redissonClient;
 
-    private final JwtTokenManager jwtTokenManager;
+    private final JwtTokenProvider jwtTokenProvider;
     private static final String RESUBMIT_LOCK_PREFIX = "LOCK:RESUBMIT:";
 
     /**
@@ -68,9 +67,10 @@ public class DuplicateSubmitAspect {
     private String generateResubmitLockKey() {
         String resubmitLockKey = null;
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String jwt = RequestUtils.resolveToken(request);
-        if (StrUtil.isNotBlank(jwt)) {
-            String jti = (String) jwtTokenManager.getTokenClaims(jwt).get("jti");
+
+        String token = jwtTokenProvider.resolveToken(request);
+        if (StrUtil.isNotBlank(token)) {
+            String jti = (String) jwtTokenProvider.getTokenClaims(token).get("jti");
             resubmitLockKey = RESUBMIT_LOCK_PREFIX + jti + ":" + request.getMethod() + "-" + request.getRequestURI();
         }
         return resubmitLockKey;

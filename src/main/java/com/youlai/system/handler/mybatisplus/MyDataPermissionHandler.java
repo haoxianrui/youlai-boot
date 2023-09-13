@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
 import com.youlai.system.common.annotation.DataPermission;
 import com.youlai.system.common.base.IBaseEnum;
 import com.youlai.system.common.enums.DataScopeEnum;
-import com.youlai.system.util.SecurityUtils;
+import com.youlai.system.common.util.SecurityUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;

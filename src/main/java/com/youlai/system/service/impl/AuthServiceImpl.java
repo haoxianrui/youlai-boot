@@ -5,11 +5,10 @@ import cn.hutool.captcha.GifCaptcha;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.constant.SecurityConstants;
+import com.youlai.system.security.jwt.JwtTokenProvider;
 import com.youlai.system.service.AuthService;
-import com.youlai.system.util.RequestUtils;
 import com.youlai.system.model.dto.CaptchaResult;
 import com.youlai.system.model.dto.LoginResult;
-import com.youlai.system.security.JwtTokenManager;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +33,8 @@ import java.util.concurrent.TimeUnit;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtTokenManager jwtTokenManager;
     private final RedisTemplate redisTemplate;
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * 登录
@@ -49,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username.toLowerCase().trim(), password);
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        String accessToken = jwtTokenManager.createToken(authentication);
+        String accessToken = jwtTokenProvider.createToken(authentication);
         return LoginResult.builder()
                 .tokenType("Bearer")
                 .accessToken(accessToken)
@@ -62,9 +61,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void logout() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String token = RequestUtils.resolveToken(request);
+        String token = jwtTokenProvider.resolveToken(request);
         if (StrUtil.isNotBlank(token)) {
-            Claims claims = jwtTokenManager.getTokenClaims(token);
+            Claims claims = jwtTokenProvider.getTokenClaims(token);
             String jti = claims.get("jti", String.class);
             Date expiration = claims.getExpiration();
             if (expiration != null) {

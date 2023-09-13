@@ -1,9 +1,7 @@
 package com.youlai.system.interceptor;
 
 import cn.hutool.core.util.StrUtil;
-import com.youlai.system.common.constant.SecurityConstants;
-import com.youlai.system.security.JwtTokenManager;
-import io.jsonwebtoken.Claims;
+import com.youlai.system.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -25,13 +23,13 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class AuthChannelInterceptor implements ChannelInterceptor {
 
-    private final JwtTokenManager jwtTokenManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * 连接前监听
      *
-     * @param message
-     * @param channel
+     * @param message 消息
+     * @param channel 通道
      * @return
      */
     @Override
@@ -41,14 +39,12 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             // get token from header
-            String token = accessor.getFirstNativeHeader("Authorization");
+            String bearerToken = accessor.getFirstNativeHeader("Authorization");
             // if token is not null
-            if (StrUtil.isNotBlank(token)) {
+            if (StrUtil.isNotBlank(bearerToken)) {
 
-                token = token.substring(SecurityConstants.TOKEN_PREFIX.length());
-                Claims claims = jwtTokenManager.parseAndValidateToken(token);
-
-                String username = claims.get("username", String.class);
+                bearerToken = bearerToken.substring(7);
+                String username = jwtTokenProvider.getUsername(bearerToken);
                 // if the username is not null, assign it to the Principal.
                 if (StrUtil.isNotBlank(username)) {
                     Principal principal = () -> username;

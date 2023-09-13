@@ -1,6 +1,7 @@
-package com.youlai.system.util;
+package com.youlai.system.common.util;
 
 import cn.hutool.json.JSONUtil;
+import com.youlai.system.common.result.IResultCode;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.common.result.ResultCode;
 
@@ -9,6 +10,8 @@ import org.springframework.http.MediaType;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static com.youlai.system.common.result.ResultCode.*;
 
 /**
  * 响应工具类

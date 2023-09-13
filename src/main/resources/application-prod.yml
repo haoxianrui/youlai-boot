@@ -46,12 +46,11 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 # 认证配置
-auth:
-  token:
-    secret_key: SecretKey012345678901234567890123456789012345678901234567890123456789
-    # token 有效期(单位:秒)
-    ttl: 18000
-
+jwt:
+  # 签署密钥
+  secret-key: SecretKey012345678901234567890123456789012345678901234567890123456789
+  # token 过期时间(单位:秒)
+  expiration: 7200
 
 oss:
   # OSS 类型 (目前支持aliyun、minio)
