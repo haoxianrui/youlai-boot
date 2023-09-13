@@ -1,7 +1,7 @@
 package com.youlai.system.security.exception;
 
 import com.youlai.system.common.result.ResultCode;
-import com.youlai.system.util.ResponseUtils;
+import com.youlai.system.common.util.ResponseUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -15,12 +15,19 @@ import java.io.IOException;
  * 认证异常处理
  *
  * @author haoxr
- * @since 2022/10/18
+ * @since 2.0.0
  */
 @Component
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    @Override
+        @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
+        int status = response.getStatus();
+        if (status == HttpServletResponse.SC_NOT_FOUND) {
+            // 资源不存在
+            ResponseUtils.writeErrMsg(response, ResultCode.RESOURCE_NOT_FOUND);
+        } else {
+            // 未认证或者token过期
+            ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
+        }
     }
 }
