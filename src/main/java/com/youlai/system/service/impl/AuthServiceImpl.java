@@ -84,7 +84,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public CaptchaResult getCaptcha() {
         // 获取验证码
-        GifCaptcha captcha = CaptchaUtil.createGifCaptcha(120, 36, 4); // 宽、高、位数
+        GifCaptcha captcha = CaptchaUtil.createGifCaptcha(120, 40, 4); // 宽、高、位数
         String captchaCode = captcha.getCode(); // 验证码
         String captchaBase64 = captcha.getImageBase64Data(); // 验证码图片Base64
 
