@@ -34,7 +34,7 @@ public class WebsocketController {
     @MessageMapping("/sendToAll")
     @SendTo("/topic/notice")
     public String sendToAll(String message) {
-        return "System Notice: " + message;
+        return "服务端通知: " + message;
     }
 
     /**
@@ -50,7 +50,7 @@ public class WebsocketController {
     //@SendToUser(value = "/queue/greeting")
     public void sendToUser(Principal principal, @DestinationVariable String username, String message) {
         log.info("sender:{};receiver:{}", username, principal.getName());
-        messagingTemplate.convertAndSendToUser(username, "/queue/greeting", "Hello," + message);
+        messagingTemplate.convertAndSendToUser(username, "/queue/greeting", "服务端点对点：" + message);
         /// return "Hello,  " + message;
     }
 
