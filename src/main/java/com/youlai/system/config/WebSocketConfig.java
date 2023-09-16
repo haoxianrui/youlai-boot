@@ -1,8 +1,7 @@
 package com.youlai.system.config;
 
-import com.youlai.system.interceptor.AuthChannelInterceptor;
+import com.youlai.system.websocket.interceptor.AuthChannelInterceptor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;

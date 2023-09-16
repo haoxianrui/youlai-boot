@@ -1,4 +1,4 @@
-package com.youlai.system.interceptor;
+package com.youlai.system.websocket.interceptor;
 
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.security.jwt.JwtTokenProvider;
