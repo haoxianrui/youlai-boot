@@ -2,7 +2,7 @@ package com.youlai.system.security.jwt;
 
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.common.util.ResponseUtils;
-import com.youlai.system.exception.BusinessException;
+import com.youlai.system.common.exception.BusinessException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

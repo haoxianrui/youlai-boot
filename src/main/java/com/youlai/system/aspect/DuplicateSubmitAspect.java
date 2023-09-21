@@ -3,7 +3,7 @@ package com.youlai.system.aspect;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.annotation.PreventDuplicateSubmit;
 import com.youlai.system.common.result.ResultCode;
-import com.youlai.system.exception.BusinessException;
+import com.youlai.system.common.exception.BusinessException;
 import com.youlai.system.security.jwt.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
