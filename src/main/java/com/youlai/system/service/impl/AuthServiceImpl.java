@@ -1,18 +1,18 @@
 package com.youlai.system.service.impl;
 
-import cn.hutool.captcha.CaptchaUtil;
-import cn.hutool.captcha.GifCaptcha;
+import cn.hutool.captcha.LineCaptcha;
+import cn.hutool.captcha.generator.MathGenerator;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.constant.SecurityConstants;
-import com.youlai.system.security.jwt.JwtTokenProvider;
-import com.youlai.system.service.AuthService;
 import com.youlai.system.model.dto.CaptchaResult;
 import com.youlai.system.model.dto.LoginResult;
+import com.youlai.system.security.jwt.JwtTokenProvider;
+import com.youlai.system.service.AuthService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
-    private final RedisTemplate redisTemplate;
+    private final StringRedisTemplate redisTemplate;
     private final JwtTokenProvider jwtTokenProvider;
 
     /**
@@ -83,10 +83,12 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public CaptchaResult getCaptcha() {
-        // 获取验证码
-        GifCaptcha captcha = CaptchaUtil.createGifCaptcha(120, 40, 4); // 宽、高、位数
-        String captchaCode = captcha.getCode(); // 验证码
-        String captchaBase64 = captcha.getImageBase64Data(); // 验证码图片Base64
+        
+        MathGenerator mathGenerator=new MathGenerator(1);
+        LineCaptcha lineCaptcha =new LineCaptcha(480,120,4,20);
+        lineCaptcha.setGenerator(mathGenerator);
+        String captchaCode = lineCaptcha.getCode(); // 验证码
+        String captchaBase64 = lineCaptcha.getImageBase64Data(); // 验证码图片Base64
 
         // 验证码文本缓存至Redis，用于登录校验
         String verifyCodeKey = IdUtil.fastSimpleUUID();
