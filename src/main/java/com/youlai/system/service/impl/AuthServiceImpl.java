@@ -1,6 +1,6 @@
 package com.youlai.system.service.impl;
 
-import cn.hutool.captcha.LineCaptcha;
+import cn.hutool.captcha.CircleCaptcha;
 import cn.hutool.captcha.generator.MathGenerator;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
@@ -85,10 +85,10 @@ public class AuthServiceImpl implements AuthService {
     public CaptchaResult getCaptcha() {
         
         MathGenerator mathGenerator=new MathGenerator(1);
-        LineCaptcha lineCaptcha =new LineCaptcha(480,120,4,20);
-        lineCaptcha.setGenerator(mathGenerator);
-        String captchaCode = lineCaptcha.getCode(); // 验证码
-        String captchaBase64 = lineCaptcha.getImageBase64Data(); // 验证码图片Base64
+        CircleCaptcha circleCaptcha =new CircleCaptcha(150,25,4,3);
+        circleCaptcha.setGenerator(mathGenerator);
+        String captchaCode = circleCaptcha.getCode(); // 验证码
+        String captchaBase64 = circleCaptcha.getImageBase64Data(); // 验证码图片Base64
 
         // 验证码文本缓存至Redis，用于登录校验
         String verifyCodeKey = IdUtil.fastSimpleUUID();
