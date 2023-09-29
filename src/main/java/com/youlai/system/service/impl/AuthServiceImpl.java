@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 认证服务实现类
+ *
  * @author haoxr
  * @since 2.4.0
  */
@@ -85,7 +87,7 @@ public class AuthServiceImpl implements AuthService {
     public CaptchaResult getCaptcha() {
         
         MathGenerator mathGenerator=new MathGenerator(1);
-        CircleCaptcha circleCaptcha =new CircleCaptcha(150,25,4,3);
+        CircleCaptcha circleCaptcha =new CircleCaptcha(120,25,4,3);
         circleCaptcha.setGenerator(mathGenerator);
         String captchaCode = circleCaptcha.getCode(); // 验证码
         String captchaBase64 = circleCaptcha.getImageBase64Data(); // 验证码图片Base64
