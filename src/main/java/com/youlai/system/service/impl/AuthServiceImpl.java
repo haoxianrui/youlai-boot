@@ -58,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * 登出
+     * 注销
      */
     @Override
     public void logout() {
