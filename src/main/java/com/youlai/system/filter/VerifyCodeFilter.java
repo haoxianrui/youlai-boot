@@ -35,14 +35,7 @@ public class VerifyCodeFilter extends OncePerRequestFilter {
         // 检验登录接口的验证码
         if (LOGIN_PATH_REQUEST_MATCHER.matches(request)) {
             // 请求中的验证码
-            String userInputCode = request.getParameter(VERIFY_CODE_PARAM_KEY);
-
-            // TODO 兼容 2.0.0 无验证码版本，后续移除
-            if (StrUtil.isBlank(userInputCode)) {
-                // 非登录接口放行
-                chain.doFilter(request, response);
-                return;
-            }
+            String verifyCode = request.getParameter(VERIFY_CODE_PARAM_KEY);
             // 缓存中的验证码
             StringRedisTemplate redisTemplate = SpringUtil.getBean("stringRedisTemplate", StringRedisTemplate.class);
             String verifyCodeKey = request.getParameter(VERIFY_CODE_KEY_PARAM_KEY);
@@ -52,7 +45,7 @@ public class VerifyCodeFilter extends OncePerRequestFilter {
             } else {
                 // 验证码比对
                 MathGenerator mathGenerator = new MathGenerator();
-                if (mathGenerator.verify(cacheVerifyCode, userInputCode)) {
+                if (mathGenerator.verify(cacheVerifyCode, verifyCode)) {
                     chain.doFilter(request, response);
                 } else {
                     ResponseUtils.writeErrMsg(response, ResultCode.VERIFY_CODE_ERROR);
