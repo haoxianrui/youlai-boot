@@ -14,9 +14,9 @@ import lombok.Data;
 @Schema
 public class BasePageQuery {
 
-    @Schema(description = "页码", example = "1")
+    @Schema(description = "页码", required = true, example = "1")
     private int pageNum = 1;
 
-    @Schema(description = "每页记录数", example = "10")
+    @Schema(description = "每页记录数", required = true, example = "10")
     private int pageSize = 10;
 }
