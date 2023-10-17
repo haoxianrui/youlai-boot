@@ -21,7 +21,7 @@ public class FileController {
     private final OssService ossService;
 
     @PostMapping
-    @Operation(summary = "文件上传", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "文件上传")
     public Result<FileInfo> uploadFile(
             @Parameter(description ="表单文件对象") @RequestParam(value = "file") MultipartFile file
     ) {
@@ -30,7 +30,7 @@ public class FileController {
     }
 
     @DeleteMapping
-    @Operation(summary = "文件删除", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "文件删除")
     @SneakyThrows
     public Result deleteFile(
             @Parameter(description ="文件路径") @RequestParam String filePath

@@ -53,7 +53,7 @@ public class SysUserController {
 
     private final SysUserService userService;
 
-    @Operation(summary = "用户分页列表", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "用户分页列表")
     @GetMapping("/page")
     public PageResult<UserPageVO> getUserPage(
             @ParameterObject UserPageQuery queryParams
@@ -62,7 +62,7 @@ public class SysUserController {
         return PageResult.success(result);
     }
 
-    @Operation(summary = "新增用户", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "新增用户")
     @PostMapping
     @PreAuthorize("@ss.hasPerm('sys:user:add')")
     @PreventDuplicateSubmit
@@ -73,7 +73,7 @@ public class SysUserController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "用户表单数据", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "用户表单数据")
     @GetMapping("/{userId}/form")
     public Result<UserForm> getUserForm(
             @Parameter(description = "用户ID") @PathVariable Long userId
@@ -82,7 +82,7 @@ public class SysUserController {
         return Result.success(formData);
     }
 
-    @Operation(summary = "修改用户", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "修改用户")
     @PutMapping(value = "/{userId}")
     @PreAuthorize("@ss.hasPerm('sys:user:edit')")
     public Result updateUser(
@@ -92,7 +92,7 @@ public class SysUserController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "删除用户", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "删除用户")
     @DeleteMapping("/{ids}")
     @PreAuthorize("@ss.hasPerm('sys:user:delete')")
     public Result deleteUsers(
@@ -102,7 +102,7 @@ public class SysUserController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "修改用户密码", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "修改用户密码")
     @PatchMapping(value = "/{userId}/password")
     @PreAuthorize("@ss.hasPerm('sys:user:reset_pwd')")
     public Result updatePassword(
@@ -113,7 +113,7 @@ public class SysUserController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "修改用户状态", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "修改用户状态")
     @PatchMapping(value = "/{userId}/status")
     public Result updateUserStatus(
             @Parameter(description = "用户ID") @PathVariable Long userId,
@@ -126,14 +126,14 @@ public class SysUserController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "获取当前登录用户信息", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "获取当前登录用户信息")
     @GetMapping("/me")
     public Result<UserInfoVO> getCurrentUserInfo() {
         UserInfoVO userInfoVO = userService.getCurrentUserInfo();
         return Result.success(userInfoVO);
     }
 
-    @Operation(summary = "用户导入模板下载", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "用户导入模板下载")
     @GetMapping("/template")
     public void downloadTemplate(HttpServletResponse response) throws IOException {
         String fileName = "用户导入模板.xlsx";
@@ -149,7 +149,7 @@ public class SysUserController {
         excelWriter.finish();
     }
 
-    @Operation(summary = "导入用户", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "导入用户")
     @PostMapping("/_import")
     public Result importUsers(@Parameter(description = "部门ID") Long deptId, MultipartFile file) throws IOException {
         UserImportListener listener = new UserImportListener(deptId);
@@ -157,7 +157,7 @@ public class SysUserController {
         return Result.success(msg);
     }
 
-    @Operation(summary = "导出用户", security = {@SecurityRequirement(name = "Authorization")})
+    @Operation(summary = "导出用户")
     @GetMapping("/_export")
     public void exportUsers(UserPageQuery queryParams, HttpServletResponse response) throws IOException {
         String fileName = "用户列表.xlsx";
