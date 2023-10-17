@@ -1,6 +1,6 @@
-package com.youlai.system.websocket;
+package com.youlai.system.controller;
 
-import com.youlai.system.websocket.dto.MessageDTO;
+import com.youlai.system.model.dto.SocketMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -51,7 +51,7 @@ public class WebsocketController {
     //@SendToUser(value = "/queue/greeting")
     public void sendToUser(Principal principal, @DestinationVariable String username, String message) {
         log.info("sender:{};receiver:{}", principal.getName(), username);
-        messagingTemplate.convertAndSendToUser(username, "/queue/greeting", new MessageDTO(principal.getName(), message));
+        messagingTemplate.convertAndSendToUser(username, "/queue/greeting", new SocketMessage(principal.getName(), message));
         /// return "Hello,  " + message;
     }
 

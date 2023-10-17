@@ -1,4 +1,4 @@
-package com.youlai.system.websocket.interceptor;
+package com.youlai.system.interceptor;
 
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.security.jwt.JwtTokenProvider;
@@ -21,7 +21,7 @@ import java.security.Principal;
  */
 @Component
 @RequiredArgsConstructor
-public class AuthChannelInterceptor implements ChannelInterceptor {
+public class WebsocketChannelInterceptor implements ChannelInterceptor {
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -38,14 +38,10 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
         assert accessor != null;
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-            // get token from header
             String bearerToken = accessor.getFirstNativeHeader("Authorization");
-            // if token is not null
             if (StrUtil.isNotBlank(bearerToken)) {
-
-                bearerToken = bearerToken.substring(7);
+                bearerToken = bearerToken.substring(7); // remove "Bearer "
                 String username = jwtTokenProvider.getUsername(bearerToken);
-                // if the username is not null, assign it to the Principal.
                 if (StrUtil.isNotBlank(username)) {
                     Principal principal = () -> username;
                     accessor.setUser(principal);

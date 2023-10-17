@@ -1,6 +1,6 @@
 package com.youlai.system.config;
 
-import com.youlai.system.websocket.interceptor.AuthChannelInterceptor;
+import com.youlai.system.interceptor.WebsocketChannelInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
@@ -22,18 +22,18 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final AuthChannelInterceptor authChannelInterceptor;
+    private final WebsocketChannelInterceptor websocketChannelInterceptor;
 
     /**
-     *  注册一个端点，客户端通过这个端点进行连接
+     * 注册一个端点，客户端通过这个端点进行连接
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry
                 .addEndpoint("/ws")   // 注册了一个 /ws 的端点
                 .setAllowedOriginPatterns("*") // 允许跨域的 WebSocket 连接
-                .withSockJS()  // 启用 SockJS (浏览器不支持WebSocket，SockJS 将会提供兼容性支持)
-        ;
+                .withSockJS();  // 启用 SockJS (浏览器不支持WebSocket，SockJS 将会提供兼容性支持)
+        registry.addEndpoint("/ws-app").setAllowedOriginPatterns("*");  // 注册了一个 /ws-app 的端点，支持 uni-app 的 ws 连接协议
     }
 
 
@@ -60,6 +60,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
      */
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(authChannelInterceptor);
+        registration.interceptors(websocketChannelInterceptor);
     }
 }
