@@ -84,11 +84,22 @@ oss:
 # springdoc配置： https://springdoc.org/properties.html
 springdoc:
   swagger-ui:
-    enabled: true
+    path: /swagger-ui.html
     operationsSorter: alpha
     tags-sorter: alpha
   api-docs:
-    enabled: true
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.youlai.system.controller
+  default-flat-param-object: true
+
+# knife4j的增强配置，不需要增强可以不配 https://doc.xiaominfo.com/docs/quick-start
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
 
 # xxl-job 定时任务配置
 xxl:
