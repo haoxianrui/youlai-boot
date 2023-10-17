@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.constant.SystemConstants;
+import com.youlai.system.common.util.DateUtils;
 import com.youlai.system.converter.UserConverter;
 import com.youlai.system.common.util.SecurityUtils;
 import com.youlai.system.mapper.SysUserMapper;
@@ -73,13 +74,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         int pageSize = queryParams.getPageSize();
         Page<UserBO> page = new Page<>(pageNum, pageSize);
 
+        // 时间范围参数处理
+        List<String> createTimeRange =  DateUtils.formatDateRange(queryParams.getCreateTimeRange());
+        queryParams.setCreateTimeRange(createTimeRange);
+
         // 查询数据
-        Page<UserBO> userBoPage = this.baseMapper.getUserPage(page, queryParams);
+        Page<UserBO> userPage = this.baseMapper.getUserPage(page, queryParams);
 
         // 实体转换
-        Page<UserPageVO> userVoPage = userConverter.bo2Vo(userBoPage);
-
-        return userVoPage;
+        return userConverter.toPageVo(userPage);
     }
 
     /**
