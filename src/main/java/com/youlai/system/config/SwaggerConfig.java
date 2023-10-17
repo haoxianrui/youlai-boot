@@ -1,25 +1,21 @@
 package com.youlai.system.config;
 
-import io.swagger.v3.oas.models.*;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import org.springdoc.core.customizers.OpenApiCustomizer;
-import org.springdoc.core.models.GroupedOpenApi;
+import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import org.springframework.http.HttpHeaders;
 
 /**
  * Swagger 配置
  * <p>
- * Spring Doc FAQ: https://springdoc.org/#faq
  *
  * @author haoxr
+ * @see <a href="https://doc.xiaominfo.com/docs/quick-start">knife4j 快速开始</a>
  * @since 2023/2/17
  */
 @Configuration
@@ -29,36 +25,33 @@ public class SwaggerConfig {
      * 接口信息
      */
     @Bean
-    public OpenAPI apiInfo() {
+    public OpenAPI openApi() {
         return new OpenAPI()
+                .info(new Info()
+                        .title("系统接口文档")
+                        .version("2.4.0")
+                )
+                //全局安全校验项，也可以在对应的controller上加注解SecurityRequirement
                 .components(new Components()
-                        .addSecuritySchemes("Authorization",
-                                new SecurityScheme().type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer").bearerFormat("JWT")
+                        .addSecuritySchemes(HttpHeaders.AUTHORIZATION,
+                                new SecurityScheme()
+                                        .name(HttpHeaders.AUTHORIZATION)
+                                        .type(SecurityScheme.Type.APIKEY)
+                                        .in(SecurityScheme.In.HEADER)
+                                        .scheme("Bearer")
+                                        .bearerFormat("JWT")
                         )
                 )
-                .info(new Info()
-                        .title("youlai-boot 接口文档")
-                        .version("2.0.0")
-                        .description("接口文档")
-                        .license(new License().name("Apache 2.0")
-                                .url("https://www.youlai.tech"))
-                );
+                .addSecurityItem(new SecurityRequirement().addList(HttpHeaders.AUTHORIZATION)) ;
     }
 
-    /**
-     * 系统接口分组
-     */
+
     @Bean
-    public GroupedOpenApi systemApi() {
-        String[] paths = {"/**"};
-        String[] packagesToScan = {"com.youlai.system.controller"};
-        return GroupedOpenApi.builder()
-                .group("系统接口")
-                .packagesToScan(packagesToScan)
-                .pathsToMatch(paths)
-                .build();
+    public GlobalOpenApiCustomizer globalOpenApiCustomizer() {
+        return openApi -> openApi.getPaths().values()
+                .stream()
+                .flatMap(pathItem -> pathItem.readOperations().stream())
+                .forEach(operation -> operation.security(openApi.getSecurity()));
     }
-
 
 }
