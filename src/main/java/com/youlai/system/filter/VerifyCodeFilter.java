@@ -36,6 +36,11 @@ public class VerifyCodeFilter extends OncePerRequestFilter {
         if (LOGIN_PATH_REQUEST_MATCHER.matches(request)) {
             // 请求中的验证码
             String verifyCode = request.getParameter(VERIFY_CODE_PARAM_KEY);
+            // TODO 兼容没有验证码的版本(线上请移除这个判断)
+            if (StrUtil.isBlank(verifyCode)) {
+                chain.doFilter(request, response);
+                return;
+            }
             // 缓存中的验证码
             StringRedisTemplate redisTemplate = SpringUtil.getBean("stringRedisTemplate", StringRedisTemplate.class);
             String verifyCodeKey = request.getParameter(VERIFY_CODE_KEY_PARAM_KEY);
