@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
  * mybatis-plus 字段自动填充
  *
  * @author haoxr
+ * @link <a href="https://mp.baomidou.com/guide/auto-fill-metainfo.html">官方文档</a>
  * @since 2022/10/14
- * @link https://mp.baomidou.com/guide/auto-fill-metainfo.html
  */
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
@@ -23,8 +23,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
      */
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, "createTime", () -> LocalDateTime.now(), LocalDateTime.class);
-        this.strictUpdateFill(metaObject, "updateTime", () -> LocalDateTime.now(), LocalDateTime.class);
+        this.strictInsertFill(metaObject, "createTime", LocalDateTime::now, LocalDateTime.class);
+        this.strictUpdateFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class);
     }
 
     /**
@@ -34,7 +34,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
      */
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.strictUpdateFill(metaObject, "updateTime", () -> LocalDateTime.now(), LocalDateTime.class);
+        this.strictUpdateFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class);
     }
 
 }
