@@ -37,16 +37,12 @@
             <if test='queryParams.deptId!=null'>
                 AND concat(',',concat(d.tree_path,',',d.id),',') like concat('%,',#{queryParams.deptId},',%')
             </if>
-
-            <if test="queryParams.createTimeRange != null and queryParams.createTimeRange.size() == 2 ">
-                <if test="queryParams.createTimeRange[0] != null and queryParams.createTimeRange[0].trim() neq ''">
-                    AND u.create_time &gt;= #{queryParams.createTimeRange[0]}
-                </if>
-                <if test="queryParams.createTimeRange[1] != null and queryParams.createTimeRange[1].trim() neq ''">
-                    AND u.create_time &lt;= #{queryParams.createTimeRange[1]}
-                </if>
+            <if test="queryParams.startTime != null">
+                AND u.create_time &gt;= #{queryParams.startTime}
             </if>
-
+            <if test="queryParams.endTime != null">
+                AND u.create_time &lt;= #{queryParams.endTime}
+            </if>
 
         </where>
         GROUP BY u.id

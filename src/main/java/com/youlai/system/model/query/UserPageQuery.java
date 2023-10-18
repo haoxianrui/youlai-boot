@@ -3,7 +3,9 @@ package com.youlai.system.model.query;
 import com.youlai.system.common.base.BasePageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,7 +27,11 @@ public class UserPageQuery extends BasePageQuery {
     @Schema(description="部门ID")
     private Long deptId;
 
-    @Schema(description="创建时间范围")
-    private List<String> createTimeRange;
+    @Schema(description="创建时间-开始时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String startTime;
 
+    @Schema(description="创建时间-结束时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String endTime;
 }
