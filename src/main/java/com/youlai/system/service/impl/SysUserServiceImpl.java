@@ -74,8 +74,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         int pageSize = queryParams.getPageSize();
         Page<UserBO> page = new Page<>(pageNum, pageSize);
 
-        // 日期格式化为数据库日期格式，避免日期比较使用函数导致索引失效
-        DateUtils.formatDateTimeForDatabase(queryParams, "startTime", "endTime");
+        // 格式化为数据库日期格式，避免日期比较使用格式化函数导致索引失效
+        DateUtils.toDatabaseFormat(queryParams, "startTime", "endTime");
 
         // 查询数据
         Page<UserBO> userPage = this.baseMapper.getUserPage(page, queryParams);
