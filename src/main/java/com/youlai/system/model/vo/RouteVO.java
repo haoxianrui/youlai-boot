@@ -42,7 +42,7 @@ public class RouteVO {
         @Schema(description = "ICON")
         private String icon;
 
-        @Schema(description = "是否隐藏", example = "true")
+        @Schema(description = "是否隐藏(true-是 false-否)", example = "true")
         private Boolean hidden;
 
         @Schema(description = "拥有路由权限的角色编码", example = "['ADMIN','ROOT']")
@@ -50,6 +50,9 @@ public class RouteVO {
 
         @Schema(description = "是否开启缓存", example = "true")
         private Boolean keepAlive;
+
+        @Schema(description = "是否一直显示根路由", example = "true")
+        private Boolean alwaysShow;
     }
 
     @Schema(description = "子路由列表")

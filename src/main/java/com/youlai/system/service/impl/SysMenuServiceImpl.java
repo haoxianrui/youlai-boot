@@ -140,6 +140,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                     meta.setRoles(menu.getRoles());
                     meta.setHidden(StatusEnum.DISABLE.getValue().equals(menu.getVisible()));
                     meta.setKeepAlive(true);
+                    meta.setAlwaysShow(true);
                     routeVO.setMeta(meta);
 
                     List<RouteVO> children = recurRoutes(menu.getId(), menuList);
