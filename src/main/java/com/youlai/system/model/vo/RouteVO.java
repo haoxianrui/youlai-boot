@@ -48,10 +48,12 @@ public class RouteVO {
         @Schema(description = "拥有路由权限的角色编码", example = "['ADMIN','ROOT']")
         private List<String> roles;
 
-        @Schema(description = "是否开启缓存", example = "true")
+        @Schema(description = "【菜单】是否开启页面缓存", example = "true")
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         private Boolean keepAlive;
 
-        @Schema(description = "是否一直显示根路由", example = "true")
+        @Schema(description = "【目录】只有一个子路由是否始终显示", example = "true")
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         private Boolean alwaysShow;
     }
 

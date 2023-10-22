@@ -1,7 +1,5 @@
 package com.youlai.system.model.bo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.youlai.system.common.enums.MenuTypeEnum;
 import lombok.Data;
 
@@ -12,10 +10,7 @@ import java.util.List;
  */
 @Data
 public class RouteBO {
-    /**
-     * 
-     */
-    @TableId(type = IdType.AUTO)
+
     private Long id;
 
     /**
@@ -72,5 +67,15 @@ public class RouteBO {
      * 拥有路由的权限
      */
     private List<String> roles;
+
+    /**
+     * 【目录】只有一个子路由是否始终显示(1:是 0:否)
+     */
+    private Integer alwaysShow;
+
+    /**
+     * 【菜单】是否开启页面缓存(1:是 0:否)
+     */
+    private Integer keepAlive;
 
 }
