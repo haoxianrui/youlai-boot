@@ -99,7 +99,7 @@ public class AuthServiceImpl implements AuthService {
 
         return CaptchaResult.builder()
                 .verifyCodeKey(verifyCodeKey)
-                .verifyCodeBase64(captchaBase64)
+                .captchaImgBase64(captchaBase64)
                 .build();
     }
 
