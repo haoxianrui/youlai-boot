@@ -7,7 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.model.dto.CaptchaResult;
 import com.youlai.system.model.dto.LoginResult;
-import com.youlai.system.security.jwt.JwtTokenProvider;
+import com.youlai.system.core.security.jwt.JwtTokenProvider;
 import com.youlai.system.service.AuthService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;

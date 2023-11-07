@@ -1,7 +1,7 @@
 package com.youlai.system.common.util;
 
 import com.alibaba.excel.EasyExcel;
-import com.youlai.system.listener.easyexcel.MyAnalysisEventListener;
+import com.youlai.system.plugin.easyexcel.MyAnalysisEventListener;
 
 import java.io.InputStream;
 

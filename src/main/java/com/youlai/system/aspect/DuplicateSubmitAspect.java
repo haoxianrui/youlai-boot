@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.annotation.PreventDuplicateSubmit;
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.common.exception.BusinessException;
-import com.youlai.system.security.jwt.JwtTokenProvider;
+import com.youlai.system.core.security.jwt.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
