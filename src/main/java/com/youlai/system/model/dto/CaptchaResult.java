@@ -19,6 +19,6 @@ public class CaptchaResult {
     private String verifyCodeKey;
 
     @Schema(description = "验证码图片Base64字符串")
-    private String verifyCodeBase64;
+    private String captchaImgBase64;
 
 }
