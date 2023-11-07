@@ -6,13 +6,13 @@
 
     <groupId>com.youlai</groupId>
     <artifactId>youlai-boot</artifactId>
-    <version>2.4.0</version>
-    <description>基于 Java 17 + SpringBoot 3 快速构建的高效权限管理系统。</description>
+    <version>2.4.1</version>
+    <description>基于 Java 17 + SpringBoot 3 构建的权限管理系统。</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.4</version> <!-- lookup parent from repository -->
+        <version>3.1.5</version> <!-- lookup parent from repository -->
         <relativePath/>
     </parent>
 
