@@ -22,7 +22,7 @@
    <a target="_blank" href="https://github.com/haoxianrui">Github</a> 
 </p>
 
-# 项目简述
+## 项目简述
 
 项目基于 JDK 17、SpringBoot3、SpringSecurity6 、 JWT 、 Redis 、 Mybatis-Plus 、 Knife4j 等技术栈搭建的前后端分离开源权限管理系统。
 
@@ -31,7 +31,7 @@
 - 基于 RBAC 模型的权限设计，细粒度接口方法、按钮级别权限控制。
 
 
-# 项目结构
+## 项目结构
 ```
 youlai-boot
 ├── sql                                 # SQL脚本
@@ -70,37 +70,37 @@ youlai-boot
 └── end       
 ```
 
-# 前端工程
+## 前端工程
 | 项目名称 | Gitee | Github |
 |------|-------|------|
 | 前端   | [vue3-element-admin](https://gitee.com/youlaiorg/vue3-element-admin)  | [vue3-element-admin](https://github.com/youlaitech/vue3-element-admin)  |
 
 
-# 接口文档
+## 接口文档
 
 - `knife4j` 接口文档：[http://localhost:8989/doc.html](http://localhost:8989/doc.html)
 
 - `swagger` 接口文档：[http://localhost:8989/swagger-ui/index.html](http://localhost:8989/swagger-ui/index.html)
 
 
-# 项目启动
+## 项目启动
 
-- 1. **数据库初始化**
+1. **数据库初始化**
 
 执行 [youlai_boot.sql](sql/mysql8/youlai_boot.sql) 脚本完成数据库创建、表结构和基础数据的初始化。
 
-- 2. **修改配置**
+2. **修改配置**
 
 [application-dev.yml](src/main/resources/application-dev.yml) 修改MySQL、Redis连接配置；
 
-- 3. **启动项目**
+3. **启动项目**
 
 执行 [SystemApplication.java](src/main/java/com/youlai/system/SystemApplication.java) 的 main 方法完成后端项目启动；
 
 访问接口文档地址 [http://localhost:8989/doc.html](http://localhost:8989/doc.html) 验证项目启动。
 
 
-# 💖加交流群
+## 💖加交流群
 
 > 关注公众号【有来技术】，获取交流群二维码，二维码过期请或不想关注公众号可加我微信(`haoxianrui`)备注“有来”，拉你进群。
 
