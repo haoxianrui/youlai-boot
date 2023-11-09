@@ -1,6 +1,6 @@
 package com.youlai.system.controller;
 
-import com.youlai.system.common.annotation.PreventDuplicateSubmit;
+import com.youlai.system.plugin.dupsubmit.annotation.PreventDuplicateSubmit;
 import com.youlai.system.common.model.Option;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.model.form.DeptForm;
@@ -8,7 +8,6 @@ import com.youlai.system.model.query.DeptQuery;
 import com.youlai.system.model.vo.DeptVO;
 import com.youlai.system.service.SysDeptService;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;

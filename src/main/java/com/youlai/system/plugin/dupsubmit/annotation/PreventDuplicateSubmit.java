@@ -1,4 +1,4 @@
-package com.youlai.system.common.annotation;
+package com.youlai.system.plugin.dupsubmit.annotation;
 
 
 import java.lang.annotation.*;

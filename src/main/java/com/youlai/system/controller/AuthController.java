@@ -1,13 +1,11 @@
 package com.youlai.system.controller;
 
-import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.model.dto.CaptchaResult;
 import com.youlai.system.model.dto.LoginResult;
 import com.youlai.system.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +30,7 @@ public class AuthController {
         return Result.success(loginResult);
     }
 
-    @Operation(summary = "注销", security = {@SecurityRequirement(name = SecurityConstants.TOKEN_KEY)})
+    @Operation(summary = "注销")
     @DeleteMapping("/logout")
     public Result logout() {
         authService.logout();

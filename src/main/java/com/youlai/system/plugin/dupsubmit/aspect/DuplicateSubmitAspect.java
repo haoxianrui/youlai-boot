@@ -1,7 +1,7 @@
-package com.youlai.system.aspect;
+package com.youlai.system.plugin.dupsubmit.aspect;
 
 import cn.hutool.core.util.StrUtil;
-import com.youlai.system.common.annotation.PreventDuplicateSubmit;
+import com.youlai.system.plugin.dupsubmit.annotation.PreventDuplicateSubmit;
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.common.exception.BusinessException;
 import com.youlai.system.core.security.jwt.JwtTokenProvider;
