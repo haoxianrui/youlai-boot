@@ -100,7 +100,7 @@ youlai-boot
 访问接口文档地址 [http://localhost:8989/doc.html](http://localhost:8989/doc.html) 验证项目启动。
 
 
-## 💖加交流群
+## 加交流群
 
 > 关注公众号【有来技术】，获取交流群二维码，二维码过期请或不想关注公众号可加我微信(`haoxianrui`)备注“有来”，拉你进群。
 
