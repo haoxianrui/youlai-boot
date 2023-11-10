@@ -16,22 +16,29 @@
 </p>
 
 <p align="center">
-   <a target="_blank" href="https://www.youlai.tech">有来技术官网</a> |
-   <a target="_blank" href="https://youlai.blog.csdn.net">有来技术博客</a>|
-   <a target="_blank" href="https://gitee.com/haoxr">Gitee</a>|
-   <a target="_blank" href="https://github.com/haoxianrui">Github</a> 
+   <a target="_blank" style="color: greenyellow" href="https://vue3.youlai.tech/">👀 在线预览</a> |
+   <a target="_blank" href="https://youlai.blog.csdn.net">📖 官方博客</a> |
+   <a target="_blank" href="https://gitee.com/haoxr">🦄 Gitee</a> |
+   <a target="_blank" href="https://github.com/haoxianrui">🚢 Github</a> 
 </p>
 
-## 项目简述
+## 📢 项目简介
 
-项目基于 JDK 17、SpringBoot3、SpringSecurity6 、 JWT 、 Redis 、 Mybatis-Plus 、 Knife4j 等技术栈搭建的前后端分离开源权限管理系统。
+**在线预览**: [https://vue3.youlai.tech](https://vue3.youlai.tech)
 
-- Spring Boot 3.0 + Vue 3 + Element-Plus 前后端分离单体应用，适合快速开发；
-- Spring Security 6 + JWT 认证鉴权方案；
-- 基于 RBAC 模型的权限设计，细粒度接口方法、按钮级别权限控制。
+基于 JDK 17、Spring Boot 3、Spring Security 6、JWT、Redis、Mybatis-Plus、Knife4j、Vue 3、Element-Plus 构建的前后端分离单体权限管理系统。
 
+- **🚀 开发框架**: 使用 Spring Boot 3.0 和 Vue 3，以及 Element-Plus 等主流技术栈，实时更新。
 
-## 项目结构
+- **🔐 安全认证**: 结合 Spring Security 和 JWT 提供安全、无状态、分布式友好的身份验证和授权机制。
+
+- **🔑 权限管理**: 基于 RBAC 模型，实现细粒度的权限控制，涵盖接口方法和按钮级别。
+
+- **🛠️ 功能模块**: 包括用户管理、角色管理、菜单管理、部门管理、字典管理等多个功能。
+
+- **📘 接口文档**: 自动生成接口文档，支持在线调试，提高开发效率。
+
+## 📁 项目目录
 ```
 youlai-boot
 ├── sql                                 # SQL脚本
@@ -70,37 +77,37 @@ youlai-boot
 └── end       
 ```
 
-## 前端工程
-| 项目名称 | Gitee | Github |
-|------|-------|------|
-| 前端   | [vue3-element-admin](https://gitee.com/youlaiorg/vue3-element-admin)  | [vue3-element-admin](https://github.com/youlaitech/vue3-element-admin)  |
+## 🌺 前端工程
+| Gitee | Github |
+|-------|------|
+| [vue3-element-admin](https://gitee.com/youlaiorg/vue3-element-admin)  | [vue3-element-admin](https://github.com/youlaitech/vue3-element-admin)  |
 
 
-## 接口文档
+## 🌈 接口文档
 
 - `knife4j` 接口文档：[http://localhost:8989/doc.html](http://localhost:8989/doc.html)
-
 - `swagger` 接口文档：[http://localhost:8989/swagger-ui/index.html](http://localhost:8989/swagger-ui/index.html)
+- `apifox`  在线接口文档：[https://www.apifox.cn/apidoc](https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5)
 
 
-## 项目启动
+## 🚀 项目启动
 
 1. **数据库初始化**
 
-执行 [youlai_boot.sql](sql/mysql8/youlai_boot.sql) 脚本完成数据库创建、表结构和基础数据的初始化。
+    执行 [youlai_boot.sql](sql/mysql8/youlai_boot.sql) 脚本完成数据库创建、表结构和基础数据的初始化。
 
 2. **修改配置**
 
-[application-dev.yml](src/main/resources/application-dev.yml) 修改MySQL、Redis连接配置；
+    [application-dev.yml](src/main/resources/application-dev.yml) 修改MySQL、Redis连接配置；
 
 3. **启动项目**
 
-执行 [SystemApplication.java](src/main/java/com/youlai/system/SystemApplication.java) 的 main 方法完成后端项目启动；
+    执行 [SystemApplication.java](src/main/java/com/youlai/system/SystemApplication.java) 的 main 方法完成后端项目启动；
 
-访问接口文档地址 [http://localhost:8989/doc.html](http://localhost:8989/doc.html) 验证项目启动。
+    访问接口文档地址 [http://ip:port/doc.html](http://localhost:8989/doc.html) 验证项目启动是否成功。
 
 
-## 加交流群
+## 💖 加交流群
 
 > 关注公众号【有来技术】，获取交流群二维码，二维码过期请或不想关注公众号可加我微信(`haoxianrui`)备注“有来”，拉你进群。
 
