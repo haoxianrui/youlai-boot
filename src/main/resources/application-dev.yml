@@ -16,7 +16,7 @@ spring:
   data:
     redis:
       database: 6
-      host: 47.117.115.107
+      host: www.youlai.tech
       port: 6379
       password: 123456
       timeout: 10s

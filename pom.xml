@@ -44,7 +44,7 @@
         <aliyun-sdk-oss.version>3.16.3</aliyun-sdk-oss.version>
 
         <!-- redisson 分布式锁 -->
-        <redisson.version>3.21.0</redisson.version>
+        <redisson.version>3.24.3</redisson.version>
     </properties>
 
     <dependencies>
