@@ -8,7 +8,7 @@ import com.youlai.system.common.constant.ExcelConstants;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.common.util.ExcelUtils;
-import com.youlai.system.common.annotation.PreventDuplicateSubmit;
+import com.youlai.system.plugin.dupsubmit.annotation.PreventDuplicateSubmit;
 import com.youlai.system.plugin.easyexcel.UserImportListener;
 import com.youlai.system.model.vo.UserImportVO;
 import com.youlai.system.model.form.UserForm;

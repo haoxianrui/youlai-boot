@@ -1,143 +1,117 @@
-# 项目简述
 
-项目基于 SpringBoot3、SpringSecurity6 、 JWT 、 Redis 、 Mybatis-Plus 、 Knife4j 等技术栈搭建的前后端分离开源权限管理系统。
+<p align="center">
+    <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
+    <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.1.5-green.svg"/>
+     <a href="https://gitee.com/youlaitech/youlai-boot" target="_blank">
+        <img alt="有来技术" src="https://gitee.com/youlaiorg/youlai-boot/badge/star.svg"/>
+    </a>     
+    <a href="https://github.com/haoxianrui" target="_blank">
+        <img alt="有来技术" src="https://img.shields.io/github/stars/haoxianrui/youlai-boot.svg?style=social&label=Stars"/>
+    </a>
+    <br/>
+    <img alt="有来技术" src="https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg"/>
+    <a href="https://gitee.com/youlaiorg" target="_blank">
+        <img alt="有来技术" src="https://img.shields.io/badge/Author-有来开源组织-orange.svg"/>
+    </a>
+</p>
+
+<p align="center">
+   <a target="_blank" style="color: greenyellow" href="https://vue3.youlai.tech/">👀 在线预览</a> |
+   <a target="_blank" href="https://youlai.blog.csdn.net">📖 官方博客</a> |
+   <a target="_blank" href="https://gitee.com/haoxr">🦄 Gitee</a> |
+   <a target="_blank" href="https://github.com/haoxianrui">🚢 Github</a> 
+</p>
+
+## 📢 项目简介
+
+**在线预览**: [https://vue3.youlai.tech](https://vue3.youlai.tech)
+
+基于 JDK 17、Spring Boot 3、Spring Security 6、JWT、Redis、Mybatis-Plus、Knife4j、Vue 3、Element-Plus 构建的前后端分离单体权限管理系统。
+
+- **🚀 开发框架**: 使用 Spring Boot 3.0 和 Vue 3，以及 Element-Plus 等主流技术栈，实时更新。
+
+- **🔐 安全认证**: 结合 Spring Security 和 JWT 提供安全、无状态、分布式友好的身份验证和授权机制。
+
+- **🔑 权限管理**: 基于 RBAC 模型，实现细粒度的权限控制，涵盖接口方法和按钮级别。
+
+- **🛠️ 功能模块**: 包括用户管理、角色管理、菜单管理、部门管理、字典管理等多个功能。
+
+- **📘 接口文档**: 自动生成接口文档，支持在线调试，提高开发效率。
+
+## 📁 项目目录
+```
+youlai-boot
+├── sql                                 # SQL脚本
+    ├── mysql5                          # MySQL5 脚本
+    ├── mysql8                          # MySQL8 脚本
+├── src                                 # 源码目录
+    ├── common                          # 公共模块
+    ├── config                          # 自动装配配置
+        ├── CorsConfig                  # 跨域共享配置
+        ├── RedisConfig                 # Redis 配置
+        ├── SwaggerConfig               # API 接口文档配置
+        ├── WebMvcConfig                # WebMvc 配置
+    ├── controller                      # 控制层
+    ├── converter                       # MapStruct转换器
+    ├── core                            # 核心模块
+        ├── mybatisplus                 # Mybatis-Plus 配置和插件
+        ├── security                    # Spring Security 安全配置和扩展
+    ├── filter                          # 过滤器
+        ├── RequestLogFilter            # 请求日志过滤器
+        ├── VerifyCodeFilter            # 验证码过滤器
+    ├── model                           # 模型层
+        ├── bo                          # 业务对象
+        ├── dto                         # 数据传输对象
+        ├── entity                      # 实体对象
+        ├── form                        # 表单对象
+        ├── query                       # 查询参数对象
+        ├── vo                          # 视图对象
+    ├── mapper                          # 数据库访问层
+    ├── plugin                          # 插件(可选)
+        ├── dupsubmit                   # 防重提交插件，用于防止表单重复提交
+        ├── easyexcel                   # EasyExcel 插件，Excel 文件的读写
+        ├── rabbitmq                    # RabbitMQ 插件，消息队列交互
+        ├── websocket                   # WebSocket 插件，实时双向通信
+        ├── xxljob                      # XXL-JOB 插件，分布式任务调度和执行
+    ├── service                         # 业务逻辑层
+└── end       
+```
+
+## 🌺 前端工程
+| Gitee | Github |
+|-------|------|
+| [vue3-element-admin](https://gitee.com/youlaiorg/vue3-element-admin)  | [vue3-element-admin](https://github.com/youlaitech/vue3-element-admin)  |
 
 
-## 项目预览
-**在线预览地址**
-
-[http://vue3.youlai.tech/](http://vue3.youlai.tech/)
-
-**首页控制台**
-
-| ![明亮模式](https://s2.loli.net/2023/03/26/oltnAHfFcbw18GL.png) |
-|-------------------------------------------------------------|
-| ![暗黑模式](https://s2.loli.net/2023/03/13/QvjY4zf3VCGteNF.png) |
-
-**接口文档**
-
-![接口文档](https://s2.loli.net/2023/03/13/bH4J3O6WRgCUpwt.png)
-
-**权限管理系统**
-
-| ![用户管理](https://s2.loli.net/2023/03/13/L9xgT5sSMVZukQj.png) | ![角色管理](https://s2.loli.net/2023/03/13/nQg6HmrtFUkPDYv.png) |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![菜单管理](https://s2.loli.net/2023/03/13/C4fDRJeTuUO7gPI.png) | ![字典管理](https://s2.loli.net/2023/03/13/BzqjHpa64wfeWhE.png) |
-
-
-
-## 项目特色
-- Spring Boot 3.0 + Vue3 前后端分离单体应用，适合快速开发；
-- Spring Security + JWT 认证鉴权方案；
-- 基于 RBAC 模型的权限设计，细粒度接口方法、按钮级别权限控制。
-
-## 运行环境
-- JDK 17
-- IDEA Lombok 插件
-- IDEA MapStruct Support 插件
-- MySQL 8.x
-
-## 项目地址
-
-| 项目名称 | 项目地址    |
-|------|------------------------------------------------|
-| 后端工程 | https://gitee.com/youlaiorg/youlai-boot        |
-| 前端工程 | https://gitee.com/youlaiorg/vue3-element-admin |
-
-
-
-## 接口文档
+## 🌈 接口文档
 
 - `knife4j` 接口文档：[http://localhost:8989/doc.html](http://localhost:8989/doc.html)
-
 - `swagger` 接口文档：[http://localhost:8989/swagger-ui/index.html](http://localhost:8989/swagger-ui/index.html)
-
-## 项目运行
-
-### 1. 数据库创建
-
-执行 [youlai_boot.sql](sql/youlai_boot.sql) 脚本完成数据库创建、表结构和基础数据的初始化。
-
-### 2. 配置修改
-
-[application-dev.yml](src/main/resources/application-dev.yml) 修改MySQL、Redis连接配置；
-
-### 3. 后端启动
-执行 [SystemApplication.java](src/main/java/com/youlai/system/SystemApplication.java) 的 main 方法完成后端项目启动；
-
-访问接口文档地址 [http://localhost:8989/doc.html](http://localhost:8989/doc.html) 验证项目启动。
-
-### 4. 前端启动
-
-文档：[README.md](https://gitee.com/youlaiorg/vue3-element-admin#%E9%A1%B9%E7%9B%AE%E5%90%AF%E5%8A%A8)
-
-## 开发规范
-
-### 方法命名
-
-以下命名涵盖了Controller、Service和Mapper层
-
-|作用|示例|
-|---|---|
-|分页查询|getUserPage|
-|列表查询|listUsers|
-|单个查询|getUser/getUserDetail/getUserInfo ...|
-|新增|saveUser|
-|修改|updateUser|
-|删除|deleteUser/removeUser|
+- `apifox`  在线接口文档：[https://www.apifox.cn/apidoc](https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5)
 
 
-### 实体命名
+## 🚀 项目启动
 
-| 名称     | 定义               | 示例        |
-|--------|------------------|-----------|
-| entity | 映射数据库实体，字段属性完全对应 | SysUser   |
-| bo     | 多表关联查询的业务实体      | UserBO    |
-| query  | 查询传参，建议参数≥3使用    | UserQuery |
-| form   | 表单对象             | UserForm  |
-| dto    | RPC调用，可替代VO      | UserDTO   |
-| vo     | 视图层对象            | UserVO    |
+1. **数据库初始化**
 
-### API规范
-在RESTFul架构中，每个URL代表一种资源，所以不能有动词，只能有名词，而且所用的名词往往与数据库的表格名对应。一般来说，数据库中的表都是同种记录的"集合"，所以API中的名词也应该使用复数。
+    执行 [youlai_boot.sql](sql/mysql8/youlai_boot.sql) 脚本完成数据库创建、表结构和基础数据的初始化。
 
-**请求示例：**
+2. **修改配置**
 
-|请求描述|请求方法|请求路径|
-|---|---|---|
-|获取所有用户信息|GET|/api/v1/users|
-|获取标识为1用户信息|GET|/api/v1/users/1|
-|删除标识为1用户信息|DELETE|/api/v1/users/1|
-|新增用户|POST|/api/v1/users|
-|修改标识为1用户信息|PUT|/api/v1/users/1|
-|修改标识为1用户状态|PATCH|/api/v1/users/1/status|
-|获取当前登录用户信息|GET|/api/v1/users/{me,current}|
+    [application-dev.yml](src/main/resources/application-dev.yml) 修改MySQL、Redis连接配置；
+
+3. **启动项目**
+
+    执行 [SystemApplication.java](src/main/java/com/youlai/system/SystemApplication.java) 的 main 方法完成后端项目启动；
+
+    访问接口文档地址 [http://ip:port/doc.html](http://localhost:8989/doc.html) 验证项目启动是否成功。
 
 
-## 请求状态码规范
+## 💖 加交流群
 
-参考 [阿里Java开发手册](https://developer.aliyun.com/topic/java2020?utm_content=g_1000113416)
+> 关注公众号【有来技术】，获取交流群二维码，不想关注公众号或二维码过期欢迎加我微信(`haoxianrui`)备注【有来】即可，拉你进群。
 
-## Git 提交规范
+| ![](https://s2.loli.net/2022/11/19/OGjum9wr8f6idLX.png) |
+|---------------------------------------------------------|
 
 
-参考 ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular)) 社区规范，建议 IDEA 安装 Git Commit Template 插件
-
-- `feat` 增加新功能
-- `fix` 修复问题/BUG
-- `style` 代码风格相关无影响运行结果的
-- `perf` 优化/性能提升
-- `refactor` 重构
-- `revert` 撤销修改
-- `test` 测试相关
-- `docs` 文档/注释
-- `chore` 依赖更新/脚手架配置修改等
-- `workflow` 工作流改进
-- `ci` 持续集成
-
-## 联系我们
-
-> 欢迎添加开发者微信，备注「有来」进群
-
-| ![郝先瑞](https://s2.loli.net/2022/04/06/yRx8uzj4emA5QVr.jpg) | ![张川](https://s2.loli.net/2022/04/06/cQihGv9uPsTjXk1.jpg) |
-| --- | --- |

@@ -1,7 +1,7 @@
 package com.youlai.system.controller;
 
 import com.youlai.system.common.result.Result;
-import com.youlai.system.common.annotation.PreventDuplicateSubmit;
+import com.youlai.system.plugin.dupsubmit.annotation.PreventDuplicateSubmit;
 import com.youlai.system.model.form.MenuForm;
 import com.youlai.system.model.query.MenuQuery;
 import com.youlai.system.model.vo.MenuVO;

@@ -31,7 +31,7 @@ public class SwaggerConfig {
                         .title("系统接口文档")
                         .version("2.4.0")
                 )
-                //全局安全校验项，也可以在对应的controller上加注解SecurityRequirement
+                // 全局安全校验项，也可以在对应的controller上加注解SecurityRequirement
                 .components(new Components()
                         .addSecuritySchemes(HttpHeaders.AUTHORIZATION,
                                 new SecurityScheme()
