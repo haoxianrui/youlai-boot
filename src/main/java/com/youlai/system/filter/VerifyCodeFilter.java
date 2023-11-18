@@ -27,15 +27,15 @@ public class VerifyCodeFilter extends OncePerRequestFilter {
 
     private static final AntPathRequestMatcher LOGIN_PATH_REQUEST_MATCHER = new AntPathRequestMatcher(SecurityConstants.LOGIN_PATH, "POST");
 
-    public static final String VERIFY_CODE_PARAM_KEY = "verifyCode";
-    public static final String VERIFY_CODE_KEY_PARAM_KEY = "verifyCodeKey";
+    public static final String CAPTCHA_CODE_PARAM_NAME = "captchaCode";
+    public static final String CAPTCHA_KEY_PARAM_NAME = "captchaKey";
 
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         // 检验登录接口的验证码
         if (LOGIN_PATH_REQUEST_MATCHER.matches(request)) {
             // 请求中的验证码
-            String verifyCode = request.getParameter(VERIFY_CODE_PARAM_KEY);
+            String verifyCode = request.getParameter(CAPTCHA_CODE_PARAM_NAME);
             // TODO 兼容没有验证码的版本(线上请移除这个判断)
             if (StrUtil.isBlank(verifyCode)) {
                 chain.doFilter(request, response);
@@ -43,8 +43,8 @@ public class VerifyCodeFilter extends OncePerRequestFilter {
             }
             // 缓存中的验证码
             StringRedisTemplate redisTemplate = SpringUtil.getBean("stringRedisTemplate", StringRedisTemplate.class);
-            String verifyCodeKey = request.getParameter(VERIFY_CODE_KEY_PARAM_KEY);
-            String cacheVerifyCode = redisTemplate.opsForValue().get(SecurityConstants.VERIFY_CODE_CACHE_PREFIX + verifyCodeKey);
+            String verifyCodeKey = request.getParameter(CAPTCHA_KEY_PARAM_NAME);
+            String cacheVerifyCode = redisTemplate.opsForValue().get(SecurityConstants.CAPTCHA_CODE_CACHE_PREFIX + verifyCodeKey);
             if (cacheVerifyCode == null) {
                 ResponseUtils.writeErrMsg(response, ResultCode.VERIFY_CODE_TIMEOUT);
             } else {

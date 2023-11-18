@@ -5,9 +5,9 @@ import cn.hutool.captcha.generator.MathGenerator;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.constant.SecurityConstants;
+import com.youlai.system.core.security.jwt.JwtTokenProvider;
 import com.youlai.system.model.dto.CaptchaResult;
 import com.youlai.system.model.dto.LoginResult;
-import com.youlai.system.core.security.jwt.JwtTokenProvider;
 import com.youlai.system.service.AuthService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,8 +21,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.awt.*;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import static java.awt.Font.SANS_SERIF;
 
 /**
  * 认证服务实现类
@@ -85,21 +88,22 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public CaptchaResult getCaptcha() {
-        
+
         MathGenerator mathGenerator=new MathGenerator(1);
         CircleCaptcha circleCaptcha =new CircleCaptcha(120,25,4,3);
         circleCaptcha.setGenerator(mathGenerator);
+        circleCaptcha.setFont(new Font(SANS_SERIF, Font.BOLD, 18));
         String captchaCode = circleCaptcha.getCode(); // 验证码
         String captchaBase64 = circleCaptcha.getImageBase64Data(); // 验证码图片Base64
 
         // 验证码文本缓存至Redis，用于登录校验
-        String verifyCodeKey = IdUtil.fastSimpleUUID();
-        redisTemplate.opsForValue().set(SecurityConstants.VERIFY_CODE_CACHE_PREFIX + verifyCodeKey, captchaCode,
+        String captchaKey = IdUtil.fastSimpleUUID();
+        redisTemplate.opsForValue().set(SecurityConstants.CAPTCHA_CODE_CACHE_PREFIX + captchaKey, captchaCode,
                 120, TimeUnit.SECONDS);
 
         return CaptchaResult.builder()
-                .verifyCodeKey(verifyCodeKey)
-                .captchaImgBase64(captchaBase64)
+                .captchaKey(captchaKey)
+                .captchaBase64(captchaBase64)
                 .build();
     }
 

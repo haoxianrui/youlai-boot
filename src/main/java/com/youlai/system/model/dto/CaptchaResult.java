@@ -16,9 +16,9 @@ import lombok.Data;
 public class CaptchaResult {
 
     @Schema(description = "验证码缓存key")
-    private String verifyCodeKey;
+    private String captchaKey;
 
     @Schema(description = "验证码图片Base64字符串")
-    private String captchaImgBase64;
+    private String captchaBase64;
 
 }
