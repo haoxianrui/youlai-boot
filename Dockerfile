@@ -1,17 +1,13 @@
-# 使用 openjdk 17-jdk-alpine 作为基础镜像
+# 基础镜像
 FROM openjdk:17-jdk-alpine
 
-# 安装 tini，用于容器的进程初始化和管理
-RUN apk --update --no-cache add tini
+# 维护者信息
+MAINTAINER youlai <youlaitech@163.com>
 
-# 时区修改
-RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
-
-# 修改 Alpine Linux 的软件包源为国内镜像源（这里使用了中国科技大学的镜像源）
-RUN echo -e https://mirrors.ustc.edu.cn/alpine/v3.7/main/ > /etc/apk/repositories
-
-# 安装 DejaVu 字体和 fontconfig，可用于支持中文等字体渲染
-RUN apk --no-cache add ttf-dejavu fontconfig
+# 设置国内镜像源(中国科技大学镜像源)，修改容器时区(alpine镜像需安装tzdata来设置时区)，安装字体库(验证码)
+RUN echo -e https://mirrors.ustc.edu.cn/alpine/v3.7/main/ > /etc/apk/repositories  \
+    && apk --no-cache add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" > /etc/timezone \
+    && apk --no-cache add ttf-dejavu fontconfig
 
 # 在运行时自动挂载 /tmp 目录为匿名卷，提高可移植性
 VOLUME /tmp
