@@ -28,17 +28,17 @@ public class MyDataPermissionHandler implements DataPermissionHandler {
     @Override
     @SneakyThrows
     public Expression getSqlSegment(Expression where, String mappedStatementId) {
-        // 超级管理员不受数据权限控制
-        if (SecurityUtils.isRoot()) {
-            return where;
-        }
+
         Class<?> clazz = Class.forName(mappedStatementId.substring(0, mappedStatementId.lastIndexOf(StringPool.DOT)));
         String methodName = mappedStatementId.substring(mappedStatementId.lastIndexOf(StringPool.DOT) + 1);
         Method[] methods = clazz.getDeclaredMethods();
         for (Method method : methods) {
             DataPermission annotation = method.getAnnotation(DataPermission.class);
-            if (ObjectUtils.isNotEmpty(annotation)
-                    && (method.getName().equals(methodName) || (method.getName() + "_COUNT").equals(methodName))) {
+            // 如果没有注解或者是超级管理员，直接返回
+            if (annotation == null || SecurityUtils.isRoot()) {
+                return where;
+            }
+            if (method.getName().equals(methodName) || (method.getName() + "_COUNT").equals(methodName)) {
                 return dataScopeFilter(annotation.deptAlias(), annotation.deptIdColumnName(), annotation.userAlias(), annotation.userIdColumnName(), where);
             }
         }
@@ -67,7 +67,7 @@ public class MyDataPermissionHandler implements DataPermissionHandler {
         String appendSqlStr;
         switch (dataScopeEnum) {
             case ALL:
-                return  where;
+                return where;
             case DEPT:
                 deptId = SecurityUtils.getDeptId();
                 appendSqlStr = deptColumnName + StringPool.EQUALS + deptId;
