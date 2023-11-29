@@ -14,16 +14,28 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
+ * JWT token 过滤器
+ *
  * @author haoxr
  * @since 2023/9/13
  */
 public class JwtTokenFilter extends OncePerRequestFilter {
+
+    /**
+     * JWT Token 工具类
+     */
     private JwtTokenProvider jwtTokenProvider;
 
     public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    /**
+     * 从请求中获取 JWT Token，校验 JWT Token 是否合法
+     * <p>
+     * 如果合法则将 Authentication 设置到 Spring Security Context 上下文中
+     * 如果不合法则清空 Spring Security Context 上下文，并直接返回响应
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtTokenProvider.resolveToken(request);
@@ -35,7 +47,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         } catch (BusinessException ex) {
             //this is very important, since it guarantees the user is not authenticated at all
             SecurityContextHolder.clearContext();
-            ResponseUtils.writeErrMsg(response,(ResultCode)ex.getResultCode());
+            ResponseUtils.writeErrMsg(response, (ResultCode) ex.getResultCode());
             return;
         }
 

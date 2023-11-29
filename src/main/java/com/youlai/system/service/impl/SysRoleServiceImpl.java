@@ -46,8 +46,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     /**
      * 角色分页列表
      *
-     * @param queryParams
-     * @return
+     * @param queryParams 角色查询参数
+     * @return {@link Page<RolePageVO>} – 角色分页列表
      */
     @Override
     public Page<RolePageVO> getRolePage(RolePageQuery queryParams) {
@@ -69,14 +69,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         );
 
         // 实体转换
-        Page<RolePageVO> pageResult = roleConverter.entity2Page(rolePage);
-        return pageResult;
+        return roleConverter.entity2Page(rolePage);
     }
 
     /**
      * 角色下拉列表
      *
-     * @return
+     * @return {@link List<Option>} – 角色下拉列表
      */
     @Override
     public List<Option> listRoleOptions() {
@@ -88,15 +87,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         );
 
         // 实体转换
-        List<Option> list = roleConverter.entities2Options(roleList);
-        return list;
+        return roleConverter.entities2Options(roleList);
     }
 
     /**
      * 保存角色
      *
-     * @param roleForm
-     * @return
+     * @param roleForm 角色表单数据
+     * @return {@link Boolean}
      */
     @Override
     public boolean saveRole(RoleForm roleForm) {
@@ -114,8 +112,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 实体转换
         SysRole role = roleConverter.form2Entity(roleForm);
 
-        boolean result = this.saveOrUpdate(role);
-        return result;
+        return this.saveOrUpdate(role);
     }
 
     /**
@@ -127,8 +124,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public RoleForm getRoleForm(Long roleId) {
         SysRole entity = this.getById(roleId);
-        RoleForm roleForm = roleConverter.entity2Form(entity);
-        return roleForm;
+        return roleConverter.entity2Form(entity);
     }
 
     /**
@@ -150,22 +146,22 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * 批量删除角色
      *
      * @param ids 角色ID，多个使用英文逗号(,)分割
-     * @return
+     * @return {@link Boolean}
      */
     @Override
     public boolean deleteRoles(String ids) {
-        List<Long> roleIds = Arrays.asList(ids.split(",")).stream().map(id -> Long.parseLong(id)).collect(Collectors.toList());
-        Optional.ofNullable(roleIds)
-                .orElse(new ArrayList<>())
-                .forEach(id -> {
-                    long count = sysUserRoleService.count(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getRoleId, id));
-                    Assert.isTrue(count <= 0, "该角色已分配用户，无法删除");
-                    sysRoleMenuService.remove(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, id));
-                });
+        Assert.isTrue(StrUtil.isNotBlank(ids), "删除的角色ID不能为空");
+        List<Long> roleIds = Arrays.stream(ids.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
 
+        roleIds.forEach(id -> {
+            long count = sysUserRoleService.count(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getRoleId, id));
+            Assert.isTrue(count <= 0, "该角色已分配用户，无法删除");
+            sysRoleMenuService.remove(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, id));
+        });
 
-        boolean result = this.removeByIds(roleIds);
-        return result;
+        return this.removeByIds(roleIds);
     }
 
     /**
@@ -176,16 +172,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     public List<Long> getRoleMenuIds(Long roleId) {
-        List<Long> menuIds = sysRoleMenuService.listMenuIdsByRoleId(roleId);
-        return menuIds;
+        return sysRoleMenuService.listMenuIdsByRoleId(roleId);
     }
 
     /**
      * 修改角色的资源权限
      *
-     * @param roleId
-     * @param menuIds
-     * @return
+     * @param roleId 角色ID
+     * @param menuIds 菜单ID集合
+     * @return {@link Boolean}
      */
     @Override
     @Transactional
@@ -206,8 +201,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     /**
      * 获取最大范围的数据权限
      *
-     * @param roles
-     * @return
+     * @param roles 角色编码集合
+     * @return {@link Integer} – 数据权限范围
      */
     @Override
     public Integer getMaximumDataScope(Set<String> roles) {

@@ -1,7 +1,6 @@
 package com.youlai.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -10,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.common.enums.MenuTypeEnum;
 import com.youlai.system.common.enums.StatusEnum;
+import com.youlai.system.common.model.Option;
 import com.youlai.system.converter.MenuConverter;
 import com.youlai.system.mapper.SysMenuMapper;
 import com.youlai.system.model.bo.RouteBO;
@@ -17,7 +17,6 @@ import com.youlai.system.model.entity.SysMenu;
 import com.youlai.system.model.form.MenuForm;
 import com.youlai.system.model.query.MenuQuery;
 import com.youlai.system.model.vo.MenuVO;
-import com.youlai.system.common.model.Option;
 import com.youlai.system.model.vo.RouteVO;
 import com.youlai.system.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +29,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
-
 /**
  * 菜单业务实现类
  *
@@ -41,7 +38,9 @@ import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
 @Service
 @RequiredArgsConstructor
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
+
     private final MenuConverter menuConverter;
+
 
     /**
      * 菜单列表
@@ -54,25 +53,25 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .like(StrUtil.isNotBlank(queryParams.getKeywords()), SysMenu::getName, queryParams.getKeywords())
                 .orderByAsc(SysMenu::getSort)
         );
-
-        Set<Long> parentIds = menus.stream()
-                .map(SysMenu::getParentId)
-                .collect(Collectors.toSet());
+        // 获取所有菜单ID
         Set<Long> menuIds = menus.stream()
                 .map(SysMenu::getId)
                 .collect(Collectors.toSet());
 
-        // 获取根节点ID
+        // 获取所有父级ID
+        Set<Long> parentIds = menus.stream()
+                .map(SysMenu::getParentId)
+                .collect(Collectors.toSet());
+
+        // 获取根节点ID（递归的起点），即父节点ID中不包含在部门ID中的节点，注意这里不能拿顶级菜单 O 作为根节点，因为菜单筛选的时候 O 会被过滤掉
         List<Long> rootIds = parentIds.stream()
                 .filter(id -> !menuIds.contains(id))
                 .toList();
 
         // 使用递归函数来构建菜单树
-        List<MenuVO> menuList = rootIds.stream()
+        return rootIds.stream()
                 .flatMap(rootId -> buildMenuTree(rootId, menus).stream())
                 .collect(Collectors.toList());
-
-        return menuList;
     }
 
     /**
@@ -99,7 +98,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public List<Option> listMenuOptions() {
-        List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>().orderByAsc(SysMenu::getSort));
+        List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>()
+                .orderByAsc(SysMenu::getSort));
         return buildMenuOptions(SystemConstants.ROOT_NODE_ID, menuList);
     }
 
@@ -251,35 +251,33 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     /**
-     * 获取角色权限集合
+     * 获取角色权限(Code)集合
      *
-     * @param roles
-     * @return
+     * @param roles 角色Code集合
+     * @return 权限集合
      */
     @Override
     public Set<String> listRolePerms(Set<String> roles) {
-        Set<String> perms = this.baseMapper.listRolePerms(roles);
-        return perms;
+        return this.baseMapper.listRolePerms(roles);
     }
 
     /**
      * 获取菜单表单数据
      *
      * @param id 菜单ID
-     * @return
+     * @return 菜单表单数据
      */
     @Override
     public MenuForm getMenuForm(Long id) {
         SysMenu entity = this.getById(id);
-        MenuForm menuForm = menuConverter.entity2Form(entity);
-        return menuForm;
+        return menuConverter.entity2Form(entity);
     }
 
     /**
      * 删除菜单
      *
      * @param id 菜单ID
-     * @return
+     * @return 是否删除成功
      */
     @Override
     public boolean deleteMenu(Long id) {
@@ -289,6 +287,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                     .or()
                     .apply("CONCAT (',',tree_path,',') LIKE CONCAT('%,',{0},',%')", id));
         }
+        // 无异常即为删除成功
         return true;
     }
 

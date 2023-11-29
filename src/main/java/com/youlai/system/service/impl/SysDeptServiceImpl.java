@@ -1,6 +1,7 @@
 package com.youlai.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -17,7 +18,7 @@ import com.youlai.system.service.SysDeptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     private final DeptConverter deptConverter;
 
     /**
-     * 部门列表
+     * 获取部门列表
      */
     @Override
     public List<DeptVO> listDepartments(DeptQuery queryParams) {
@@ -52,29 +53,33 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
                         .orderByAsc(SysDept::getSort)
         );
 
+        if (CollectionUtil.isEmpty(deptList)) {
+            return Collections.EMPTY_LIST;
+        }
+
+        // 获取所有部门ID
         Set<Long> deptIds = deptList.stream()
                 .map(SysDept::getId)
                 .collect(Collectors.toSet());
-
+        // 获取父节点ID
         Set<Long> parentIds = deptList.stream()
                 .map(SysDept::getParentId)
                 .collect(Collectors.toSet());
-
+        // 获取根节点ID（递归的起点），即父节点ID中不包含在部门ID中的节点，注意这里不能拿顶级部门 O 作为根节点，因为部门筛选的时候 O 会被过滤掉
         List<Long> rootIds = CollectionUtil.subtractToList(parentIds, deptIds);
 
-        List<DeptVO> list = new ArrayList<>();
-        for (Long rootId : rootIds) {
-            list.addAll(recurDeptList(rootId, deptList));
-        }
-        return list;
+        // 递归生成部门树形列表
+        return rootIds.stream()
+                .flatMap(rootId -> recurDeptList(rootId, deptList).stream())
+                .toList();
     }
 
     /**
      * 递归生成部门树形列表
      *
-     * @param parentId
-     * @param deptList
-     * @return
+     * @param parentId 父ID
+     * @param deptList 部门列表
+     * @return 部门树形列表
      */
     public List<DeptVO> recurDeptList(Long parentId, List<SysDept> deptList) {
         return deptList.stream()
@@ -100,54 +105,93 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
                 .select(SysDept::getId, SysDept::getParentId, SysDept::getName)
                 .orderByAsc(SysDept::getSort)
         );
-
-        Set<Long> parentIds = deptList.stream()
-                .map(SysDept::getParentId)
-                .collect(Collectors.toSet());
+        if (CollectionUtil.isEmpty(deptList)) {
+            return Collections.EMPTY_LIST;
+        }
 
         Set<Long> deptIds = deptList.stream()
                 .map(SysDept::getId)
                 .collect(Collectors.toSet());
 
+        Set<Long> parentIds = deptList.stream()
+                .map(SysDept::getParentId)
+                .collect(Collectors.toSet());
+
         List<Long> rootIds = CollectionUtil.subtractToList(parentIds, deptIds);
 
-        List<Option> list = new ArrayList<>();
-        for (Long rootId : rootIds) {
-            list.addAll(recurDeptTreeOptions(rootId, deptList));
-        }
-        return list;
+        // 递归生成部门树形列表
+        return rootIds.stream()
+                .flatMap(rootId -> recurDeptTreeOptions(rootId, deptList).stream())
+                .toList();
     }
 
+    /**
+     * 新增部门
+     *
+     * @param formData 部门表单
+     * @return 部门ID
+     */
     @Override
     public Long saveDept(DeptForm formData) {
+        // 校验部门名称是否存在
+        String name = formData.getName();
+        long count = this.count(new LambdaQueryWrapper<SysDept>()
+                .eq(SysDept::getName, name)
+        );
+        Assert.isTrue(count == 0, "部门名称已存在");
+
+        // form->entity
         SysDept entity = deptConverter.form2Entity(formData);
-        // 部门路径
+
+        // 生成部门路径(tree_path)，格式：父节点tree_path + , + 父节点ID，用于删除部门时级联删除子部门
         String treePath = generateDeptTreePath(formData.getParentId());
         entity.setTreePath(treePath);
+
         // 保存部门并返回部门ID
-        this.save(entity);
+        boolean result = this.save(entity);
+        Assert.isTrue(result, "部门保存失败");
+
         return entity.getId();
     }
 
+    /**
+     * 更新部门
+     *
+     * @param deptId   部门ID
+     * @param formData 部门表单
+     * @return 部门ID
+     */
     @Override
     public Long updateDept(Long deptId, DeptForm formData) {
+        // 校验部门名称是否存在
+        String name = formData.getName();
+        long count = this.count(new LambdaQueryWrapper<SysDept>()
+                .eq(SysDept::getName, name)
+                .ne(SysDept::getId, deptId)
+        );
+        Assert.isTrue(count == 0, "部门名称已存在");
+
         // form->entity
         SysDept entity = deptConverter.form2Entity(formData);
         entity.setId(deptId);
-        // 部门路径
+
+        // 生成部门路径(tree_path)，格式：父节点tree_path + , + 父节点ID，用于删除部门时级联删除子部门
         String treePath = generateDeptTreePath(formData.getParentId());
         entity.setTreePath(treePath);
+
         // 保存部门并返回部门ID
-        this.updateById(entity);
+        boolean result = this.updateById(entity);
+        Assert.isTrue(result, "部门更新失败");
+
         return entity.getId();
     }
 
     /**
      * 递归生成部门表格层级列表
      *
-     * @param parentId
-     * @param deptList
-     * @return
+     * @param parentId 父ID
+     * @param deptList 部门列表
+     * @return 部门表格层级列表
      */
     public static List<Option> recurDeptTreeOptions(long parentId, List<SysDept> deptList) {
         List<Option> list = CollectionUtil.emptyIfNull(deptList).stream()
@@ -169,7 +213,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      * 删除部门
      *
      * @param ids 部门ID，多个以英文逗号,拼接字符串
-     * @return
+     * @return 是否删除成功
      */
     @Override
     public boolean deleteByIds(String ids) {
@@ -189,8 +233,8 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     /**
      * 获取部门详情
      *
-     * @param deptId
-     * @return
+     * @param deptId 部门ID
+     * @return 部门表单对象
      */
     @Override
     public DeptForm getDeptForm(Long deptId) {

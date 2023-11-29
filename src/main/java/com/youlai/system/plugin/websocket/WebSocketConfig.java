@@ -16,7 +16,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  * @since 2.4.0
  */
 @Configuration
-@ConditionalOnProperty(name = "system.config.websocket-enabled")// system.config.websocket-enabled = true 才会自动装配
 @EnableWebSocketMessageBroker // 启用WebSocket消息代理功能和配置STOMP协议，实现实时双向通信和消息传递
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {

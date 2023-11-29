@@ -13,8 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * @author xuxueli 2017-04-28
  */
 @Configuration
-// system.config.xxl-job-enabled = true 才会自动装配
-@ConditionalOnProperty(name = "system.config.xxl-job-enabled")
+@ConditionalOnProperty(name = "xxl.job.enabled") // xxl.job.enabled = true 才会自动装配
 @Slf4j
 public class XxlJobConfig {
 

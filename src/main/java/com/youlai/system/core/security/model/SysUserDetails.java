@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.youlai.system.model.dto.UserAuthInfo;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,11 +15,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Spring Security
+ * Spring Security 用户对象
  *
  * @author haoxr
+ * @since 3.0.0
  */
 @Data
+@NoArgsConstructor
 public class SysUserDetails implements UserDetails {
 
     private Long userId;
@@ -36,10 +39,6 @@ public class SysUserDetails implements UserDetails {
     private Long deptId;
 
     private Integer dataScope;
-
-    public SysUserDetails() {
-
-    }
 
     public SysUserDetails(UserAuthInfo user) {
         this.userId = user.getUserId();

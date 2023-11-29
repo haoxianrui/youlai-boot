@@ -34,6 +34,9 @@ public class DuplicateSubmitAspect {
 
     private final RedissonClient redissonClient;
 
+    /**
+     * JWT token 工具类
+     */
     private final JwtTokenProvider jwtTokenProvider;
     private static final String RESUBMIT_LOCK_PREFIX = "LOCK:RESUBMIT:";
 

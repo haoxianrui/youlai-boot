@@ -3,6 +3,7 @@ package com.youlai.system.filter;
 import cn.hutool.captcha.generator.MathGenerator;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import com.youlai.system.common.constant.CacheConstants;
 import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.common.util.ResponseUtils;
@@ -44,7 +45,7 @@ public class VerifyCodeFilter extends OncePerRequestFilter {
             // 缓存中的验证码
             StringRedisTemplate redisTemplate = SpringUtil.getBean("stringRedisTemplate", StringRedisTemplate.class);
             String verifyCodeKey = request.getParameter(CAPTCHA_KEY_PARAM_NAME);
-            String cacheVerifyCode = redisTemplate.opsForValue().get(SecurityConstants.CAPTCHA_CODE_CACHE_PREFIX + verifyCodeKey);
+            String cacheVerifyCode = redisTemplate.opsForValue().get(CacheConstants.CAPTCHA_CODE_PREFIX + verifyCodeKey);
             if (cacheVerifyCode == null) {
                 ResponseUtils.writeErrMsg(response, ResultCode.VERIFY_CODE_TIMEOUT);
             } else {

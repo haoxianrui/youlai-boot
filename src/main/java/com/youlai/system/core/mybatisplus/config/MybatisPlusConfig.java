@@ -22,10 +22,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class MybatisPlusConfig {
 
-
-    @Value("${system.config.data-permission-enabled}")
-    private Boolean dataPermissionEnabled;
-
     /**
      * 分页插件和数据权限插件
      */
@@ -33,9 +29,7 @@ public class MybatisPlusConfig {
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         //数据权限
-        if (dataPermissionEnabled) {
-            interceptor.addInnerInterceptor(new DataPermissionInterceptor(new MyDataPermissionHandler()));
-        }
+        interceptor.addInnerInterceptor(new DataPermissionInterceptor(new MyDataPermissionHandler()));
         //分页插件
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
 

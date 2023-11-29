@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.youlai.system.common.constant.CacheConstants;
 import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.common.util.DateUtils;
@@ -23,10 +24,7 @@ import com.youlai.system.model.query.UserPageQuery;
 import com.youlai.system.model.vo.UserExportVO;
 import com.youlai.system.model.vo.UserInfoVO;
 import com.youlai.system.model.vo.UserPageVO;
-import com.youlai.system.service.SysMenuService;
-import com.youlai.system.service.SysRoleService;
-import com.youlai.system.service.SysUserRoleService;
-import com.youlai.system.service.SysUserService;
+import com.youlai.system.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -59,6 +58,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private final SysRoleService roleService;
 
     private final RedisTemplate redisTemplate;
+
+    private final SysRoleMenuService roleMenuService;
 
     /**
      * 获取用户分页列表
@@ -232,7 +233,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 获取登录用户信息
      *
-     * @return
+     * @return {@link UserInfoVO}   用户信息
      */
     @Override
     public UserInfoVO getCurrentUserInfo() {
@@ -257,9 +258,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         userInfoVO.setRoles(roles);
 
         // 用户权限集合
-        Set<String> perms = (Set<String>) redisTemplate.opsForValue().get(SecurityConstants.USER_PERMS_CACHE_PREFIX + user.getId());
+        Set<String> perms = new HashSet<>();
+        if (CollectionUtil.isNotEmpty(roles)) {
+            for (String role : roles) {
+                Set<String> rolePerms = (Set<String>) redisTemplate.opsForHash().get(CacheConstants.ROLE_PERMS_PREFIX, role);
+                if (CollectionUtil.isNotEmpty(rolePerms)) {
+                    perms.addAll(rolePerms);
+                }
+            }
+        }
         userInfoVO.setPerms(perms);
-
         return userInfoVO;
     }
 

@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
  * mybatis-plus 字段自动填充
  *
  * @author haoxr
- * @link <a href="https://mp.baomidou.com/guide/auto-fill-metainfo.html">官方文档</a>
  * @since 2022/10/14
  */
 @Component
@@ -19,7 +18,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     /**
      * 新增填充创建时间
      *
-     * @param metaObject
+     * @param metaObject 元数据
      */
     @Override
     public void insertFill(MetaObject metaObject) {
@@ -30,7 +29,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     /**
      * 更新填充更新时间
      *
-     * @param metaObject
+     * @param metaObject 元数据
      */
     @Override
     public void updateFill(MetaObject metaObject) {
