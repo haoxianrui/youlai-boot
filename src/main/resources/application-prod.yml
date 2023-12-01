@@ -16,7 +16,7 @@ spring:
   data:
     redis:
       database: 6
-      host: 47.117.115.107
+      host: www.youlai.tech
       port: 6379
       password: 123456
       timeout: 10s
@@ -30,20 +30,23 @@ spring:
           max-idle: 8
           # 连接池中的最小空闲连接 默认0
           min-idle: 0
-
 mybatis-plus:
   global-config:
     db-config:
       # 主键ID类型
       id-type: none
+      # 逻辑删除字段名称
       logic-delete-field: deleted
+      # 逻辑删除-删除值
       logic-delete-value: 1
+      # 逻辑删除-未删除值
       logic-not-delete-value: 0
   configuration:
     # 驼峰下划线转换
     map-underscore-to-camel-case: true
     # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 
 # 认证配置
 jwt:
@@ -58,15 +61,15 @@ oss:
   # MinIO 对象存储服务
   minio:
     # 服务Endpoint
-    endpoint: http://www.youlai.tech:9000
+    endpoint: http://localhost:9000
     # 访问凭据
     access-key: minioadmin
     # 凭据密钥
-    secret-key: youlaitech
+    secret-key: minioadmin
     # 存储桶名称
-    bucket-name: youlai-boot
+    bucket-name: default
     # (可选)自定义域名，如果配置了域名，生成的文件URL是域名格式，未配置则URL则是IP格式 (eg: https://oss.youlai.tech)
-    custom-domain: https://oss.youlai.tech
+    custom-domain:
   # 阿里云OSS对象存储服务
   aliyun:
     # 服务Endpoint
@@ -101,7 +104,7 @@ knife4j:
 # xxl-job 定时任务配置
 xxl:
   job:
-    # xxl-job 开关
+    # 定时任务开关
     enabled: false
     admin:
       # 多个地址使用,分割
@@ -115,12 +118,30 @@ xxl:
       logpath: /data/applogs/xxl-job/jobhandler
       logretentiondays: 30
 
-# 系统配置
-system:
-  config:
-    # 数据权限开关
-    data-permission-enabled: true
-    # 定时任务 xxl-job 开关
-    xxl-job-enabled: false
-    # WebSocket 开关
-    websocket-enabled: true
+# 验证码配置
+captcha:
+  # 验证码类型 circle-圆圈干扰验证码|gif-Gif验证码|line-干扰线验证码|shear-扭曲干扰验证码
+  type: circle
+  # 验证码宽度
+  width: 120
+  # 验证码高度
+  height: 40
+  # 验证码干扰元素个数
+  interfere-count: 3
+  # 验证码字符配置
+  code:
+    # 验证码字符类型 math-算术 |random-随机字符
+    type: math
+    # 验证码字符长度，type=算术时，表示运算位数(1:个位数运算 2:十位数运算)；type=随机字符时，表示字符个数
+    length: 1
+  # 验证码字体
+  font:
+    # 字体名称 Dialog|DialogInput|Monospaced|Serif|SansSerif
+    name: SansSerif
+    # 字体样式 0-普通|1-粗体|2-斜体
+    weight: 1
+    # 字体大小
+    size: 18
+  # 验证码有效期(秒)
+  expire-seconds: 120
+

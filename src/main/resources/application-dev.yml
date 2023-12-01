@@ -104,6 +104,8 @@ knife4j:
 # xxl-job 定时任务配置
 xxl:
   job:
+    # 定时任务开关
+    enabled: false
     admin:
       # 多个地址使用,分割
       addresses: http://127.0.0.1:8080/xxl-job-admin
@@ -116,12 +118,30 @@ xxl:
       logpath: /data/applogs/xxl-job/jobhandler
       logretentiondays: 30
 
-# 系统配置
-system:
-  config:
-    # 数据权限开关
-    data-permission-enabled: true
-    # 定时任务 xxl-job 开关
-    xxl-job-enabled: false
-    # WebSocket 开关
-    websocket-enabled: true
+# 验证码配置
+captcha:
+    # 验证码类型 circle-圆圈干扰验证码|gif-Gif验证码|line-干扰线验证码|shear-扭曲干扰验证码
+    type: circle
+    # 验证码宽度
+    width: 120
+    # 验证码高度
+    height: 40
+    # 验证码干扰元素个数
+    interfere-count: 3
+    # 验证码字符配置
+    code:
+      # 验证码字符类型 math-算术 |random-随机字符
+      type: math
+      # 验证码字符长度，type=算术时，表示运算位数(1:个位数运算 2:十位数运算)；type=随机字符时，表示字符个数
+      length: 1
+    # 验证码字体
+    font:
+      # 字体名称 Dialog|DialogInput|Monospaced|Serif|SansSerif
+      name: SansSerif
+      # 字体样式 0-普通|1-粗体|2-斜体
+      weight: 1
+      # 字体大小
+      size: 18
+    # 验证码有效期(秒)
+    expire-seconds: 120
+
