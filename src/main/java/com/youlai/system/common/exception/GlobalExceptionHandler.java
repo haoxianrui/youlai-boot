@@ -10,6 +10,8 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -183,7 +185,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public <T> Result<T> handleException(Exception e) {
+    public <T> Result<T> handleException(Exception e) throws Exception{
+        // 将 Spring Security 异常继续抛出，以便交给自定义处理器处理
+        if (e instanceof AccessDeniedException
+                || e instanceof AuthenticationException) {
+            throw e;
+        }
         log.error("unknown exception: {}", e.getMessage());
         return Result.failed(e.getLocalizedMessage());
     }
@@ -203,7 +210,7 @@ public class GlobalExceptionHandler {
         if (matcher.find()) {
             String matchString = matcher.group();
             matchString = matchString.replace("[", "").replace("]", "");
-            matchString = "%s字段类型错误".formatted(matchString.replaceAll("\\\"", ""));
+            matchString = "%s字段类型错误".formatted(matchString.replaceAll("\"", ""));
             group += matchString;
         }
         return group;

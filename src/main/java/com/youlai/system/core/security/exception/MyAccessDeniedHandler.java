@@ -20,6 +20,6 @@ import java.io.IOException;
 public class MyAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
-        ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_ACCESS_FORBIDDEN);
+        ResponseUtils.writeErrMsg(response, ResultCode.ACCESS_UNAUTHORIZED);
     }
 }

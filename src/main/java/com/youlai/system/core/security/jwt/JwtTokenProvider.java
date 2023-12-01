@@ -78,7 +78,8 @@ public class JwtTokenProvider {
 
         // claims 中添加角色信息
         Set<String> roles = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toSet());
         claims.put(JwtClaimConstants.AUTHORITIES, roles);
 
         Date now = new Date();
@@ -107,7 +108,7 @@ public class JwtTokenProvider {
         userDetails.setDataScope(Convert.toInt(claims.get(JwtClaimConstants.DATA_SCOPE))); // 数据权限范围
 
         // 角色集合
-        Set<SimpleGrantedAuthority> authorities = ((Set<String>) claims.get(JwtClaimConstants.AUTHORITIES))
+        Set<SimpleGrantedAuthority> authorities = ((ArrayList<String>) claims.get(JwtClaimConstants.AUTHORITIES))
                 .stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
