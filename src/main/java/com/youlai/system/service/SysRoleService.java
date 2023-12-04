@@ -85,7 +85,7 @@ public interface SysRoleService extends IService<SysRole> {
      * @param menuIds
      * @return
      */
-    boolean updateRoleMenus(Long roleId, List<Long> menuIds);
+    boolean assignMenusToRole(Long roleId, List<Long> menuIds);
 
     /**
      * 获取最大范围的数据权限

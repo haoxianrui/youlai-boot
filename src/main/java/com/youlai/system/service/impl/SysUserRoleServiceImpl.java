@@ -32,7 +32,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
         List<Long> userRoleIds = this.list(new LambdaQueryWrapper<SysUserRole>()
                         .eq(SysUserRole::getUserId, userId))
                 .stream()
-                .map(item -> item.getRoleId())
+                .map(SysUserRole::getRoleId)
                 .collect(Collectors.toList());
 
         // 新增用户角色
@@ -66,5 +66,17 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
         }
         return true;
 
+    }
+
+    /**
+     * 判断角色是否存在绑定的用户
+     *
+     * @param roleId 角色ID
+     * @return true：已分配 false：未分配
+     */
+    @Override
+    public boolean isRoleAssignedToUser(Long roleId) {
+        int count = this.baseMapper.countUsersForRole(roleId);
+        return count > 0;
     }
 }

@@ -10,10 +10,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.common.model.Option;
 import com.youlai.system.converter.RoleConverter;
+import com.youlai.system.core.security.service.PermissionService;
 import com.youlai.system.mapper.SysRoleMapper;
 import com.youlai.system.model.entity.SysRole;
 import com.youlai.system.model.entity.SysRoleMenu;
-import com.youlai.system.model.entity.SysUserRole;
 import com.youlai.system.model.form.RoleForm;
 import com.youlai.system.model.query.RolePageQuery;
 import com.youlai.system.model.vo.RolePageVO;
@@ -39,9 +39,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
 
-    private final SysRoleMenuService sysRoleMenuService;
-    private final SysUserRoleService sysUserRoleService;
+    private final SysRoleMenuService roleMenuService;
+    private final SysUserRoleService userRoleService;
     private final RoleConverter roleConverter;
+    private final PermissionService permissionService;
 
     /**
      * 角色分页列表
@@ -119,7 +120,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * 获取角色表单数据
      *
      * @param roleId 角色ID
-     * @return  {@link RoleForm} – 角色表单数据
+     * @return {@link RoleForm} – 角色表单数据
      */
     @Override
     public RoleForm getRoleForm(Long roleId) {
@@ -136,10 +137,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     public boolean updateRoleStatus(Long roleId, Integer status) {
-        boolean result = this.update(new LambdaUpdateWrapper<SysRole>()
+        return this.update(new LambdaUpdateWrapper<SysRole>()
                 .eq(SysRole::getId, roleId)
                 .set(SysRole::getStatus, status));
-        return result;
     }
 
     /**
@@ -153,15 +153,23 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         Assert.isTrue(StrUtil.isNotBlank(ids), "删除的角色ID不能为空");
         List<Long> roleIds = Arrays.stream(ids.split(","))
                 .map(Long::parseLong)
-                .collect(Collectors.toList());
+                .toList();
 
-        roleIds.forEach(id -> {
-            long count = sysUserRoleService.count(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getRoleId, id));
-            Assert.isTrue(count <= 0, "该角色已分配用户，无法删除");
-            sysRoleMenuService.remove(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, id));
-        });
+        for (Long roleId : roleIds) {
+            SysRole role = this.getById(roleId);
+            Assert.isTrue(role != null, "角色不存在");
 
-        return this.removeByIds(roleIds);
+            // 判断角色是否被用户关联
+            boolean isRoleAssigned = userRoleService.isRoleAssignedToUser(roleId);
+            Assert.isTrue(!isRoleAssigned, "角色【{}】已分配用户，请先解除关联后删除", role.getName());
+
+            boolean deleteResult = this.removeById(roleId);
+            if(deleteResult) {
+                // 删除成功，刷新权限缓存
+                permissionService.refreshPermissionCache(role.getCode());
+            }
+        }
+        return true;
     }
 
     /**
@@ -172,28 +180,29 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     public List<Long> getRoleMenuIds(Long roleId) {
-        return sysRoleMenuService.listMenuIdsByRoleId(roleId);
+        return roleMenuService.listMenuIdsByRoleId(roleId);
     }
 
     /**
      * 修改角色的资源权限
      *
-     * @param roleId 角色ID
+     * @param roleId  角色ID
      * @param menuIds 菜单ID集合
      * @return {@link Boolean}
      */
     @Override
     @Transactional
     @CacheEvict(cacheNames = "system", key = "'routes'")
-    public boolean updateRoleMenus(Long roleId, List<Long> menuIds) {
+    public boolean assignMenusToRole(Long roleId, List<Long> menuIds) {
         // 删除角色菜单
-        sysRoleMenuService.remove(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, roleId));
+        roleMenuService.remove(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, roleId));
         // 新增角色菜单
         if (CollectionUtil.isNotEmpty(menuIds)) {
-            List<SysRoleMenu> roleMenus = menuIds.stream()
+            List<SysRoleMenu> roleMenus = menuIds
+                    .stream()
                     .map(menuId -> new SysRoleMenu(roleId, menuId))
-                    .collect(Collectors.toList());
-            sysRoleMenuService.saveBatch(roleMenus);
+                    .toList();
+            roleMenuService.saveBatch(roleMenus);
         }
         return true;
     }

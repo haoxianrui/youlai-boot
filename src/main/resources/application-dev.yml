@@ -30,6 +30,14 @@ spring:
           max-idle: 8
           # 连接池中的最小空闲连接 默认0
           min-idle: 0
+  cache:
+    # 缓存类型 redis、none(不使用缓存)
+    type: redis
+    # 缓存时间(单位：ms)
+    redis:
+      time-to-live: 3600000
+      # 缓存null值，防止缓存穿透
+      cache-null-values: true
 mybatis-plus:
   global-config:
     db-config:
