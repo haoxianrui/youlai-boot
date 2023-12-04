@@ -21,6 +21,7 @@ import com.youlai.system.model.vo.RouteVO;
 import com.youlai.system.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -128,10 +129,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     /**
-     * 路由列表
+     * 获取路由列表
      */
     @Override
-    @Cacheable(cacheNames = "system", key = "'routes'")
+    @Cacheable(cacheNames = "menu", key = "'routes'")
     public List<RouteVO> listRoutes() {
         List<RouteBO> menuList = this.baseMapper.listRoutes();
         return buildRoutes(SystemConstants.ROOT_NODE_ID, menuList);
@@ -193,9 +194,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     /**
-     * 保存菜单
+     * 新增/修改菜单
      */
     @Override
+    @CacheEvict(cacheNames = "menu", key = "'routes'",beforeInvocation = false)
     public boolean saveMenu(MenuForm menuForm) {
         String path = menuForm.getPath();
         MenuTypeEnum menuType = menuForm.getType();
@@ -280,15 +282,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @return 是否删除成功
      */
     @Override
+    @CacheEvict(cacheNames = "menu", key = "'routes'")
     public boolean deleteMenu(Long id) {
-        if (id != null) {
-            this.remove(new LambdaQueryWrapper<SysMenu>()
+        return   this.remove(new LambdaQueryWrapper<SysMenu>()
                     .eq(SysMenu::getId, id)
                     .or()
                     .apply("CONCAT (',',tree_path,',') LIKE CONCAT('%,',{0},',%')", id));
-        }
-        // 无异常即为删除成功
-        return true;
     }
 
 

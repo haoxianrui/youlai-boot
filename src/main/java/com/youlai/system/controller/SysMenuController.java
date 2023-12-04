@@ -70,7 +70,6 @@ public class SysMenuController {
     @PostMapping
     @PreAuthorize("@ss.hasPerm('sys:menu:add')")
     @PreventDuplicateSubmit
-    @CacheEvict(cacheNames = "system", key = "'routes'")
     public Result addMenu(@RequestBody MenuForm menuForm) {
         boolean result = menuService.saveMenu(menuForm);
         return Result.judge(result);
@@ -79,7 +78,6 @@ public class SysMenuController {
     @Operation(summary = "修改菜单")
     @PutMapping(value = "/{id}")
     @PreAuthorize("@ss.hasPerm('sys:menu:edit')")
-    @CacheEvict(cacheNames = "system", key = "'routes'")
     public Result updateMenu(
             @RequestBody MenuForm menuForm
     ) {
