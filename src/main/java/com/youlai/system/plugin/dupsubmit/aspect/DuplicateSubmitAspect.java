@@ -45,10 +45,10 @@ public class DuplicateSubmitAspect {
      */
     @Pointcut("@annotation(preventDuplicateSubmit)")
     public void preventDuplicateSubmitPointCut(PreventDuplicateSubmit preventDuplicateSubmit) {
-        log.info("定义防重复提交切点");
+
     }
 
-    @Around("preventDuplicateSubmitPointCut(preventDuplicateSubmit)")
+    @Around(value = "preventDuplicateSubmitPointCut(preventDuplicateSubmit)", argNames = "pjp,preventDuplicateSubmit")
     public Object doAround(ProceedingJoinPoint pjp, PreventDuplicateSubmit preventDuplicateSubmit) throws Throwable {
 
         String resubmitLockKey = generateResubmitLockKey();
