@@ -31,6 +31,7 @@ spring:
           # 连接池中的最小空闲连接 默认0
           min-idle: 0
   cache:
+    enabled: false
     # 缓存类型 redis、none(不使用缓存)
     type: redis
     # 缓存时间(单位：ms)

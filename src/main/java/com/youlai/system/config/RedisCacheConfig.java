@@ -1,6 +1,7 @@
 package com.youlai.system.config;
 
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 @EnableCaching
 @EnableConfigurationProperties(CacheProperties.class)
 @Configuration
+@ConditionalOnProperty(name = "spring.cache.enabled") // xxl.job.enabled = true 才会自动装配
 public class RedisCacheConfig {
 
     /**
