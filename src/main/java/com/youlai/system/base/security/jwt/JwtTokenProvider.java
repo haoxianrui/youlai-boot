@@ -1,8 +1,8 @@
-package com.youlai.system.core.security.jwt;
+package com.youlai.system.base.security.jwt;
 
 import cn.hutool.core.convert.Convert;
 import com.youlai.system.common.constant.JwtClaimConstants;
-import com.youlai.system.core.security.model.SysUserDetails;
+import com.youlai.system.base.security.model.SysUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -1,11 +1,11 @@
-package com.youlai.system.core.security.config;
+package com.youlai.system.base.security.config;
 
 import com.youlai.system.common.constant.SecurityConstants;
-import com.youlai.system.core.security.exception.MyAccessDeniedHandler;
-import com.youlai.system.core.security.exception.MyAuthenticationEntryPoint;
-import com.youlai.system.core.security.jwt.JwtTokenFilter;
+import com.youlai.system.base.security.exception.MyAccessDeniedHandler;
+import com.youlai.system.base.security.exception.MyAuthenticationEntryPoint;
+import com.youlai.system.base.security.jwt.JwtTokenFilter;
 import com.youlai.system.filter.VerifyCodeFilter;
-import com.youlai.system.core.security.jwt.JwtTokenProvider;
+import com.youlai.system.base.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

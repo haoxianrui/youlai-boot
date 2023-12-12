@@ -1,7 +1,7 @@
 
 <p align="center">
     <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
-    <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.1.5-green.svg"/>
+    <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.2.0-green.svg"/>
      <a href="https://gitee.com/youlaitech/youlai-boot" target="_blank">
         <img alt="有来技术" src="https://gitee.com/youlaiorg/youlai-boot/badge/star.svg"/>
     </a>     
@@ -45,6 +45,9 @@ youlai-boot
     ├── mysql5                          # MySQL5 脚本
     ├── mysql8                          # MySQL8 脚本
 ├── src                                 # 源码目录
+    ├── base                            # 核心模块
+        ├── mybatisplus                 # Mybatis-Plus 配置和插件
+        ├── security                    # Spring Security 安全配置和扩展
     ├── common                          # 公共模块
     ├── config                          # 自动装配配置
         ├── CorsConfig                  # 跨域共享配置
@@ -53,9 +56,6 @@ youlai-boot
         ├── WebMvcConfig                # WebMvc 配置
     ├── controller                      # 控制层
     ├── converter                       # MapStruct转换器
-    ├── core                            # 核心模块
-        ├── mybatisplus                 # Mybatis-Plus 配置和插件
-        ├── security                    # Spring Security 安全配置和扩展
     ├── filter                          # 过滤器
         ├── RequestLogFilter            # 请求日志过滤器
         ├── VerifyCodeFilter            # 验证码过滤器

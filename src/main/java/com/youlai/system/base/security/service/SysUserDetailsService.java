@@ -1,6 +1,6 @@
-package com.youlai.system.core.security.service;
+package com.youlai.system.base.security.service;
 
-import com.youlai.system.core.security.model.SysUserDetails;
+import com.youlai.system.base.security.model.SysUserDetails;
 import com.youlai.system.model.dto.UserAuthInfo;
 import com.youlai.system.service.SysUserService;
 import lombok.RequiredArgsConstructor;

@@ -1,21 +1,19 @@
 package com.youlai.system.service.impl;
 
 import cn.hutool.captcha.AbstractCaptcha;
-import cn.hutool.captcha.CircleCaptcha;
-import cn.hutool.captcha.ICaptcha;
-import cn.hutool.captcha.generator.MathGenerator;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.constant.CacheConstants;
-import com.youlai.system.core.security.jwt.JwtTokenProvider;
+import com.youlai.system.base.security.jwt.JwtTokenProvider;
 import com.youlai.system.model.dto.CaptchaResult;
 import com.youlai.system.model.dto.LoginResult;
+import com.youlai.system.plugin.captcha.CaptchaGenerator;
+import com.youlai.system.plugin.captcha.CaptchaModel;
 import com.youlai.system.plugin.captcha.CaptchaProperties;
 import com.youlai.system.service.AuthService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,11 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.awt.*;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-
-import static java.awt.Font.SANS_SERIF;
 
 /**
  * 认证服务实现类
@@ -44,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final StringRedisTemplate redisTemplate;
     private final JwtTokenProvider jwtTokenProvider;
-    private final AbstractCaptcha abstractCaptcha;
+    private final CaptchaGenerator captchaGenerator;
     private final CaptchaProperties captchaProperties;
 
     /**
@@ -94,17 +89,16 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public CaptchaResult getCaptcha() {
-        String captchaCode = abstractCaptcha.getCode(); // 验证码
-        String captchaBase64 = abstractCaptcha.getImageBase64Data(); // 验证码图片Base64
+        CaptchaModel captchaModel = captchaGenerator.generate();
 
         // 验证码文本缓存至Redis，用于登录校验
         String captchaKey = IdUtil.fastSimpleUUID();
-        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_CODE_PREFIX + captchaKey, captchaCode,
+        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_CODE_PREFIX + captchaKey, captchaModel.getCode(),
                 captchaProperties.getExpireSeconds(), TimeUnit.SECONDS);
 
         return CaptchaResult.builder()
                 .captchaKey(captchaKey)
-                .captchaBase64(captchaBase64)
+                .captchaBase64(captchaModel.getBase64())
                 .build();
     }
 

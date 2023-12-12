@@ -5,6 +5,7 @@ import cn.hutool.captcha.CircleCaptcha;
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.captcha.generator.MathGenerator;
 import cn.hutool.captcha.generator.RandomGenerator;
+import com.youlai.system.model.dto.CaptchaResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 2023/11/24
  */
 @Configuration
-public class CaptchaConfig {
+public class CaptchaGenerator {
 
     @Autowired
     private CaptchaProperties captchaProperties;
@@ -27,7 +28,7 @@ public class CaptchaConfig {
      * @return CodeGenerator
      */
     @Bean
-    public CodeGenerator captchaGenerator() {
+    public CodeGenerator codeGenerator() {
         String codeType = captchaProperties.getCode().getType();
         int codeLength = captchaProperties.getCode().getLength();
         if ("math".equalsIgnoreCase(codeType)) {
@@ -39,13 +40,24 @@ public class CaptchaConfig {
         }
     }
 
+
+    /**
+     * 生成验证码
+     *
+     * @return CaptchaModel 验证码
+     */
+    public CaptchaModel generate() {
+        AbstractCaptcha captcha = getCaptcha();
+        captcha.createCode();
+        return new CaptchaModel(captcha.getCode(), captcha.getImageBase64Data());
+    }
+
     /**
      * 验证码类
      *
      * @return AbstractCaptcha
      */
-    @Bean
-    public AbstractCaptcha abstractCaptcha() {
+    public AbstractCaptcha getCaptcha() {
         AbstractCaptcha captcha = null;
 
         String type = captchaProperties.getType();
@@ -67,7 +79,7 @@ public class CaptchaConfig {
             throw new IllegalArgumentException("Invalid captcha type: " + type);
         }
 
-        captcha.setGenerator(captchaGenerator());
+        captcha.setGenerator(codeGenerator());
         return captcha;
     }
 

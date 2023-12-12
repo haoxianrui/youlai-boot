@@ -1,7 +1,7 @@
 package com.youlai.system.plugin.websocket;
 
 import cn.hutool.core.util.StrUtil;
-import com.youlai.system.core.security.jwt.JwtTokenProvider;
+import com.youlai.system.base.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
