@@ -45,17 +45,22 @@ youlai-boot
     ├── mysql5                          # MySQL5 脚本
     ├── mysql8                          # MySQL8 脚本
 ├── src                                 # 源码目录
-    ├── base                            # 核心模块
-        ├── mybatisplus                 # Mybatis-Plus 配置和插件
-        ├── security                    # Spring Security 安全配置和扩展
     ├── common                          # 公共模块
     ├── config                          # 自动装配配置
         ├── CorsConfig                  # 跨域共享配置
-        ├── RedisConfig                 # Redis 配置
+        ├── MybatisConfig               # Mybatis 自动装配配置
+        ├── RedisCacheConfig            # Redis 缓存自动装配配置
+        ├── RedisConfig                 # Redis 自动装配配置
+        ├── SecurityConfig              # Spring Security 自动装配配置
         ├── SwaggerConfig               # API 接口文档配置
         ├── WebMvcConfig                # WebMvc 配置
+        ├── WebSocketConfig             # WebSocket 自动装配配置
+        ├── XxlJobConfig                # XXL-JOB 自动装配配置
     ├── controller                      # 控制层
     ├── converter                       # MapStruct转换器
+    ├── core                            # 核心模块
+        ├── security                    # Spring Security 安全配置和扩展
+        ├── mybatis                     # Mybatis-Plus 配置和插件
     ├── filter                          # 过滤器
         ├── RequestLogFilter            # 请求日志过滤器
         ├── VerifyCodeFilter            # 验证码过滤器
@@ -68,6 +73,7 @@ youlai-boot
         ├── vo                          # 视图对象
     ├── mapper                          # 数据库访问层
     ├── plugin                          # 插件(可选)
+        ├── captcha                     # 验证码插件，用于生成验证码
         ├── dupsubmit                   # 防重提交插件，用于防止表单重复提交
         ├── easyexcel                   # EasyExcel 插件，Excel 文件的读写
         ├── rabbitmq                    # RabbitMQ 插件，消息队列交互

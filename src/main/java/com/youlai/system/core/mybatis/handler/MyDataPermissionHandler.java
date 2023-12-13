@@ -1,9 +1,9 @@
-package com.youlai.system.base.mybatisplus.handler;
+package com.youlai.system.core.mybatis.handler;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
-import com.youlai.system.base.mybatisplus.annotation.DataPermission;
+import com.youlai.system.core.mybatis.annotation.DataPermission;
 import com.youlai.system.common.base.IBaseEnum;
 import com.youlai.system.common.enums.DataScopeEnum;
 import com.youlai.system.common.util.SecurityUtils;

@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.common.model.Option;
 import com.youlai.system.converter.RoleConverter;
-import com.youlai.system.base.security.service.PermissionService;
+import com.youlai.system.core.security.service.PermissionService;
 import com.youlai.system.mapper.SysRoleMapper;
 import com.youlai.system.model.entity.SysRole;
 import com.youlai.system.model.entity.SysRoleMenu;
