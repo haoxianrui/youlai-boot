@@ -54,7 +54,7 @@ public class WebsocketController {
         String receiver = username; // 接收人
 
         log.info("发送人:{}; 接收人:{}", sender, receiver);
-        // 发送消息给指定用户 /user/{username}/queue/greeting
+        // 发送消息给指定用户，拼接后路径 /user/{receiver}/queue/greeting
         messagingTemplate.convertAndSendToUser(receiver, "/queue/greeting", new ChatMessage(sender, message));
     }
 

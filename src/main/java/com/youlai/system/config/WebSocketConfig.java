@@ -63,6 +63,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     /**
      * 配置客户端入站通道拦截器
+     * <p>
+     * 添加 ChannelInterceptor 拦截器，用于在消息发送前，从请求头中获取 token 并解析出用户信息(username)，用于点对点发送消息给指定用户
      *
      * @param registration 通道注册器
      */
@@ -72,37 +74,28 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-
-                // 如果 StompHeaderAccessor 为 null，说明不是 STOMP 消息，直接放行
-                if (accessor == null) {
-                    return ChannelInterceptor.super.preSend(message, channel);
-                }
-
                 // 如果是连接请求（CONNECT 命令），从请求头中取出 token 并设置到认证信息中
-                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+                if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
                     // 从连接头中提取授权令牌
                     String bearerToken = accessor.getFirstNativeHeader(HttpHeaders.AUTHORIZATION);
 
                     // 验证令牌格式并提取用户信息
                     if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith("Bearer ")) {
                         try {
-                            // 移除 "Bearer " 前缀
+                            // 移除 "Bearer " 前缀，从令牌中提取用户信息(username), 并设置到认证信息中
                             String tokenWithoutPrefix = bearerToken.substring(7);
                             String username = jwtTokenProvider.getUsername(tokenWithoutPrefix);
 
-                            // 如果用户名有效，设置用户到访问器中
                             if (StrUtil.isNotBlank(username)) {
                                 accessor.setUser(() -> username);
                                 return message;
                             }
                         } catch (Exception e) {
-                            // 异常处理，可能是解析令牌失败
                             log.error("Failed to process authentication token.", e);
                         }
                     }
                 }
-
-                // 如果不是连接命令或授权失败，继续执行默认逻辑
+                // 不是连接请求，直接放行
                 return ChannelInterceptor.super.preSend(message, channel);
             }
         });
