@@ -88,7 +88,6 @@ public class SysMenuController {
     @Operation(summary = "删除菜单")
     @DeleteMapping("/{id}")
     @PreAuthorize("@ss.hasPerm('sys:menu:delete')")
-    @CacheEvict(cacheNames = "system", key = "'routes'")
     public Result deleteMenu(
             @Parameter(description ="菜单ID，多个以英文(,)分割") @PathVariable("id") Long id
     ) {

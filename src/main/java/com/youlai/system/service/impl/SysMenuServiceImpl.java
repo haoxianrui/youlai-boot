@@ -197,7 +197,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * 新增/修改菜单
      */
     @Override
-    @CacheEvict(cacheNames = "menu", key = "'routes'",beforeInvocation = false)
+    @CacheEvict(cacheNames = "menu", key = "'routes'")
     public boolean saveMenu(MenuForm menuForm) {
         String path = menuForm.getPath();
         MenuTypeEnum menuType = menuForm.getType();
@@ -245,6 +245,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @return
      */
     @Override
+    @CacheEvict(cacheNames = "menu", key = "'routes'")
     public boolean updateMenuVisible(Long menuId, Integer visible) {
         return this.update(new LambdaUpdateWrapper<SysMenu>()
                 .eq(SysMenu::getId, menuId)

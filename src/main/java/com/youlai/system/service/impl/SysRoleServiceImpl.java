@@ -191,7 +191,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "system", key = "'routes'")
+    @CacheEvict(cacheNames = "menu", key = "'routes'")
     public boolean assignMenusToRole(Long roleId, List<Long> menuIds) {
         // 删除角色菜单
         roleMenuService.remove(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, roleId));
