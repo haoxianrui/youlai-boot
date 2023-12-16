@@ -1,12 +1,12 @@
-package com.youlai.system.base.mybatisplus.config;
+package com.youlai.system.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.DataPermissionInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.youlai.system.base.mybatisplus.handler.MyDataPermissionHandler;
-import com.youlai.system.base.mybatisplus.handler.MyMetaObjectHandler;
+import com.youlai.system.core.mybatis.handler.MyDataPermissionHandler;
+import com.youlai.system.core.mybatis.handler.MyMetaObjectHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @Configuration
 @EnableTransactionManagement
-public class MybatisPlusConfig {
+public class MybatisConfig {
 
     /**
      * 分页插件和数据权限插件

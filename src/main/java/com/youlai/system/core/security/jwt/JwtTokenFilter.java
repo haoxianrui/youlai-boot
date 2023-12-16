@@ -1,4 +1,4 @@
-package com.youlai.system.base.security.jwt;
+package com.youlai.system.core.security.jwt;
 
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.common.util.ResponseUtils;

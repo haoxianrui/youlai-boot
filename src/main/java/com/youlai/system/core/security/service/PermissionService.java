@@ -1,4 +1,4 @@
-package com.youlai.system.base.security.service;
+package com.youlai.system.core.security.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;

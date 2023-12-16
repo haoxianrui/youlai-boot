@@ -1,4 +1,4 @@
-package com.youlai.system.plugin.xxljob;
+package com.youlai.system.config;
 
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 import lombok.extern.slf4j.Slf4j;

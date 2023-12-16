@@ -1,4 +1,4 @@
-package com.youlai.system.base.security.model;
+package com.youlai.system.core.security.model;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;

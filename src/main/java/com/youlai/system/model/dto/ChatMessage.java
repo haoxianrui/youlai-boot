@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SocketMessage {
+public class ChatMessage {
 
     /**
      * 发送者
