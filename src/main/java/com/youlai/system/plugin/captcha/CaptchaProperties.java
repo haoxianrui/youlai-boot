@@ -35,6 +35,11 @@ public class CaptchaProperties {
     private int interfereCount;
 
     /**
+     * 文本透明度
+     */
+    private Float textAlpha;
+
+    /**
      * 验证码过期时间，单位：秒
      */
     private Long expireSeconds;
