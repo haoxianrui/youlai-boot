@@ -136,7 +136,7 @@ captcha:
   # 验证码高度
   height: 40
   # 验证码干扰元素个数
-  interfere-count: 4
+  interfere-count: 2
   # 文本透明度(0.0-1.0)
   text-alpha: 0.8
   # 验证码字符配置
@@ -152,7 +152,7 @@ captcha:
     # 字体样式 0-普通|1-粗体|2-斜体
     weight: 1
     # 字体大小
-    size: 30
+    size: 20
   # 验证码有效期(秒)
   expire-seconds: 120
 
