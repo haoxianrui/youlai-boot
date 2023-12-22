@@ -1,6 +1,5 @@
 package com.youlai.system.plugin.captcha;
 
-import cn.hutool.captcha.*;
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.captcha.generator.MathGenerator;
 import cn.hutool.captcha.generator.RandomGenerator;

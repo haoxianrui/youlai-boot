@@ -137,6 +137,8 @@ public class SysDictController {
             @Parameter(description ="字典类型ID，多个以英文逗号(,)分割") @PathVariable String ids
     ) {
         boolean result = dictTypeService.deleteDictTypes(ids);
+
+
         return Result.judge(result);
     }
 
