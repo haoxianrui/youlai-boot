@@ -59,8 +59,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     private final RedisTemplate redisTemplate;
 
-    private final SysRoleMenuService roleMenuService;
-
     /**
      * 获取用户分页列表
      *
@@ -172,10 +170,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public boolean deleteUsers(String idsStr) {
         Assert.isTrue(StrUtil.isNotBlank(idsStr), "删除的用户数据为空");
         // 逻辑删除
-        List<Long> ids = Arrays.asList(idsStr.split(",")).stream()
-                .map(idStr -> Long.parseLong(idStr)).collect(Collectors.toList());
-        boolean result = this.removeByIds(ids);
-        return result;
+        List<Long> ids = Arrays.stream(idsStr.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        return this.removeByIds(ids);
 
     }
 
