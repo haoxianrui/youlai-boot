@@ -2,6 +2,7 @@ package com.youlai.system.core.security.exception;
 
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.common.util.ResponseUtils;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -26,8 +27,14 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
             // 资源不存在
             ResponseUtils.writeErrMsg(response, ResultCode.RESOURCE_NOT_FOUND);
         } else {
-            // 未认证或者token过期
-            ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
+
+            if(authException instanceof BadCredentialsException){
+                // 用户名或密码错误
+                ResponseUtils.writeErrMsg(response, ResultCode.USERNAME_OR_PASSWORD_ERROR);
+            }else {
+                // 未认证或者token过期
+                ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
+            }
         }
     }
 }
