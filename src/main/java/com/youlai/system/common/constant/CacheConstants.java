@@ -21,7 +21,7 @@ public interface CacheConstants {
     /**
      * 黑名单Token缓存前缀
      */
-    String BLACKLIST_TOKEN_PREFIX = "blacklist_token:";
+    String BLACKLIST_TOKEN_PREFIX = "token:blacklist:";
 
 
 }
