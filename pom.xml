@@ -6,13 +6,13 @@
 
     <groupId>com.youlai</groupId>
     <artifactId>youlai-boot</artifactId>
-    <version>2.5.2</version>
+    <version>2.5.3</version>
     <description>基于 Java 17 + SpringBoot 3 构建的权限管理系统。</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version> <!-- lookup parent from repository -->
+        <version>3.2.1</version> <!-- lookup parent from repository -->
         <relativePath/>
     </parent>
 
@@ -24,7 +24,7 @@
 
         <mysql.version>8.0.28</mysql.version>
         <druid.version>1.2.16</druid.version>
-        <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
 
         <knife4j.version>4.3.0</knife4j.version>
 
@@ -121,12 +121,6 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>mybatis-spring</artifactId>
-                    <groupId>org.mybatis</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
