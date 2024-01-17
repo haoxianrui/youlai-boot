@@ -4,25 +4,24 @@ package com.youlai.system.common.enums;
  * EasyCaptcha 验证码类型枚举
  *
  * @author haoxr
- * @since 2023/03/24
+ * @since 2.5.1
  */
 public enum CaptchaTypeEnum {
 
     /**
-     * 算数
+     * 圆圈干扰验证码
      */
-    ARITHMETIC,
+    CIRCLE,
     /**
-     * 中文
-     */
-    CHINESE,
-    /**
-     * 中文闪图
-     */
-    CHINESE_GIF,
-    /**
-     * 闪图
+     * GIF验证码
      */
     GIF,
-    SPEC
+    /**
+     * 干扰线验证码
+     */
+    LINE,
+    /**
+     * 扭曲干扰验证码
+     */
+    SHEAR
 }

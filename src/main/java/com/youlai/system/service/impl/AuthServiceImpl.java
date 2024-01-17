@@ -6,6 +6,7 @@ import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.constant.CacheConstants;
+import com.youlai.system.common.enums.CaptchaTypeEnum;
 import com.youlai.system.core.security.jwt.JwtTokenProvider;
 import com.youlai.system.model.dto.CaptchaResult;
 import com.youlai.system.model.dto.LoginResult;
@@ -14,6 +15,7 @@ import com.youlai.system.service.AuthService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,6 +37,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
@@ -73,6 +76,7 @@ public class AuthServiceImpl implements AuthService {
         if (StrUtil.isNotBlank(token)) {
             Claims claims = jwtTokenProvider.getTokenClaims(token);
             String jti = claims.get("jti", String.class);
+
             Date expiration = claims.getExpiration();
             if (expiration != null) {
                 long ttl = expiration.getTime() - System.currentTimeMillis();
@@ -92,23 +96,23 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public CaptchaResult getCaptcha() {
 
-        String type = captchaProperties.getType();
+        String captchaType = captchaProperties.getType();
         int width = captchaProperties.getWidth();
         int height = captchaProperties.getHeight();
         int interfereCount = captchaProperties.getInterfereCount();
         int codeLength = captchaProperties.getCode().getLength();
 
         AbstractCaptcha captcha;
-        if ("circle".equalsIgnoreCase(type)) {
+        if (CaptchaTypeEnum.CIRCLE.name().equalsIgnoreCase(captchaType)) {
             captcha = CaptchaUtil.createCircleCaptcha(width, height, codeLength, interfereCount);
-        } else if ("gif".equalsIgnoreCase(type)) {
+        } else if (CaptchaTypeEnum.GIF.name().equalsIgnoreCase(captchaType)) {
             captcha = CaptchaUtil.createGifCaptcha(width, height, codeLength);
-        } else if ("line".equalsIgnoreCase(type)) {
+        } else if (CaptchaTypeEnum.LINE.name().equalsIgnoreCase(captchaType)) {
             captcha = CaptchaUtil.createLineCaptcha(width, height, codeLength, interfereCount);
-        } else if ("shear".equalsIgnoreCase(type)) {
+        } else if (CaptchaTypeEnum.SHEAR.name().equalsIgnoreCase(captchaType)) {
             captcha = CaptchaUtil.createShearCaptcha(width, height, codeLength, interfereCount);
         } else {
-            throw new IllegalArgumentException("Invalid captcha type: " + type);
+            throw new IllegalArgumentException("Invalid captcha type: " + captchaType);
         }
         captcha.setGenerator(codeGenerator);
         captcha.setTextAlpha(captchaProperties.getTextAlpha());
