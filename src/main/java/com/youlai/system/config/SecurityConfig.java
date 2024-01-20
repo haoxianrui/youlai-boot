@@ -8,6 +8,7 @@ import com.youlai.system.filter.VerifyCodeFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -35,6 +36,7 @@ public class SecurityConfig {
 
     private final MyAuthenticationEntryPoint authenticationEntryPoint;
     private final MyAccessDeniedHandler accessDeniedHandler;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -56,7 +58,7 @@ public class SecurityConfig {
         // 验证码校验过滤器
         http.addFilterBefore(new VerifyCodeFilter(), UsernamePasswordAuthenticationFilter.class);
         // JWT 校验过滤器
-        http.addFilterBefore(new JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtTokenFilter(redisTemplate), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -31,6 +31,12 @@ import java.util.Map;
  */
 public class JwtTokenFilter extends OncePerRequestFilter {
 
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    public JwtTokenFilter(RedisTemplate<String, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
     /**
      * 从请求中获取 JWT Token，校验 JWT Token 是否合法
      * <p>
@@ -43,11 +49,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         try {
             if (StrUtil.isNotBlank(token)) {
                 Map<String, Object> payload = JwtUtils.parseToken(token);
-                String jti = Convert.toStr(payload.get(JWTPayload.JWT_ID));
-                RedisTemplate redisTemplate = SpringUtil.getBean("redisTemplate", RedisTemplate.class);
-                Boolean isBlack = redisTemplate.hasKey(CacheConstants.BLACKLIST_TOKEN_PREFIX + jti);
 
-                if (isBlack) {
+                String jti = Convert.toStr(payload.get(JWTPayload.JWT_ID));
+                Boolean isTokenBlacklisted  = redisTemplate.hasKey(CacheConstants.BLACKLIST_TOKEN_PREFIX + jti);
+                if (isTokenBlacklisted ) {
                     ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
                     return;
                 }
