@@ -80,6 +80,10 @@ youlai-boot
         ├── websocket                   # WebSocket 插件，实时双向通信
         ├── xxljob                      # XXL-JOB 插件，分布式任务调度和执行
     ├── service                         # 业务逻辑层
+    ├── util                            # 工具类
+         ├── JwtUtils                   # JWT 工具类
+         ├── SecurityUtils              # Spring Security 工具类
+    
 └── end       
 ```
 

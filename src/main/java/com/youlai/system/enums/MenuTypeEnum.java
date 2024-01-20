@@ -1,4 +1,4 @@
-package com.youlai.system.common.enums;
+package com.youlai.system.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.youlai.system.common.base.IBaseEnum;

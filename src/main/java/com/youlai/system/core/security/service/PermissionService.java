@@ -3,7 +3,7 @@ package com.youlai.system.core.security.service;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.constant.CacheConstants;
-import com.youlai.system.common.util.SecurityUtils;
+import com.youlai.system.util.SecurityUtils;
 import com.youlai.system.model.bo.RolePermsBO;
 import com.youlai.system.service.SysRoleMenuService;
 import jakarta.annotation.PostConstruct;

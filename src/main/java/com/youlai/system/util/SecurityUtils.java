@@ -1,4 +1,4 @@
-package com.youlai.system.common.util;
+package com.youlai.system.util;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.convert.Convert;
@@ -49,8 +49,7 @@ public class SecurityUtils {
      * @return
      */
     public static Long getDeptId() {
-        Long userId = Convert.toLong(getUser().getDeptId());
-        return userId;
+        return Convert.toLong(getUser().getDeptId());
     }
 
     /**
@@ -59,8 +58,7 @@ public class SecurityUtils {
      * @return DataScope
      */
     public static Integer getDataScope() {
-        Integer dataScope = Convert.toInt(getUser().getDataScope());
-        return dataScope;
+        return Convert.toInt(getUser().getDataScope());
     }
 
 
@@ -74,10 +72,9 @@ public class SecurityUtils {
         if (authentication != null) {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             if (CollectionUtil.isNotEmpty(authorities)) {
-                Set<String> roles = authorities.stream().filter(item -> item.getAuthority().startsWith("ROLE_"))
+                return authorities.stream().filter(item -> item.getAuthority().startsWith("ROLE_"))
                         .map(item -> StrUtil.removePrefix(item.getAuthority(), "ROLE_"))
                         .collect(Collectors.toSet());
-                return roles;
             }
         }
         return Collections.EMPTY_SET;
@@ -93,10 +90,10 @@ public class SecurityUtils {
         if (authentication != null) {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             if (CollectionUtil.isNotEmpty(authorities)) {
-                Set<String> perms = authorities.stream().filter(item -> !item.getAuthority().startsWith("ROLE_"))
-                        .map(item -> item.getAuthority())
+                return authorities.stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .filter(authority -> !authority.startsWith("ROLE_"))
                         .collect(Collectors.toSet());
-                return perms;
             }
         }
         return Collections.EMPTY_SET;
@@ -111,11 +108,7 @@ public class SecurityUtils {
      */
     public static boolean isRoot() {
         Set<String> roles = getRoles();
-
-        if (roles.contains(SystemConstants.ROOT_ROLE_CODE)) {
-            return true;
-        }
-        return false;
+        return roles.contains(SystemConstants.ROOT_ROLE_CODE);
     }
 
 
@@ -134,8 +127,7 @@ public class SecurityUtils {
 
         Set<String> perms = getPerms();
 
-        boolean hasPerm = perms.stream().anyMatch(item -> PatternMatchUtils.simpleMatch(perm, item));
-        return hasPerm;
+        return perms.stream().anyMatch(item -> PatternMatchUtils.simpleMatch(perm, item));
     }
 
 }

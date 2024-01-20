@@ -1,4 +1,4 @@
-package com.youlai.system.common.util;
+package com.youlai.system.util;
 
 import com.alibaba.excel.EasyExcel;
 import com.youlai.system.plugin.easyexcel.MyAnalysisEventListener;

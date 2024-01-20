@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import com.youlai.system.common.base.BaseEntity;
-import com.youlai.system.common.enums.MenuTypeEnum;
+import com.youlai.system.enums.MenuTypeEnum;
 import lombok.Data;
 
 /**

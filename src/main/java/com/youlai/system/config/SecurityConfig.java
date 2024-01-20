@@ -3,9 +3,8 @@ package com.youlai.system.config;
 import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.core.security.exception.MyAccessDeniedHandler;
 import com.youlai.system.core.security.exception.MyAuthenticationEntryPoint;
-import com.youlai.system.core.security.jwt.JwtTokenFilter;
+import com.youlai.system.filter.JwtTokenFilter;
 import com.youlai.system.filter.VerifyCodeFilter;
-import com.youlai.system.core.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +35,6 @@ public class SecurityConfig {
 
     private final MyAuthenticationEntryPoint authenticationEntryPoint;
     private final MyAccessDeniedHandler accessDeniedHandler;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -58,7 +56,7 @@ public class SecurityConfig {
         // 验证码校验过滤器
         http.addFilterBefore(new VerifyCodeFilter(), UsernamePasswordAuthenticationFilter.class);
         // JWT 校验过滤器
-        http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
