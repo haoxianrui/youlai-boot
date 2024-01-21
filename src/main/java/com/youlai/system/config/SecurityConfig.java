@@ -1,8 +1,8 @@
 package com.youlai.system.config;
 
 import com.youlai.system.common.constant.SecurityConstants;
-import com.youlai.system.core.security.exception.MyAccessDeniedHandler;
-import com.youlai.system.core.security.exception.MyAuthenticationEntryPoint;
+import com.youlai.system.security.exception.MyAccessDeniedHandler;
+import com.youlai.system.security.exception.MyAuthenticationEntryPoint;
 import com.youlai.system.filter.JwtTokenFilter;
 import com.youlai.system.filter.VerifyCodeFilter;
 import lombok.RequiredArgsConstructor;

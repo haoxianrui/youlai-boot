@@ -1,4 +1,4 @@
-package com.youlai.system.util;
+package com.youlai.system.security.util;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
@@ -9,7 +9,7 @@ import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
 import com.youlai.system.common.constant.JwtClaimConstants;
-import com.youlai.system.core.security.model.SysUserDetails;
+import com.youlai.system.security.model.SysUserDetails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -126,27 +126,4 @@ public class JwtUtils {
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
-
-
-    /**
-     * 验证 JWT Token
-     *
-     * @param token JWT Token
-     * @return 是否有效
-     */
-    public static boolean verifyToken(String token) {
-
-        if (StrUtil.isBlank(token)) {
-            return false;
-        }
-
-        if (token.startsWith("Bearer ")) {
-            token = token.substring(7);
-        }
-
-        JWT jwt = JWTUtil.parseToken(token);
-        return jwt.setKey(JwtUtils.key).validate(0);
-
-    }
-
 }

@@ -28,7 +28,7 @@
 
 基于 JDK 17、Spring Boot 3、Spring Security 6、JWT、Redis、Mybatis-Plus、Knife4j、Vue 3、Element-Plus 构建的前后端分离单体权限管理系统。
 
-- **🚀 开发框架**: 使用 Spring Boot 3.0 和 Vue 3，以及 Element-Plus 等主流技术栈，实时更新。
+- **🚀 开发框架**: 使用 Spring Boot 3 和 Vue 3，以及 Element-Plus 等主流技术栈，实时更新。
 
 - **🔐 安全认证**: 结合 Spring Security 和 JWT 提供安全、无状态、分布式友好的身份验证和授权机制。
 
@@ -57,7 +57,7 @@ youlai-boot
         ├── WebSocketConfig             # WebSocket 自动装配配置
         ├── XxlJobConfig                # XXL-JOB 自动装配配置
     ├── controller                      # 控制层
-    ├── converter                       # MapStruct转换器
+    ├── converter                       # MapStruct 转换器
     ├── core                            # 核心模块
         ├── security                    # Spring Security 安全配置和扩展
         ├── mybatis                     # Mybatis-Plus 配置和插件
@@ -75,14 +75,15 @@ youlai-boot
     ├── plugin                          # 插件(可选)
         ├── captcha                     # 验证码插件，用于生成验证码
         ├── dupsubmit                   # 防重提交插件，用于防止表单重复提交
+        ├── mybatis                     # Mybatis 插件，数据权限、字段填充
         ├── easyexcel                   # EasyExcel 插件，Excel 文件的读写
-        ├── rabbitmq                    # RabbitMQ 插件，消息队列交互
-        ├── websocket                   # WebSocket 插件，实时双向通信
         ├── xxljob                      # XXL-JOB 插件，分布式任务调度和执行
+    ├── security                        # Spring Security 安全配置和扩展
+        ├── util                        # 工具类
+            ├── JwtUtils                # JWT 工具类，用于生成和解析 JWT
+            ├── SecurityUtils           # Spring Security 工具类，用于获取当前登录用户
     ├── service                         # 业务逻辑层
-    ├── util                            # 工具类
-         ├── JwtUtils                   # JWT 工具类
-         ├── SecurityUtils              # Spring Security 工具类
+
     
 └── end       
 ```

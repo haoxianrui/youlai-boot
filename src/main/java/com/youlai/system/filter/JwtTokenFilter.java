@@ -2,19 +2,17 @@ package com.youlai.system.filter;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.jwt.JWTPayload;
 import com.youlai.system.common.constant.CacheConstants;
 import com.youlai.system.common.result.ResultCode;
-import com.youlai.system.util.JwtUtils;
-import com.youlai.system.util.ResponseUtils;
+import com.youlai.system.security.util.JwtUtils;
+import com.youlai.system.common.util.ResponseUtils;
 import com.youlai.system.common.exception.BusinessException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,7 +50,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
                 String jti = Convert.toStr(payload.get(JWTPayload.JWT_ID));
                 Boolean isTokenBlacklisted  = redisTemplate.hasKey(CacheConstants.BLACKLIST_TOKEN_PREFIX + jti);
-                if (isTokenBlacklisted ) {
+                if (Boolean.TRUE.equals(isTokenBlacklisted)) {
                     ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
                     return;
                 }

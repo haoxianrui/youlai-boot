@@ -1,5 +1,5 @@
 
-package com.youlai.system.util;
+package com.youlai.system.common.util;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;

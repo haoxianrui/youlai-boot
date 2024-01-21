@@ -1,7 +1,7 @@
 package com.youlai.system.model.form;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.youlai.system.enums.MenuTypeEnum;
+import com.youlai.system.common.enums.MenuTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
