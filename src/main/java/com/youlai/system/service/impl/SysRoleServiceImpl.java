@@ -105,7 +105,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         long count = this.count(new LambdaQueryWrapper<SysRole>()
                 .ne(roleId != null, SysRole::getId, roleId)
                 .and(wrapper ->
-                        wrapper.eq(SysRole::getCode, roleCode).or().eq(SysRole::getName, roleCode)
+                        wrapper.eq(SysRole::getCode, roleCode).or().eq(SysRole::getName, roleForm.getName())
                 ));
         Assert.isTrue(count == 0, "角色名称或角色编码重复，请检查！");
 
