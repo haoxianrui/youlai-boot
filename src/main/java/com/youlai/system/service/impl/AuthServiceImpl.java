@@ -3,20 +3,22 @@ package com.youlai.system.service.impl;
 import cn.hutool.captcha.AbstractCaptcha;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.generator.CodeGenerator;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.jwt.JWTPayload;
 import com.youlai.system.common.constant.CacheConstants;
 import com.youlai.system.common.enums.CaptchaTypeEnum;
-import com.youlai.system.core.security.jwt.JwtTokenProvider;
 import com.youlai.system.model.dto.CaptchaResult;
 import com.youlai.system.model.dto.LoginResult;
 import com.youlai.system.plugin.captcha.CaptchaProperties;
 import com.youlai.system.service.AuthService;
-import io.jsonwebtoken.Claims;
+import com.youlai.system.security.util.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,7 +28,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.awt.*;
-import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -42,7 +44,6 @@ public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final StringRedisTemplate redisTemplate;
-    private final JwtTokenProvider jwtTokenProvider;
     private final CodeGenerator codeGenerator;
     private final Font captchaFont;
     private final CaptchaProperties captchaProperties;
@@ -59,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username.toLowerCase().trim(), password);
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        String accessToken = jwtTokenProvider.createToken(authentication);
+        String accessToken = JwtUtils.generateToken(authentication);
         return LoginResult.builder()
                 .tokenType("Bearer")
                 .accessToken(accessToken)
@@ -72,15 +73,15 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void logout() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String token = jwtTokenProvider.resolveToken(request);
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StrUtil.isNotBlank(token)) {
-            Claims claims = jwtTokenProvider.getTokenClaims(token);
-            String jti = claims.get("jti", String.class);
 
-            Date expiration = claims.getExpiration();
+            Map<String, Object> claims = JwtUtils.parseToken(token);
+            String jti = Convert.toStr(claims.get(JWTPayload.JWT_ID));
+            Long expiration = Convert.toLong(claims.get(JWTPayload.EXPIRES_AT));
             if (expiration != null) {
-                long ttl = expiration.getTime() - System.currentTimeMillis();
-                redisTemplate.opsForValue().set(CacheConstants.BLACKLIST_TOKEN_PREFIX + jti, null, ttl, TimeUnit.MILLISECONDS);
+                long ttl = expiration - System.currentTimeMillis() / 1000;
+                redisTemplate.opsForValue().set(CacheConstants.BLACKLIST_TOKEN_PREFIX + jti, null, ttl, TimeUnit.SECONDS);
             } else {
                 redisTemplate.opsForValue().set(CacheConstants.BLACKLIST_TOKEN_PREFIX + jti, null);
             }
@@ -123,7 +124,7 @@ public class AuthServiceImpl implements AuthService {
 
         // 验证码文本缓存至Redis，用于登录校验
         String captchaKey = IdUtil.fastSimpleUUID();
-        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_CODE_PREFIX + captchaKey,captchaCode,
+        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_CODE_PREFIX + captchaKey, captchaCode,
                 captchaProperties.getExpireSeconds(), TimeUnit.SECONDS);
 
         return CaptchaResult.builder()

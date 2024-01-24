@@ -1,8 +1,7 @@
 package com.youlai.system.config;
 
 import cn.hutool.core.util.StrUtil;
-import com.youlai.system.core.security.jwt.JwtTokenProvider;
-import lombok.RequiredArgsConstructor;
+import com.youlai.system.security.util.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -26,11 +25,8 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  */
 @Configuration
 @EnableWebSocketMessageBroker // 启用WebSocket消息代理功能和配置STOMP协议，实现实时双向通信和消息传递
-@RequiredArgsConstructor
 @Slf4j
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-
-    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * 注册一个端点，客户端通过这个端点进行连接
@@ -83,8 +79,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith("Bearer ")) {
                         try {
                             // 移除 "Bearer " 前缀，从令牌中提取用户信息(username), 并设置到认证信息中
-                            String tokenWithoutPrefix = bearerToken.substring(7);
-                            String username = jwtTokenProvider.getUsername(tokenWithoutPrefix);
+                            String username = JwtUtils.parseToken(bearerToken).get("name").toString();
 
                             if (StrUtil.isNotBlank(username)) {
                                 accessor.setUser(() -> username);

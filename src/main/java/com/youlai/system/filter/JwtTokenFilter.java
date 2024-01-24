@@ -1,17 +1,25 @@
-package com.youlai.system.core.security.jwt;
+package com.youlai.system.filter;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.jwt.JWTPayload;
+import com.youlai.system.common.constant.CacheConstants;
 import com.youlai.system.common.result.ResultCode;
+import com.youlai.system.security.util.JwtUtils;
 import com.youlai.system.common.util.ResponseUtils;
 import com.youlai.system.common.exception.BusinessException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * JWT token 过滤器
@@ -21,13 +29,10 @@ import java.io.IOException;
  */
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-    /**
-     * JWT Token 工具类
-     */
-    private JwtTokenProvider jwtTokenProvider;
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    public JwtTokenFilter(RedisTemplate<String, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -38,11 +43,20 @@ public class JwtTokenFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = jwtTokenProvider.resolveToken(request);
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         try {
-            if (token != null && jwtTokenProvider.validateToken(token)) {
-                Authentication auth = jwtTokenProvider.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(auth);
+            if (StrUtil.isNotBlank(token)) {
+                Map<String, Object> payload = JwtUtils.parseToken(token);
+
+                String jti = Convert.toStr(payload.get(JWTPayload.JWT_ID));
+                Boolean isTokenBlacklisted  = redisTemplate.hasKey(CacheConstants.BLACKLIST_TOKEN_PREFIX + jti);
+                if (Boolean.TRUE.equals(isTokenBlacklisted)) {
+                    ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
+                    return;
+                }
+
+                Authentication authentication = JwtUtils.getAuthentication(payload);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (BusinessException ex) {
             //this is very important, since it guarantees the user is not authenticated at all

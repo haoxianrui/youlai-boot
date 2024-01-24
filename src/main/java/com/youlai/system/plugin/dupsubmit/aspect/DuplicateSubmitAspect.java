@@ -1,10 +1,11 @@
 package com.youlai.system.plugin.dupsubmit.aspect;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.plugin.dupsubmit.annotation.PreventDuplicateSubmit;
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.common.exception.BusinessException;
-import com.youlai.system.core.security.jwt.JwtTokenProvider;
+import com.youlai.system.security.util.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -33,11 +35,6 @@ import java.util.concurrent.TimeUnit;
 public class DuplicateSubmitAspect {
 
     private final RedissonClient redissonClient;
-
-    /**
-     * JWT token 工具类
-     */
-    private final JwtTokenProvider jwtTokenProvider;
     private static final String RESUBMIT_LOCK_PREFIX = "LOCK:RESUBMIT:";
 
     /**
@@ -71,9 +68,9 @@ public class DuplicateSubmitAspect {
         String resubmitLockKey = null;
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
-        String token = jwtTokenProvider.resolveToken(request);
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StrUtil.isNotBlank(token)) {
-            String jti = (String) jwtTokenProvider.getTokenClaims(token).get("jti");
+            String jti = Convert.toStr(JwtUtils.parseToken(token).get("jti"), null);
             resubmitLockKey = RESUBMIT_LOCK_PREFIX + jti + ":" + request.getMethod() + "-" + request.getRequestURI();
         }
         return resubmitLockKey;

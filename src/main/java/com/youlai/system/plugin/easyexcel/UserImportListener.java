@@ -107,13 +107,13 @@ public class UserImportListener extends MyAnalysisEventListener<UserImportVO> {
             }
         }
 
-        if (validationMsg.length() == 0) {
+        if (validationMsg.isEmpty()) {
             // 校验通过，持久化至数据库
             SysUser entity = userConverter.importVo2Entity(userImportVO);
             entity.setDeptId(deptId);   // 部门
             entity.setPassword(passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));   // 默认密码
             // 性别翻译
-            String genderLabel = userImportVO.getGender();
+            String genderLabel = userImportVO.getGenderLabel();
             if (StrUtil.isNotBlank(genderLabel)) {
                 Integer genderValue = (Integer) IBaseEnum.getValueByLabel(genderLabel, GenderEnum.class);
                 entity.setGender(genderValue);
@@ -129,7 +129,7 @@ public class UserImportListener extends MyAnalysisEventListener<UserImportVO> {
                                         .eq(SysRole::getStatus, StatusEnum.ENABLE.getValue())
                                         .select(SysRole::getId)
                         ).stream()
-                        .map(role -> role.getId())
+                        .map(SysRole::getId)
                         .collect(Collectors.toList());
             }
 
@@ -146,7 +146,7 @@ public class UserImportListener extends MyAnalysisEventListener<UserImportVO> {
                 }
             } else {
                 invalidCount++;
-                msg.append("第" + (validCount + invalidCount) + "行数据保存失败；<br/>");
+                msg.append("第").append(validCount + invalidCount).append("行数据保存失败；<br/>");
             }
         } else {
             invalidCount++;

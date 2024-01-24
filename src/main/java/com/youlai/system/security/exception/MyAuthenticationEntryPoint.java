@@ -1,4 +1,4 @@
-package com.youlai.system.core.security.exception;
+package com.youlai.system.security.exception;
 
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.common.util.ResponseUtils;

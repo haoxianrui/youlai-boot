@@ -1,4 +1,4 @@
-package com.youlai.system.core.mybatis.annotation;
+package com.youlai.system.plugin.mybatis.annotation;
 
 import java.lang.annotation.*;
 
