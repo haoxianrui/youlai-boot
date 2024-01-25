@@ -1,10 +1,11 @@
 package com.youlai.system.config;
 
-import com.youlai.system.common.constant.SecurityConstants;
+import cn.hutool.captcha.generator.CodeGenerator;
+import com.youlai.system.security.constant.SecurityConstants;
 import com.youlai.system.security.exception.MyAccessDeniedHandler;
 import com.youlai.system.security.exception.MyAuthenticationEntryPoint;
-import com.youlai.system.filter.JwtTokenFilter;
-import com.youlai.system.filter.VerifyCodeFilter;
+import com.youlai.system.filter.JwtValidationFilter;
+import com.youlai.system.filter.CaptchaValidationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +38,8 @@ public class SecurityConfig {
     private final MyAuthenticationEntryPoint authenticationEntryPoint;
     private final MyAccessDeniedHandler accessDeniedHandler;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final CodeGenerator codeGenerator;
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -56,9 +59,9 @@ public class SecurityConfig {
         ;
 
         // 验证码校验过滤器
-        http.addFilterBefore(new VerifyCodeFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CaptchaValidationFilter(redisTemplate,codeGenerator), UsernamePasswordAuthenticationFilter.class);
         // JWT 校验过滤器
-        http.addFilterBefore(new JwtTokenFilter(redisTemplate), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtValidationFilter(redisTemplate), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

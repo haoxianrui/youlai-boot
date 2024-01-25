@@ -1,4 +1,4 @@
-package com.youlai.system.common.constant;
+package com.youlai.system.security.constant;
 
 /**
  * Security 常量

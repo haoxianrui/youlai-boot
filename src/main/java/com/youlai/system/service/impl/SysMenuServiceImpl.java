@@ -18,6 +18,7 @@ import com.youlai.system.model.form.MenuForm;
 import com.youlai.system.model.query.MenuQuery;
 import com.youlai.system.model.vo.MenuVO;
 import com.youlai.system.model.vo.RouteVO;
+import com.youlai.system.security.service.PermissionService;
 import com.youlai.system.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +42,8 @@ import java.util.stream.Collectors;
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
 
     private final MenuConverter menuConverter;
+
+    private final PermissionService permissionService;
 
 
     /**
@@ -199,18 +202,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     @CacheEvict(cacheNames = "menu", key = "'routes'")
     public boolean saveMenu(MenuForm menuForm) {
-        String path = menuForm.getPath();
+
         MenuTypeEnum menuType = menuForm.getType();
 
-        // 如果是目录
-        if (menuType == MenuTypeEnum.CATALOG) {
+        if (menuType == MenuTypeEnum.CATALOG) {  // 如果是外链
+            String path = menuForm.getPath();
             if (menuForm.getParentId() == 0 && !path.startsWith("/")) {
                 menuForm.setPath("/" + path); // 一级目录需以 / 开头
             }
             menuForm.setComponent("Layout");
-        }
-        // 如果是外链
-        else if (menuType == MenuTypeEnum.EXTLINK) {
+        } else if (menuType == MenuTypeEnum.EXTLINK) {   // 如果是目录
+
             menuForm.setComponent(null);
         }
 
@@ -218,7 +220,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         String treePath = generateMenuTreePath(menuForm.getParentId());
         entity.setTreePath(treePath);
 
-        return this.saveOrUpdate(entity);
+        boolean result = this.saveOrUpdate(entity);
+        if (result) {
+            // 编辑刷新角色权限缓存
+            if (menuForm.getId() != null) {
+                permissionService.refreshRolePermsCache();
+            }
+        }
+        return result;
     }
 
     /**
@@ -285,10 +294,18 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     @CacheEvict(cacheNames = "menu", key = "'routes'")
     public boolean deleteMenu(Long id) {
-        return   this.remove(new LambdaQueryWrapper<SysMenu>()
-                    .eq(SysMenu::getId, id)
-                    .or()
-                    .apply("CONCAT (',',tree_path,',') LIKE CONCAT('%,',{0},',%')", id));
+        boolean result = this.remove(new LambdaQueryWrapper<SysMenu>()
+                .eq(SysMenu::getId, id)
+                .or()
+                .apply("CONCAT (',',tree_path,',') LIKE CONCAT('%,',{0},',%')", id));
+
+
+        // 刷新角色权限缓存
+        if (result) {
+            permissionService.refreshRolePermsCache();
+        }
+        return result;
+
     }
 
 

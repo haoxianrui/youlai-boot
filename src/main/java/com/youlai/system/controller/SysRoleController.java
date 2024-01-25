@@ -10,7 +10,6 @@ import com.youlai.system.model.query.RolePageQuery;
 import com.youlai.system.model.vo.RolePageVO;
 import com.youlai.system.service.SysRoleService;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -76,7 +75,7 @@ public class SysRoleController {
     @DeleteMapping("/{ids}")
     @PreAuthorize("@ss.hasPerm('sys:role:delete')")
     public Result deleteRoles(
-            @Parameter(description = "删除角色，多个以英文逗号(,)分割") @PathVariable String ids
+            @Parameter(description = "删除角色，多个以英文逗号(,)拼接") @PathVariable String ids
     ) {
         boolean result = roleService.deleteRoles(ids);
         return Result.judge(result);

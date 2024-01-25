@@ -8,7 +8,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
-import com.youlai.system.common.constant.JwtClaimConstants;
+import com.youlai.system.security.constant.JwtClaimConstants;
 import com.youlai.system.security.model.SysUserDetails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,9 +29,15 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtils {
 
+    /**
+     * JWT 加解密使用的密钥
+     */
     private static byte[] key;
 
 
+    /**
+     * JWT Token 的有效时间(单位:秒)
+     */
     private static int ttl;
 
 
@@ -56,7 +62,6 @@ public class JwtUtils {
     public static String generateToken(Authentication authentication) {
 
         SysUserDetails userDetails = (SysUserDetails) authentication.getPrincipal();
-
 
         Map<String, Object> payload = new HashMap<>();
         payload.put(JwtClaimConstants.USER_ID, userDetails.getUserId()); // 用户ID

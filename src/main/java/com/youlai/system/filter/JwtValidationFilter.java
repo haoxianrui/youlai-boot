@@ -22,16 +22,16 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * JWT token 过滤器
+ * JWT token 校验过滤器
  *
  * @author haoxr
  * @since 2023/9/13
  */
-public class JwtTokenFilter extends OncePerRequestFilter {
+public class JwtValidationFilter extends OncePerRequestFilter {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public JwtTokenFilter(RedisTemplate<String, Object> redisTemplate) {
+    public JwtValidationFilter(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 

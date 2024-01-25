@@ -1,8 +1,9 @@
-package com.youlai.system.plugin.captcha;
+package com.youlai.system.config;
 
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.captcha.generator.MathGenerator;
 import cn.hutool.captcha.generator.RandomGenerator;
+import com.youlai.system.plugin.captcha.CaptchaProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

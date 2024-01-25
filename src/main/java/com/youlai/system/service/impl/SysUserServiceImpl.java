@@ -22,9 +22,9 @@ import com.youlai.system.model.query.UserPageQuery;
 import com.youlai.system.model.vo.UserExportVO;
 import com.youlai.system.model.vo.UserInfoVO;
 import com.youlai.system.model.vo.UserPageVO;
+import com.youlai.system.security.service.PermissionService;
 import com.youlai.system.service.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +54,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     private final SysRoleService roleService;
 
-    private final RedisTemplate redisTemplate;
+    private final PermissionService permissionService;
 
     /**
      * 获取用户分页列表
@@ -254,7 +254,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 用户权限集合
         if (CollectionUtil.isNotEmpty(roles)) {
-            Set<String> perms = menuService.listRolePerms(roles);
+            Set<String> perms = permissionService.getRolePermsFormCache(roles);
             userInfoVO.setPerms(perms);
         }
         return userInfoVO;

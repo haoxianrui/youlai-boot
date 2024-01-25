@@ -1,4 +1,4 @@
-package com.youlai.system.common.constant;
+package com.youlai.system.security.constant;
 
 /**
  * JWT Claims声明常量
@@ -14,11 +14,6 @@ public interface JwtClaimConstants {
      * 用户ID
      */
     String USER_ID = "userId";
-
-    /**
-     * 用户名
-     */
-    String USERNAME = "username";
 
     /**
      * 部门ID

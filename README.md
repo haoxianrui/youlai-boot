@@ -58,9 +58,6 @@ youlai-boot
         ├── XxlJobConfig                # XXL-JOB 自动装配配置
     ├── controller                      # 控制层
     ├── converter                       # MapStruct 转换器
-    ├── core                            # 核心模块
-        ├── security                    # Spring Security 安全配置和扩展
-        ├── mybatis                     # Mybatis-Plus 配置和插件
     ├── filter                          # 过滤器
         ├── RequestLogFilter            # 请求日志过滤器
         ├── VerifyCodeFilter            # 验证码过滤器
