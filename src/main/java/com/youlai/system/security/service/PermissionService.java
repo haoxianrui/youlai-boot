@@ -26,10 +26,9 @@ import java.util.*;
 @Slf4j
 public class PermissionService {
 
-    private final RedisTemplate<String,Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     private final SysRoleMenuService roleMenuService;
-
 
     /**
      * 初始化权限缓存
@@ -78,7 +77,7 @@ public class PermissionService {
     /**
      * 刷新权限缓存 (角色编码变更时调用)
      */
-    public void refreshRolePermsCache(String oldRoleCode,String newRoleCode) {
+    public void refreshRolePermsCache(String oldRoleCode, String newRoleCode) {
         // 清理旧角色权限缓存
         redisTemplate.opsForHash().delete(CacheConstants.ROLE_PERMS_PREFIX, oldRoleCode);
 
@@ -128,8 +127,8 @@ public class PermissionService {
     /**
      * 判断当前登录用户是否拥有操作权限
      *
-     * @param requiredPerm 权限标识(eg: sys:user:add)
-     * @return
+     * @param requiredPerm 所需权限
+     * @return 是否有权限
      */
     public boolean hasPerm(String requiredPerm) {
 
@@ -141,29 +140,24 @@ public class PermissionService {
             return true;
         }
 
+        // 获取当前登录用户的角色编码集合
         Set<String> roleCodes = SecurityUtils.getRoles();
         if (CollectionUtil.isEmpty(roleCodes)) {
             return false;
         }
-        boolean hasPermission = false;
-        for (String roleCode : roleCodes) {
-            Set<String> rolePerms = (Set<String>) redisTemplate.opsForHash().get(CacheConstants.ROLE_PERMS_PREFIX, roleCode);
 
-            if (CollectionUtil.isEmpty(rolePerms)) {
-                // 无权限 ，判断下一个角色是否有权限
-                continue;
-            }
-            // 匹配权限，支持通配符
-            hasPermission = rolePerms.stream()
-                    .anyMatch(rolePerm ->
-                            PatternMatchUtils.simpleMatch(rolePerm, requiredPerm)
-                    );
-
-            if (hasPermission) {
-                // 匹配到权限，退出循环
-                break;
-            }
+        // 获取当前登录用户的所有角色的权限列表
+        Set<String> rolePerms = this.getRolePermsFormCache(roleCodes);
+        if (CollectionUtil.isEmpty(rolePerms)) {
+            return false;
         }
+        // 判断当前登录用户的所有角色的权限列表中是否包含所需权限
+        boolean hasPermission = rolePerms.stream()
+                .anyMatch(rolePerm ->
+                        // 匹配权限，支持通配符(* 等)
+                        PatternMatchUtils.simpleMatch(rolePerm, requiredPerm)
+                );
+
         if (!hasPermission) {
             log.error("用户无操作权限");
         }
