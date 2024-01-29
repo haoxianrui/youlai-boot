@@ -18,8 +18,8 @@ import com.youlai.system.model.form.MenuForm;
 import com.youlai.system.model.query.MenuQuery;
 import com.youlai.system.model.vo.MenuVO;
 import com.youlai.system.model.vo.RouteVO;
-import com.youlai.system.security.service.PermissionService;
 import com.youlai.system.service.SysMenuService;
+import com.youlai.system.service.SysRoleMenuService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
@@ -43,7 +43,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     private final MenuConverter menuConverter;
 
-    private final PermissionService permissionService;
+    private final SysRoleMenuService roleMenuService;
 
 
     /**
@@ -224,7 +224,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (result) {
             // 编辑刷新角色权限缓存
             if (menuForm.getId() != null) {
-                permissionService.refreshRolePermsCache();
+                roleMenuService.refreshRolePermsCache();
             }
         }
         return result;
@@ -251,7 +251,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      *
      * @param menuId  菜单ID
      * @param visible 是否显示(1->显示；2->隐藏)
-     * @return
+     * @return 是否修改成功
      */
     @Override
     @CacheEvict(cacheNames = "menu", key = "'routes'")
@@ -302,7 +302,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         // 刷新角色权限缓存
         if (result) {
-            permissionService.refreshRolePermsCache();
+            roleMenuService.refreshRolePermsCache();
         }
         return result;
 

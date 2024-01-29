@@ -20,7 +20,7 @@ public class SecurityUtils {
     /**
      * 获取当前登录人信息
      *
-     * @return
+     * @return SysUserDetails
      */
     public static SysUserDetails getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -36,7 +36,7 @@ public class SecurityUtils {
     /**
      * 获取用户ID
      *
-     * @return
+     * @return Long
      */
     public static Long getUserId() {
         Long userId = Convert.toLong(getUser().getUserId());
@@ -65,7 +65,7 @@ public class SecurityUtils {
     /**
      * 获取用户角色集合
      *
-     * @return
+     * @return 角色集合
      */
     public static Set<String> getRoles() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -74,25 +74,6 @@ public class SecurityUtils {
             if (CollectionUtil.isNotEmpty(authorities)) {
                 return authorities.stream().filter(item -> item.getAuthority().startsWith("ROLE_"))
                         .map(item -> StrUtil.removePrefix(item.getAuthority(), "ROLE_"))
-                        .collect(Collectors.toSet());
-            }
-        }
-        return Collections.EMPTY_SET;
-    }
-
-    /**
-     * 获取用户权限集合
-     *
-     * @return
-     */
-    public static Set<String> getPerms() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-            if (CollectionUtil.isNotEmpty(authorities)) {
-                return authorities.stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .filter(authority -> !authority.startsWith("ROLE_"))
                         .collect(Collectors.toSet());
             }
         }
@@ -109,25 +90,6 @@ public class SecurityUtils {
     public static boolean isRoot() {
         Set<String> roles = getRoles();
         return roles.contains(SystemConstants.ROOT_ROLE_CODE);
-    }
-
-
-    /**
-     * 是否拥有权限判断
-     * <p>
-     * 适用业务判断(接口权限判断适用Spring Security 自带注解 PreAuthorize 判断即可 )
-     *
-     * @return
-     */
-    public static boolean hasPerm(String perm) {
-
-        if (isRoot()) {
-            return true;
-        }
-
-        Set<String> perms = getPerms();
-
-        return perms.stream().anyMatch(item -> PatternMatchUtils.simpleMatch(perm, item));
     }
 
 }

@@ -3,7 +3,7 @@ package com.youlai.system.filter;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.jwt.JWTPayload;
-import com.youlai.system.common.constant.CacheConstants;
+import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.security.util.JwtUtils;
 import com.youlai.system.common.util.ResponseUtils;
@@ -49,7 +49,7 @@ public class JwtValidationFilter extends OncePerRequestFilter {
                 Map<String, Object> payload = JwtUtils.parseToken(token);
 
                 String jti = Convert.toStr(payload.get(JWTPayload.JWT_ID));
-                Boolean isTokenBlacklisted  = redisTemplate.hasKey(CacheConstants.BLACKLIST_TOKEN_PREFIX + jti);
+                Boolean isTokenBlacklisted  = redisTemplate.hasKey(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti);
                 if (Boolean.TRUE.equals(isTokenBlacklisted)) {
                     ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
                     return;

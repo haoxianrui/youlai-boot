@@ -75,7 +75,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
      * @return true：已分配 false：未分配
      */
     @Override
-    public boolean isRoleAssignedToUser(Long roleId) {
+    public boolean hasAssignedUsers(Long roleId) {
         int count = this.baseMapper.countUsersForRole(roleId);
         return count > 0;
     }

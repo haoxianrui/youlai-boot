@@ -7,7 +7,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.jwt.JWTPayload;
-import com.youlai.system.common.constant.CacheConstants;
+import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.enums.CaptchaTypeEnum;
 import com.youlai.system.model.dto.CaptchaResult;
 import com.youlai.system.model.dto.LoginResult;
@@ -81,9 +81,9 @@ public class AuthServiceImpl implements AuthService {
             Long expiration = Convert.toLong(claims.get(JWTPayload.EXPIRES_AT));
             if (expiration != null) {
                 long ttl = expiration - System.currentTimeMillis() / 1000;
-                redisTemplate.opsForValue().set(CacheConstants.BLACKLIST_TOKEN_PREFIX + jti, null, ttl, TimeUnit.SECONDS);
+                redisTemplate.opsForValue().set(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti, null, ttl, TimeUnit.SECONDS);
             } else {
-                redisTemplate.opsForValue().set(CacheConstants.BLACKLIST_TOKEN_PREFIX + jti, null);
+                redisTemplate.opsForValue().set(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti, null);
             }
         }
         SecurityContextHolder.clearContext();
@@ -124,7 +124,7 @@ public class AuthServiceImpl implements AuthService {
 
         // 验证码文本缓存至Redis，用于登录校验
         String captchaKey = IdUtil.fastSimpleUUID();
-        redisTemplate.opsForValue().set(CacheConstants.CAPTCHA_CODE_PREFIX + captchaKey, captchaCode,
+        redisTemplate.opsForValue().set(SecurityConstants.CAPTCHA_CODE_PREFIX + captchaKey, captchaCode,
                 captchaProperties.getExpireSeconds(), TimeUnit.SECONDS);
 
         return CaptchaResult.builder()
