@@ -14,13 +14,13 @@
             user_id = #{userId}
     </select>
 
-    <!-- 统计角色下绑定的用户数量 -->
+    <!-- 获取角色绑定的用户数 -->
     <select id="countUsersForRole" resultType="java.lang.Integer">
         SELECT
             count(*)
         FROM
             sys_user_role t1
-            INNER JOIN sys_role t2 ON t1.role_id = t2.id   AND t2.deleted = 0
+            INNER JOIN sys_role t2 ON t1.role_id = t2.id AND t2.deleted = 0
             INNER JOIN sys_user t3 ON t1.user_id = t3.id
             AND t3.deleted = 0
         WHERE

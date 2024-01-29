@@ -6,7 +6,7 @@ package com.youlai.system.common.constant;
  * @author haoxr
  * @since 2023/11/24
  */
-public interface CacheConstants {
+public interface SecurityConstants {
 
     /**
      * 验证码缓存前缀

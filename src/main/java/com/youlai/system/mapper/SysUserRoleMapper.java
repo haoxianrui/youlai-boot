@@ -14,7 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface SysUserRoleMapper extends BaseMapper<SysUserRole> {
 
     /**
-     * 统计角色下绑定的用户数量
+     * 获取角色绑定的用户数
      *
      * @param roleId 角色ID
      */

@@ -2,8 +2,7 @@ package com.youlai.system.filter;
 
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.util.StrUtil;
-import com.youlai.system.common.constant.CacheConstants;
-import com.youlai.system.security.constant.SecurityConstants;
+import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.common.util.ResponseUtils;
 import jakarta.servlet.FilterChain;
@@ -25,7 +24,7 @@ import java.io.IOException;
  */
 public class CaptchaValidationFilter extends OncePerRequestFilter {
 
-    private static final AntPathRequestMatcher LOGIN_PATH_REQUEST_MATCHER = new AntPathRequestMatcher(SecurityConstants.LOGIN_PATH, "POST");
+    private static final AntPathRequestMatcher LOGIN_PATH_REQUEST_MATCHER = new AntPathRequestMatcher(com.youlai.system.security.constant.SecurityConstants.LOGIN_PATH, "POST");
 
     public static final String CAPTCHA_CODE_PARAM_NAME = "captchaCode";
     public static final String CAPTCHA_KEY_PARAM_NAME = "captchaKey";
@@ -53,7 +52,7 @@ public class CaptchaValidationFilter extends OncePerRequestFilter {
             }
             // 缓存中的验证码
             String verifyCodeKey = request.getParameter(CAPTCHA_KEY_PARAM_NAME);
-            String cacheVerifyCode = (String) redisTemplate.opsForValue().get(CacheConstants.CAPTCHA_CODE_PREFIX + verifyCodeKey);
+            String cacheVerifyCode = (String) redisTemplate.opsForValue().get(SecurityConstants.CAPTCHA_CODE_PREFIX + verifyCodeKey);
             if (cacheVerifyCode == null) {
                 ResponseUtils.writeErrMsg(response, ResultCode.VERIFY_CODE_TIMEOUT);
             } else {

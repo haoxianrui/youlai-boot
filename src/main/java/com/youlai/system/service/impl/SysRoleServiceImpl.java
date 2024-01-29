@@ -43,7 +43,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private final SysRoleMenuService roleMenuService;
     private final SysUserRoleService userRoleService;
     private final RoleConverter roleConverter;
-    private final PermissionService permissionService;
 
     /**
      * 角色分页列表
@@ -129,7 +128,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                     !StrUtil.equals(oldRole.getCode(), roleCode) ||
                             !ObjectUtil.equals(oldRole.getStatus(), roleForm.getStatus())
             )) {
-                permissionService.refreshRolePermsCache(oldRole.getCode(), roleCode);
+                roleMenuService.refreshRolePermsCache(oldRole.getCode(), roleCode);
             }
         }
         return result;
@@ -160,10 +159,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         SysRole role = this.getById(roleId);
         Assert.isTrue(role != null, "角色不存在");
 
+        role.setStatus(status);
         boolean result = this.updateById(role);
         if (result) {
             // 刷新角色的权限缓存
-            permissionService.refreshRolePermsCache(role.getCode());
+            roleMenuService.refreshRolePermsCache(role.getCode());
         }
         return result;
     }
@@ -186,13 +186,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             Assert.isTrue(role != null, "角色不存在");
 
             // 判断角色是否被用户关联
-            boolean isRoleAssigned = userRoleService.isRoleAssignedToUser(roleId);
+            boolean isRoleAssigned = userRoleService.hasAssignedUsers(roleId);
             Assert.isTrue(!isRoleAssigned, "角色【{}】已分配用户，请先解除关联后删除", role.getName());
 
             boolean deleteResult = this.removeById(roleId);
             if (deleteResult) {
                 // 删除成功，刷新权限缓存
-                permissionService.refreshRolePermsCache(role.getCode());
+                roleMenuService.refreshRolePermsCache(role.getCode());
             }
         }
         return true;
@@ -238,7 +238,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
 
         // 刷新角色的权限缓存
-        permissionService.refreshRolePermsCache(role.getCode());
+        roleMenuService.refreshRolePermsCache(role.getCode());
 
         return true;
     }
