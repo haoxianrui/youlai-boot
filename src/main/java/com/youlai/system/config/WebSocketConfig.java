@@ -1,6 +1,7 @@
 package com.youlai.system.config;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.jwt.JWTPayload;
 import com.youlai.system.security.util.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
