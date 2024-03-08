@@ -52,9 +52,7 @@ public class JwtUtils {
     }
 
     /**
-     * 创建Token
-     * <p>
-     * 认证成功后的用户信息会被封装到 Authentication 对象中，然后通过 JwtTokenProvider#createToken(Authentication) 方法创建 Token 字符串
+     * 生成 JWT Token
      *
      * @param authentication 用户认证信息
      * @return Token 字符串
@@ -85,11 +83,35 @@ public class JwtUtils {
         return JWTUtil.createToken(payload, JwtUtils.key);
     }
 
+
     /**
-     * 从 Token 中解析数据
+     * 从 JWT Token 中解析 Authentication  用户认证信息
+     *
+     * @param payload JWT 载体
+     * @return 用户认证信息
+     */
+    public static UsernamePasswordAuthenticationToken getAuthentication(Map<String, Object> payload) {
+        SysUserDetails userDetails = new SysUserDetails();
+        userDetails.setUserId(Convert.toLong(payload.get(JwtClaimConstants.USER_ID))); // 用户ID
+        userDetails.setDeptId(Convert.toLong(payload.get(JwtClaimConstants.DEPT_ID))); // 部门ID
+        userDetails.setDataScope(Convert.toInt(payload.get(JwtClaimConstants.DATA_SCOPE))); // 数据权限范围
+
+        userDetails.setUsername(Convert.toStr(payload.get(JWTPayload.SUBJECT))); // 用户名
+        // 角色集合
+        Set<SimpleGrantedAuthority> authorities = ((JSONArray) payload.get(JwtClaimConstants.AUTHORITIES))
+                .stream()
+                .map(authority -> new SimpleGrantedAuthority(Convert.toStr(authority)))
+                .collect(Collectors.toSet());
+
+        return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
+    }
+
+
+    /**
+     * 解析 JWT Token 获取载体信息
      *
      * @param token JWT Token
-     * @return 解析数据
+     * @return 载体信息
      */
     public static Map<String, Object> parseToken(String token) {
         try {
@@ -110,25 +132,5 @@ public class JwtUtils {
         return null;
     }
 
-    /**
-     *  从 Token 中获取 Authentication
-     *
-     * @param payload
-     * @return
-     */
-    public static UsernamePasswordAuthenticationToken getAuthentication(Map<String, Object> payload) {
-        SysUserDetails userDetails = new SysUserDetails();
-        userDetails.setUserId(Convert.toLong(payload.get(JwtClaimConstants.USER_ID))); // 用户ID
-        userDetails.setDeptId(Convert.toLong(payload.get(JwtClaimConstants.DEPT_ID))); // 部门ID
-        userDetails.setDataScope(Convert.toInt(payload.get(JwtClaimConstants.DATA_SCOPE))); // 数据权限范围
 
-        userDetails.setUsername(Convert.toStr(payload.get(JWTPayload.SUBJECT))); // 用户名
-        // 角色集合
-        Set<SimpleGrantedAuthority> authorities = ((JSONArray) payload.get(JwtClaimConstants.AUTHORITIES))
-                .stream()
-                .map(authority -> new SimpleGrantedAuthority(Convert.toStr(authority)))
-                .collect(Collectors.toSet());
-
-        return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
-    }
 }
