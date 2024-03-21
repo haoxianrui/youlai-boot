@@ -1,7 +1,7 @@
 
 <p align="center">
     <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
-    <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.2.1-green.svg"/>
+    <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.2.3-green.svg"/>
      <a href="https://gitee.com/youlaitech/youlai-boot" target="_blank">
         <img alt="有来技术" src="https://gitee.com/youlaiorg/youlai-boot/badge/star.svg"/>
     </a>     

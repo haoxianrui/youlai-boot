@@ -1,6 +1,7 @@
 package com.youlai.system.config;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.jwt.JWTPayload;
 import com.youlai.system.security.util.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -79,7 +80,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith("Bearer ")) {
                         try {
                             // 移除 "Bearer " 前缀，从令牌中提取用户信息(username), 并设置到认证信息中
-                            String username = JwtUtils.parseToken(bearerToken).get("name").toString();
+                            
+                            // 这里不应该用"name"
+                            // String username = JwtUtils.parseToken(bearerToken).get("name").toString();
+                            String username = JwtUtils.parseToken(bearerToken).get(JWTPayload.SUBJECT).toString();
 
                             if (StrUtil.isNotBlank(username)) {
                                 accessor.setUser(() -> username);
