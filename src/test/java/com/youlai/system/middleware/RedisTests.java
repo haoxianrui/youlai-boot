@@ -1,4 +1,4 @@
-package com.youlai.system;
+package com.youlai.system.middleware;
 
 import com.youlai.system.model.entity.SysUser;
 import lombok.extern.slf4j.Slf4j;

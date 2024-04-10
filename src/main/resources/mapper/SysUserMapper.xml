@@ -5,7 +5,7 @@
 <mapper namespace="com.youlai.system.mapper.SysUserMapper">
 
     <!-- 用户分页列表 -->
-    <select id="getUserPage" resultType="com.youlai.system.model.bo.UserBO">
+    <select id="listPagedUsers" resultType="com.youlai.system.model.bo.UserBO">
         SELECT
             u.id,
             u.username,
@@ -49,7 +49,7 @@
     </select>
 
     <!-- 用户表单信息映射 -->
-    <resultMap id="UserFormMap" type="com.youlai.system.model.bo.UserFormBO">
+    <resultMap id="UserFormMap" type="com.youlai.system.model.form.UserForm">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="username" column="username" jdbcType="VARCHAR"/>
         <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
@@ -68,19 +68,21 @@
     </resultMap>
 
     <!-- 根据用户ID获取用户详情 -->
-    <select id="getUserDetail" resultMap="UserFormMap">
-        SELECT id,
-               username,
-               nickname,
-               mobile,
-               gender,
-               avatar,
-               email,
-               STATUS,
-               dept_id
-        FROM sys_user
-        WHERE id = #{userId}
-          AND deleted = 0
+    <select id="getUserFormData" resultMap="UserFormMap">
+        SELECT
+            id,
+            username,
+            nickname,
+            mobile,
+            gender,
+            avatar,
+            email,
+            STATUS,
+            dept_id
+        FROM
+            sys_user
+        WHERE
+            id = #{userId} AND deleted = 0
     </select>
 
     <!-- 用户认证信息映射 -->

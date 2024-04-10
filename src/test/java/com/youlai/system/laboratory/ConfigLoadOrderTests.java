@@ -1,4 +1,4 @@
-package com.youlai.system;
+package com.youlai.system.laboratory;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

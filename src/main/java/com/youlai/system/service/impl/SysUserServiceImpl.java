@@ -15,7 +15,6 @@ import com.youlai.system.security.util.SecurityUtils;
 import com.youlai.system.mapper.SysUserMapper;
 import com.youlai.system.model.dto.UserAuthInfo;
 import com.youlai.system.model.bo.UserBO;
-import com.youlai.system.model.bo.UserFormBO;
 import com.youlai.system.model.entity.SysUser;
 import com.youlai.system.model.form.UserForm;
 import com.youlai.system.model.query.UserPageQuery;
@@ -59,11 +58,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 获取用户分页列表
      *
-     * @param queryParams
-     * @return
+     * @param queryParams 查询参数
+     * @return {@link IPage<UserPageVO>} 用户分页列表
      */
     @Override
-    public IPage<UserPageVO> getUserPage(UserPageQuery queryParams) {
+    public IPage<UserPageVO> listPagedUsers(UserPageQuery queryParams) {
 
         // 参数构建
         int pageNum = queryParams.getPageNum();
@@ -74,24 +73,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         DateUtils.toDatabaseFormat(queryParams, "startTime", "endTime");
 
         // 查询数据
-        Page<UserBO> userPage = this.baseMapper.getUserPage(page, queryParams);
+        Page<UserBO> userPage = this.baseMapper.listPagedUsers(page, queryParams);
 
         // 实体转换
-        return userConverter.toPageVo(userPage);
+        return userConverter.bo2PageVo(userPage);
     }
 
     /**
-     * 获取用户详情
+     * 获取用户表单数据
      *
-     * @param userId
+     * @param userId 用户ID
      * @return
      */
     @Override
     public UserForm getUserFormData(Long userId) {
-        UserFormBO userFormBO = this.baseMapper.getUserDetail(userId);
-        // 实体转换po->form
-        UserForm userForm = userConverter.bo2Form(userFormBO);
-        return userForm;
+        return this.baseMapper.getUserFormData(userId);
     }
 
     /**
@@ -161,7 +157,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 删除用户
      *
      * @param idsStr 用户ID，多个以英文逗号(,)分割
-     * @return
+     * @return true|false
      */
     @Override
     public boolean deleteUsers(String idsStr) {
@@ -216,13 +212,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 获取导出用户列表
      *
-     * @param queryParams
-     * @return
+     * @param queryParams 查询参数
+     * @return {@link List<UserExportVO>} 导出用户列表
      */
     @Override
     public List<UserExportVO> listExportUsers(UserPageQuery queryParams) {
-        List<UserExportVO> list = this.baseMapper.listExportUsers(queryParams);
-        return list;
+        return this.baseMapper.listExportUsers(queryParams);
     }
 
     /**
