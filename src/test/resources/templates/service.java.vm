@@ -1,0 +1,58 @@
+package ${package.Service};
+
+import ${package.Entity}.${entity};
+import ${superServiceClassPackage};
+
+/**
+ * $!{table.comment} 服务类
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+
+
+    /**
+     *$!{table.comment}分页列表
+     *
+     * @return
+     */
+    IPage<${entity}PageVO> listPaged${entity}s(${entity}PageQuery queryParams);
+
+
+    /**
+     * 获取$!{table.comment}表单数据
+     *
+     * @param userId
+     * @return
+     */
+     ${entity}Form get${entity}FormData(Long id);
+
+
+    /**
+     * 新增$!{table.comment}
+     *
+     * @param formData $!{table.comment}表单对象
+     * @return
+     */
+    boolean save${entity}(${entity}Form formData);
+
+    /**
+     * 修改$!{table.comment}
+     *
+     * @param id   $!{table.comment}ID
+     * @param formData $!{table.comment}表单对象
+     * @return
+     */
+    boolean update${entity}(Long id, UserForm formData);
+
+
+    /**
+     * 删除$!{table.comment}
+     *
+     * @param idsStr $!{table.comment}ID，多个以英文逗号(,)分割
+     * @return
+     */
+    boolean delete${entity}s(String idsStr);
+
+}

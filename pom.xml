@@ -6,13 +6,13 @@
 
     <groupId>com.youlai</groupId>
     <artifactId>youlai-boot</artifactId>
-    <version>2.6.2</version>
+    <version>2.7.0</version>
     <description>基于 Java 17 + SpringBoot 3 + Spring Security 构建的权限管理系统。</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.3</version> <!-- lookup parent from repository -->
+        <version>3.2.4</version> <!-- lookup parent from repository -->
         <relativePath/>
     </parent>
 
@@ -43,6 +43,10 @@
 
         <!-- redisson 分布式锁 -->
         <redisson.version>3.24.3</redisson.version>
+
+        <!-- 自动代码生成 -->
+        <mybatis-plus-generator.version>3.5.6</mybatis-plus-generator.version>
+        <velocity.version>2.3</velocity.version>
     </properties>
 
     <dependencies>
@@ -182,6 +186,17 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>${mybatis-plus-generator.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>${velocity.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

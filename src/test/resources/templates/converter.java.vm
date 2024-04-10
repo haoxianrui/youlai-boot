@@ -1,0 +1,29 @@
+package ${package}.converter;
+
+#foreach($pkg in ${table.importPackages})
+import ${pkg};
+#end
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
+
+import ${package}.dto.${entity}DTO;
+import ${package}.entity.${entity};
+import ${package}.vo.${entity}PageVO;
+import ${package}.form.${entity}Form;
+import ${package}.bo.${entity}BO;
+
+
+@Mapper(componentModel = "spring")
+public interface ${entity}Converter}{
+
+    ${entity}PageVO bo2PageVo(${entity}BO bo);
+
+    Page<${entity}PageVO> bo2PageVo(Page<${entity}BO> bo);
+
+    ${entity}Form entity2Form(${entity} entity);
+
+    @InheritInverseConfiguration(name = "entity2Form")
+    ${entity} form2Entity(${entity}Form entity);
+}

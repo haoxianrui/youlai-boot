@@ -1,0 +1,21 @@
+package ${package}.model.query;
+
+import ${package}.common.base.BasePageQuery;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
+/**
+ * $!{table.comment}分页查询对象
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Schema(description ="$!{table.comment}分页查询对象")
+@Data
+public class ${entity}PageQuery extends BasePageQuery {
+
+    @Schema(description="关键字")
+    private String keywords;
+
+}
