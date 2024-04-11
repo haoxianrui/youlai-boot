@@ -1,8 +1,5 @@
-package ${package}.model.dto;
+package ${package.Parent}.model.dto;
 
-#foreach($pkg in ${table.importPackages})
-import ${pkg};
-#end
 #if(${springdoc})
 import io.swagger.v3.oas.annotations.media.Schema;
 #elseif(${swagger})
@@ -16,7 +13,7 @@ import lombok.Setter;
     import lombok.experimental.Accessors;
     #end
 #end
-
+import java.io.Serializable;
 /**
  * $!{table.comment} DTO
  *
@@ -27,11 +24,8 @@ import lombok.Setter;
 @Getter
 @Setter
     #if(${chainModel})
-    @Accessors(chain = true)
+@Accessors(chain = true)
     #end
-#end
-#if(${table.convert})
-@TableName("${schemaName}${table.name}")
 #end
 #if(${springdoc})
 @Schema(name = "${entity}", description = "$!{table.comment}")
@@ -39,13 +33,13 @@ import lombok.Setter;
 @ApiModel(value = "${entity}对象", description = "$!{table.comment}")
 #end
 #if(${superEntityClass})
-public class ${entity} extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
+public class ${entity}DTO extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
 #elseif(${activeRecord})
-public class ${entity} extends Model<${entity}> {
+public class ${entity}DTO extends Model<${entity}> {
 #elseif(${entitySerialVersionUID})
-public class ${entity} implements Serializable {
+public class ${entity}DTO implements Serializable {
 #else
-public class ${entity} {
+public class ${entity}DTO {
 #end
 #if(${entitySerialVersionUID})
 

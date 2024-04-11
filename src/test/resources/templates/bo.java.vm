@@ -1,4 +1,4 @@
-package ${package.Entity};
+package ${package.Parent}.model.bo;
 
 #foreach($pkg in ${table.importPackages})
 import ${pkg};
@@ -24,17 +24,14 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
   #end
 #end
-#if(${table.convert})
-@TableName("${schemaName}${table.name}")
-#end
 #if(${superEntityClass})
-public class ${entity} extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
+public class ${entity}BO extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
 #elseif(${activeRecord})
-public class ${entity} extends Model<${entity}> {
+public class ${entity}BO extends Model<${entity}> {
 #elseif(${entitySerialVersionUID})
-public class ${entity} implements Serializable {
+public class ${entity}BO implements Serializable {
 #else
-public class ${entity} {
+public class ${entity}BO {
 #end
 #if(${entitySerialVersionUID})
 

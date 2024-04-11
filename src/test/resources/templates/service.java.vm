@@ -2,14 +2,17 @@ package ${package.Service};
 
 import ${package.Entity}.${entity};
 import ${superServiceClassPackage};
-
+import ${package.Parent}.model.form.${entity}Form;
+import ${package.Parent}.model.query.${entity}PageQuery;
+import ${package.Parent}.model.vo.${entity}PageVO;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 /**
  * $!{table.comment} 服务类
  *
  * @author ${author}
  * @since ${date}
  */
-public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+public interface ${entity}Service extends ${superServiceClass}<${entity}> {
 
 
     /**
@@ -44,7 +47,7 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
      * @param formData $!{table.comment}表单对象
      * @return
      */
-    boolean update${entity}(Long id, UserForm formData);
+    boolean update${entity}(Long id, ${entity}Form formData);
 
 
     /**

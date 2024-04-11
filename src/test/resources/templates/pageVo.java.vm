@@ -1,4 +1,4 @@
-package ${package.Parent}.model.form;
+package ${package.Parent}.model.vo;
 
 #foreach($pkg in ${table.importPackages})
 import ${pkg};
@@ -18,7 +18,7 @@ import lombok.Setter;
 #end
 
 /**
- * $!{table.comment} 表单对象
+ * $!{table.comment} 分页VO
  *
  * @author ${author}
  * @since ${date}
@@ -33,16 +33,16 @@ import lombok.Setter;
 #if(${springdoc})
 @Schema(name = "${entity}", description = "$!{table.comment}")
 #elseif(${swagger})
-@ApiModel(value = "${entity}对象", description = "$!{table.comment}")
+@ApiModel(value = "${entity}分页视图对象", description = "$!{table.comment}")
 #end
 #if(${superEntityClass})
-public class ${entity}Form extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
+public class ${entity}PageVO extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
 #elseif(${activeRecord})
-public class ${entity}Form extends Model<${entity}> {
+public class ${entity}PageVO extends Model<${entity}> {
 #elseif(${entitySerialVersionUID})
-public class ${entity}Form implements Serializable {
+public class ${entity}PageVO implements Serializable {
 #else
-public class ${entity}Form {
+public class ${entity}PageVO {
 #end
 #if(${entitySerialVersionUID})
 
@@ -66,7 +66,7 @@ public class ${entity}Form {
         #end
     #end
 
-private ${field.propertyType} ${field.propertyName};
+    private ${field.propertyType} ${field.propertyName};
 #end
 ## ----------  END 字段循环遍历  ----------
 #if(!${entityLombokModel})

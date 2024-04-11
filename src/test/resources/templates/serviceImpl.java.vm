@@ -7,6 +7,19 @@ import ${superServiceImplClassPackage};
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.youlai.system.common.util.DateUtils;
+import ${package.Parent}.model.form.${entity}Form;
+import ${package.Parent}.model.query.${entity}PageQuery;
+import ${package.Parent}.model.bo.${entity}BO;
+import ${package.Parent}.model.vo.${entity}PageVO;
+import ${package.Parent}.converter.${entity}Converter;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * $!{table.comment} 服务实现类
@@ -47,12 +60,13 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     /**
      * 获取$!{table.comment}表单数据
      *
-     * @param userId $!{table.comment}ID
+     * @param id $!{table.comment}ID
      * @return
      */
     @Override
-    public ${entity}Form get${entity}FormData(Long userId) {
-        return this.baseMapper.get${entity}FormData(userId);
+    public ${entity}Form get${entity}FormData(Long id) {
+        ${entity} entity = this.getById(id);
+        return converter.entity2Form(entity);
     }
     
     /**
@@ -64,19 +78,18 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     @Override
     public boolean save${entity}(${entity}Form formData) {
         // 实体转换 form->entity
-        SysUser entity = converter.form2Entity(formData);
+        ${entity} entity = converter.form2Entity(formData);
         return this.save(entity);
     }
     
     /**
      * 更新$!{table.comment}
      *
-     * @param userId   $!{table.comment}ID
+     * @param id   $!{table.comment}ID
      * @param formData $!{table.comment}表单对象
      * @return
      */
     @Override
-    @Transactional
     public boolean update${entity}(Long id,${entity}Form formData) {
         ${entity} entity = converter.form2Entity(formData);
         return this.updateById(entity);

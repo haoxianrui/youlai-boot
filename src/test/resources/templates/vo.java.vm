@@ -1,4 +1,4 @@
-package ${package}.model.vo;
+package ${package.Parent}.model.vo;
 
 #foreach($pkg in ${table.importPackages})
 import ${pkg};
@@ -30,22 +30,19 @@ import lombok.Setter;
     @Accessors(chain = true)
     #end
 #end
-#if(${table.convert})
-@TableName("${schemaName}${table.name}")
-#end
 #if(${springdoc})
 @Schema(name = "${entity}", description = "$!{table.comment}")
 #elseif(${swagger})
-@ApiModel(value = "${entity}对象", description = "$!{table.comment}")
+@ApiModel(value = "${entity}视图对象", description = "$!{table.comment}")
 #end
 #if(${superEntityClass})
-public class ${entity} extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
+public class ${entity}VO extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
 #elseif(${activeRecord})
 public class ${entity} extends Model<${entity}> {
 #elseif(${entitySerialVersionUID})
-public class ${entity} implements Serializable {
+public class ${entity}VO implements Serializable {
 #else
-public class ${entity} {
+public class ${entity}VO {
 #end
 #if(${entitySerialVersionUID})
 

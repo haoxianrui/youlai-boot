@@ -1,11 +1,12 @@
 package ${package.Controller};
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
-#if(${restControllerStyle})
 import org.springframework.web.bind.annotation.RestController;
-#else
-import org.springframework.stereotype.Controller;
-#end
+import ${package.Parent}.model.form.${entity}Form;
+import ${package.Parent}.model.query.${entity}PageQuery;
+import ${package.Parent}.model.vo.${entity}PageVO;
+import ${package.Parent}.service.${entity}Service;
 #if(${superControllerClassPackage})
 import ${superControllerClassPackage};
 #end
@@ -13,24 +14,58 @@ import ${superControllerClassPackage};
 /**
  * $!{table.comment} 前端控制器
  *
- * @author ${author}
- * @since ${date}
+ * @author${author}
+ * @since${date}
  */
-#if(${restControllerStyle})
 @RestController
-#else
-@Controller
-#end
-@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
-
+@RequiredArgsConstructor
 #if(${superControllerClass})
-public class ${table.controllerName} extends ${superControllerClass} {
+public class${table.controllerName} extends ${superControllerClass} {
 #else
 public class ${table.controllerName} {
 #end
 
+        #set($entityLower = $string.toLowerCase($entity))
+        private final ${entity}Service $entityLowerService;
 
+        @Operation(summary = "$!{table.comment}分页列表")
+        @GetMapping("/page")
+        public PageResult<${entity}PageVO> listPaged${entity}s(${entity}PageQuery queryParams ) {
+            IPage<${entity}PageVO> result = ${entityLower}Service.listPaged${entity}s(queryParams);
+            return PageResult.success(result);
+        }
 
+        @Operation(summary = "新增$!{table.comment}")
+        @PostMapping
+        @PreventDuplicateSubmit
+        public Result save${entity}(@RequestBody @Valid ${entity}Form formData ) {
+            boolean result = ${entityLower}Service.save${entity}(userForm);
+            return Result.judge(result);
+        }
 
+        @Operation(summary = "$!{table.comment}表单数据")
+        @GetMapping("/{id}/form")
+        public Result<${entity}Form> get${entity}Form(
+            @Parameter(description = "$!{table.comment}ID") @PathVariable Long id
+        ) {
+            ${entity}Form formData = ${entityLower}Service.get${entity}FormData(id);
+            return Result.success(formData);
+        }
 
+        @Operation(summary = "修改$!{table.comment}")
+        @PutMapping(value = "/{id}")
+        public Result update${entity}(@Parameter(description = "$!{table.comment}ID") @PathVariable Long id,
+        @RequestBody @Validated ${entity}Form formData) {
+            boolean result = ${entityLower}Service.update${entity}(userId, formData);
+            return Result.judge(result);
+        }
+
+        @Operation(summary = "删除$!{table.comment}")
+        @DeleteMapping("/{ids}")
+        public Result delete${entity}s(
+            @Parameter(description = "$!{table.comment}ID，多个以英文逗号(,)分割") @PathVariable String ids
+        ) {
+            boolean result = ${entityLower}Service.delete${entity}s(ids);
+            return Result.judge(result);
+        }
 }

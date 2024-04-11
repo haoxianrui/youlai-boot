@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,14 +36,16 @@ public class FastAutoGeneratorTest {
                     ;
                 })
                 // 包配置
-                .packageConfig(builder -> builder
-                        .parent("com.youlai.system")
-                        .entity("model.entity")
-                        .mapper("mapper")
-                        .service("service")
-                        .serviceImpl("service.impl")
-                        .controller("controller")
-                        .pathInfo(Collections.singletonMap(OutputFile.xml, System.getProperty("user.dir") + "/src/main/resources/mapper"))
+                .packageConfig(builder -> {
+                    builder
+                            .parent("com.youlai.system")
+                            .entity("model.entity")
+                            .mapper("mapper")
+                            .service("service")
+                            .serviceImpl("service.impl")
+                            .controller("controller")
+                            .pathInfo(Collections.singletonMap(OutputFile.xml, System.getProperty("user.dir") + "/src/main/resources/mapper"));
+                        }
                 )
                 // 注入配置(设置扩展类的模板路径和包路径)
                 .injectionConfig(consumer -> {
@@ -53,6 +54,7 @@ public class FastAutoGeneratorTest {
                     customFiles.add(new CustomFile.Builder().fileName("VO.java").templatePath("/templates/vo.java.vm").packageName("model.vo").build());
                     customFiles.add(new CustomFile.Builder().fileName("BO.java").templatePath("/templates/bo.java.vm").packageName("model.bo").build());
                     customFiles.add(new CustomFile.Builder().fileName("PageQuery.java").templatePath("/templates/pageQuery.java.vm").packageName("model.query").build());
+                    customFiles.add(new CustomFile.Builder().fileName("PageVO.java").templatePath("/templates/pageVO.java.vm").packageName("model.vo").build());
                     customFiles.add(new CustomFile.Builder().fileName("Form.java").templatePath("/templates/form.java.vm").packageName("model.form").build());
                     customFiles.add(new CustomFile.Builder().fileName("Converter.java").templatePath("/templates/converter.java.vm").packageName("converter").build());
                     consumer.customFile(customFiles);

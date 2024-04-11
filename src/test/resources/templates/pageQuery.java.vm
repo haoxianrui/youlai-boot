@@ -1,6 +1,6 @@
-package ${package}.model.query;
+package ${package.Parent}.model.query;
 
-import ${package}.common.base.BasePageQuery;
+import ${package.Parent}.common.base.BasePageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;

@@ -1,22 +1,17 @@
-package ${package}.converter;
+package ${package.Parent}.converter;
 
-#foreach($pkg in ${table.importPackages})
-import ${pkg};
-#end
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
-import ${package}.dto.${entity}DTO;
-import ${package}.entity.${entity};
-import ${package}.vo.${entity}PageVO;
-import ${package}.form.${entity}Form;
-import ${package}.bo.${entity}BO;
-
+import ${package.Parent}.model.dto.${entity}DTO;
+import ${package.Parent}.model.entity.${entity};
+import ${package.Parent}.model.vo.${entity}PageVO;
+import ${package.Parent}.model.form.${entity}Form;
+import ${package.Parent}.model.bo.${entity}BO;
 
 @Mapper(componentModel = "spring")
-public interface ${entity}Converter}{
+public interface ${entity}Converter{
 
     ${entity}PageVO bo2PageVo(${entity}BO bo);
 
