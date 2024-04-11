@@ -7,6 +7,20 @@ import ${package.Parent}.model.form.${entity}Form;
 import ${package.Parent}.model.query.${entity}PageQuery;
 import ${package.Parent}.model.vo.${entity}PageVO;
 import ${package.Parent}.service.${entity}Service;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.youlai.system.common.result.PageResult;
+import com.youlai.system.common.result.Result;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import java.util.List;
+
 #if(${superControllerClassPackage})
 import ${superControllerClassPackage};
 #end
@@ -20,13 +34,13 @@ import ${superControllerClassPackage};
 @RestController
 @RequiredArgsConstructor
 #if(${superControllerClass})
-public class${table.controllerName} extends ${superControllerClass} {
+public class ${table.controllerName} extends ${superControllerClass} {
 #else
 public class ${table.controllerName} {
 #end
 
         #set($entityLower = $string.toLowerCase($entity))
-        private final ${entity}Service $entityLowerService;
+        private final ${table.serviceName} $entityLowerService;
 
         @Operation(summary = "$!{table.comment}分页列表")
         @GetMapping("/page")
