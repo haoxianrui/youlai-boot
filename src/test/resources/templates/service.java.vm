@@ -26,7 +26,7 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
     /**
      * 获取$!{table.comment}表单数据
      *
-     * @param userId
+     * @param id $!{table.comment}ID
      * @return
      */
      ${entity}Form get${entity}FormData(Long id);

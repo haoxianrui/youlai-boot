@@ -6,9 +6,7 @@ import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * 代码交互式生成
@@ -22,7 +20,7 @@ import java.util.List;
 public class FastAutoGeneratorTest {
 
     private static final DataSourceConfig.Builder DATA_SOURCE_CONFIG = new DataSourceConfig
-            .Builder("jdbc:mysql://localhost:3306/youlai_boot?serverTimezone=Asia/Shanghai" , "root" , "123456");
+            .Builder("jdbc:mysql://localhost:3306/youlai_boot?serverTimezone=Asia/Shanghai", "root", "123456");
 
     /**
      * 执行 run
@@ -37,14 +35,14 @@ public class FastAutoGeneratorTest {
                 })
                 // 包配置
                 .packageConfig(builder -> {
-                    builder
-                            .parent("com.youlai.system")
-                            .entity("model.entity")
-                            .mapper("mapper")
-                            .service("service")
-                            .serviceImpl("service.impl")
-                            .controller("controller")
-                            .pathInfo(Collections.singletonMap(OutputFile.xml, System.getProperty("user.dir") + "/src/main/resources/mapper"));
+                            builder
+                                    .parent("com.youlai.system")
+                                    .entity("model.entity")
+                                    .mapper("mapper")
+                                    .service("service")
+                                    .serviceImpl("service.impl")
+                                    .controller("controller")
+                                    .pathInfo(Collections.singletonMap(OutputFile.xml, System.getProperty("user.dir") + "/src/main/resources/mapper"));
                         }
                 )
                 // 注入配置(设置扩展类的模板路径和包路径)
@@ -58,20 +56,35 @@ public class FastAutoGeneratorTest {
                     customFiles.add(new CustomFile.Builder().fileName("Form.java").templatePath("/templates/form.java.vm").packageName("model.form").build());
                     customFiles.add(new CustomFile.Builder().fileName("Converter.java").templatePath("/templates/converter.java.vm").packageName("converter").build());
                     consumer.customFile(customFiles);
+                    consumer.beforeOutputFile((tableInfo, objectMap) -> {
+                        // 为每个表生成首字母小写的实体名
+                        String entityName = tableInfo.getEntityName();
+                        String lowerCaseEntity = entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
+                        // 注入自定义参数
+                        objectMap.put("firstCharLowerCaseEntity", lowerCaseEntity);
+
+                    });
+
                 })
                 // 策略配置
                 .strategyConfig((scanner, builder) -> {
 
                             builder.entityBuilder()
                                     .enableLombok() // 是否使用lombok
-                                    //.enableFileOverride() // 是否覆盖文件
+                                    //.enableFileOverride() // 开启覆盖已生成的文件
                                     .logicDeleteColumnName("deleted") // 逻辑删除字段名
+                                    .enableRemoveIsPrefix() // 开启移除is前缀
                             ;
 
                             builder.mapperBuilder()
                                     .enableBaseColumnList()
                                     .enableBaseResultMap()
                             ;
+
+                            builder.serviceBuilder()
+                                    .formatServiceFileName("%sService"
+                                    );
+
 
                             builder.addTablePrefix("sys_") // 过滤移除表前缀 sys_user 表生成的实体类 User.java
                                     .addInclude(scanner.apply("请输入表名，多个表名用,隔开"));
