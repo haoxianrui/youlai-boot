@@ -1,11 +1,12 @@
 package com.youlai.system.plugin.dupsubmit.aspect;
 
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
-import com.youlai.system.plugin.dupsubmit.annotation.PreventDuplicateSubmit;
-import com.youlai.system.common.result.ResultCode;
+import cn.hutool.jwt.JWTUtil;
+import cn.hutool.jwt.RegisteredPayload;
+import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.exception.BusinessException;
-import com.youlai.system.security.util.JwtUtils;
+import com.youlai.system.common.result.ResultCode;
+import com.youlai.system.plugin.dupsubmit.annotation.PreventDuplicateSubmit;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,8 +70,10 @@ public class DuplicateSubmitAspect {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StrUtil.isNotBlank(token)) {
-            String jti = Convert.toStr(JwtUtils.parseToken(token).get("jti"), null);
+        if (StrUtil.isNotBlank(token) && token.startsWith(SecurityConstants.JWT_TOKEN_PREFIX)) {
+            token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
+            // 从 JWT Token 中获取 jti
+            String jti = (String) JWTUtil.parseToken(token).getPayload(RegisteredPayload.JWT_ID);
             resubmitLockKey = RESUBMIT_LOCK_PREFIX + jti + ":" + request.getMethod() + "-" + request.getRequestURI();
         }
         return resubmitLockKey;

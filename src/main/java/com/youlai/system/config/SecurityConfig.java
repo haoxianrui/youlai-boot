@@ -1,7 +1,9 @@
 package com.youlai.system.config;
 
 import cn.hutool.captcha.generator.CodeGenerator;
-import com.youlai.system.security.constant.SecurityConstants;
+import cn.hutool.core.collection.CollectionUtil;
+import com.youlai.system.common.constant.SecurityConstants;
+import com.youlai.system.config.property.SecurityProperties;
 import com.youlai.system.security.exception.MyAccessDeniedHandler;
 import com.youlai.system.security.exception.MyAuthenticationEntryPoint;
 import com.youlai.system.filter.JwtValidationFilter;
@@ -17,6 +19,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * Spring Security 权限配置
  *
- * @author haoxr
+ * @author Ray Hao
  * @since 2023/2/17
  */
 @Configuration
@@ -39,29 +42,33 @@ public class SecurityConfig {
     private final MyAccessDeniedHandler accessDeniedHandler;
     private final RedisTemplate<String, Object> redisTemplate;
     private final CodeGenerator codeGenerator;
+    private final SecurityProperties securityProperties;
+
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+
                 .authorizeHttpRequests(requestMatcherRegistry ->
                         requestMatcherRegistry.requestMatchers(SecurityConstants.LOGIN_PATH).permitAll()
                                 .anyRequest().authenticated()
                 )
-                .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
                         httpSecurityExceptionHandlingConfigurer
                                 .authenticationEntryPoint(authenticationEntryPoint)
                                 .accessDeniedHandler(accessDeniedHandler)
                 )
+                .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
 
         ;
 
         // 验证码校验过滤器
-        http.addFilterBefore(new CaptchaValidationFilter(redisTemplate,codeGenerator), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CaptchaValidationFilter(redisTemplate, codeGenerator), UsernamePasswordAuthenticationFilter.class);
         // JWT 校验过滤器
-        http.addFilterBefore(new JwtValidationFilter(redisTemplate), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtValidationFilter(redisTemplate,securityProperties.getJwt().getKey()), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -71,18 +78,11 @@ public class SecurityConfig {
      */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-                .requestMatchers(
-                        "/api/v1/auth/captcha",
-                        "/webjars/**",
-                        "/doc.html",
-                        "/swagger-resources/**",
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/ws/**",
-                        "/ws-app/**"
-                );
+        return (web) -> {
+            if (CollectionUtil.isNotEmpty(securityProperties.getIgnoreUrls())) {
+                web.ignoring().requestMatchers(securityProperties.getIgnoreUrls().toArray(new String[0]));
+            }
+        };
     }
 
     /**

@@ -3,10 +3,11 @@ package com.youlai.system.service.impl;
 import cn.hutool.captcha.AbstractCaptcha;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.generator.CodeGenerator;
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWTPayload;
+import cn.hutool.jwt.JWTUtil;
 import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.enums.CaptchaTypeEnum;
 import com.youlai.system.model.dto.CaptchaResult;
@@ -28,7 +29,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.awt.*;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
-    private final RedisTemplate<String,Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
     private final CodeGenerator codeGenerator;
     private final Font captchaFont;
     private final CaptchaProperties captchaProperties;
@@ -57,10 +57,13 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public LoginResult login(String username, String password) {
+        // 认证用户信息
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username.toLowerCase().trim(), password);
+        // 认证
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        String accessToken = JwtUtils.generateToken(authentication);
+        // 认证成功，生成Token
+        String accessToken = JwtUtils.createToken(authentication);
         return LoginResult.builder()
                 .tokenType("Bearer")
                 .accessToken(accessToken)
@@ -74,18 +77,24 @@ public class AuthServiceImpl implements AuthService {
     public void logout() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StrUtil.isNotBlank(token)) {
-
-            Map<String, Object> claims = JwtUtils.parseToken(token);
-            String jti = Convert.toStr(claims.get(JWTPayload.JWT_ID));
-            Long expiration = Convert.toLong(claims.get(JWTPayload.EXPIRES_AT));
+        if (StrUtil.isNotBlank(token) && token.startsWith(SecurityConstants.JWT_TOKEN_PREFIX)) {
+            token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
+            // 解析Token以获取有效载荷（payload）
+            JSONObject payloads = JWTUtil.parseToken(token).getPayloads();
+            // 解析 Token 获取 jti(JWT ID) 和 exp(过期时间)
+            String jti = payloads.getStr(JWTPayload.JWT_ID);
+            Long expiration = payloads.getLong(JWTPayload.EXPIRES_AT);
+            // 如果exp存在，则计算Token剩余有效时间
             if (expiration != null) {
+                // 将Token的jti加入黑名单，并设置剩余有效时间，使其在过期后自动从黑名单移除
                 long ttl = expiration - System.currentTimeMillis() / 1000;
                 redisTemplate.opsForValue().set(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti, null, ttl, TimeUnit.SECONDS);
             } else {
+                // 如果exp不存在，说明Token永不过期，则永久加入黑名单
                 redisTemplate.opsForValue().set(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti, null);
             }
         }
+        // 清空Spring Security上下文
         SecurityContextHolder.clearContext();
     }
 

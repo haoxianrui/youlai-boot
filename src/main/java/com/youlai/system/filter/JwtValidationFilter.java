@@ -1,13 +1,14 @@
 package com.youlai.system.filter;
 
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
+import cn.hutool.jwt.JWTUtil;
 import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.security.util.JwtUtils;
 import com.youlai.system.common.util.ResponseUtils;
-import com.youlai.system.common.exception.BusinessException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,21 +20,24 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * JWT token 校验过滤器
  *
- * @author haoxr
+ * @author Ray Hao
  * @since 2023/9/13
  */
 public class JwtValidationFilter extends OncePerRequestFilter {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public JwtValidationFilter(RedisTemplate<String, Object> redisTemplate) {
+    private final byte[] secretKey;
+
+    public JwtValidationFilter(RedisTemplate<String, Object> redisTemplate, String secretKey) {
         this.redisTemplate = redisTemplate;
+        this.secretKey = secretKey.getBytes();
     }
+
 
     /**
      * 从请求中获取 JWT Token，校验 JWT Token 是否合法
@@ -44,27 +48,38 @@ public class JwtValidationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        try {
-            if (StrUtil.isNotBlank(token)) {
-                Map<String, Object> payload = JwtUtils.parseToken(token);
 
-                String jti = Convert.toStr(payload.get(JWTPayload.JWT_ID));
-                Boolean isTokenBlacklisted  = redisTemplate.hasKey(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti);
-                if (Boolean.TRUE.equals(isTokenBlacklisted)) {
+        try {
+            if (StrUtil.isNotBlank(token) && token.startsWith(SecurityConstants.JWT_TOKEN_PREFIX)) {
+                token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length()); // 去除 Bearer 前缀
+                // 校验 Token 是否有效
+                if (JWTUtil.verify(token, secretKey)) {
+                    // 解析 Token 获取有效载荷
+                    JWT jwt = JWTUtil.parseToken(token);
+                    JSONObject payloads = jwt.getPayloads();
+
+                    // 检查 Token 是否已被加入黑名单
+                    String jti = payloads.getStr(JWTPayload.JWT_ID);
+                    boolean isTokenBlacklisted = Boolean.TRUE.equals(redisTemplate.hasKey(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti));
+                    if (isTokenBlacklisted) {
+                        ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
+                        return;
+                    }
+                    // Token 有效将其解析为 Authentication 对象，并设置到 Spring Security 上下文中
+                    Authentication authentication = JwtUtils.getAuthentication(payloads);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    // Token 无效，直接返回响应
                     ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
                     return;
                 }
-
-                Authentication authentication = JwtUtils.getAuthentication(payload);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } catch (BusinessException ex) {
-            //this is very important, since it guarantees the user is not authenticated at all
+        } catch (Exception e) {
             SecurityContextHolder.clearContext();
-            ResponseUtils.writeErrMsg(response, (ResultCode) ex.getResultCode());
+            ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
             return;
         }
-
+        // Token有效或无Token时继续执行过滤链
         filterChain.doFilter(request, response);
     }
 }

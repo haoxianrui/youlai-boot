@@ -57,12 +57,21 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 
-# 认证配置
-jwt:
-  # 密钥
-  key: SecretKey012345678901234567890123456789012345678901234567890123456789
-  # token 过期时间(单位:秒)
-  ttl: 7200
+# 安全配置
+security:
+  jwt:
+    key: SecretKey012345678901234567890123456789012345678901234567890123456789
+    ttl: 7200
+  ignore-urls:
+    - /v3/api-docs/**
+    - /doc.html
+    - /swagger-resources/**
+    - /webjars/**
+    - /doc.html
+    - /swagger-ui/**
+    - /swagger-ui.html
+    - /api/v1/auth/captcha
+
 
 oss:
   # OSS 类型 (目前支持aliyun、minio)

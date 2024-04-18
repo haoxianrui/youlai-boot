@@ -1,4 +1,4 @@
-package com.youlai.system.security.constant;
+package com.youlai.system.common.constant;
 
 /**
  * JWT Claims声明常量

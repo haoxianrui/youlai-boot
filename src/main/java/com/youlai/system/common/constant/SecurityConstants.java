@@ -24,4 +24,16 @@ public interface SecurityConstants {
     String BLACKLIST_TOKEN_PREFIX = "token:blacklist:";
 
 
+    /**
+     * 登录路径
+     */
+    String LOGIN_PATH = "/api/v1/auth/login";
+
+
+    /**
+     * JWT Token 前缀
+     */
+    String JWT_TOKEN_PREFIX = "Bearer ";
+
+
 }

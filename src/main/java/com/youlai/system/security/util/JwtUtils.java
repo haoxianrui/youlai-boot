@@ -3,12 +3,10 @@ package com.youlai.system.security.util;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONArray;
-import cn.hutool.jwt.JWT;
+import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
-import com.youlai.system.security.constant.JwtClaimConstants;
+import com.youlai.system.common.constant.JwtClaimConstants;
 import com.youlai.system.security.model.SysUserDetails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,9 +19,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * JWT 工具类
+ * JWT Token 工具类
  *
- * @author haoxr
+ * @author Ray Hao
  * @since 2.6.0
  */
 @Component
@@ -41,12 +39,12 @@ public class JwtUtils {
     private static int ttl;
 
 
-    @Value("${jwt.key}")
+    @Value("${security.jwt.key}")
     public void setKey(String key) {
         JwtUtils.key = key.getBytes();
     }
 
-    @Value("${jwt.ttl}")
+    @Value("${security.jwt.ttl}")
     public void setTtl(Integer ttl) {
         JwtUtils.ttl = ttl;
     }
@@ -57,7 +55,7 @@ public class JwtUtils {
      * @param authentication 用户认证信息
      * @return Token 字符串
      */
-    public static String generateToken(Authentication authentication) {
+    public static String createToken(Authentication authentication) {
 
         SysUserDetails userDetails = (SysUserDetails) authentication.getPrincipal();
 
@@ -80,56 +78,30 @@ public class JwtUtils {
         payload.put(JWTPayload.SUBJECT, authentication.getName());
         payload.put(JWTPayload.JWT_ID, IdUtil.simpleUUID());
 
-        return JWTUtil.createToken(payload, JwtUtils.key);
+        return JWTUtil.createToken(payload, key);
     }
 
 
     /**
      * 从 JWT Token 中解析 Authentication  用户认证信息
      *
-     * @param payload JWT 载体
+     * @param payloads JWT 载体
      * @return 用户认证信息
      */
-    public static UsernamePasswordAuthenticationToken getAuthentication(Map<String, Object> payload) {
+    public static UsernamePasswordAuthenticationToken getAuthentication(JSONObject payloads) {
         SysUserDetails userDetails = new SysUserDetails();
-        userDetails.setUserId(Convert.toLong(payload.get(JwtClaimConstants.USER_ID))); // 用户ID
-        userDetails.setDeptId(Convert.toLong(payload.get(JwtClaimConstants.DEPT_ID))); // 部门ID
-        userDetails.setDataScope(Convert.toInt(payload.get(JwtClaimConstants.DATA_SCOPE))); // 数据权限范围
+        userDetails.setUserId(payloads.getLong(JwtClaimConstants.USER_ID)); // 用户ID
+        userDetails.setDeptId(payloads.getLong(JwtClaimConstants.DEPT_ID)); // 部门ID
+        userDetails.setDataScope(payloads.getInt(JwtClaimConstants.DATA_SCOPE)); // 数据权限范围
 
-        userDetails.setUsername(Convert.toStr(payload.get(JWTPayload.SUBJECT))); // 用户名
+        userDetails.setUsername(payloads.getStr(JWTPayload.SUBJECT)); // 用户名
         // 角色集合
-        Set<SimpleGrantedAuthority> authorities = ((JSONArray) payload.get(JwtClaimConstants.AUTHORITIES))
+        Set<SimpleGrantedAuthority> authorities = payloads.getJSONArray(JwtClaimConstants.AUTHORITIES)
                 .stream()
                 .map(authority -> new SimpleGrantedAuthority(Convert.toStr(authority)))
                 .collect(Collectors.toSet());
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
-    }
-
-
-    /**
-     * 解析 JWT Token 获取载体信息
-     *
-     * @param token JWT Token
-     * @return 载体信息
-     */
-    public static Map<String, Object> parseToken(String token) {
-        try {
-            if (StrUtil.isBlank(token)) {
-                return null;
-            }
-
-            if (token.startsWith("Bearer ")) {
-                token = token.substring(7);
-            }
-
-            JWT jwt = JWTUtil.parseToken(token);
-            if (jwt.setKey(JwtUtils.key).validate(0)) {
-                return jwt.getPayloads();
-            }
-        } catch (Exception ignored) {
-        }
-        return null;
     }
 
 
