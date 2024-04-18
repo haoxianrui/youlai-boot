@@ -1,13 +1,29 @@
+# 2.7.1 (2024/4/18)
+### 🐛 fix
+- 修复用户名或者密码错误时，返回的错误信息不正确问题
+### 🛠️ refactor
+- JWT 解析和验证代码优化重构
+- 优化代码结构和完善注释，提高代码可读性
+
+# 2.7.0 (2024/4/13)
+### ✨ feat
+- 集成 Mybatis-Plus generator 代码生成器
+
+# 2.6.0 (2024/3/6)
+
+### ✨ feat
+- 黑名单方式实现 JWT 主动注销过期
+### 🛠️ refactor
+- 角色权限重构
+
+
 # 2.5.0 (2023/12/6)
 ### ✨ feat
 - [集成 Spring Cache 和 Redis 缓存，路由缓存](https://blog.csdn.net/u013737132/article/details/134789862)
 ### 🛠️ refactor
 - 权限判断逻辑调整，用户绑定权限调整为角色绑定权限
-
 ### fix
 - [接口无请求权限，Spring Security 自定义异常无效问题修复](https://youlai.blog.csdn.net/article/details/134718249)
-
-
 
 
 # 2.4.1 (2023/11/7)
