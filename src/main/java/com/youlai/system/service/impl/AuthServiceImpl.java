@@ -83,11 +83,16 @@ public class AuthServiceImpl implements AuthService {
             JSONObject payloads = JWTUtil.parseToken(token).getPayloads();
             // 解析 Token 获取 jti(JWT ID) 和 exp(过期时间)
             String jti = payloads.getStr(JWTPayload.JWT_ID);
-            Long expiration = payloads.getLong(JWTPayload.EXPIRES_AT);
+            Long expiration = payloads.getLong(JWTPayload.EXPIRES_AT); // 过期时间(秒)
             // 如果exp存在，则计算Token剩余有效时间
             if (expiration != null) {
+                long currentTimeSeconds = System.currentTimeMillis() / 1000;
+                if (expiration < currentTimeSeconds) {
+                    // Token已过期，不再加入黑名单
+                    return;
+                }
                 // 将Token的jti加入黑名单，并设置剩余有效时间，使其在过期后自动从黑名单移除
-                long ttl = expiration - System.currentTimeMillis() / 1000;
+                long ttl = expiration - currentTimeSeconds;
                 redisTemplate.opsForValue().set(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti, null, ttl, TimeUnit.SECONDS);
             } else {
                 // 如果exp不存在，说明Token永不过期，则永久加入黑名单
