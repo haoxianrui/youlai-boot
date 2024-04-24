@@ -6,7 +6,7 @@ import ${package.Service}.${table.serviceName};
 import ${superServiceImplClassPackage};
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.youlai.system.common.util.DateUtils;
+import com.youlai.common.util.DateUtils;
 import ${package.Parent}.model.form.${entity}Form;
 import ${package.Parent}.model.query.${entity}PageQuery;
 import ${package.Parent}.model.bo.${entity}BO;
@@ -18,14 +18,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * $!{table.comment} 服务实现类
+ * $!{table.comment}服务实现类
  *
  * @author ${author}
  * @since ${date}
@@ -101,17 +100,17 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     /**
      * 删除$!{table.comment}
      *
-     * @param idsStr $!{table.comment}ID，多个以英文逗号(,)分割
+     * @param ids $!{table.comment}ID，多个以英文逗号(,)分割
      * @return true|false
      */
     @Override
-    public boolean delete${entity}s(String idsStr) {
-        Assert.isTrue(StrUtil.isNotBlank(idsStr), "删除的$!{table.comment}数据为空");
+    public boolean delete${entity}s(String ids) {
+        Assert.isTrue(StrUtil.isNotBlank(ids), "删除的$!{table.comment}数据为空");
         // 逻辑删除
-        List<Long> ids = Arrays.stream(idsStr.split(","))
+        List<Long> idList = Arrays.stream(ids.split(","))
                 .map(Long::parseLong)
-                .collect(Collectors.toList());
-        return this.removeByIds(ids);
+                .toList();
+        return this.removeByIds(idList);
     }
     
 

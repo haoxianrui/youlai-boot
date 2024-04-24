@@ -8,6 +8,7 @@ import ${mapperAnnotationClass.name};
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import ${package.Parent}.model.bo.${entity}BO;
 import ${package.Parent}.model.query.${entity}PageQuery;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * $!{table.comment} Mapper 接口
@@ -19,6 +20,7 @@ import ${package.Parent}.model.query.${entity}PageQuery;
 @${mapperAnnotationClass.simpleName}
 #end
 
+@Mapper
 public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
 
     /**

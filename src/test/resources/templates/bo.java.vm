@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 #end
 #end
+import java.time.LocalDateTime;
 
 /**
  * $!{table.comment}
