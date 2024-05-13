@@ -71,7 +71,8 @@ security:
     - /swagger-ui/**
     - /swagger-ui.html
     - /api/v1/auth/captcha
-
+    - /ws/**
+    - /ws-app/**
 
 oss:
   # OSS 类型 (目前支持aliyun、minio)

@@ -15,7 +15,7 @@ spring:
     password: 123456
   data:
     redis:
-      database: 6
+      database: 12
       host: www.youlai.tech
       port: 6379
       password: 123456
@@ -71,7 +71,8 @@ security:
     - /swagger-ui/**
     - /swagger-ui.html
     - /api/v1/auth/captcha
-
+    - /ws/**
+    - /ws-app/**
 # 文件上传配置
 oss:
   # OSS 类型 (目前支持aliyun、minio)
