@@ -148,7 +148,7 @@ public class SysUserController {
     }
 
     @Operation(summary = "导入用户")
-    @PostMapping("/_import")
+    @PostMapping("/import")
     public Result importUsers(@Parameter(description = "部门ID") Long deptId, MultipartFile file) throws IOException {
         UserImportListener listener = new UserImportListener(deptId);
         String msg = ExcelUtils.importExcel(file.getInputStream(), UserImportVO.class, listener);
@@ -156,7 +156,7 @@ public class SysUserController {
     }
 
     @Operation(summary = "导出用户")
-    @GetMapping("/_export")
+    @GetMapping("/export")
     public void exportUsers(UserPageQuery queryParams, HttpServletResponse response) throws IOException {
         String fileName = "用户列表.xlsx";
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
