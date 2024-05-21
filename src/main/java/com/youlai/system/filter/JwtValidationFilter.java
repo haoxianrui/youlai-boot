@@ -52,27 +52,30 @@ public class JwtValidationFilter extends OncePerRequestFilter {
         try {
             if (StrUtil.isNotBlank(token) && token.startsWith(SecurityConstants.JWT_TOKEN_PREFIX)) {
                 token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length()); // 去除 Bearer 前缀
-                // 校验 Token 是否有效
-                if (JWTUtil.verify(token, secretKey)) {
-                    // 解析 Token 获取有效载荷
-                    JWT jwt = JWTUtil.parseToken(token);
-                    JSONObject payloads = jwt.getPayloads();
 
-                    // 检查 Token 是否已被加入黑名单
-                    String jti = payloads.getStr(JWTPayload.JWT_ID);
-                    boolean isTokenBlacklisted = Boolean.TRUE.equals(redisTemplate.hasKey(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti));
-                    if (isTokenBlacklisted) {
-                        ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
-                        return;
-                    }
-                    // Token 有效将其解析为 Authentication 对象，并设置到 Spring Security 上下文中
-                    Authentication authentication = JwtUtils.getAuthentication(payloads);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                } else {
-                    // Token 无效，直接返回响应
+                // 解析 Token
+                JWT jwt = JWTUtil.parseToken(token);
+
+                // 检查 Token 是否有效(验签 + 是否过期)
+                boolean isValidate = jwt.setKey(secretKey).validate(0);
+                if (!isValidate) {
                     ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
                     return;
                 }
+
+                // 检查 Token 是否已被加入黑名单(注销)
+                JSONObject payloads = jwt.getPayloads();
+                String jti = payloads.getStr(JWTPayload.JWT_ID);
+                boolean isTokenBlacklisted = Boolean.TRUE.equals(redisTemplate.hasKey(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti));
+                if (isTokenBlacklisted) {
+                    ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
+                    return;
+                }
+
+                // Token 有效将其解析为 Authentication 对象，并设置到 Spring Security 上下文中
+                Authentication authentication = JwtUtils.getAuthentication(payloads);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
             }
         } catch (Exception e) {
             SecurityContextHolder.clearContext();
