@@ -16,8 +16,8 @@ public interface MenuConverter {
 
     MenuVO entity2Vo(SysMenu entity);
 
-    MenuForm entity2Form(SysMenu entity);
+    MenuForm convertToForm(SysMenu entity);
 
-    SysMenu form2Entity(MenuForm menuForm);
+    SysMenu convertToEntity(MenuForm menuForm);
 
 }

@@ -88,5 +88,10 @@ public class SysMenu extends BaseEntity {
      */
     private Integer alwaysShow;
 
+    /**
+     * 路由参数
+     */
+    private String params;
+
 
 }

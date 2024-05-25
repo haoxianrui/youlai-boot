@@ -1,14 +1,17 @@
 package com.youlai.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.common.enums.MenuTypeEnum;
 import com.youlai.system.common.enums.StatusEnum;
+import com.youlai.system.common.model.KeyValue;
 import com.youlai.system.common.model.Option;
 import com.youlai.system.converter.MenuConverter;
 import com.youlai.system.mapper.SysMenuMapper;
@@ -212,9 +215,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             menuForm.setComponent(null);
         }
 
-        SysMenu entity = menuConverter.form2Entity(menuForm);
+        SysMenu entity = menuConverter.convertToEntity(menuForm);
         String treePath = generateMenuTreePath(menuForm.getParentId());
         entity.setTreePath(treePath);
+
+        List<KeyValue> paramList = menuForm.getParamList();
+        if (CollectionUtil.isNotEmpty(paramList)) {
+            entity.setParams(JSONUtil.toJsonStr(paramList));
+        }
 
         boolean result = this.saveOrUpdate(entity);
         if (result) {
@@ -278,7 +286,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public MenuForm getMenuForm(Long id) {
         SysMenu entity = this.getById(id);
-        return menuConverter.entity2Form(entity);
+        Assert.isTrue(entity != null, "菜单不存在");
+        MenuForm formData = menuConverter.convertToForm(entity);
+
+        if(StrUtil.isNotBlank(entity.getParams())){
+            List<KeyValue> params = JSONUtil.toList(JSONUtil.parseArray(entity.getParams()), KeyValue.class);
+            formData.setParamList(params);
+        }
+        return formData;
     }
 
     /**
