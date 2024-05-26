@@ -8,6 +8,8 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.common.enums.MenuTypeEnum;
 import com.youlai.system.common.enums.StatusEnum;
@@ -31,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -141,7 +144,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Cacheable(cacheNames = "menu", key = "'routes'")
     public List<RouteVO> listRoutes() {
         List<RouteBO> menuList = this.baseMapper.listRoutes();
-        return buildRoutes(SystemConstants.ROOT_NODE_ID, menuList);
+        List<RouteVO> routes = buildRoutes(SystemConstants.ROOT_NODE_ID, menuList);
+        return routes;
     }
 
     /**
@@ -191,6 +195,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
         meta.setAlwaysShow(ObjectUtil.equals(routeBO.getAlwaysShow(), 1));
 
+        String paramsJson = routeBO.getParams();
+        // 将 JSON 字符串转换为 Map<String, String>
+        if (StrUtil.isNotBlank(paramsJson)) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                Map<String, String> paramMap = objectMapper.readValue(paramsJson, new TypeReference<>() {});
+                meta.setParams(paramMap);
+            } catch (Exception e) {
+                throw new RuntimeException("解析参数失败", e);
+            }
+        }
         routeVO.setMeta(meta);
         return routeVO;
     }
@@ -219,9 +234,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         String treePath = generateMenuTreePath(menuForm.getParentId());
         entity.setTreePath(treePath);
 
-        List<KeyValue> paramList = menuForm.getParamList();
-        if (CollectionUtil.isNotEmpty(paramList)) {
-            entity.setParams(JSONUtil.toJsonStr(paramList));
+        List<KeyValue> params = menuForm.getParams();
+        // 路由参数 [{key:"id",value:"1"}，{key:"name",value:"张三"}] 转换为 [{"id":"1"},{"name":"张三"}]
+        if (CollectionUtil.isNotEmpty(params)) {
+            entity.setParams(JSONUtil.toJsonStr(params.stream()
+                    .collect(Collectors.toMap(KeyValue::getKey, KeyValue::getValue))));
+        }else{
+            entity.setParams(null);
         }
 
         boolean result = this.saveOrUpdate(entity);
@@ -288,11 +307,26 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         SysMenu entity = this.getById(id);
         Assert.isTrue(entity != null, "菜单不存在");
         MenuForm formData = menuConverter.convertToForm(entity);
+        // 路由参数字符串 {"id":"1","name":"张三"} 转换为 [{key:"id", value:"1"}, {key:"name", value:"张三"}]
+        String params = entity.getParams();
+        if (StrUtil.isNotBlank(params)) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                // 解析 JSON 字符串为 Map<String, String>
+                Map<String, String> paramMap = objectMapper.readValue(params, new TypeReference<>() {});
 
-        if(StrUtil.isNotBlank(entity.getParams())){
-            List<KeyValue> params = JSONUtil.toList(JSONUtil.parseArray(entity.getParams()), KeyValue.class);
-            formData.setParamList(params);
+                // 转换为 List<KeyValue> 格式 [{key:"id", value:"1"}, {key:"name", value:"张三"}]
+                List<KeyValue> transformedList = paramMap.entrySet().stream()
+                        .map(entry -> new KeyValue(entry.getKey(), entry.getValue()))
+                        .toList();
+
+                // 将转换后的列表存入 MenuForm
+                formData.setParams(transformedList);
+            } catch (Exception e) {
+                throw new RuntimeException("解析参数失败", e);
+            }
         }
+
         return formData;
     }
 

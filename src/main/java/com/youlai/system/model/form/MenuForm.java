@@ -1,12 +1,12 @@
 package com.youlai.system.model.form;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.youlai.system.common.enums.MenuTypeEnum;
 import com.youlai.system.common.model.KeyValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 @Schema(description = "菜单表单对象")
 @Data
@@ -52,6 +52,6 @@ public class MenuForm {
     private Integer alwaysShow;
 
     @Schema(description = "路由参数")
-    private List<KeyValue> paramList;
+    private List<KeyValue> params;
 
 }
