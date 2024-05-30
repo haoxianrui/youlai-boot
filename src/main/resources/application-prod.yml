@@ -15,7 +15,7 @@ spring:
     password: 123456
   data:
     redis:
-      database: 12
+      database: 1
       host: www.youlai.tech
       port: 6379
       password: 123456
@@ -114,9 +114,12 @@ springdoc:
       packages-to-scan: com.youlai.system.controller
   default-flat-param-object: true
 
-# knife4j的增强配置，不需要增强可以不配 https://doc.xiaominfo.com/docs/quick-start
+# knife4j 接口文档配置
 knife4j:
-  enable: true
+  # 是否开启 Knife4j 增强功能
+  enable: true  # 设置为 true 表示开启增强功能
+  # 生产环境配置
+  production: true  # 设置为 true 表示在生产环境中不显示文档，为 false 表示显示文档（通常在开发环境中使用）
   setting:
     language: zh_cn
 
