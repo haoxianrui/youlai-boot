@@ -1,7 +1,7 @@
 
 <p align="center">
     <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
-    <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.2.3-green.svg"/>
+    <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.3.0-green.svg"/>
      <a href="https://gitee.com/youlaitech/youlai-boot" target="_blank">
         <img alt="有来技术" src="https://gitee.com/youlaiorg/youlai-boot/badge/star.svg"/>
     </a>     
@@ -113,6 +113,14 @@ youlai-boot
     执行 [SystemApplication.java](src/main/java/com/youlai/system/SystemApplication.java) 的 main 方法完成后端项目启动；
 
     访问接口文档地址 [http://ip:port/doc.html](http://localhost:8989/doc.html) 验证项目启动是否成功。
+
+## ✅ 项目统计
+
+![Alt](https://repobeats.axiom.co/api/embed/544c5c0b5b3611a6c4d5ef0faa243a9066b89659.svg "Repobeats analytics image")
+
+Thanks to all the contributors!
+
+[![contributors](https://contrib.rocks/image?repo=haoxianrui/youlai-boot)](https://github.com/haoxianrui/youlai-boot/graphs/contributors)
 
 
 ## 💖 加交流群
