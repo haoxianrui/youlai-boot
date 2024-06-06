@@ -33,7 +33,7 @@
 
         <xxl-job.version>2.4.1</xxl-job.version>
 
-        <easyexcel.version>3.3.4</easyexcel.version>
+        <easyexcel.version>3.2.1</easyexcel.version>
 
         <!-- 对象存储 -->
         <minio.version>8.5.10</minio.version>
