@@ -20,7 +20,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface RoleConverter {
 
-    Page<RolePageVO> entity2Page(Page<SysRole> page);
+    Page<RolePageVO> convertToPageVo(Page<SysRole> page);
 
     @Mappings({
             @Mapping(target = "value", source = "id"),
@@ -31,7 +31,7 @@ public interface RoleConverter {
 
     List<Option> entities2Options(List<SysRole> roles);
 
-    SysRole form2Entity(RoleForm roleForm);
+    SysRole convertToEntity(RoleForm roleForm);
 
-    RoleForm entity2Form(SysRole entity);
+    RoleForm convertToForm(SysRole entity);
 }

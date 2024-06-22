@@ -1,7 +1,7 @@
 
 <p align="center">
     <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
-    <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.1.5-green.svg"/>
+    <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.3.0-green.svg"/>
      <a href="https://gitee.com/youlaitech/youlai-boot" target="_blank">
         <img alt="有来技术" src="https://gitee.com/youlaiorg/youlai-boot/badge/star.svg"/>
     </a>     
@@ -28,7 +28,7 @@
 
 基于 JDK 17、Spring Boot 3、Spring Security 6、JWT、Redis、Mybatis-Plus、Knife4j、Vue 3、Element-Plus 构建的前后端分离单体权限管理系统。
 
-- **🚀 开发框架**: 使用 Spring Boot 3.0 和 Vue 3，以及 Element-Plus 等主流技术栈，实时更新。
+- **🚀 开发框架**: 使用 Spring Boot 3 和 Vue 3，以及 Element-Plus 等主流技术栈，实时更新。
 
 - **🔐 安全认证**: 结合 Spring Security 和 JWT 提供安全、无状态、分布式友好的身份验证和授权机制。
 
@@ -48,14 +48,16 @@ youlai-boot
     ├── common                          # 公共模块
     ├── config                          # 自动装配配置
         ├── CorsConfig                  # 跨域共享配置
-        ├── RedisConfig                 # Redis 配置
+        ├── MybatisConfig               # Mybatis 自动装配配置
+        ├── RedisCacheConfig            # Redis 缓存自动装配配置
+        ├── RedisConfig                 # Redis 自动装配配置
+        ├── SecurityConfig              # Spring Security 自动装配配置
         ├── SwaggerConfig               # API 接口文档配置
         ├── WebMvcConfig                # WebMvc 配置
+        ├── WebSocketConfig             # WebSocket 自动装配配置
+        ├── XxlJobConfig                # XXL-JOB 自动装配配置
     ├── controller                      # 控制层
-    ├── converter                       # MapStruct转换器
-    ├── core                            # 核心模块
-        ├── mybatisplus                 # Mybatis-Plus 配置和插件
-        ├── security                    # Spring Security 安全配置和扩展
+    ├── converter                       # MapStruct 转换器
     ├── filter                          # 过滤器
         ├── RequestLogFilter            # 请求日志过滤器
         ├── VerifyCodeFilter            # 验证码过滤器
@@ -68,12 +70,18 @@ youlai-boot
         ├── vo                          # 视图对象
     ├── mapper                          # 数据库访问层
     ├── plugin                          # 插件(可选)
+        ├── captcha                     # 验证码插件，用于生成验证码
         ├── dupsubmit                   # 防重提交插件，用于防止表单重复提交
+        ├── mybatis                     # Mybatis 插件，数据权限、字段填充
         ├── easyexcel                   # EasyExcel 插件，Excel 文件的读写
-        ├── rabbitmq                    # RabbitMQ 插件，消息队列交互
-        ├── websocket                   # WebSocket 插件，实时双向通信
         ├── xxljob                      # XXL-JOB 插件，分布式任务调度和执行
+    ├── security                        # Spring Security 安全配置和扩展
+        ├── util                        # 工具类
+            ├── JwtUtils                # JWT 工具类，用于生成和解析 JWT
+            ├── SecurityUtils           # Spring Security 工具类，用于获取当前登录用户
     ├── service                         # 业务逻辑层
+
+    
 └── end       
 ```
 
@@ -105,6 +113,14 @@ youlai-boot
     执行 [SystemApplication.java](src/main/java/com/youlai/system/SystemApplication.java) 的 main 方法完成后端项目启动；
 
     访问接口文档地址 [http://ip:port/doc.html](http://localhost:8989/doc.html) 验证项目启动是否成功。
+
+## ✅ 项目统计
+
+![Alt](https://repobeats.axiom.co/api/embed/544c5c0b5b3611a6c4d5ef0faa243a9066b89659.svg "Repobeats analytics image")
+
+Thanks to all the contributors!
+
+[![contributors](https://contrib.rocks/image?repo=haoxianrui/youlai-boot)](https://github.com/haoxianrui/youlai-boot/graphs/contributors)
 
 
 ## 💖 加交流群

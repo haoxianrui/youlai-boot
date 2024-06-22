@@ -15,7 +15,7 @@ spring:
     password: 123456
   data:
     redis:
-      database: 6
+      database: 1
       host: www.youlai.tech
       port: 6379
       password: 123456
@@ -31,6 +31,7 @@ spring:
           # 连接池中的最小空闲连接 默认0
           min-idle: 0
   cache:
+    enabled: false
     # 缓存类型 redis、none(不使用缓存)
     type: redis
     # 缓存时间(单位：ms)
@@ -56,13 +57,23 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 
-# 认证配置
-jwt:
-  # 签署密钥
-  secret-key: SecretKey012345678901234567890123456789012345678901234567890123456789
-  # token 过期时间(单位:秒)
-  expiration: 7200
-
+# 安全配置
+security:
+  jwt:
+    key: SecretKey012345678901234567890123456789012345678901234567890123456789
+    ttl: 7200
+  ignore-urls:
+    - /v3/api-docs/**
+    - /doc.html
+    - /swagger-resources/**
+    - /webjars/**
+    - /doc.html
+    - /swagger-ui/**
+    - /swagger-ui.html
+    - /api/v1/auth/captcha
+    - /ws/**
+    - /ws-app/**
+# 文件上传配置
 oss:
   # OSS 类型 (目前支持aliyun、minio)
   type: minio
@@ -103,9 +114,12 @@ springdoc:
       packages-to-scan: com.youlai.system.controller
   default-flat-param-object: true
 
-# knife4j的增强配置，不需要增强可以不配 https://doc.xiaominfo.com/docs/quick-start
+# knife4j 接口文档配置
 knife4j:
-  enable: true
+  # 是否开启 Knife4j 增强功能
+  enable: true  # 设置为 true 表示开启增强功能
+  # 生产环境配置
+  production: true  # 设置为 true 表示在生产环境中不显示文档，为 false 表示显示文档（通常在开发环境中使用）
   setting:
     language: zh_cn
 
@@ -135,10 +149,12 @@ captcha:
   # 验证码高度
   height: 40
   # 验证码干扰元素个数
-  interfere-count: 3
+  interfere-count: 2
+  # 文本透明度(0.0-1.0)
+  text-alpha: 0.8
   # 验证码字符配置
   code:
-    # 验证码字符类型 math-算术 |random-随机字符
+    # 验证码字符类型 math-算术|random-随机字符
     type: math
     # 验证码字符长度，type=算术时，表示运算位数(1:个位数运算 2:十位数运算)；type=随机字符时，表示字符个数
     length: 1
@@ -149,7 +165,7 @@ captcha:
     # 字体样式 0-普通|1-粗体|2-斜体
     weight: 1
     # 字体大小
-    size: 18
+    size: 20
   # 验证码有效期(秒)
   expire-seconds: 120
 

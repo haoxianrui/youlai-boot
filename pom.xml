@@ -6,13 +6,13 @@
 
     <groupId>com.youlai</groupId>
     <artifactId>youlai-boot</artifactId>
-    <version>2.4.1</version>
-    <description>基于 Java 17 + SpringBoot 3 构建的权限管理系统。</description>
+    <version>2.9.0</version>
+    <description>基于 Java 17 + SpringBoot 3 + Spring Security 构建的权限管理系统。</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version> <!-- lookup parent from repository -->
+        <version>3.3.0</version> <!-- lookup parent from repository -->
         <relativePath/>
     </parent>
 
@@ -20,31 +20,33 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <hutool.version>5.8.15</hutool.version>
+        <hutool.version>5.8.27</hutool.version>
 
         <mysql.version>8.0.28</mysql.version>
-        <druid.version>1.2.16</druid.version>
-        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
+        <druid.version>1.2.23</druid.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
 
-        <knife4j.version>4.3.0</knife4j.version>
+        <knife4j.version>4.5.0</knife4j.version>
 
-        <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 
-        <xxl-job.version>2.4.0</xxl-job.version>
+        <xxl-job.version>2.4.1</xxl-job.version>
 
-        <jjwt.version>0.11.5</jjwt.version>
-
-        <easyexcel.version>3.2.1</easyexcel.version>
+        <easyexcel.version>3.3.4</easyexcel.version>
 
         <!-- 对象存储 -->
-        <minio.version>8.5.2</minio.version>
+        <minio.version>8.5.10</minio.version>
         <okhttp3.version>4.8.1</okhttp3.version>
 
         <aliyun-sdk-oss.version>3.16.3</aliyun-sdk-oss.version>
 
         <!-- redisson 分布式锁 -->
-        <redisson.version>3.24.3</redisson.version>
+        <redisson.version>3.30.0</redisson.version>
+
+        <!-- 自动代码生成 -->
+        <mybatis-plus-generator.version>3.5.6</mybatis-plus-generator.version>
+        <velocity.version>2.3</velocity.version>
     </properties>
 
     <dependencies>
@@ -119,7 +121,7 @@
 
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
 
@@ -145,25 +147,6 @@
             <groupId>com.xuxueli</groupId>
             <artifactId>xxl-job-core</artifactId>
             <version>${xxl-job.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>${jjwt.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>${jjwt.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>${jjwt.version}</version>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -201,6 +184,24 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>${mybatis-plus-generator.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>${velocity.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
+            <version>4.2.0</version>
         </dependency>
 
     </dependencies>

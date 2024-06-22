@@ -2,32 +2,33 @@ package com.youlai.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.common.model.Option;
+import com.youlai.system.security.util.SecurityUtils;
 import com.youlai.system.converter.RoleConverter;
-import com.youlai.system.core.security.service.PermissionService;
 import com.youlai.system.mapper.SysRoleMapper;
 import com.youlai.system.model.entity.SysRole;
 import com.youlai.system.model.entity.SysRoleMenu;
 import com.youlai.system.model.form.RoleForm;
 import com.youlai.system.model.query.RolePageQuery;
 import com.youlai.system.model.vo.RolePageVO;
+import com.youlai.system.security.service.PermissionService;
 import com.youlai.system.service.SysRoleMenuService;
 import com.youlai.system.service.SysRoleService;
 import com.youlai.system.service.SysUserRoleService;
-import com.youlai.system.common.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 角色业务实现类
@@ -42,7 +43,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private final SysRoleMenuService roleMenuService;
     private final SysUserRoleService userRoleService;
     private final RoleConverter roleConverter;
-    private final PermissionService permissionService;
 
     /**
      * 角色分页列表
@@ -70,7 +70,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         );
 
         // 实体转换
-        return roleConverter.entity2Page(rolePage);
+        return roleConverter.convertToPageVo(rolePage);
     }
 
     /**
@@ -101,19 +101,37 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public boolean saveRole(RoleForm roleForm) {
 
         Long roleId = roleForm.getId();
-        String roleCode = roleForm.getCode();
 
+        // 编辑角色时，判断角色是否存在
+        SysRole oldRole = null;
+        if (roleId != null) {
+            oldRole = this.getById(roleId);
+            Assert.isTrue(oldRole != null, "角色不存在");
+        }
+
+        String roleCode = roleForm.getCode();
         long count = this.count(new LambdaQueryWrapper<SysRole>()
                 .ne(roleId != null, SysRole::getId, roleId)
                 .and(wrapper ->
-                        wrapper.eq(SysRole::getCode, roleCode).or().eq(SysRole::getName, roleCode)
+                        wrapper.eq(SysRole::getCode, roleCode).or().eq(SysRole::getName, roleForm.getName())
                 ));
-        Assert.isTrue(count == 0, "角色名称或角色编码重复，请检查！");
+        Assert.isTrue(count == 0, "角色名称或角色编码已存在，请修改后重试！");
 
         // 实体转换
-        SysRole role = roleConverter.form2Entity(roleForm);
+        SysRole role = roleConverter.convertToEntity(roleForm);
 
-        return this.saveOrUpdate(role);
+        boolean result = this.saveOrUpdate(role);
+        if (result) {
+            // 判断角色编码或状态是否修改，修改了则刷新权限缓存
+            if (oldRole != null
+                    && (
+                    !StrUtil.equals(oldRole.getCode(), roleCode) ||
+                            !ObjectUtil.equals(oldRole.getStatus(), roleForm.getStatus())
+            )) {
+                roleMenuService.refreshRolePermsCache(oldRole.getCode(), roleCode);
+            }
+        }
+        return result;
     }
 
     /**
@@ -125,7 +143,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public RoleForm getRoleForm(Long roleId) {
         SysRole entity = this.getById(roleId);
-        return roleConverter.entity2Form(entity);
+        return roleConverter.convertToForm(entity);
     }
 
     /**
@@ -137,9 +155,17 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     public boolean updateRoleStatus(Long roleId, Integer status) {
-        return this.update(new LambdaUpdateWrapper<SysRole>()
-                .eq(SysRole::getId, roleId)
-                .set(SysRole::getStatus, status));
+
+        SysRole role = this.getById(roleId);
+        Assert.isTrue(role != null, "角色不存在");
+
+        role.setStatus(status);
+        boolean result = this.updateById(role);
+        if (result) {
+            // 刷新角色的权限缓存
+            roleMenuService.refreshRolePermsCache(role.getCode());
+        }
+        return result;
     }
 
     /**
@@ -160,13 +186,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             Assert.isTrue(role != null, "角色不存在");
 
             // 判断角色是否被用户关联
-            boolean isRoleAssigned = userRoleService.isRoleAssignedToUser(roleId);
+            boolean isRoleAssigned = userRoleService.hasAssignedUsers(roleId);
             Assert.isTrue(!isRoleAssigned, "角色【{}】已分配用户，请先解除关联后删除", role.getName());
 
             boolean deleteResult = this.removeById(roleId);
-            if(deleteResult) {
+            if (deleteResult) {
                 // 删除成功，刷新权限缓存
-                permissionService.refreshPermissionCache(role.getCode());
+                roleMenuService.refreshRolePermsCache(role.getCode());
             }
         }
         return true;
@@ -192,10 +218,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     @Transactional
-    @CacheEvict(cacheNames = "system", key = "'routes'")
+    @CacheEvict(cacheNames = "menu", key = "'routes'")
     public boolean assignMenusToRole(Long roleId, List<Long> menuIds) {
+        SysRole role = this.getById(roleId);
+        Assert.isTrue(role != null, "角色不存在");
+
         // 删除角色菜单
-        roleMenuService.remove(new LambdaQueryWrapper<SysRoleMenu>().eq(SysRoleMenu::getRoleId, roleId));
+        roleMenuService.remove(
+                new LambdaQueryWrapper<SysRoleMenu>()
+                        .eq(SysRoleMenu::getRoleId, roleId)
+        );
         // 新增角色菜单
         if (CollectionUtil.isNotEmpty(menuIds)) {
             List<SysRoleMenu> roleMenus = menuIds
@@ -204,6 +236,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                     .toList();
             roleMenuService.saveBatch(roleMenus);
         }
+
+        // 刷新角色的权限缓存
+        roleMenuService.refreshRolePermsCache(role.getCode());
+
         return true;
     }
 

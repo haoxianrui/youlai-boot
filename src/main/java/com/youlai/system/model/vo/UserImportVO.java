@@ -19,7 +19,7 @@ public class UserImportVO {
     private String nickname;
 
     @ExcelProperty(value = "性别")
-    private String gender;
+    private String genderLabel;
 
     @ExcelProperty(value = "手机号码")
     private String mobile;

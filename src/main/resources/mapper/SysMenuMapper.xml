@@ -18,6 +18,7 @@
         <result property="type" column="type" jdbcType="OTHER"/>
         <result property="alwaysShow" column="always_show" jdbcType="INTEGER"/>
         <result property="keepAlive" column="keep_alive" jdbcType="INTEGER"/>
+        <result property="params" column="params" jdbcType="VARCHAR"/>
         <collection property="roles" ofType="string" javaType="list">
             <result column="code"/>
         </collection>
@@ -38,7 +39,8 @@
            t1.type,
            t3.code,
            t1.always_show,
-           t1.keep_alive
+           t1.keep_alive,
+           t1.params
         FROM
             sys_menu t1
                  LEFT JOIN sys_role_menu t2 ON t1.id = t2.menu_id

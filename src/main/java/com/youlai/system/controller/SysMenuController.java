@@ -1,7 +1,7 @@
 package com.youlai.system.controller;
 
 import com.youlai.system.common.result.Result;
-import com.youlai.system.plugin.dupsubmit.annotation.PreventDuplicateSubmit;
+import com.youlai.system.plugin.norepeat.annotation.PreventRepeatSubmit;
 import com.youlai.system.model.form.MenuForm;
 import com.youlai.system.model.query.MenuQuery;
 import com.youlai.system.model.vo.MenuVO;
@@ -10,12 +10,9 @@ import com.youlai.system.model.vo.RouteVO;
 import com.youlai.system.service.SysMenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +35,7 @@ public class SysMenuController {
 
     @Operation(summary = "菜单列表")
     @GetMapping
-    public Result<List<MenuVO>> listMenus( @ParameterObject MenuQuery queryParams) {
+    public Result<List<MenuVO>> listMenus(  MenuQuery queryParams) {
         List<MenuVO> menuList = menuService.listMenus(queryParams);
         return Result.success(menuList);
     }
@@ -69,7 +66,7 @@ public class SysMenuController {
     @Operation(summary = "新增菜单")
     @PostMapping
     @PreAuthorize("@ss.hasPerm('sys:menu:add')")
-    @PreventDuplicateSubmit
+    @PreventRepeatSubmit
     public Result addMenu(@RequestBody MenuForm menuForm) {
         boolean result = menuService.saveMenu(menuForm);
         return Result.judge(result);
@@ -88,7 +85,6 @@ public class SysMenuController {
     @Operation(summary = "删除菜单")
     @DeleteMapping("/{id}")
     @PreAuthorize("@ss.hasPerm('sys:menu:delete')")
-    @CacheEvict(cacheNames = "system", key = "'routes'")
     public Result deleteMenu(
             @Parameter(description ="菜单ID，多个以英文(,)分割") @PathVariable("id") Long id
     ) {

@@ -2,11 +2,9 @@ package com.youlai.system.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.system.model.bo.RolePermsBO;
 import com.youlai.system.model.entity.SysRoleMenu;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * 角色菜单业务接口
@@ -26,9 +24,23 @@ public interface SysRoleMenuService extends IService<SysRoleMenu> {
 
 
     /**
-     * 获取角色和权限的列表
-     *
-     * @return 角色权限的列表
+     * 刷新权限缓存(所有角色)
      */
-    List<RolePermsBO> getRolePermsList(String roleCode);
+    void refreshRolePermsCache();
+
+    /**
+     * 刷新权限缓存(指定角色)
+     *
+     * @param roleCode 角色编码
+     */
+    void refreshRolePermsCache(String roleCode);
+
+    /**
+     * 刷新权限缓存(修改角色编码时调用)
+     *
+     * @param oldRoleCode 旧角色编码
+     * @param newRoleCode 新角色编码
+     */
+    void refreshRolePermsCache(String oldRoleCode, String newRoleCode);
+
 }

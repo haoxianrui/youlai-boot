@@ -78,4 +78,9 @@ public class RouteBO {
      */
     private Integer keepAlive;
 
+    /**
+     * 【菜单】路由参数
+     */
+    private String params;
+
 }

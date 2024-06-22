@@ -8,31 +8,27 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.system.common.constant.CacheConstants;
-import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.common.util.DateUtils;
 import com.youlai.system.converter.UserConverter;
-import com.youlai.system.common.util.SecurityUtils;
+import com.youlai.system.security.util.SecurityUtils;
 import com.youlai.system.mapper.SysUserMapper;
 import com.youlai.system.model.dto.UserAuthInfo;
 import com.youlai.system.model.bo.UserBO;
-import com.youlai.system.model.bo.UserFormBO;
 import com.youlai.system.model.entity.SysUser;
 import com.youlai.system.model.form.UserForm;
 import com.youlai.system.model.query.UserPageQuery;
 import com.youlai.system.model.vo.UserExportVO;
 import com.youlai.system.model.vo.UserInfoVO;
 import com.youlai.system.model.vo.UserPageVO;
+import com.youlai.system.security.service.PermissionService;
 import com.youlai.system.service.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -57,18 +53,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     private final SysRoleService roleService;
 
-    private final RedisTemplate redisTemplate;
-
-    private final SysRoleMenuService roleMenuService;
+    private final PermissionService permissionService;
 
     /**
      * 获取用户分页列表
      *
-     * @param queryParams
-     * @return
+     * @param queryParams 查询参数
+     * @return {@link IPage<UserPageVO>} 用户分页列表
      */
     @Override
-    public IPage<UserPageVO> getUserPage(UserPageQuery queryParams) {
+    public IPage<UserPageVO> listPagedUsers(UserPageQuery queryParams) {
 
         // 参数构建
         int pageNum = queryParams.getPageNum();
@@ -79,24 +73,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         DateUtils.toDatabaseFormat(queryParams, "startTime", "endTime");
 
         // 查询数据
-        Page<UserBO> userPage = this.baseMapper.getUserPage(page, queryParams);
+        Page<UserBO> userPage = this.baseMapper.listPagedUsers(page, queryParams);
 
         // 实体转换
-        return userConverter.toPageVo(userPage);
+        return userConverter.bo2PageVo(userPage);
     }
 
     /**
-     * 获取用户详情
+     * 获取用户表单数据
      *
-     * @param userId
+     * @param userId 用户ID
      * @return
      */
     @Override
     public UserForm getUserFormData(Long userId) {
-        UserFormBO userFormBO = this.baseMapper.getUserDetail(userId);
-        // 实体转换po->form
-        UserForm userForm = userConverter.bo2Form(userFormBO);
-        return userForm;
+        return this.baseMapper.getUserFormData(userId);
     }
 
     /**
@@ -114,7 +105,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Assert.isTrue(count == 0, "用户名已存在");
 
         // 实体转换 form->entity
-        SysUser entity = userConverter.form2Entity(userForm);
+        SysUser entity = userConverter.convertToEntity(userForm);
 
         // 设置默认加密密码
         String defaultEncryptPwd = passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD);
@@ -150,7 +141,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Assert.isTrue(count == 0, "用户名已存在");
 
         // form -> entity
-        SysUser entity = userConverter.form2Entity(userForm);
+        SysUser entity = userConverter.convertToEntity(userForm);
 
         // 修改用户
         boolean result = this.updateById(entity);
@@ -166,16 +157,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 删除用户
      *
      * @param idsStr 用户ID，多个以英文逗号(,)分割
-     * @return
+     * @return true|false
      */
     @Override
     public boolean deleteUsers(String idsStr) {
         Assert.isTrue(StrUtil.isNotBlank(idsStr), "删除的用户数据为空");
         // 逻辑删除
-        List<Long> ids = Arrays.asList(idsStr.split(",")).stream()
-                .map(idStr -> Long.parseLong(idStr)).collect(Collectors.toList());
-        boolean result = this.removeByIds(ids);
-        return result;
+        List<Long> ids = Arrays.stream(idsStr.split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        return this.removeByIds(ids);
 
     }
 
@@ -221,13 +212,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 获取导出用户列表
      *
-     * @param queryParams
-     * @return
+     * @param queryParams 查询参数
+     * @return {@link List<UserExportVO>} 导出用户列表
      */
     @Override
     public List<UserExportVO> listExportUsers(UserPageQuery queryParams) {
-        List<UserExportVO> list = this.baseMapper.listExportUsers(queryParams);
-        return list;
+        return this.baseMapper.listExportUsers(queryParams);
     }
 
     /**
@@ -258,16 +248,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         userInfoVO.setRoles(roles);
 
         // 用户权限集合
-        Set<String> perms = new HashSet<>();
         if (CollectionUtil.isNotEmpty(roles)) {
-            for (String role : roles) {
-                Set<String> rolePerms = (Set<String>) redisTemplate.opsForHash().get(CacheConstants.ROLE_PERMS_PREFIX, role);
-                if (CollectionUtil.isNotEmpty(rolePerms)) {
-                    perms.addAll(rolePerms);
-                }
-            }
+            Set<String> perms = permissionService.getRolePermsFormCache(roles);
+            userInfoVO.setPerms(perms);
         }
-        userInfoVO.setPerms(perms);
         return userInfoVO;
     }
 

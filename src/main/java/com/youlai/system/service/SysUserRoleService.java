@@ -23,5 +23,5 @@ public interface SysUserRoleService extends IService<SysUserRole> {
      * @param roleId 角色ID
      * @return true：已分配 false：未分配
      */
-    boolean isRoleAssignedToUser(Long roleId);
+    boolean hasAssignedUsers(Long roleId);
 }
