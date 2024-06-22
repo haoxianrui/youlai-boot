@@ -4,25 +4,29 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.converter.DictConverter;
-import com.youlai.system.mapper.SysDictMapper;
+import com.youlai.system.converter.DictItemConverter;
 import com.youlai.system.model.entity.SysDict;
-import com.youlai.system.model.form.DictForm;
-import com.youlai.system.model.query.DictPageQuery;
-import com.youlai.system.model.vo.DictPageVO;
+import com.youlai.system.model.entity.SysDictItem;
 import com.youlai.system.common.model.Option;
+import com.youlai.system.mapper.SysDictMapper;
+import com.youlai.system.model.form.DictForm;
+import com.youlai.system.model.query.DictTypePageQuery;
+import com.youlai.system.model.vo.DictPageVO;
+import com.youlai.system.service.SysDictItemService;
 import com.youlai.system.service.SysDictService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 数据字典项业务实现类
+ * 数据字典业务实现类
  *
  * @author haoxr
  * @since 2022/10/12
@@ -31,133 +35,186 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> implements SysDictService {
 
+
+    private final SysDictItemService dictItemService;
     private final DictConverter dictConverter;
+    private final DictItemConverter dictItemConverter;
 
     /**
-     * 字典数据项分页列表
+     * 字典分页列表
      *
-     * @param queryParams
+     * @param queryParams 分页查询对象
      * @return
      */
     @Override
-    public Page<DictPageVO> getDictPage(DictPageQuery queryParams) {
+    public Page<DictPageVO> getDictPage(DictTypePageQuery queryParams) {
         // 查询参数
         int pageNum = queryParams.getPageNum();
         int pageSize = queryParams.getPageSize();
-        String keywords = queryParams.getKeywords();
-        String typeCode = queryParams.getTypeCode();
 
         // 查询数据
-        Page<SysDict> dictItemPage = this.page(
-                new Page<>(pageNum, pageSize),
-                new LambdaQueryWrapper<SysDict>()
-                        .like(StrUtil.isNotBlank(keywords), SysDict::getName, keywords)
-                        .eq(StrUtil.isNotBlank(typeCode), SysDict::getTypeCode, typeCode)
-                        .select(SysDict::getId, SysDict::getName, SysDict::getValue, SysDict::getStatus)
-        );
-
-        // 实体转换
-        Page<DictPageVO> pageResult = dictConverter.entity2Page(dictItemPage);
-        return pageResult;
+        return this.baseMapper.getDictPage(new Page<>(pageNum, pageSize), queryParams);
     }
 
-    /**
-     * 字典数据项表单详情
-     *
-     * @param id 字典数据项ID
-     * @return
-     */
-    @Override
-    public DictForm getDictForm(Long id) {
-        // 获取entity
-        SysDict entity = this.getOne(new LambdaQueryWrapper<SysDict>()
-                .eq(SysDict::getId, id)
-                .select(
-                        SysDict::getId,
-                        SysDict::getTypeCode,
-                        SysDict::getName,
-                        SysDict::getValue,
-                        SysDict::getStatus,
-                        SysDict::getSort,
-                        SysDict::getRemark
-                ));
-        Assert.isTrue(entity != null, "字典数据项不存在");
-
-        // 实体转换
-        DictForm dictForm = dictConverter.entity2Form(entity);
-        return dictForm;
-    }
 
     /**
-     * 新增字典数据项
+     * 新增字典
      *
-     * @param dictForm 字典数据项表单
+     * @param dictForm 字典表单数据
      * @return
      */
     @Override
     public boolean saveDict(DictForm dictForm) {
-        // 实体对象转换 form->entity
-        SysDict entity = dictConverter.form2Entity(dictForm);
-        // 持久化
+        // 保存字典
+        SysDict entity = dictConverter.convertToEntity(dictForm);
         boolean result = this.save(entity);
+        // 保存字典项
+        if (result) {
+            List<SysDictItem> dictItems = dictItemConverter.convertToEntity(dictForm.getDictItems());
+            dictItems.forEach(dictItem -> dictItem.setDictId(entity.getId()));
+            dictItemService.saveBatch(dictItems);
+        }
         return result;
     }
 
+
     /**
-     * 修改字典数据项
+     * 获取字典表单详情
      *
-     * @param id           字典数据项ID
-     * @param dictForm 字典数据项表单
+     * @param id 字典ID
+     * @return
+     */
+    @Override
+    public DictForm getDictForm(Long id) {
+        // 获取字典
+        SysDict entity = this.getById(id);
+        Assert.isTrue(entity != null, "字典不存在");
+        DictForm dictForm = dictConverter.convertToForm(entity);
+
+        // 获取字典项集合
+        List<SysDictItem> dictItems = dictItemService.list(new LambdaQueryWrapper<SysDictItem>()
+                .eq(SysDictItem::getDictId, id)
+        );
+        // 转换数据项
+        List<DictForm.DictItem> dictItemList = dictItemConverter.convertToDictForm(dictItems);
+        dictForm.setDictItems(dictItemList);
+        return dictForm;
+    }
+
+
+    /**
+     * 修改字典
+     *
+     * @param id       字典ID
+     * @param dictForm 字典表单
      * @return
      */
     @Override
     public boolean updateDict(Long id, DictForm dictForm) {
-        SysDict entity = dictConverter.form2Entity(dictForm);
+        // 更新字典
+        SysDict entity = dictConverter.convertToEntity(dictForm);
         boolean result = this.updateById(entity);
+
+        if (result) {
+            // 更新字典项
+            List<AttrGroupForm.Attr> attrList = formData.getAttrs();
+            List<Attr> attrEntities = attrConverter.convertToEntity(attrList);
+
+            // 获取当前组的所有属性
+            List<Attr> currentAttrEntities = attrService.list(new LambdaQueryWrapper<Attr>()
+                    .eq(Attr::getAttrGroupId, groupId)
+            );
+
+            // 获取当前数据库中存在的属性ID集合
+            Set<Long> currentAttrIds = currentAttrEntities.stream()
+                    .map(Attr::getId)
+                    .collect(Collectors.toSet());
+
+            // 获取新提交的属性ID集合
+            Set<Long> newAttrIds = attrEntities.stream()
+                    .map(Attr::getId)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+
+            // 需要删除的属性ID集合（存在于数据库但不在新提交的属性中）
+            Set<Long> idsToDelete = new HashSet<>(currentAttrIds);
+            idsToDelete.removeAll(newAttrIds);
+
+            // 删除不在新提交属性中的旧属性
+            if (!idsToDelete.isEmpty()) {
+                attrService.removeByIds(idsToDelete);
+            }
+
+            // 更新或新增属性
+            for (Attr attr : attrEntities) {
+                if (attr.getId() != null && currentAttrIds.contains(attr.getId())) {
+                    // 更新现有属性
+                    attrService.updateById(attr);
+                } else {
+                    // 新增属性
+                    attr.setAttrGroupId(groupId);
+                    attrService.save(attr);
+                }
+            }
+        }
         return result;
     }
 
     /**
-     * 删除字典数据项
+     * 删除字典
      *
-     * @param idsStr 字典数据项ID，多个以英文逗号(,)分割
+     * @param ids 字典ID，多个以英文逗号(,)分割
      * @return
      */
     @Override
-    public boolean deleteDict(String idsStr) {
-        Assert.isTrue(StrUtil.isNotBlank(idsStr), "删除数据为空");
-        //
-        List<Long> ids = Arrays.asList(idsStr.split(","))
-                .stream()
-                .map(id -> Long.parseLong(id))
-                .collect(Collectors.toList());
+    @Transactional
+    public boolean deleteDictByIds(String ids) {
+
+        Assert.isTrue(StrUtil.isNotBlank(ids), "请选择需要删除的字典");
+
+        List<String> idList = Arrays.stream(ids.split(","))
+                .toList();
 
         // 删除字典数据项
-        boolean result = this.removeByIds(ids);
+        List<String> dictTypeCodes = this.list(new LambdaQueryWrapper<SysDict>()
+                        .in(SysDict::getId, ids)
+                        .select(SysDict::getCode))
+                .stream()
+                .map(dictType -> dictType.getCode())
+                .collect(Collectors.toList()
+                );
+        if (CollectionUtil.isNotEmpty(dictTypeCodes)) {
+            dictItemService.remove(new LambdaQueryWrapper<SysDictItem>()
+                    .in(SysDictItem::getTypeCode, dictTypeCodes));
+        }
+        // 删除字典
+        boolean result = this.removeByIds(idList);
         return result;
     }
 
     /**
-     * 获取字典下拉列表
+     * 获取字典的数据项
      *
      * @param typeCode
      * @return
      */
     @Override
-    public List<Option> listDictOptions(String typeCode) {
+    public List<Option> listDictItemsByTypeCode(String typeCode) {
         // 数据字典项
-        List<SysDict> dictList = this.list(new LambdaQueryWrapper<SysDict>()
-                .eq(SysDict::getTypeCode, typeCode)
-                .select(SysDict::getValue, SysDict::getName)
+        List<SysDictItem> dictItems = dictItemService.list(new LambdaQueryWrapper<SysDictItem>()
+                .eq(SysDictItem::getTypeCode, typeCode)
+                .select(SysDictItem::getValue, SysDictItem::getName)
         );
 
         // 转换下拉数据
-        List<Option> options = CollectionUtil.emptyIfNull(dictList)
+        List<Option> options = CollectionUtil.emptyIfNull(dictItems)
                 .stream()
                 .map(dictItem -> new Option(dictItem.getValue(), dictItem.getName()))
                 .collect(Collectors.toList());
         return options;
     }
+
+
 }
 
 

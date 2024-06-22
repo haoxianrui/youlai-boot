@@ -28,10 +28,10 @@ public interface UserConverter {
 
     Page<UserPageVO> bo2PageVo(Page<UserBO> bo);
 
-    UserForm entity2Form(SysUser entity);
+    UserForm convertToForm(SysUser entity);
 
-    @InheritInverseConfiguration(name = "entity2Form")
-    SysUser form2Entity(UserForm entity);
+    @InheritInverseConfiguration(name = "convertToForm")
+    SysUser convertToEntity(UserForm entity);
 
     @Mappings({
             @Mapping(target = "userId", source = "id")

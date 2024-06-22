@@ -1,7 +1,7 @@
 package com.youlai.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.system.plugin.dupsubmit.annotation.PreventDuplicateSubmit;
+import com.youlai.system.plugin.norepeat.annotation.PreventRepeatSubmit;
 import com.youlai.system.common.model.Option;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +31,7 @@ public class SysRoleController {
     @Operation(summary = "角色分页列表")
     @GetMapping("/page")
     public PageResult<RolePageVO> getRolePage(
-            @ParameterObject RolePageQuery queryParams
+             RolePageQuery queryParams
     ) {
         Page<RolePageVO> result = roleService.getRolePage(queryParams);
         return PageResult.success(result);
@@ -48,7 +47,7 @@ public class SysRoleController {
     @Operation(summary = "新增角色")
     @PostMapping
     @PreAuthorize("@ss.hasPerm('sys:role:add')")
-    @PreventDuplicateSubmit
+    @PreventRepeatSubmit
     public Result addRole(@Valid @RequestBody RoleForm roleForm) {
         boolean result = roleService.saveRole(roleForm);
         return Result.judge(result);

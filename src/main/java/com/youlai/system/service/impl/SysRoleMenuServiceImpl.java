@@ -9,6 +9,7 @@ import com.youlai.system.model.entity.SysRoleMenu;
 import com.youlai.system.service.SysRoleMenuService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ import java.util.Set;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenu> implements SysRoleMenuService {
 
     private final RedisTemplate<String, Object> redisTemplate;
@@ -33,6 +35,7 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
      */
     @PostConstruct
     public void initRolePermsCache() {
+        log.info("初始化权限缓存... ");
         refreshRolePermsCache();
     }
 
