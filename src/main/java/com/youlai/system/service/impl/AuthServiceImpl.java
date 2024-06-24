@@ -12,7 +12,7 @@ import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.enums.CaptchaTypeEnum;
 import com.youlai.system.model.dto.CaptchaResult;
 import com.youlai.system.model.dto.LoginResult;
-import com.youlai.system.plugin.captcha.CaptchaProperties;
+import com.youlai.system.config.property.CaptchaProperties;
 import com.youlai.system.service.AuthService;
 import com.youlai.system.security.util.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;

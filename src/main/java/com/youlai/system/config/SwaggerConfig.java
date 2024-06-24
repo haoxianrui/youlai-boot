@@ -17,7 +17,7 @@ import org.springframework.http.HttpHeaders;
  * Swagger 配置
  * <p>
  *
- * @author haoxr
+ * @author Ray
  * @see <a href="https://doc.xiaominfo.com/docs/quick-start">knife4j 快速开始</a>
  * @since 2023/2/17
  */

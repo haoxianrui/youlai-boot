@@ -40,7 +40,7 @@ public class SysDeptController {
         return Result.success(list);
     }
 
-    @Operation(summary = "获取部门下拉选项")
+    @Operation(summary = "获取部门下拉列表")
     @GetMapping("/options")
     public Result<List<Option>> getDeptOptions() {
         List<Option> list = deptService.listDeptOptions();

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 /**
- * WebSocket 测试控制器
+ * WebSocket 测试控制层
  *
- * @author haoxr
+ * @author Ray
  * @since 2.3.0
  */
 @RestController

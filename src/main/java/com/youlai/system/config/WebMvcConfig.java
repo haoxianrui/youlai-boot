@@ -23,6 +23,12 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.TimeZone;
 
+/**
+ * WebMvc 自动装配配置
+ *
+ * @author Ray
+ * @since 2020/10/16
+ */
 @Configuration
 @Slf4j
 public class WebMvcConfig implements WebMvcConfigurer {

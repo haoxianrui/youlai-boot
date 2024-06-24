@@ -1,11 +1,11 @@
-package com.youlai.system.plugin.captcha;
+package com.youlai.system.config.property;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * 验证码配置
+ * 验证码 属性配置
  *
  * @author haoxr
  * @since 2023/11/24

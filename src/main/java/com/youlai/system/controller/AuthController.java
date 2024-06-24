@@ -11,6 +11,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 认证控制层
+ *
+ * @author Ray
+ * @since 2022/10/16
+ */
 @Tag(name = "01.认证中心")
 @RestController
 @RequestMapping("/api/v1/auth")

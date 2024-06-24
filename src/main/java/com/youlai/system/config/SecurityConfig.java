@@ -29,7 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * Spring Security 权限配置
  *
- * @author Ray Hao
+ * @author Ray
  * @since 2023/2/17
  */
 @Configuration

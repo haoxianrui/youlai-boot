@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 字典控制层
  *
- * @author Ray Hao
+ * @author Ray
  * @since 2.9.0
  */
 @Tag(name = "06.字典接口")
