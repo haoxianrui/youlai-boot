@@ -58,7 +58,7 @@
         <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
         <result property="email" column="email" jdbcType="VARCHAR"/>
         <result property="status" column="status" jdbcType="BOOLEAN"/>
-        <result property="deptId" column="dept_id" jdbcType="BIGINT"></result>
+        <result property="deptId" column="dept_id" jdbcType="BIGINT"/>
         <collection
                 property="roleIds"
                 column="id"
@@ -77,12 +77,12 @@
             gender,
             avatar,
             email,
-            STATUS,
+            status,
             dept_id
         FROM
             sys_user
         WHERE
-            id = #{userId} AND deleted = 0
+            id = #{userId} AND is_deleted = 0
     </select>
 
     <!-- 用户认证信息映射 -->
@@ -124,7 +124,7 @@
             CASE u.gender
                 WHEN 1 THEN '男'
                 WHEN 2 THEN '女'
-                ELSE '未知'
+                ELSE '保密'
             END gender,
             d.NAME AS dept_name,
             u.create_time
