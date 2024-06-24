@@ -5,7 +5,7 @@ import com.youlai.system.common.base.BasePageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-@Schema(description ="字典类型分页查询对象")
+@Schema(description ="字典分页查询对象")
 @Data
 public class DictTypePageQuery extends BasePageQuery {
 

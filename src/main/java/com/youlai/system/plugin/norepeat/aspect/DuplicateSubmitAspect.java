@@ -1,4 +1,4 @@
-package com.youlai.system.plugin.dupsubmit.aspect;
+package com.youlai.system.plugin.norepeat.aspect;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.jwt.JWTUtil;
@@ -6,7 +6,7 @@ import cn.hutool.jwt.RegisteredPayload;
 import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.common.exception.BusinessException;
 import com.youlai.system.common.result.ResultCode;
-import com.youlai.system.plugin.dupsubmit.annotation.PreventDuplicateSubmit;
+import com.youlai.system.plugin.norepeat.annotation.PreventRepeatSubmit;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,17 +41,17 @@ public class DuplicateSubmitAspect {
     /**
      * 防重复提交切点
      */
-    @Pointcut("@annotation(preventDuplicateSubmit)")
-    public void preventDuplicateSubmitPointCut(PreventDuplicateSubmit preventDuplicateSubmit) {
+    @Pointcut("@annotation(preventRepeatSubmit)")
+    public void preventDuplicateSubmitPointCut(PreventRepeatSubmit preventRepeatSubmit) {
         log.info("定义防重复提交切点");
     }
 
-    @Around("preventDuplicateSubmitPointCut(preventDuplicateSubmit)")
-    public Object doAround(ProceedingJoinPoint pjp, PreventDuplicateSubmit preventDuplicateSubmit) throws Throwable {
+    @Around("preventDuplicateSubmitPointCut(preventRepeatSubmit)")
+    public Object doAround(ProceedingJoinPoint pjp, PreventRepeatSubmit preventRepeatSubmit) throws Throwable {
 
         String resubmitLockKey = generateResubmitLockKey();
         if (resubmitLockKey != null) {
-            int expire = preventDuplicateSubmit.expire(); // 防重提交锁过期时间
+            int expire = preventRepeatSubmit.expire(); // 防重提交锁过期时间
             RLock lock = redissonClient.getLock(resubmitLockKey);
             boolean lockResult = lock.tryLock(0, expire, TimeUnit.SECONDS); // 获取锁失败，直接返回 false
             if (!lockResult) {

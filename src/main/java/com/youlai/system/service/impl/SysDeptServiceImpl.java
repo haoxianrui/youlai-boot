@@ -24,10 +24,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 部门业务实现类
+ * 部门 业务实现类
  *
- * @author haoxr
- * @since 2021-08-22
+ * @author Ray
+ * @since 2021/08/22
  */
 @Service
 @RequiredArgsConstructor
@@ -40,7 +40,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      * 获取部门列表
      */
     @Override
-    public List<DeptVO> listDepartments(DeptQuery queryParams) {
+    public List<DeptVO> getDeptList(DeptQuery queryParams) {
         // 查询参数
         String keywords = queryParams.getKeywords();
         Integer status = queryParams.getStatus();
@@ -85,11 +85,11 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         return deptList.stream()
                 .filter(dept -> dept.getParentId().equals(parentId))
                 .map(dept -> {
-                    DeptVO deptVO = deptConverter.entity2Vo(dept);
+                    DeptVO deptVO = deptConverter.convertToVo(dept);
                     List<DeptVO> children = recurDeptList(dept.getId(), deptList);
                     deptVO.setChildren(children);
                     return deptVO;
-                }).collect(Collectors.toList());
+                }).toList();
     }
 
     /**
@@ -134,14 +134,14 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Override
     public Long saveDept(DeptForm formData) {
         // 校验部门名称是否存在
-        String name = formData.getName();
+        String code = formData.getCode();
         long count = this.count(new LambdaQueryWrapper<SysDept>()
-                .eq(SysDept::getName, name)
+                .eq(SysDept::getCode, code)
         );
-        Assert.isTrue(count == 0, "部门名称已存在");
+        Assert.isTrue(count == 0, "部门编号已存在");
 
         // form->entity
-        SysDept entity = deptConverter.form2Entity(formData);
+        SysDept entity = deptConverter.convertToEntity(formData);
 
         // 生成部门路径(tree_path)，格式：父节点tree_path + , + 父节点ID，用于删除部门时级联删除子部门
         String treePath = generateDeptTreePath(formData.getParentId());
@@ -154,6 +154,20 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         return entity.getId();
     }
 
+
+    /**
+     * 获取部门表单
+     *
+     * @param deptId 部门ID
+     * @return 部门表单对象
+     */
+    @Override
+    public DeptForm getDeptForm(Long deptId) {
+        SysDept entity = this.getById(deptId);
+        return deptConverter.convertToForm(entity);
+    }
+
+
     /**
      * 更新部门
      *
@@ -163,16 +177,17 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      */
     @Override
     public Long updateDept(Long deptId, DeptForm formData) {
-        // 校验部门名称是否存在
-        String name = formData.getName();
+        // 校验部门名称/部门编号是否存在
+        String code = formData.getCode();
         long count = this.count(new LambdaQueryWrapper<SysDept>()
-                .eq(SysDept::getName, name)
                 .ne(SysDept::getId, deptId)
+                .eq(SysDept::getCode, code)
         );
-        Assert.isTrue(count == 0, "部门名称已存在");
+        Assert.isTrue(count == 0, "部门编号已存在");
+
 
         // form->entity
-        SysDept entity = deptConverter.form2Entity(formData);
+        SysDept entity = deptConverter.convertToEntity(formData);
         entity.setId(deptId);
 
         // 生成部门路径(tree_path)，格式：父节点tree_path + , + 父节点ID，用于删除部门时级联删除子部门
@@ -194,7 +209,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      * @return 部门表格层级列表
      */
     public static List<Option> recurDeptTreeOptions(long parentId, List<SysDept> deptList) {
-        List<Option> list = CollectionUtil.emptyIfNull(deptList).stream()
+        return CollectionUtil.emptyIfNull(deptList).stream()
                 .filter(dept -> dept.getParentId().equals(parentId))
                 .map(dept -> {
                     Option option = new Option(dept.getId(), dept.getName());
@@ -205,7 +220,6 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
                     return option;
                 })
                 .collect(Collectors.toList());
-        return list;
     }
 
 
@@ -228,28 +242,6 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
             }
         }
         return true;
-    }
-
-    /**
-     * 获取部门详情
-     *
-     * @param deptId 部门ID
-     * @return 部门表单对象
-     */
-    @Override
-    public DeptForm getDeptForm(Long deptId) {
-
-        SysDept entity = this.getOne(new LambdaQueryWrapper<SysDept>()
-                .eq(SysDept::getId, deptId)
-                .select(
-                        SysDept::getId,
-                        SysDept::getName,
-                        SysDept::getParentId,
-                        SysDept::getStatus,
-                        SysDept::getSort
-                ));
-
-        return deptConverter.entity2Form(entity);
     }
 
 

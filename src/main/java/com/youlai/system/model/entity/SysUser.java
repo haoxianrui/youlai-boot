@@ -3,15 +3,17 @@ package com.youlai.system.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.youlai.system.common.base.BaseEntity;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * 用户表
+ * 用户 实体
  */
-@Data
+@Getter
+@Setter
 public class SysUser extends BaseEntity {
     /**
-     * 
+     * 用户 ID
      */
     @TableId(type = IdType.AUTO)
     private Long id;
@@ -27,7 +29,7 @@ public class SysUser extends BaseEntity {
     private String nickname;
 
     /**
-     * 性别((1:男;2:女))
+     * 性别((1-男 2-女 0-保密)
      */
     private Integer gender;
 
@@ -52,7 +54,7 @@ public class SysUser extends BaseEntity {
     private String mobile;
 
     /**
-     * 用户状态((1:正常;0:禁用))
+     * 状态((1-正常 0-禁用)
      */
     private Integer status;
 
@@ -62,8 +64,12 @@ public class SysUser extends BaseEntity {
     private String email;
 
     /**
-     * 逻辑删除标识(0:未删除;1:已删除)
+     * 创建人 ID
      */
-    private Integer deleted;
+    private Long createBy;
 
+    /**
+     * 更新人 ID
+     */
+    private Long updateBy;
 }

@@ -18,7 +18,7 @@ import com.youlai.system.model.bo.UserBO;
 import com.youlai.system.model.entity.SysUser;
 import com.youlai.system.model.form.UserForm;
 import com.youlai.system.model.query.UserPageQuery;
-import com.youlai.system.model.vo.UserExportVO;
+import com.youlai.system.model.dto.UserExportDTO;
 import com.youlai.system.model.vo.UserInfoVO;
 import com.youlai.system.model.vo.UserPageVO;
 import com.youlai.system.security.service.PermissionService;
@@ -49,7 +49,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     private final UserConverter userConverter;
 
-    private final SysMenuService menuService;
+    private final SysRoleMenuService roleMenuService;
 
     private final SysRoleService roleService;
 
@@ -105,7 +105,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Assert.isTrue(count == 0, "用户名已存在");
 
         // 实体转换 form->entity
-        SysUser entity = userConverter.form2Entity(userForm);
+        SysUser entity = userConverter.convertToEntity(userForm);
 
         // 设置默认加密密码
         String defaultEncryptPwd = passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD);
@@ -141,7 +141,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Assert.isTrue(count == 0, "用户名已存在");
 
         // form -> entity
-        SysUser entity = userConverter.form2Entity(userForm);
+        SysUser entity = userConverter.convertToEntity(userForm);
 
         // 修改用户
         boolean result = this.updateById(entity);
@@ -197,7 +197,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (userAuthInfo != null) {
             Set<String> roles = userAuthInfo.getRoles();
             if (CollectionUtil.isNotEmpty(roles)) {
-                Set<String> perms = menuService.listRolePerms(roles);
+                Set<String> perms = roleMenuService.getRolePermsByRoleCodes(roles);
                 userAuthInfo.setPerms(perms);
             }
 
@@ -213,10 +213,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 获取导出用户列表
      *
      * @param queryParams 查询参数
-     * @return {@link List<UserExportVO>} 导出用户列表
+     * @return {@link List< UserExportDTO >} 导出用户列表
      */
     @Override
-    public List<UserExportVO> listExportUsers(UserPageQuery queryParams) {
+    public List<UserExportDTO> listExportUsers(UserPageQuery queryParams) {
         return this.baseMapper.listExportUsers(queryParams);
     }
 

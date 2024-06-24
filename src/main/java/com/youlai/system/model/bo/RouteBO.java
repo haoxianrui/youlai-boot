@@ -24,14 +24,19 @@ public class RouteBO {
     private String name;
 
     /**
-     * 菜单类型(1-菜单；2-目录；3-外链；4-按钮权限)
+     * 菜单类型(1-菜单 2-目录 3-外链 4-按钮)
      */
     private MenuTypeEnum type;
 
     /**
-     * 路由路径(浏览器地址栏路径)
+     * 路由名称（Vue Router 中定义的路由名称）
      */
-    private String path;
+    private String routeName;
+
+    /**
+     * 路由路径（Vue Router 中定义的 URL 路径）
+     */
+    private String routePath;
 
     /**
      * 组件路径(vue页面完整路径，省略.vue后缀)

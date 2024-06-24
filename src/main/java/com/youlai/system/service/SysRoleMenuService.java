@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.youlai.system.model.entity.SysRoleMenu;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 角色菜单业务接口
@@ -43,4 +44,11 @@ public interface SysRoleMenuService extends IService<SysRoleMenu> {
      */
     void refreshRolePermsCache(String oldRoleCode, String newRoleCode);
 
+    /**
+     * 获取角色权限集合
+     *
+     * @param roles 角色编码集合
+     * @return 权限集合
+     */
+    Set<String> getRolePermsByRoleCodes(Set<String> roles);
 }

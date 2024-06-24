@@ -15,7 +15,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface MenuConverter {
 
-    MenuVO entity2Vo(SysMenu entity);
+    MenuVO convertToVo(SysMenu entity);
 
     @Mapping(target = "params", ignore = true)
     MenuForm convertToForm(SysMenu entity);

@@ -9,6 +9,7 @@ import com.youlai.system.model.entity.SysRoleMenu;
 import com.youlai.system.service.SysRoleMenuService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,12 @@ import java.util.Set;
 /**
  * 角色菜单业务实现
  *
- * @author haoxr
+ * @author Ray
  * @since 2.5.0
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenu> implements SysRoleMenuService {
 
     private final RedisTemplate<String, Object> redisTemplate;
@@ -33,6 +35,7 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
      */
     @PostConstruct
     public void initRolePermsCache() {
+        log.info("初始化权限缓存... ");
         refreshRolePermsCache();
     }
 
@@ -83,7 +86,7 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
         redisTemplate.opsForHash().delete(SecurityConstants.ROLE_PERMS_PREFIX, oldRoleCode);
 
         // 添加新角色权限缓存
-        List<RolePermsBO> list =this.baseMapper.getRolePermsList(newRoleCode);
+        List<RolePermsBO> list = this.baseMapper.getRolePermsList(newRoleCode);
         if (CollectionUtil.isNotEmpty(list)) {
             RolePermsBO rolePerms = list.get(0);
             if (rolePerms == null) {
@@ -95,6 +98,16 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
         }
     }
 
+    /**
+     * 获取角色权限集合
+     *
+     * @param roles 角色编码集合
+     * @return 权限集合
+     */
+    @Override
+    public Set<String> getRolePermsByRoleCodes(Set<String> roles) {
+        return this.baseMapper.listRolePerms(roles);
+    }
 
     /**
      * 获取角色拥有的菜单ID集合
@@ -104,8 +117,7 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
      */
     @Override
     public List<Long> listMenuIdsByRoleId(Long roleId) {
-        List<Long> menuIds = this.baseMapper.listMenuIdsByRoleId(roleId);
-        return menuIds;
+        return this.baseMapper.listMenuIdsByRoleId(roleId);
     }
 
 }

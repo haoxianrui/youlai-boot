@@ -1,4 +1,4 @@
-package com.youlai.system.model.vo;
+package com.youlai.system.model.dto;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
@@ -10,7 +10,7 @@ import lombok.Data;
  * @since 2022/4/10
  */
 @Data
-public class UserImportVO {
+public class UserImportDTO {
 
     @ExcelProperty(value = "用户名")
     private String username;
@@ -29,5 +29,8 @@ public class UserImportVO {
 
     @ExcelProperty("角色")
     private String roleCodes;
+
+    @ExcelProperty("部门")
+    private String deptCode;
 
 }

@@ -2,19 +2,21 @@ package com.youlai.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
-import com.youlai.system.common.base.BaseEntity;
 import com.youlai.system.common.enums.MenuTypeEnum;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 /**
- * 菜单实体对象
+ * 菜单 实体
  *
- * @author haoxr
+ * @author Ray
  * @since 2023/3/6
  */
-@TableName(value ="sys_menu")
-@Data
-public class SysMenu extends BaseEntity {
+@Getter
+@Setter
+public class SysMenu {
     /**
      * 菜单ID
      */
@@ -37,9 +39,14 @@ public class SysMenu extends BaseEntity {
     private MenuTypeEnum type;
 
     /**
-     * 路由路径(浏览器地址栏路径)
+     * 路由名称（Vue Router 中定义的路由名称）
      */
-    private String path;
+    private String routeName;
+
+    /**
+     * 路由路径（Vue Router 中定义的 URL 路径）
+     */
+    private String routePath;
 
     /**
      * 组件路径(vue页面完整路径，省略.vue后缀)
@@ -91,5 +98,15 @@ public class SysMenu extends BaseEntity {
      */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String params;
+
+
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
 }

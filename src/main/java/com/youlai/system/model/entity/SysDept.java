@@ -4,12 +4,17 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 
 import com.youlai.system.common.base.BaseEntity;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * 部门表
+ * 部门 实体
+ *
+ * @author Ray
+ * @since 2024/06/23
  */
-@Data
+@Getter
+@Setter
 public class SysDept extends BaseEntity {
     /**
      * 主键
@@ -21,6 +26,11 @@ public class SysDept extends BaseEntity {
      * 部门名称
      */
     private String name;
+
+    /**
+     * 部门编码
+     */
+    private String code;
 
     /**
      * 父节点id
@@ -38,17 +48,18 @@ public class SysDept extends BaseEntity {
     private Integer sort;
 
     /**
-     * 状态(1:正常;0:禁用)
+     * 状态(1-正常 0-禁用)
      */
     private Integer status;
 
     /**
-     * 逻辑删除标识(1:已删除;0:未删除)
+     * 创建人 ID
      */
-    private Integer deleted;
-
     private Long createBy;
 
+    /**
+     * 更新人 ID
+     */
     private Long updateBy;
 
 }

@@ -9,17 +9,17 @@ import lombok.NoArgsConstructor;
 /**
  * 验证码响应对象
  *
- * @author haoxr
+ * @author Ray Hao
  * @since 2023/03/24
  */
-@Schema(description ="验证码响应对象")
+@Schema(description = "验证码响应对象")
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CaptchaResult {
 
-    @Schema(description = "验证码缓存key")
+    @Schema(description = "验证码ID")
     private String captchaKey;
 
     @Schema(description = "验证码图片Base64字符串")

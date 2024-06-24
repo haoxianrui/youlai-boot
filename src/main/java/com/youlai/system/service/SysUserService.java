@@ -7,7 +7,7 @@ import com.youlai.system.model.entity.SysUser;
 import com.youlai.system.model.form.UserForm;
 import com.youlai.system.model.dto.UserAuthInfo;
 import com.youlai.system.model.query.UserPageQuery;
-import com.youlai.system.model.vo.UserExportVO;
+import com.youlai.system.model.dto.UserExportDTO;
 import com.youlai.system.model.vo.UserInfoVO;
 import com.youlai.system.model.vo.UserPageVO;
 
@@ -90,7 +90,7 @@ public interface SysUserService extends IService<SysUser> {
      * @param queryParams
      * @return
      */
-    List<UserExportVO> listExportUsers(UserPageQuery queryParams);
+    List<UserExportDTO> listExportUsers(UserPageQuery queryParams);
 
 
     /**

@@ -8,7 +8,7 @@ import com.youlai.system.model.bo.UserBO;
 import com.youlai.system.model.entity.SysUser;
 import com.youlai.system.model.dto.UserAuthInfo;
 import com.youlai.system.model.query.UserPageQuery;
-import com.youlai.system.model.vo.UserExportVO;
+import com.youlai.system.model.dto.UserExportDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -55,5 +55,5 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @return
      */
     @DataPermission(deptAlias = "u")
-    List<UserExportVO> listExportUsers(UserPageQuery queryParams);
+    List<UserExportDTO> listExportUsers(UserPageQuery queryParams);
 }

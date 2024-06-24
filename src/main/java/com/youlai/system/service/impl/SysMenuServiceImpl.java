@@ -96,7 +96,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 .stream()
                 .filter(menu -> menu.getParentId().equals(parentId))
                 .map(entity -> {
-                    MenuVO menuVO = menuConverter.entity2Vo(entity);
+                    MenuVO menuVO = menuConverter.convertToVo(entity);
                     List<MenuVO> children = buildMenuTree(entity.getId(), menuList);
                     menuVO.setChildren(children);
                     return menuVO;
@@ -144,8 +144,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Cacheable(cacheNames = "menu", key = "'routes'")
     public List<RouteVO> listRoutes() {
         List<RouteBO> menuList = this.baseMapper.listRoutes();
-        List<RouteVO> routes = buildRoutes(SystemConstants.ROOT_NODE_ID, menuList);
-        return routes;
+        return buildRoutes(SystemConstants.ROOT_NODE_ID, menuList);
     }
 
     /**
@@ -177,9 +176,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     private RouteVO toRouteVo(RouteBO routeBO) {
         RouteVO routeVO = new RouteVO();
-        String routeName = StringUtils.capitalize(StrUtil.toCamelCase(routeBO.getPath(), '-'));  // 路由 name 需要驼峰，首字母大写
-        routeVO.setName(routeName); // 根据name路由跳转 this.$router.push({name:xxx})
-        routeVO.setPath(routeBO.getPath()); // 根据path路由跳转 this.$router.push({path:xxx})
+        // 获取路由名称
+        String routeName = routeBO.getRouteName();
+        if (StrUtil.isBlank(routeName)) {
+            // 路由 name 需要驼峰，首字母大写
+            routeName = StringUtils.capitalize(StrUtil.toCamelCase(routeBO.getRoutePath(), '-'));
+        }
+        // 根据name路由跳转 this.$router.push({name:xxx})
+        routeVO.setName(routeName);
+
+        // 根据path路由跳转 this.$router.push({path:xxx})
+        routeVO.setPath(routeBO.getRoutePath());
         routeVO.setRedirect(routeBO.getRedirect());
         routeVO.setComponent(routeBO.getComponent());
 
@@ -200,7 +207,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (StrUtil.isNotBlank(paramsJson)) {
             ObjectMapper objectMapper = new ObjectMapper();
             try {
-                Map<String, String> paramMap = objectMapper.readValue(paramsJson, new TypeReference<>() {});
+                Map<String, String> paramMap = objectMapper.readValue(paramsJson, new TypeReference<>() {
+                });
                 meta.setParams(paramMap);
             } catch (Exception e) {
                 throw new RuntimeException("解析参数失败", e);
@@ -220,9 +228,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         MenuTypeEnum menuType = menuForm.getType();
 
         if (menuType == MenuTypeEnum.CATALOG) {  // 如果是外链
-            String path = menuForm.getPath();
+            String path = menuForm.getRoutePath();
             if (menuForm.getParentId() == 0 && !path.startsWith("/")) {
-                menuForm.setPath("/" + path); // 一级目录需以 / 开头
+                menuForm.setRoutePath("/" + path); // 一级目录需以 / 开头
             }
             menuForm.setComponent("Layout");
         } else if (menuType == MenuTypeEnum.EXTLINK) {   // 如果是目录
@@ -239,7 +247,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (CollectionUtil.isNotEmpty(params)) {
             entity.setParams(JSONUtil.toJsonStr(params.stream()
                     .collect(Collectors.toMap(KeyValue::getKey, KeyValue::getValue))));
-        }else{
+        } else {
             entity.setParams(null);
         }
 
@@ -286,17 +294,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     /**
-     * 获取角色权限(Code)集合
-     *
-     * @param roles 角色Code集合
-     * @return 权限集合
-     */
-    @Override
-    public Set<String> listRolePerms(Set<String> roles) {
-        return this.baseMapper.listRolePerms(roles);
-    }
-
-    /**
      * 获取菜单表单数据
      *
      * @param id 菜单ID
@@ -313,7 +310,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 // 解析 JSON 字符串为 Map<String, String>
-                Map<String, String> paramMap = objectMapper.readValue(params, new TypeReference<>() {});
+                Map<String, String> paramMap = objectMapper.readValue(params, new TypeReference<>() {
+                });
 
                 // 转换为 List<KeyValue> 格式 [{key:"id", value:"1"}, {key:"name", value:"张三"}]
                 List<KeyValue> transformedList = paramMap.entrySet().stream()
@@ -352,6 +350,5 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return result;
 
     }
-
 
 }

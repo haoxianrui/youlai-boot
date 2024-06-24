@@ -1,4 +1,4 @@
-package com.youlai.system.model.vo;
+package com.youlai.system.model.dto;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.format.DateTimeFormat;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 @Data
 @ColumnWidth(20)
-public class UserExportVO {
+public class UserExportDTO {
 
     @ExcelProperty(value = "用户名")
     private String username;

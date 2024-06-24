@@ -9,7 +9,8 @@
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
         <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
-        <result property="path" column="path" jdbcType="VARCHAR"/>
+        <result property="routeName" column="route_name" jdbcType="VARCHAR"/>
+        <result property="routePath" column="route_path" jdbcType="VARCHAR"/>
         <result property="component" column="component" jdbcType="VARCHAR"/>
         <result property="redirect" column="redirect" jdbcType="VARCHAR"/>
         <result property="icon" column="icon" jdbcType="VARCHAR"/>
@@ -30,7 +31,8 @@
            t1.id,
            t1.name,
            t1.parent_id,
-           t1.path,
+           t1.route_name,
+           t1.route_path,
            t1.component,
            t1.icon,
            t1.sort,
@@ -47,30 +49,9 @@
                  LEFT JOIN sys_role t3 ON t2.role_id = t3.id
         WHERE
             t1.type != '${@com.youlai.system.common.enums.MenuTypeEnum@BUTTON.getValue()}'
-        ORDER BY t1.sort asc
+        ORDER BY
+            t1.sort
     </select>
 
-    <!-- 获取角色拥有的权限集合 -->
-    <select id="listRolePerms" resultType="java.lang.String">
-        SELECT
-            DISTINCT t1.perm
-        FROM
-            sys_menu t1
-                INNER JOIN sys_role_menu t2 ON t1.id = t2.menu_id
-                INNER JOIN sys_role t3 ON t3.id = t2.role_id
-        WHERE
-            t1.type = '${@com.youlai.system.common.enums.MenuTypeEnum@BUTTON.getValue()}'
-          AND t1.perm IS NOT NULL
-          <choose>
-            <when test="roles!=null and roles.size()>0">
-                AND t3.CODE IN
-                <foreach collection="roles" item="role" separator="," open="(" close=")">
-                    #{role}
-                </foreach>
-            </when>
-            <otherwise>
-                AND t1.id = -1
-            </otherwise>
-          </choose>
-    </select>
+
 </mapper>

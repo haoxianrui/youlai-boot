@@ -6,8 +6,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
+/**
+ * 菜单表单对象
+ *
+ * @author Ray
+ * @since 2024/06/23
+ */
 @Schema(description = "菜单表单对象")
 @Data
 public class MenuForm {
@@ -21,11 +26,14 @@ public class MenuForm {
     @Schema(description = "菜单名称")
     private String name;
 
-    @Schema(description = "菜单类型(1-菜单；2-目录；3-外链；4-按钮权限)")
+    @Schema(description = "菜单类型（1-菜单 2-目录 3-外链 4-按钮）")
     private MenuTypeEnum type;
 
+    @Schema(description = "路由名称")
+    private String routeName;
+
     @Schema(description = "路由路径")
-    private String path;
+    private String routePath;
 
     @Schema(description = "组件路径(vue页面完整路径，省略.vue后缀)")
     private String component;
