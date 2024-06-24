@@ -11,9 +11,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
- * 系统用户认证
+ * 系统用户认证 DetailsService
  *
- * @author haoxr
+ * @author Ray
+ * @since 2021/10/19
  */
 @Service
 @RequiredArgsConstructor
