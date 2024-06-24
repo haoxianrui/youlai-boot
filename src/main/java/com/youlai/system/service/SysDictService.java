@@ -66,10 +66,10 @@ public interface SysDictService extends IService<SysDict> {
     /**
      * 获取字典的数据项
      *
-     * @param typeCode
+     * @param code 字典编码
      * @return
      */
-    List<Option> listDictItemsByCode(String typeCode);
+    List<Option> listDictItemsByCode(String code);
 
 
 }

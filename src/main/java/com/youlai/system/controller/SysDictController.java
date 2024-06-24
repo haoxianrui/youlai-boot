@@ -1,6 +1,7 @@
 package com.youlai.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.youlai.system.common.model.Option;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.model.vo.DictPageVO;
@@ -14,6 +15,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 字典控制层
@@ -36,6 +39,15 @@ public class SysDictController {
     ) {
         Page<DictPageVO> result = dictService.getDictPage(queryParams);
         return PageResult.success(result);
+    }
+
+    @Operation(summary = "字典数据项列表")
+    @GetMapping("/{code}/options")
+    public Result<List<Option>> getDictOptions(
+            @Parameter(description = "字典编码") @PathVariable String code
+    ) {
+        List<Option> options = dictService.listDictItemsByCode(code);
+        return Result.success(options);
     }
 
     @Operation(summary = "字典表单")

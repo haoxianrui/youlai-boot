@@ -217,8 +217,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         );
 
         // 转换为 Option
-        List<Option> options = dictItemConverter.convertToOption(dictItems);
-        return options;
+        return dictItemConverter.convertToOption(dictItems);
     }
 
 
