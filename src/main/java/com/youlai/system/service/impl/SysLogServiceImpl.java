@@ -7,11 +7,14 @@ import com.youlai.system.mapper.SysLogMapper;
 import org.springframework.stereotype.Service;
 
 /**
+ * 系统日志 服务实现类
  *
+ * @author Ray
+ * @since 2.10.0
  */
 @Service
 public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog>
-    implements SysLogService{
+        implements SysLogService {
 
 }
 

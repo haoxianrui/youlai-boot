@@ -1,18 +1,20 @@
 package com.youlai.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
+
+import com.youlai.system.common.base.BaseEntity;
 import lombok.Data;
 
 /**
- * 系统日志
- * @TableName sys_log
+ * 系统日志 实体类
+ *
+ * @author Ray
+ * @since 2.10.0
  */
-@TableName(value ="sys_log")
 @Data
 public class SysLog implements Serializable {
     /**
@@ -22,6 +24,34 @@ public class SysLog implements Serializable {
     private Long id;
 
     /**
+     * 日志类型
+     *
+     * @see com.youlai.system.common.enums.LogTypeEnum
+     */
+    private Integer type;
+
+
+    /**
+     * 日志标题
+     */
+    private String title;
+
+    /**
+     * 请求路径
+     */
+    private String requestUri;
+
+    /**
+     * IP 地址
+     */
+    private String ip;
+
+    /**
+     * 执行时间(毫秒)
+     */
+    private Long executionTime;
+
+    /**
      * 创建人ID
      */
     private Long createBy;
@@ -29,23 +59,6 @@ public class SysLog implements Serializable {
     /**
      * 创建时间
      */
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
-
-    /**
-     * 修改人ID
-     */
-    private Long updateBy;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    /**
-     * 逻辑删除标识(1-已删除 0-未删除)
-     */
-    private Integer isDeleted;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }

@@ -1,8 +1,10 @@
 package com.youlai.system.controller;
 
+import com.youlai.system.common.enums.LogTypeEnum;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.model.dto.CaptchaResult;
 import com.youlai.system.model.dto.LoginResult;
+import com.youlai.system.plugin.syslog.annotation.LogAnnotation;
 import com.youlai.system.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,6 +30,7 @@ public class AuthController {
 
     @Operation(summary = "登录")
     @PostMapping("/login")
+    @LogAnnotation(value = "登录", logType = LogTypeEnum.LOGIN)
     public Result<LoginResult> login(
             @Parameter(description = "用户名", example = "admin") @RequestParam String username,
             @Parameter(description = "密码", example = "123456") @RequestParam String password
@@ -38,6 +41,7 @@ public class AuthController {
 
     @Operation(summary = "注销")
     @DeleteMapping("/logout")
+    @LogAnnotation(value = "注销", logType = LogTypeEnum.LOGIN)
     public Result logout() {
         authService.logout();
         return Result.success();

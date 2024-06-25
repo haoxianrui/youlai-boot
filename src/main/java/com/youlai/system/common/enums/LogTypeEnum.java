@@ -5,23 +5,23 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 /**
- * 性别枚举
+ * 日志类型枚举
  *
- * @author haoxr
- * @since 2022/10/14
+ * @author Ray
+ * @since 2.10.0
  */
-@Getter
 @Schema(enumAsRef = true)
-public enum GenderEnum implements IBaseEnum<Integer> {
+@Getter
+public enum LogTypeEnum implements IBaseEnum<Integer> {
 
-    MALE(1, "男"),
-    FEMALE (2, "女");
+    OPERATION(1, "操作日志"),
+    LOGIN (2, "登录日志");
 
     private final Integer value;
 
     private final String label;
 
-    GenderEnum(Integer value, String label) {
+    LogTypeEnum(Integer value, String label) {
         this.value = value;
         this.label = label;
     }
