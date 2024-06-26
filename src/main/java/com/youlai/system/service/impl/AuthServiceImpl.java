@@ -57,13 +57,16 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public LoginResult login(String username, String password) {
-        // 认证用户信息
+        // 创建认证令牌对象
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username.toLowerCase().trim(), password);
-        // 认证
+        // 执行用户认证
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        // 认证成功，生成Token
+        // 认证成功后生成JWT令牌
         String accessToken = JwtUtils.createToken(authentication);
+        // 将认证信息存入Security上下文，便于在AOP（如日志记录）中获取当前用户信息
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        // 返回包含JWT令牌的登录结果
         return LoginResult.builder()
                 .tokenType("Bearer")
                 .accessToken(accessToken)

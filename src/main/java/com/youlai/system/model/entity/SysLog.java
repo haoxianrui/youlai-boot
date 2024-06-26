@@ -2,11 +2,9 @@ package com.youlai.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
-import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
-import com.youlai.system.common.base.BaseEntity;
 import lombok.Data;
 
 /**
@@ -42,14 +40,30 @@ public class SysLog implements Serializable {
     private String requestUri;
 
     /**
+     * 请求方法
+     */
+    private String method;
+
+    /**
      * IP 地址
      */
     private String ip;
 
     /**
+     * 浏览器
+     */
+    private String browser;
+
+    /**
+     * 终端系统
+     */
+    private String os;
+
+    /**
      * 执行时间(毫秒)
      */
     private Long executionTime;
+
 
     /**
      * 创建人ID
@@ -60,5 +74,7 @@ public class SysLog implements Serializable {
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private LocalDateTime createTime;
+
+
 }
