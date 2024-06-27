@@ -10,7 +10,7 @@ import lombok.Getter;
  * @author haoxr
  * @since 2022/4/23 9:36
  */
-
+@Getter
 public enum MenuTypeEnum implements IBaseEnum<Integer> {
 
     NULL(0, null),
@@ -19,13 +19,12 @@ public enum MenuTypeEnum implements IBaseEnum<Integer> {
     EXTLINK(3, "外链"),
     BUTTON(4, "按钮");
 
-    @Getter
-    @EnumValue //  Mybatis-Plus 提供注解表示插入数据库时插入该值
-    private Integer value;
+    //  Mybatis-Plus 提供注解表示插入数据库时插入该值
+    @EnumValue
+    private final Integer value;
 
-    @Getter
     // @JsonValue //  表示对枚举序列化时返回此字段
-    private String label;
+    private final String label;
 
     MenuTypeEnum(Integer value, String label) {
         this.value = value;

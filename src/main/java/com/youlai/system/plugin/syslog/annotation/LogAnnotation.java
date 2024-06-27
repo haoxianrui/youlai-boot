@@ -1,6 +1,6 @@
 package com.youlai.system.plugin.syslog.annotation;
 
-import com.youlai.system.enums.LogTypeEnum;
+import com.youlai.system.enums.LogModuleEnum;
 
 import java.lang.annotation.*;
 
@@ -17,7 +17,7 @@ public @interface LogAnnotation {
 
     String value() default "";
 
-    LogTypeEnum logType() default LogTypeEnum.OPERATION;
+    LogModuleEnum module()  ;
 
 
 }
