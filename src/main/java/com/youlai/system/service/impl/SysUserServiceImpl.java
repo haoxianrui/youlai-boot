@@ -228,7 +228,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public UserInfoVO getCurrentUserInfo() {
 
-        String username = SecurityUtils.getUser().getUsername(); // 登录用户名
+        String username = SecurityUtils.getUsername();
 
         // 获取登录用户基础信息
         SysUser user = this.getOne(new LambdaQueryWrapper<SysUser>()

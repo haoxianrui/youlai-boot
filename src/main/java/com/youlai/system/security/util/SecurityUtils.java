@@ -1,37 +1,43 @@
 package com.youlai.system.security.util;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.security.model.SysUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.PatternMatchUtils;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Spring Security 工具类
+ *
+ * @author Ray
+ * @since 2021/1/10
+ */
 public class SecurityUtils {
 
     /**
      * 获取当前登录人信息
      *
-     * @return SysUserDetails
+     * @return Optional<SysUserDetails>
      */
-    public static SysUserDetails getUser() {
+    public static Optional<SysUserDetails> getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
             if (principal instanceof SysUserDetails) {
-                return (SysUserDetails) authentication.getPrincipal();
+                return Optional.of((SysUserDetails) principal);
             }
         }
-        return null;
+        return Optional.empty();
     }
+
 
     /**
      * 获取用户ID
@@ -39,26 +45,36 @@ public class SecurityUtils {
      * @return Long
      */
     public static Long getUserId() {
-        Long userId = Convert.toLong(getUser().getUserId());
-        return userId;
+        return getUser().map(SysUserDetails::getUserId).orElse(null);
     }
+
+
+    /**
+     * 获取用户账号
+     *
+     * @return String 用户账号
+     */
+    public static String getUsername() {
+        return getUser().map(SysUserDetails::getUsername).orElse(null);
+    }
+
 
     /**
      * 获取部门ID
      *
-     * @return
+     * @return Long
      */
     public static Long getDeptId() {
-        return Convert.toLong(getUser().getDeptId());
+        return getUser().map(SysUserDetails::getDeptId).orElse(null);
     }
 
     /**
      * 获取数据权限范围
      *
-     * @return DataScope
+     * @return Integer
      */
     public static Integer getDataScope() {
-        return Convert.toInt(getUser().getDataScope());
+        return getUser().map(SysUserDetails::getDataScope).orElse(null);
     }
 
 
@@ -84,8 +100,6 @@ public class SecurityUtils {
      * 是否超级管理员
      * <p>
      * 超级管理员忽视任何权限判断
-     *
-     * @return
      */
     public static boolean isRoot() {
         Set<String> roles = getRoles();
