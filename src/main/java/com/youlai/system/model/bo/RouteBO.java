@@ -1,6 +1,6 @@
 package com.youlai.system.model.bo;
 
-import com.youlai.system.common.enums.MenuTypeEnum;
+import com.youlai.system.enums.MenuTypeEnum;
 import lombok.Data;
 
 import java.util.List;

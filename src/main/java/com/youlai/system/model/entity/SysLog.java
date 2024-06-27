@@ -26,7 +26,7 @@ public class SysLog implements Serializable {
     /**
      * 日志类型
      *
-     * @see com.youlai.system.common.enums.LogTypeEnum
+     * @see com.youlai.system.enums.LogTypeEnum
      */
     private Integer type;
 

@@ -6,7 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SystemConstants;
-import com.youlai.system.common.enums.StatusEnum;
+import com.youlai.system.enums.StatusEnum;
 import com.youlai.system.converter.DeptConverter;
 import com.youlai.system.mapper.SysDeptMapper;
 import com.youlai.system.model.entity.SysDept;

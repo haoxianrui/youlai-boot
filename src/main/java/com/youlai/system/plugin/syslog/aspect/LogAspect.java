@@ -2,7 +2,6 @@ package com.youlai.system.plugin.syslog.aspect;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
-import cn.hutool.extra.servlet.ServletUtil;
 import com.youlai.system.common.util.IPUtils;
 import com.youlai.system.model.entity.SysLog;
 import com.youlai.system.plugin.syslog.annotation.LogAnnotation;

@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.RegisteredPayload;
 import com.youlai.system.common.constant.SecurityConstants;
-import com.youlai.system.common.exception.BusinessException;
+import com.youlai.system.exception.BusinessException;
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.plugin.norepeat.annotation.PreventRepeatSubmit;
 import jakarta.servlet.http.HttpServletRequest;

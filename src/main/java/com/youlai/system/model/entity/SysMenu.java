@@ -2,7 +2,7 @@ package com.youlai.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
-import com.youlai.system.common.enums.MenuTypeEnum;
+import com.youlai.system.enums.MenuTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
 

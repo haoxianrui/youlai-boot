@@ -7,9 +7,11 @@ import java.io.Serializable;
 
 /**
  * 响应码枚举
+ * <p>
+ * 参考阿里巴巴开发手册响应码规范
  *
- * @author haoxr
- * @since 2020-06-23
+ * @author Ray
+ * @since 2020/6/23
  **/
 @AllArgsConstructor
 @NoArgsConstructor
@@ -103,7 +105,7 @@ public enum ResultCode implements IResultCode, Serializable {
     }
 
 
-    public static ResultCode getValue(String code){
+    public static ResultCode getValue(String code) {
         for (ResultCode value : values()) {
             if (value.getCode().equals(code)) {
                 return value;

@@ -1,6 +1,6 @@
 package com.youlai.system.controller;
 
-import com.youlai.system.common.enums.LogTypeEnum;
+import com.youlai.system.enums.LogTypeEnum;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.model.dto.CaptchaResult;
 import com.youlai.system.model.dto.LoginResult;

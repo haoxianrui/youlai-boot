@@ -1,6 +1,6 @@
 package com.youlai.system.plugin.syslog.annotation;
 
-import com.youlai.system.common.enums.LogTypeEnum;
+import com.youlai.system.enums.LogTypeEnum;
 
 import java.lang.annotation.*;
 
