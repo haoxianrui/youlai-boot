@@ -56,7 +56,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
         Page<${entity}BO> boPage = this.baseMapper.listPaged${entity}s(page, queryParams);
     
         // 实体转换
-        return ${firstCharLowerCaseEntity}Converter.bo2PageVo(boPage);
+        return ${firstCharLowerCaseEntity}Converter.toPageVo(boPage);
     }
     
     /**

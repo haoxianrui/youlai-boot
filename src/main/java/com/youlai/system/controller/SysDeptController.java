@@ -1,11 +1,13 @@
 package com.youlai.system.controller;
 
+import com.youlai.system.enums.LogModuleEnum;
 import com.youlai.system.plugin.norepeat.annotation.PreventRepeatSubmit;
 import com.youlai.system.common.model.Option;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.model.form.DeptForm;
 import com.youlai.system.model.query.DeptQuery;
 import com.youlai.system.model.vo.DeptVO;
+import com.youlai.system.plugin.syslog.annotation.LogAnnotation;
 import com.youlai.system.service.SysDeptService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,8 +33,9 @@ public class SysDeptController {
 
     private final SysDeptService deptService;
 
-    @Operation(summary = "获取部门列表")
+    @Operation(summary = "部门列表")
     @GetMapping
+    @LogAnnotation( value = "部门列表",module = LogModuleEnum.DEPT)
     public Result<List<DeptVO>> getDeptList(
              DeptQuery queryParams
     ) {
@@ -40,7 +43,7 @@ public class SysDeptController {
         return Result.success(list);
     }
 
-    @Operation(summary = "获取部门下拉列表")
+    @Operation(summary = "部门下拉列表")
     @GetMapping("/options")
     public Result<List<Option>> getDeptOptions() {
         List<Option> list = deptService.listDeptOptions();

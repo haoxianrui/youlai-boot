@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.common.util.ExcelUtils;
+import com.youlai.system.enums.LogModuleEnum;
 import com.youlai.system.model.dto.UserImportDTO;
 import com.youlai.system.plugin.norepeat.annotation.PreventRepeatSubmit;
 import com.youlai.system.plugin.easyexcel.UserImportListener;
@@ -16,6 +17,7 @@ import com.youlai.system.model.query.UserPageQuery;
 import com.youlai.system.model.dto.UserExportDTO;
 import com.youlai.system.model.vo.UserInfoVO;
 import com.youlai.system.model.vo.UserPageVO;
+import com.youlai.system.plugin.syslog.annotation.LogAnnotation;
 import com.youlai.system.service.SysUserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,6 +54,7 @@ public class SysUserController {
 
     @Operation(summary = "用户分页列表")
     @GetMapping("/page")
+    @LogAnnotation( value = "用户分页列表",module = LogModuleEnum.USER)
     public PageResult<UserPageVO> listPagedUsers(
              UserPageQuery queryParams
     ) {

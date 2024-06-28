@@ -1,6 +1,7 @@
 package com.youlai.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.youlai.system.enums.LogModuleEnum;
 import com.youlai.system.plugin.norepeat.annotation.PreventRepeatSubmit;
 import com.youlai.system.common.model.Option;
 import com.youlai.system.common.result.PageResult;
@@ -8,6 +9,7 @@ import com.youlai.system.common.result.Result;
 import com.youlai.system.model.form.RoleForm;
 import com.youlai.system.model.query.RolePageQuery;
 import com.youlai.system.model.vo.RolePageVO;
+import com.youlai.system.plugin.syslog.annotation.LogAnnotation;
 import com.youlai.system.service.SysRoleService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,6 +39,7 @@ public class SysRoleController {
 
     @Operation(summary = "角色分页列表")
     @GetMapping("/page")
+    @LogAnnotation( value = "角色分页列表",module = LogModuleEnum.ROLE)
     public PageResult<RolePageVO> getRolePage(
              RolePageQuery queryParams
     ) {

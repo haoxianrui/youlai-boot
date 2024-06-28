@@ -1,12 +1,14 @@
 package com.youlai.system.controller;
 
 import com.youlai.system.common.result.Result;
+import com.youlai.system.enums.LogModuleEnum;
 import com.youlai.system.plugin.norepeat.annotation.PreventRepeatSubmit;
 import com.youlai.system.model.form.MenuForm;
 import com.youlai.system.model.query.MenuQuery;
 import com.youlai.system.model.vo.MenuVO;
 import com.youlai.system.common.model.Option;
 import com.youlai.system.model.vo.RouteVO;
+import com.youlai.system.plugin.syslog.annotation.LogAnnotation;
 import com.youlai.system.service.SysMenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,6 +37,7 @@ public class SysMenuController {
 
     @Operation(summary = "菜单列表")
     @GetMapping
+    @LogAnnotation( value = "菜单列表",module = LogModuleEnum.MENU)
     public Result<List<MenuVO>> listMenus(MenuQuery queryParams) {
         List<MenuVO> menuList = menuService.listMenus(queryParams);
         return Result.success(menuList);

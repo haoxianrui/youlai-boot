@@ -1,7 +1,10 @@
 package com.youlai.system.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.system.model.entity.SysLog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.youlai.system.model.query.RolePageQuery;
+import com.youlai.system.model.vo.LogPageVO;
 import org.apache.ibatis.annotations.Mapper;
 
 
@@ -14,6 +17,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SysLogMapper extends BaseMapper<SysLog> {
 
+    Page<LogPageVO> listPagedLogs(Page page, RolePageQuery queryParams);
 }
 
 

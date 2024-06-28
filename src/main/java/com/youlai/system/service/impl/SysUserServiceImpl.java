@@ -76,7 +76,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Page<UserBO> userPage = this.baseMapper.listPagedUsers(page, queryParams);
 
         // 实体转换
-        return userConverter.bo2PageVo(userPage);
+        return userConverter.toPageVo(userPage);
     }
 
     /**
