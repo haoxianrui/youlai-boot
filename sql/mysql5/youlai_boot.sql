@@ -137,7 +137,7 @@ CREATE TABLE `sys_menu`  (
                              `redirect` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '跳转路径',
                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                              `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-                             `params` json NULL COMMENT '路由参数',
+                             `params` text NULL COMMENT '路由参数',
                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 117 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单管理' ROW_FORMAT = DYNAMIC;
 
@@ -196,6 +196,7 @@ INSERT INTO `sys_menu` VALUES (109, 36, '0,36', '列表选择器', 1, NULL, 'tab
 INSERT INTO `sys_menu` VALUES (110, 0, '0', '路由参数', 2, NULL, '/route-param', 'Layout', NULL, 1, 1, 1, 11, 'el-icon-ElementPlus', NULL, '2024-05-26 21:05:09', '2024-05-26 21:05:34', NULL);
 INSERT INTO `sys_menu` VALUES (111, 110, '0,110', '参数(type=1)', 1, NULL, 'route-param-type1', 'demo/route-param', NULL, 0, 1, 1, 1, 'el-icon-Star', NULL, '2024-05-26 21:59:24', '2024-05-26 21:59:37', '{\"type\": \"1\"}');
 INSERT INTO `sys_menu` VALUES (112, 110, '0,110', '参数(type=2)', 1, NULL, 'route-param-type2', 'demo/route-param', NULL, 0, 1, 1, 2, 'el-icon-StarFilled', NULL, '2024-05-26 21:46:55', '2024-05-26 21:59:45', '{\"type\": \"2\"}');
+INSERT INTO `sys_menu` VALUES (117, 1, '0,1', '系统日志', 1, 'Log', 'log', 'system/log/index', NULL, 0, 1, 1, 6, 'document', NULL, '2024-06-28 07:43:16', '2024-06-28 07:43:16', NULL);
 
 -- ----------------------------
 -- Table structure for sys_message
@@ -320,6 +321,7 @@ INSERT INTO `sys_role_menu` VALUES (2, 112);
 INSERT INTO `sys_role_menu` VALUES (2, 114);
 INSERT INTO `sys_role_menu` VALUES (2, 115);
 INSERT INTO `sys_role_menu` VALUES (2, 116);
+INSERT INTO `sys_role_menu` VALUES (2, 117);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -369,5 +371,26 @@ CREATE TABLE `sys_user_role`  (
 INSERT INTO `sys_user_role` VALUES (1, 1);
 INSERT INTO `sys_user_role` VALUES (2, 2);
 INSERT INTO `sys_user_role` VALUES (3, 3);
+
+-- ----------------------------
+-- Table structure for sys_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_log`;
+CREATE TABLE `sys_log` (
+                           `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+                           `module` enum('LOGIN','USER','ROLE','DEPT','MENU','DICT') COLLATE utf8mb4_general_ci NOT NULL COMMENT '日志模块',
+                           `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '日志内容',
+                           `request_uri` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '请求路径',
+                           `method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '方法名',
+                           `ip` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'IP地址',
+                           `region` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+                           `execution_time` bigint DEFAULT NULL COMMENT '执行时间(ms)',
+                           `browser` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '浏览器',
+                           `os` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '终端系统',
+                           `create_by` bigint DEFAULT NULL COMMENT '创建人ID',
+                           `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+                           `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '逻辑删除标识(1-已删除 0-未删除)',
+                           PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='系统日志表';
 
 SET FOREIGN_KEY_CHECKS = 1;
