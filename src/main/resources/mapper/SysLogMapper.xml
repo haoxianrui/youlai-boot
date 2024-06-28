@@ -7,18 +7,18 @@
     <!-- 日志分页列表 -->
     <select id="listPagedLogs" resultType="com.youlai.system.model.vo.LogPageVO">
         SELECT
-            id,
-            module,
-            content,
-            request_uri,
-            method,
-            ip,
-            concat(province, city) AS region,
-            execution_time,
-            browser,
-            browser_version,
-            os,
-            create_time,
+            t1.id,
+            t1.module,
+            t1.content,
+            t1.request_uri,
+            t1.method,
+            t1.ip,
+            CONCAT(t1.province, t1.city) AS region,
+            t1.execution_time,
+            t1.browser,
+            t1.browser_version,
+            t1.os,
+            t1.create_time,
             t2.nickname AS operator
         FROM
             sys_log t1
