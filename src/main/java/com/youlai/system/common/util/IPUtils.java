@@ -1,13 +1,19 @@
 package com.youlai.system.common.util;
 
 import cn.hutool.core.util.StrUtil;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.lionsoul.ip2region.xdb.Searcher;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 /**
  * IP工具类
@@ -22,9 +28,31 @@ import java.net.UnknownHostException;
  * @since 2.10.0
  */
 @Slf4j
+@Component
 public class IPUtils {
 
-    private static final String DB_PATH = "src/main/resources/data/ip2region.xdb";
+    private static final String DB_PATH = "/data/ip2region.xdb";
+    private static Searcher searcher;
+
+    @PostConstruct
+    public void init() {
+        try {
+            // 从类路径加载资源文件
+            InputStream inputStream = getClass().getResourceAsStream(DB_PATH);
+            if (inputStream == null) {
+                throw new FileNotFoundException("Resource not found: " + DB_PATH);
+            }
+
+            // 将资源文件复制到临时文件
+            Path tempDbPath = Files.createTempFile("ip2region", ".xdb");
+            Files.copy(inputStream, tempDbPath, StandardCopyOption.REPLACE_EXISTING);
+
+            // 使用临时文件初始化 Searcher 对象
+            searcher = Searcher.newWithFileOnly(tempDbPath.toString());
+        } catch (Exception e) {
+            log.error("IpRegionUtil initialization ERROR, {}", e.getMessage());
+        }
+    }
 
     /**
      * 获取IP地址
@@ -96,21 +124,16 @@ public class IPUtils {
      * @return 地理位置信息
      */
     public static String getRegion(String ip) {
-        Searcher searcher = null;
+        if (searcher == null) {
+            log.error("Searcher is not initialized");
+            return null;
+        }
+
         try {
-            searcher = Searcher.newWithFileOnly(DB_PATH);
             return searcher.search(ip);
         } catch (Exception e) {
             log.error("IpRegionUtil ERROR, {}", e.getMessage());
             return null;
-        } finally {
-            if (searcher != null) {
-                try {
-                    searcher.close();
-                } catch (IOException e) {
-                    log.error("IpRegionUtil close ERROR, {}", e.getMessage());
-                }
-            }
         }
     }
 }

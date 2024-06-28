@@ -52,12 +52,12 @@ public class LogAspect {
         }
 
         TimeInterval timer = DateUtil.timer();
+        // 执行方法
         Object proceed = joinPoint.proceed();
         long executionTime = timer.interval();
 
-        // 创建日志对象
+        // 创建日志记录
         SysLog log = new SysLog();
-
         log.setModule(logAnnotation.module());
         log.setContent(logAnnotation.value());
         log.setRequestUri(requestURI);
@@ -70,7 +70,14 @@ public class LogAspect {
         if (StrUtil.isNotBlank(ipAddr)) {
             log.setIp(ipAddr);
             String region = IPUtils.getRegion(ipAddr);
-            log.setRegion(region);
+            // 中国|0|四川省|成都市|电信 解析省和市
+            if (StrUtil.isNotBlank(region)) {
+                String[] regionArray = region.split("\\|");
+                if (regionArray.length > 2) {
+                    log.setProvince(regionArray[2]);
+                    log.setRegion(regionArray[3]);
+                }
+            }
         }
         log.setExecutionTime(executionTime);
         // 方法名
@@ -81,8 +88,8 @@ public class LogAspect {
         // 系统信息
         log.setOs(userAgent.getOs().getName());
         // 浏览器信息
-        String browserInfo = userAgent.getBrowser().getName() + " " + userAgent.getBrowser().getVersion(userAgentString);
-        log.setBrowser(browserInfo);
+        log.setBrowser(userAgent.getBrowser().getName());
+        log.setBrowserVersion(userAgent.getBrowser().getVersion(userAgentString));
         // 保存日志到数据库
         logService.save(log);
 

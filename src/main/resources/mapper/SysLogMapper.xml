@@ -7,7 +7,18 @@
     <!-- 日志分页列表 -->
     <select id="listPagedLogs" resultType="com.youlai.system.model.vo.LogPageVO">
         SELECT
-            t1.*,
+            id,
+            module,
+            content,
+            request_uri,
+            method,
+            ip,
+            concat(province, city) AS region,
+            execution_time,
+            browser,
+            browser_version,
+            os,
+            create_time,
             t2.nickname AS operator
         FROM
             sys_log t1
