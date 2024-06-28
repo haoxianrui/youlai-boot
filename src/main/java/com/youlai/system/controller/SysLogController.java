@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * 日志控制层
  *
  * @author Ray
- * @since 2022/10/16
+ * @since 2.10.0
  */
 @Tag(name = "08.日志接口")
 @RestController
