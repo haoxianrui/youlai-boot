@@ -75,7 +75,7 @@ public class LogAspect {
                 String[] regionArray = region.split("\\|");
                 if (regionArray.length > 2) {
                     log.setProvince(regionArray[2]);
-                    log.setRegion(regionArray[3]);
+                    log.setCity(regionArray[3]);
                 }
             }
         }

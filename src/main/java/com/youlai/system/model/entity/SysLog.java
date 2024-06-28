@@ -49,11 +49,6 @@ public class SysLog implements Serializable {
     private String ip;
 
     /**
-     * 地区
-     */
-    private String region;
-
-    /**
      * 省份
      */
     private String province;
