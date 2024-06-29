@@ -15,7 +15,7 @@
             t1.ip,
             CONCAT(t1.province," ", t1.city) AS region,
             t1.execution_time,
-            CONCAT(t1.browser_name," ", t1.browser_version) AS browser,
+            CONCAT(t1.browser," ", t1.browser_version) AS browser,
             t1.os,
             t1.create_time,
             t2.nickname AS operator
