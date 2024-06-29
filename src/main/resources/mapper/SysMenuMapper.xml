@@ -25,25 +25,24 @@
     <!-- 获取路由列表 -->
     <select id="listRoutes" resultMap="RouteMap">
         SELECT
-           t1.id,
-           t1.name,
-           t1.parent_id,
-           t1.route_name,
-           t1.route_path,
-           t1.component,
-           t1.icon,
-           t1.sort,
-           t1.visible,
-           t1.redirect,
-           t1.type,
-           t3.code,
-           t1.always_show,
-           t1.keep_alive,
-           t1.params
+            DISTINCT t1.id,
+            t1.name,
+            t1.parent_id,
+            t1.route_name,
+            t1.route_path,
+            t1.component,
+            t1.icon,
+            t1.sort,
+            t1.visible,
+            t1.redirect,
+            t1.type,
+            t1.always_show,
+            t1.keep_alive,
+            t1.params
         FROM
             sys_menu t1
-                 LEFT JOIN sys_role_menu t2 ON t1.id = t2.menu_id
-                 LEFT JOIN sys_role t3 ON t2.role_id = t3.id
+                INNER JOIN sys_role_menu t2 ON t1.id = t2.menu_id
+                INNER JOIN sys_role t3 ON t2.role_id = t3.id AND t3.status = 1 AND t3.is_deleted = 0
         WHERE
             t1.type != '${@com.youlai.system.enums.MenuTypeEnum@BUTTON.getValue()}'
             <if test="roles != null and roles.size() > 0">
