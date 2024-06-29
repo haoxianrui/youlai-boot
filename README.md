@@ -2,15 +2,15 @@
 <p align="center">
     <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
     <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.3.0-green.svg"/>
-     <a href="https://gitee.com/youlaitech/youlai-boot" target="_blank">
-        <img alt="有来技术" src="https://gitcode.com/youlai/youlai-boot/badge/star.svg"/>
+     <a href="https://gitee.com/youlaiorg/youlai-boot" target="_blank">
+        <img alt="有来技术" src="https://gitee.com/youlaiorg/youlai-boot/badge/star.svg"/>
     </a>     
     <a href="https://github.com/haoxianrui" target="_blank">
         <img alt="有来技术" src="https://img.shields.io/github/stars/haoxianrui/youlai-boot.svg?style=social&label=Stars"/>
     </a>
     <br/>
     <img alt="有来技术" src="https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg"/>
-    <a href="https://gitcode.com/youlai" target="_blank">
+    <a href="https://gitee.com/youlaiorg" target="_blank">
         <img alt="有来技术" src="https://img.shields.io/badge/Author-有来开源组织-orange.svg"/>
     </a>
 </p>
@@ -18,7 +18,7 @@
 <p align="center">
    <a target="_blank" style="color: greenyellow" href="https://vue3.youlai.tech/">👀 在线预览</a> |
    <a target="_blank" href="https://youlai.blog.csdn.net">📖 官方博客</a> |
-   <a target="_blank" href="https://gitcode.com/youlai">🦄 Gitcode</a> |
+   <a target="_blank" href="https://gitee.com/youlaiorg">🦄 Gitcode</a> |
    <a target="_blank" href="https://github.com/haoxianrui">🚢 Github</a> 
 </p>
 
@@ -86,9 +86,9 @@ youlai-boot
 ```
 
 ## 🌺 前端工程
-| Gitcode | Github |
+| Gitee | Github |
 |-------|------|
-| [vue3-element-admin](https://gitcode.com/youlai/vue3-element-admin)  | [vue3-element-admin](https://github.com/youlaitech/vue3-element-admin)  |
+| [vue3-element-admin](https://gitee.com/youlaiorg/vue3-element-admin)  | [vue3-element-admin](https://github.com/youlaitech/vue3-element-admin)  |
 
 
 ## 🌈 接口文档
