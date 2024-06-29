@@ -80,8 +80,6 @@ public class LogAspect {
             }
         }
         log.setExecutionTime(executionTime);
-        // 方法名
-        log.setMethod(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
         // 获取浏览器和终端系统信息
         String userAgentString = request.getHeader("User-Agent");
         UserAgent userAgent = UserAgentUtil.parse(userAgentString);

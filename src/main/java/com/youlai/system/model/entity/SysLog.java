@@ -39,11 +39,6 @@ public class SysLog implements Serializable {
     private String requestUri;
 
     /**
-     * 请求方法
-     */
-    private String method;
-
-    /**
      * IP 地址
      */
     private String ip;
