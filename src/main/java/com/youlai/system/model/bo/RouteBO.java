@@ -69,11 +69,6 @@ public class RouteBO {
     private String redirect;
 
     /**
-     * 拥有路由的权限
-     */
-    private List<String> roles;
-
-    /**
      * 【目录】只有一个子路由是否始终显示(1:是 0:否)
      */
     private Integer alwaysShow;

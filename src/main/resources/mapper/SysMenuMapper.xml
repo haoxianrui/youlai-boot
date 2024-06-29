@@ -20,9 +20,6 @@
         <result property="alwaysShow" column="always_show" jdbcType="INTEGER"/>
         <result property="keepAlive" column="keep_alive" jdbcType="INTEGER"/>
         <result property="params" column="params" jdbcType="VARCHAR"/>
-        <collection property="roles" ofType="string" javaType="list">
-            <result column="code"/>
-        </collection>
     </resultMap>
 
     <!-- 获取路由列表 -->
@@ -49,6 +46,15 @@
                  LEFT JOIN sys_role t3 ON t2.role_id = t3.id
         WHERE
             t1.type != '${@com.youlai.system.enums.MenuTypeEnum@BUTTON.getValue()}'
+            <if test="roles != null and roles.size() > 0">
+                <!-- ROOT 可查看所有菜单  -->
+                <if test="!roles.contains('ROOT')">
+                    AND t3.code IN
+                    <foreach collection="roles" item="role" open="(" close=")" separator=",">
+                        #{role}
+                    </foreach>
+                </if>
+            </if>
         ORDER BY
             t1.sort
     </select>

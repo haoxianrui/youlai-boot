@@ -9,6 +9,7 @@ import com.youlai.system.model.vo.MenuVO;
 import com.youlai.system.model.vo.RouteVO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 菜单业务接口
@@ -39,7 +40,7 @@ public interface SysMenuService extends IService<SysMenu> {
     /**
      * 获取路由列表
      */
-    List<RouteVO> listRoutes();
+    List<RouteVO> listRoutes( Set<String> roles);
 
     /**
      * 修改菜单显示状态

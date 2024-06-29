@@ -9,6 +9,7 @@ import com.youlai.system.model.vo.MenuVO;
 import com.youlai.system.common.model.Option;
 import com.youlai.system.model.vo.RouteVO;
 import com.youlai.system.plugin.syslog.annotation.LogAnnotation;
+import com.youlai.system.security.util.SecurityUtils;
 import com.youlai.system.service.SysMenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,6 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 菜单控制层
@@ -53,7 +55,8 @@ public class SysMenuController {
     @Operation(summary = "路由列表")
     @GetMapping("/routes")
     public Result<List<RouteVO>> listRoutes() {
-        List<RouteVO> routeList = menuService.listRoutes();
+        Set<String> roles = SecurityUtils.getRoles();
+        List<RouteVO> routeList = menuService.listRoutes(roles);
         return Result.success(routeList);
     }
 
@@ -105,7 +108,6 @@ public class SysMenuController {
         boolean result = menuService.updateMenuVisible(menuId, visible);
         return Result.judge(result);
     }
-
 
 }
 

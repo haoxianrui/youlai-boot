@@ -1,9 +1,9 @@
 package com.youlai.system.mapper;
 
-/**
- * 菜单持久接口层
+/*
+ * 菜单 访问层
  *
- * @author haoxr
+ * @author Ray
  * @since 2022/1/24
  */
 
@@ -18,6 +18,6 @@ import java.util.Set;
 @Mapper
 public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
-    List<RouteBO> listRoutes();
+    List<RouteBO> listRoutes(Set<String> roles);
 
 }

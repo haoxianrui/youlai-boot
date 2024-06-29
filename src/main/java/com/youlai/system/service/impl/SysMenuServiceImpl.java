@@ -141,9 +141,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * 获取路由列表
      */
     @Override
-    @Cacheable(cacheNames = "menu", key = "'routes'")
-    public List<RouteVO> listRoutes() {
-        List<RouteBO> menuList = this.baseMapper.listRoutes();
+    public List<RouteVO> listRoutes(Set<String> roles) {
+
+        if (CollectionUtil.isEmpty(roles)) {
+            return new ArrayList<>();
+        }
+
+        List<RouteBO> menuList = this.baseMapper.listRoutes(roles);
         return buildRoutes(SystemConstants.ROOT_NODE_ID, menuList);
     }
 
@@ -193,7 +197,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         RouteVO.Meta meta = new RouteVO.Meta();
         meta.setTitle(routeBO.getName());
         meta.setIcon(routeBO.getIcon());
-        meta.setRoles(routeBO.getRoles());
         meta.setHidden(StatusEnum.DISABLE.getValue().equals(routeBO.getVisible()));
         // 【菜单】是否开启页面缓存
         if (MenuTypeEnum.MENU.equals(routeBO.getType())
