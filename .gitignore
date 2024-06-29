@@ -10,3 +10,4 @@ gen
 target
 *.log
 logs
+.history
