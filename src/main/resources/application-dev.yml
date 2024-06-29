@@ -62,7 +62,9 @@ mybatis-plus:
 # 安全配置
 security:
   jwt:
+    # JWT 秘钥
     key: SecretKey012345678901234567890123456789012345678901234567890123456789
+    # JWT 有效期(单位：秒)
     ttl: 7200
   ignore-urls:
     - /v3/api-docs/**
