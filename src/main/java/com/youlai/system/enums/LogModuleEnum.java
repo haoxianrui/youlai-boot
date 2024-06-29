@@ -14,31 +14,13 @@ import lombok.Getter;
 @Getter
 public enum LogModuleEnum {
 
-    /**
-     * 登录
-     */
-    LOGIN("登录"),
-    /**
-     * 用户模块
-     */
-    USER("用户模块"),
-    /**
-     * 部门模块
-     */
-    DEPT("部门模块"),
-    /**
-     * 角色模块
-     */
-    ROLE("角色模块"),
-    /**
-     * 菜单模块
-     */
-    MENU("菜单模块"),
-    /**
-     * 字典模块
-     */
-    DICT("字典模块"),
 
+    LOGIN("登录"),
+    USER("用户"),
+    DEPT("部门"),
+    ROLE("角色"),
+    MENU("菜单"),
+    DICT("字典"),
     OTHER("其他")
     ;
 
