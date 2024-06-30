@@ -33,8 +33,40 @@
                     t2.nickname LIKE concat('%',#{queryParams.keywords},'%')
                 )
             </if>
+            <if test="queryParams.startDate != null">
+                AND t1.create_time &gt;= #{queryParams.startDate}
+            </if>
+            <if test="queryParams.endDate != null">
+                AND t1.create_time &lt;= #{queryParams.endDate}
+            </if>
         </where>
         ORDER BY
             t1.create_time DESC
+    </select>
+
+    <!-- 获取PV访问量统计数据 -->
+    <select id="getPvCounts" resultType="com.youlai.system.model.bo.VisitCount">
+        SELECT
+            COUNT(1) AS count,
+            DATE_FORMAT(create_time,'%Y-%m-%d') AS date
+        FROM
+            sys_log
+        WHERE
+            is_deleted = 0
+        GROUP BY
+            DATE_FORMAT(create_time, '%Y-%m-%d')
+    </select>
+
+    <!-- 获取IP访问统计数据 -->
+    <select id="getIpCounts" resultType="com.youlai.system.model.bo.VisitCount">
+        SELECT
+            COUNT(DISTINCT ip) AS count,
+            DATE_FORMAT(create_time, '%Y-%m-%d') AS date
+        FROM
+            sys_log
+        WHERE
+            is_deleted = 0
+        GROUP BY
+            DATE_FORMAT(create_time, '%Y-%m-%d')
     </select>
 </mapper>

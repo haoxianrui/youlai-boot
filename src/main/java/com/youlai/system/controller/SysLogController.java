@@ -2,6 +2,7 @@ package com.youlai.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.system.common.result.PageResult;
+import com.youlai.system.model.query.LogPageQuery;
 import com.youlai.system.model.query.RolePageQuery;
 import com.youlai.system.model.vo.LogPageVO;
 import com.youlai.system.service.SysLogService;
@@ -28,7 +29,7 @@ public class SysLogController {
     @Operation(summary = "日志分页列表")
     @GetMapping("/page")
     public PageResult<LogPageVO> listPagedLogs(
-             RolePageQuery queryParams
+             LogPageQuery queryParams
     ) {
         Page<LogPageVO> result = logService.listPagedLogs(queryParams);
         return PageResult.success(result);

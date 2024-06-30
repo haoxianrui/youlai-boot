@@ -20,13 +20,14 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 /**
- * WebSocket 配置
+ * WebSocket 自动配置类
  *
  * @author haoxr
  * @since 2.4.0
  */
+// 启用WebSocket消息代理功能和配置STOMP协议，实现实时双向通信和消息传递
+@EnableWebSocketMessageBroker
 @Configuration
-@EnableWebSocketMessageBroker // 启用WebSocket消息代理功能和配置STOMP协议，实现实时双向通信和消息传递
 @Slf4j
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
@@ -36,9 +37,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry
-                .addEndpoint("/ws")   // 注册了一个 /ws 的端点
-                .setAllowedOriginPatterns("*") // 允许跨域的 WebSocket 连接
-                .withSockJS();  // 启用 SockJS (浏览器不支持WebSocket，SockJS 将会提供兼容性支持)
+                // 注册 /ws 的端点
+                .addEndpoint("/ws")
+                // 允许跨域的 WebSocket 连接
+                .setAllowedOriginPatterns("*")
+                // 启用 SockJS (浏览器不支持WebSocket，SockJS 将会提供兼容性支持)
+                .withSockJS();
         registry.addEndpoint("/ws-app").setAllowedOriginPatterns("*");  // 注册了一个 /ws-app 的端点，支持 uni-app 的 ws 连接协议
     }
 
