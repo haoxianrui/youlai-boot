@@ -393,6 +393,6 @@ CREATE TABLE `sys_log` (
                            `create_time` datetime DEFAULT NULL COMMENT '创建时间',
                            `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '逻辑删除标识(1-已删除 0-未删除)',
                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDBDEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='系统日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='系统日志表';
 
 SET FOREIGN_KEY_CHECKS = 1;
