@@ -5,8 +5,8 @@ import com.youlai.system.model.bo.VisitCount;
 import com.youlai.system.model.entity.SysLog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.youlai.system.model.query.LogPageQuery;
-import com.youlai.system.model.query.RolePageQuery;
 import com.youlai.system.model.vo.LogPageVO;
+import com.youlai.system.model.vo.VisitStatsVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -47,6 +47,20 @@ public interface SysLogMapper extends BaseMapper<SysLog> {
      * @return
      */
     List<VisitCount> getIpCounts(String startDate, String endDate);
+
+    /**
+     * 获取浏览量(PV)统计数据
+     *
+     * @return
+     */
+    VisitStatsVO getPvStats();
+
+    /**
+     * 获取IP统计数据
+     *
+     * @return
+     */
+    VisitStatsVO getIpStats();
 }
 
 

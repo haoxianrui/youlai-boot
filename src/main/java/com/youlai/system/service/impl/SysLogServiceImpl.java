@@ -7,11 +7,13 @@ import com.youlai.system.model.bo.VisitCount;
 import com.youlai.system.model.entity.SysLog;
 import com.youlai.system.model.query.LogPageQuery;
 import com.youlai.system.model.vo.LogPageVO;
+import com.youlai.system.model.vo.VisitStatsVO;
 import com.youlai.system.model.vo.VisitTrendVO;
 import com.youlai.system.service.SysLogService;
 import com.youlai.system.mapper.SysLogMapper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +54,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog>
      */
     @Override
     public VisitTrendVO getVisitTrend(LocalDate startDate, LocalDate endDate) {
-        VisitTrendVO visitTrend= new VisitTrendVO();
+        VisitTrendVO visitTrend = new VisitTrendVO();
         List<String> dates = new ArrayList<>();
 
         // 获取日期范围内的日期
@@ -64,7 +66,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog>
 
         // 获取访问量和访问 IP 数的统计数据
         List<VisitCount> pvCounts = this.baseMapper.getPvCounts(dates.get(0) + " 00:00:00", dates.get(dates.size() - 1) + " 23:59:59");
-        List<VisitCount> ipCounts =  this.baseMapper.getIpCounts(dates.get(0) + " 00:00:00", dates.get(dates.size() - 1) + " 23:59:59");
+        List<VisitCount> ipCounts = this.baseMapper.getIpCounts(dates.get(0) + " 00:00:00", dates.get(dates.size() - 1) + " 23:59:59");
 
         // 将统计数据转换为 Map
         Map<String, Integer> pvMap = pvCounts.stream().collect(Collectors.toMap(VisitCount::getDate, VisitCount::getCount));
@@ -84,6 +86,43 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog>
 
         return visitTrend;
     }
+
+    /**
+     * 获取访问统计
+     *
+     * @return
+     */
+    @Override
+    public List<VisitStatsVO> getVisitStats() {
+        List<VisitStatsVO> list = new ArrayList<>();
+
+        // 访问量
+        VisitStatsVO pvStats = this.baseMapper.getPvStats();
+        pvStats.setTitle("浏览量");
+        pvStats.setType("pv");
+        pvStats.setGranularityLabel("日");
+        list.add(pvStats);
+
+        // 访客数
+        VisitStatsVO uvStats = new VisitStatsVO();
+        uvStats.setTitle("访客数");
+        uvStats.setType("uv");
+        uvStats.setTodayCount(100);
+        uvStats.setTotalCount(2000);
+        uvStats.setGrowthRate(BigDecimal.ZERO);
+        uvStats.setGranularityLabel("日");
+        list.add(uvStats);
+
+        // IP数
+        VisitStatsVO ipStats = this.baseMapper.getIpStats();
+        ipStats.setTitle("IP数");
+        ipStats.setType("ip");
+        ipStats.setGranularityLabel("日");
+        list.add(ipStats);
+
+        return list;
+    }
+
 }
 
 
