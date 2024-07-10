@@ -31,10 +31,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -138,13 +135,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     /**
-     * 获取路由列表
+     * 获取菜单路由列表
      */
     @Override
     public List<RouteVO> listRoutes(Set<String> roles) {
 
         if (CollectionUtil.isEmpty(roles)) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
 
         List<RouteBO> menuList = this.baseMapper.listRoutes(roles);

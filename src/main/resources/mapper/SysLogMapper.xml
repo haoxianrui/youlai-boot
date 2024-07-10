@@ -76,14 +76,14 @@
             COUNT(CASE WHEN DATE(create_time) = CURDATE() THEN 1 END) AS todayCount,
             COUNT(*) AS totalCount,
             ROUND(
-                    CASE
-                        WHEN COUNT(CASE WHEN DATE(create_time) = CURDATE() - INTERVAL 1 DAY THEN 1 END) = 0 THEN 0
-                        ELSE
-                                (COUNT(CASE WHEN DATE(create_time) = CURDATE() THEN 1 END) -
-                                 COUNT(CASE WHEN DATE(create_time) = CURDATE() - INTERVAL 1 DAY THEN 1 END)) /
-                                COUNT(CASE WHEN DATE(create_time) = CURDATE() - INTERVAL 1 DAY THEN 1 END)
-                        END,
-                    2) AS growthRate
+                CASE
+                    WHEN COUNT(CASE WHEN DATE(create_time) = CURDATE() - INTERVAL 1 DAY AND TIME(create_time) &lt;= TIME(NOW()) THEN 1 END) = 0 THEN 0
+                ELSE
+                    (COUNT(CASE WHEN DATE(create_time) = CURDATE() THEN 1 END) -
+                    COUNT(CASE WHEN DATE(create_time) = CURDATE() - INTERVAL 1 DAY AND TIME(create_time)  &lt;= TIME(NOW()) THEN 1 END)) /
+                    COUNT(CASE WHEN DATE(create_time) = CURDATE() - INTERVAL 1 DAY AND TIME(create_time)  &lt;= TIME(NOW()) THEN 1 END)
+                END,
+            2) AS growthRate
         FROM
             sys_log
         WHERE
@@ -96,14 +96,14 @@
             COUNT(DISTINCT CASE WHEN DATE(create_time) = CURDATE() THEN ip END) AS todayCount,
             COUNT(DISTINCT ip) AS totalCount,
             ROUND(
-                    CASE
-                        WHEN COUNT(DISTINCT CASE WHEN DATE(create_time) = CURDATE() - INTERVAL 1 DAY THEN ip END) = 0 THEN 0
-                        ELSE
-                                (COUNT(DISTINCT CASE WHEN DATE(create_time) = CURDATE() THEN ip END) -
-                                 COUNT(DISTINCT CASE WHEN DATE(create_time) = CURDATE() - INTERVAL 1 DAY THEN ip END)) /
-                                COUNT(DISTINCT CASE WHEN DATE(create_time) = CURDATE() - INTERVAL 1 DAY THEN ip END)
-                        END,
-                    2) AS growthRate
+                CASE
+                    WHEN COUNT(DISTINCT CASE WHEN DATE(create_time) = CURDATE() - INTERVAL 1 DAY AND TIME(create_time) &lt;= TIME(NOW()) THEN ip END) = 0 THEN 0
+                    ELSE
+                        (COUNT(DISTINCT CASE WHEN DATE(create_time) = CURDATE() THEN ip END) -
+                         COUNT(DISTINCT CASE WHEN DATE(create_time) = CURDATE() - INTERVAL 1 DAY AND TIME(create_time) &lt;= TIME(NOW()) THEN ip END)) /
+                        COUNT(DISTINCT CASE WHEN DATE(create_time) = CURDATE() - INTERVAL 1 DAY AND TIME(create_time) &lt;= TIME(NOW()) THEN ip END)
+                    END,
+                2) AS growthRate
         FROM
             sys_log
         WHERE
