@@ -46,7 +46,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * 修改菜单显示状态
      * 
      * @param menuId 菜单ID
-     * @param visible 是否显示(1-显示 2-隐藏)
+     * @param visible 是否显示(1-显示 0-隐藏)
      */
     boolean updateMenuVisible(Long menuId, Integer visible);
 

@@ -52,7 +52,7 @@ public class SysMenuController {
         return Result.success(menus);
     }
 
-    @Operation(summary = "路由列表")
+    @Operation(summary = "菜单路由列表")
     @GetMapping("/routes")
     public Result<List<RouteVO>> listRoutes() {
         Set<String> roles = SecurityUtils.getRoles();
