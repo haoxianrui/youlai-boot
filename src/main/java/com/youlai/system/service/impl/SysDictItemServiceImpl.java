@@ -17,15 +17,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SysDictItemServiceImpl extends ServiceImpl<SysDictItemMapper, SysDictItem> implements SysDictItemService {
 
-    /**
-     * 根据字典ID删除字典项
-     *
-     * @param dictId 字典ID
-     */
-    @Override
-    public void removeByDictId(Long dictId) {
-
-    }
 }
 
 

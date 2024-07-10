@@ -11,10 +11,4 @@ import com.youlai.system.model.entity.SysDictItem;
  */
 public interface SysDictItemService extends IService<SysDictItem> {
 
-    /**
-     * 根据字典ID删除字典项
-     *
-     * @param dictId 字典ID
-     */
-    void removeByDictId(Long dictId);
 }

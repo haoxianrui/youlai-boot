@@ -5,10 +5,10 @@ import com.youlai.system.common.model.Option;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.enums.LogModuleEnum;
+import com.youlai.system.model.query.DictPageQuery;
 import com.youlai.system.model.vo.DictPageVO;
 import com.youlai.system.plugin.norepeat.annotation.PreventRepeatSubmit;
 import com.youlai.system.model.form.DictForm;
-import com.youlai.system.model.query.DictTypePageQuery;
 import com.youlai.system.plugin.syslog.annotation.LogAnnotation;
 import com.youlai.system.service.SysDictService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,7 +38,7 @@ public class SysDictController {
     @GetMapping("/page")
     @LogAnnotation( value = "字典分页列表",module = LogModuleEnum.DICT)
     public PageResult<DictPageVO> getDictPage(
-            DictTypePageQuery queryParams
+            DictPageQuery queryParams
     ) {
         Page<DictPageVO> result = dictService.getDictPage(queryParams);
         return PageResult.success(result);

@@ -3,7 +3,7 @@ package com.youlai.system.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.system.model.entity.SysDict;
-import com.youlai.system.model.query.DictTypePageQuery;
+import com.youlai.system.model.query.DictPageQuery;
 import com.youlai.system.model.vo.DictPageVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -23,7 +23,7 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
      * @param queryParams 查询参数
      * @return
      */
-    Page<DictPageVO> getDictPage(Page<DictPageVO> page, DictTypePageQuery queryParams);
+    Page<DictPageVO> getDictPage(Page<DictPageVO> page, DictPageQuery queryParams);
 }
 
 

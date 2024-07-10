@@ -14,7 +14,7 @@ import com.youlai.system.model.entity.SysDictItem;
 import com.youlai.system.common.model.Option;
 import com.youlai.system.mapper.SysDictMapper;
 import com.youlai.system.model.form.DictForm;
-import com.youlai.system.model.query.DictTypePageQuery;
+import com.youlai.system.model.query.DictPageQuery;
 import com.youlai.system.model.vo.DictPageVO;
 import com.youlai.system.service.SysDictItemService;
 import com.youlai.system.service.SysDictService;
@@ -45,7 +45,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
      * @param queryParams 分页查询对象
      */
     @Override
-    public Page<DictPageVO> getDictPage(DictTypePageQuery queryParams) {
+    public Page<DictPageVO> getDictPage(DictPageQuery queryParams) {
         // 查询参数
         int pageNum = queryParams.getPageNum();
         int pageSize = queryParams.getPageSize();

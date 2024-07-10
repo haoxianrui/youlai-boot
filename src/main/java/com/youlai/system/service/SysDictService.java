@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.youlai.system.common.model.Option;
 import com.youlai.system.model.entity.SysDict;
 import com.youlai.system.model.form.DictForm;
-import com.youlai.system.model.query.DictTypePageQuery;
+import com.youlai.system.model.query.DictPageQuery;
 import com.youlai.system.model.vo.DictPageVO;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public interface SysDictService extends IService<SysDict> {
      * @param queryParams 分页查询对象
      * @return
      */
-    Page<DictPageVO> getDictPage(DictTypePageQuery queryParams);
+    Page<DictPageVO> getDictPage(DictPageQuery queryParams);
 
 
     /**
