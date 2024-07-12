@@ -3,8 +3,6 @@ package com.youlai.system.model.bo;
 import com.youlai.system.enums.MenuTypeEnum;
 import lombok.Data;
 
-import java.util.List;
-
 /**
  * 路由
  */
