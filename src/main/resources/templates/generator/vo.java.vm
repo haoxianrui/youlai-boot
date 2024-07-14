@@ -1,0 +1,37 @@
+package ${package}.model.vo;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
+#if(${hasLocalDateTime})
+import java.time.LocalDateTime;
+#end
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+
+/**
+ * $!{tableComment} 图对象
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Getter
+@Setter
+@Schema( description = "$!{tableComment}视图对象")
+public class ${entityName}VO implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+#foreach($field in ${fields})
+    #if("$!field.comment" != "")
+    @Schema(description = "${field.comment}")
+    #end
+    private ${field.propertyType} ${field.propertyName};
+#end
+
+}

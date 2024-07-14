@@ -48,20 +48,20 @@ public class FastAutoGeneratorTest {
                 // 注入配置(设置扩展类的模板路径和包路径)
                 .injectionConfig(consumer -> {
                     List<CustomFile> customFiles = new ArrayList<>();
-                    customFiles.add(new CustomFile.Builder().fileName("DTO.java").templatePath("/templates/dto.java.vm").packageName("model.dto").build());
-                    customFiles.add(new CustomFile.Builder().fileName("VO.java").templatePath("/templates/vo.java.vm").packageName("model.vo").build());
-                    customFiles.add(new CustomFile.Builder().fileName("BO.java").templatePath("/templates/bo.java.vm").packageName("model.bo").build());
-                    customFiles.add(new CustomFile.Builder().fileName("PageQuery.java").templatePath("/templates/pageQuery.java.vm").packageName("model.query").build());
+                    customFiles.add(new CustomFile.Builder().fileName("DTO.java").templatePath("/templates/generator/dto.java.vm").packageName("model.dto").build());
+                    customFiles.add(new CustomFile.Builder().fileName("VO.java").templatePath("/templates/generator/vo.java.vm").packageName("model.vo").build());
+                    customFiles.add(new CustomFile.Builder().fileName("BO.java").templatePath("/templates/generator/bo.java.vm").packageName("model.bo").build());
+                    customFiles.add(new CustomFile.Builder().fileName("PageQuery.java").templatePath("/templates/generator/query.java.vm").packageName("model.query").build());
                     customFiles.add(new CustomFile.Builder().fileName("PageVO.java").templatePath("/templates/pageVO.java.vm").packageName("model.vo").build());
-                    customFiles.add(new CustomFile.Builder().fileName("Form.java").templatePath("/templates/form.java.vm").packageName("model.form").build());
-                    customFiles.add(new CustomFile.Builder().fileName("Converter.java").templatePath("/templates/converter.java.vm").packageName("converter").build());
+                    customFiles.add(new CustomFile.Builder().fileName("Form.java").templatePath("/templates/generator/form.java.vm").packageName("model.form").build());
+                    customFiles.add(new CustomFile.Builder().fileName("Converter.java").templatePath("/templates/generator/converter.java.vm").packageName("converter").build());
                     consumer.customFile(customFiles);
                     consumer.beforeOutputFile((tableInfo, objectMap) -> {
                         // 为每个表生成首字母小写的实体名
                         String entityName = tableInfo.getEntityName();
                         String lowerCaseEntity = entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
                         // 注入自定义参数
-                        objectMap.put("firstCharLowerCaseEntity", lowerCaseEntity);
+                        objectMap.put("lowerFirstEntityName", lowerCaseEntity);
 
                     });
 

@@ -23,10 +23,10 @@ public interface DictItemConverter {
 
     Page<DictPageVO> convertToPageVo(Page<SysDictItem> page);
 
-    DictForm convertToForm(SysDictItem entity);
+    DictForm toForm(SysDictItem entity);
 
-    SysDictItem convertToEntity(DictForm.DictItem dictFormDictItems);
-    List<SysDictItem> convertToEntity(List<DictForm.DictItem> dictFormDictItems);
+    SysDictItem toEntity(DictForm.DictItem dictFormDictItems);
+    List<SysDictItem> toEntity(List<DictForm.DictItem> dictFormDictItems);
 
     DictForm.DictItem convertToDictFormDictItem(SysDictItem entity);
     List<DictForm.DictItem> convertToDictFormDictItem(List<SysDictItem> entities);

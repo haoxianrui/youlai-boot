@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youlai.system.mapper.DatabaseMapper">
+
+    <!-- 查询数据库表分页 -->
+    <select id="getTablePage" resultType="com.youlai.system.model.vo.TablePageVO">
+        SELECT
+            TABLE_NAME ,
+            TABLE_COMMENT ,
+            TABLE_COLLATION,
+            ENGINE,
+            CREATE_TIME
+        FROM
+            information_schema.tables
+        WHERE
+            TABLE_SCHEMA = (SELECT DATABASE())
+            AND table_type = 'BASE TABLE'
+            <if test="queryParams.keywords != null and queryParams.keywords.trim() neq ''">
+                AND TABLE_NAME LIKE CONCAT('%',#{queryParams.keywords},'%')
+            </if>
+        ORDER BY
+            CREATE_TIME DESC
+    </select>
+
+    <select id="getTableColumns" resultType="com.youlai.system.model.vo.TableColumnVO">
+        SELECT
+            COLUMN_NAME,
+            DATA_TYPE,
+            COLUMN_COMMENT,
+            CASE COLUMN_KEY WHEN 'PRI' THEN 1 ELSE 0 END AS isPrimaryKey,
+            IS_NULLABLE,
+            CHARACTER_MAXIMUM_LENGTH,
+            CHARACTER_SET_NAME,
+            COLLATION_NAME
+        FROM
+            information_schema.columns
+        WHERE
+            TABLE_SCHEMA = (SELECT DATABASE())
+            AND TABLE_NAME = #{tableName}
+    </select>
+</mapper>

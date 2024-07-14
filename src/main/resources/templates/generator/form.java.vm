@@ -1,0 +1,37 @@
+package ${package}.model.form;
+
+import java.io.Serial;
+import java.io.Serializable;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
+#if(${hasLocalDateTime})
+import java.time.LocalDateTime;
+#end
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+
+
+/**
+ * $!{tableComment} 表单对象
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Getter
+@Setter
+@Schema(description = "$!{tableComment}表单对象")
+public class ${entityName}Form implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in ${fields})
+    #if("$!field.comment" != "")
+        @Schema(description = "${field.comment}")
+    #end
+    private ${field.propertyType} ${field.propertyName};
+#end
+}

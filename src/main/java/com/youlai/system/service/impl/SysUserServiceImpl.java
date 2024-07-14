@@ -105,7 +105,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Assert.isTrue(count == 0, "用户名已存在");
 
         // 实体转换 form->entity
-        SysUser entity = userConverter.convertToEntity(userForm);
+        SysUser entity = userConverter.toEntity(userForm);
 
         // 设置默认加密密码
         String defaultEncryptPwd = passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD);
@@ -141,7 +141,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Assert.isTrue(count == 0, "用户名已存在");
 
         // form -> entity
-        SysUser entity = userConverter.convertToEntity(userForm);
+        SysUser entity = userConverter.toEntity(userForm);
 
         // 修改用户
         boolean result = this.updateById(entity);

@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -54,9 +55,9 @@ public class SysUserController {
 
     @Operation(summary = "用户分页列表")
     @GetMapping("/page")
-    @LogAnnotation( value = "用户分页列表",module = LogModuleEnum.USER)
+    @LogAnnotation(value = "用户分页列表", module = LogModuleEnum.USER)
     public PageResult<UserPageVO> listPagedUsers(
-             UserPageQuery queryParams
+            UserPageQuery queryParams
     ) {
         IPage<UserPageVO> result = userService.listPagedUsers(queryParams);
         return PageResult.success(result);
@@ -138,9 +139,9 @@ public class SysUserController {
     public void downloadTemplate(HttpServletResponse response) throws IOException {
         String fileName = "用户导入模板.xlsx";
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+        response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
 
-        String fileClassPath = "excel-templates" + File.separator + fileName;
+        String fileClassPath = "templates" + File.separator + "excel" + File.separator + fileName;
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(fileClassPath);
 
         ServletOutputStream outputStream = response.getOutputStream();
@@ -151,7 +152,7 @@ public class SysUserController {
 
     @Operation(summary = "导入用户")
     @PostMapping("/import")
-    public Result importUsers( MultipartFile file) throws IOException {
+    public Result importUsers(MultipartFile file) throws IOException {
         UserImportListener listener = new UserImportListener();
         String msg = ExcelUtils.importExcel(file.getInputStream(), UserImportDTO.class, listener);
         return Result.success(msg);

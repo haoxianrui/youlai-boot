@@ -31,7 +31,7 @@ public interface RoleConverter {
 
     List<Option> entities2Options(List<SysRole> roles);
 
-    SysRole convertToEntity(RoleForm roleForm);
+    SysRole toEntity(RoleForm roleForm);
 
-    RoleForm convertToForm(SysRole entity);
+    RoleForm toForm(SysRole entity);
 }

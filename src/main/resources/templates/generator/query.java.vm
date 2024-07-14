@@ -1,0 +1,34 @@
+package ${package}.model.query;
+
+import com.youlai.common.base.BasePageQuery;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
+#if(${hasLocalDateTime})
+import java.time.LocalDateTime;
+#end
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+
+
+/**
+ * $!{tableComment}分页查询对象
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Schema(description ="$!{tableComment}分页查询对象")
+@Getter
+@Setter
+public class ${entityName}Query extends BasePageQuery {
+
+    private static final long serialVersionUID = 1L;
+
+#foreach($field in ${fields})
+    #if("$!field.comment" != "")
+    @Schema(description = "${field.comment}")
+    #end
+    private ${field.propertyType} ${field.propertyName};
+#end
+}

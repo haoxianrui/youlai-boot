@@ -1,7 +1,6 @@
 package com.youlai.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -62,7 +61,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     @Override
     public boolean saveDict(DictForm dictForm) {
         // 保存字典
-        SysDict entity = dictConverter.convertToEntity(dictForm);
+        SysDict entity = dictConverter.toEntity(dictForm);
 
         // 校验 code 是否唯一
         long count = this.count(new LambdaQueryWrapper<SysDict>()
@@ -74,7 +73,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         // 保存字典项
         if (result) {
             List<DictForm.DictItem> dictFormDictItems = dictForm.getDictItems();
-            List<SysDictItem> dictItems = dictItemConverter.convertToEntity(dictFormDictItems);
+            List<SysDictItem> dictItems = dictItemConverter.toEntity(dictFormDictItems);
             dictItems.forEach(dictItem -> dictItem.setDictId(entity.getId()));
             dictItemService.saveBatch(dictItems);
         }
@@ -92,7 +91,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         // 获取字典
         SysDict entity = this.getById(id);
         Assert.isTrue(entity != null, "字典不存在");
-        DictForm dictForm = dictConverter.convertToForm(entity);
+        DictForm dictForm = dictConverter.toForm(entity);
 
         // 获取字典项集合
         List<SysDictItem> dictItems = dictItemService.list(new LambdaQueryWrapper<SysDictItem>()
@@ -113,7 +112,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     @Override
     public boolean updateDict(Long id, DictForm dictForm) {
         // 更新字典
-        SysDict entity = dictConverter.convertToEntity(dictForm);
+        SysDict entity = dictConverter.toEntity(dictForm);
 
         // 校验 code 是否唯一
         long count = this.count(new LambdaQueryWrapper<SysDict>()
@@ -127,7 +126,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         if (result) {
             // 更新字典项
             List<DictForm.DictItem> dictFormDictItems = dictForm.getDictItems();
-            List<SysDictItem> dictItems = dictItemConverter.convertToEntity(dictFormDictItems);
+            List<SysDictItem> dictItems = dictItemConverter.toEntity(dictFormDictItems);
 
             // 获取当前数据库中的字典项
             List<SysDictItem> currentDictItemEntities = dictItemService.list(new LambdaQueryWrapper<SysDictItem>()
