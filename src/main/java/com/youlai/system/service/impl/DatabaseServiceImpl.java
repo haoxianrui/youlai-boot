@@ -1,6 +1,6 @@
 package com.youlai.system.service.impl;
 
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.extra.template.Template;
 import cn.hutool.extra.template.TemplateConfig;
 import cn.hutool.extra.template.TemplateEngine;
@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 import cn.hutool.extra.template.TemplateConfig.ResourceMode;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 数据库服务实现类
@@ -67,13 +64,14 @@ public class DatabaseServiceImpl implements DatabaseService {
 
         List<TableGeneratePreviewVO> list = new ArrayList<>();
 
-        TemplateConfig templateConfig = new TemplateConfig("templates"  , ResourceMode.CLASSPATH);
+        TemplateConfig templateConfig = new TemplateConfig("templates" , ResourceMode.CLASSPATH);
         TemplateEngine templateEngine = TemplateUtil.createEngine(templateConfig);
 
 
         Map<String, Object> bindingMap = new HashMap<>();
         bindingMap.put("tableName", "sys_user");
         bindingMap.put("author", "Ray");
+        bindingMap.put("date", DateUtil.format(new Date(), "yyyy-MM-dd HH:mm"));
         bindingMap.put("entityName", "User" );
         bindingMap.put("lowerFirstEntityName", "user");
         bindingMap.put("tableComment", "用户");

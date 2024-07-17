@@ -10,7 +10,6 @@ import com.youlai.system.model.vo.TablePageVO;
 import com.youlai.system.service.DatabaseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +21,9 @@ import java.util.List;
 
 @Tag(name = "09.代码生成")
 @RestController
-@RequestMapping("/api/v1/databases")
+@RequestMapping("/api/v1/generator")
 @RequiredArgsConstructor
-public class DatabaseController {
+public class GeneratorController {
 
     private final DatabaseService databaseService;
 
@@ -48,7 +47,7 @@ public class DatabaseController {
 
 
     @Operation(summary = "获取预览生成代码")
-    @GetMapping("/table/{tableName}/generate-preview")
+    @GetMapping("/table/{tableName}/preview")
     public Result<List<TableGeneratePreviewVO>> getTablePreviewData(@PathVariable String tableName) {
         List<TableGeneratePreviewVO> list = databaseService.getTablePreviewData(tableName);
         return Result.success(list);
