@@ -14,7 +14,7 @@ import java.util.List;
  * @author haoxr
  * @since 2.11.0
  */
-public interface DatabaseService {
+public interface GeneratorService {
 
 
     /**

@@ -7,7 +7,7 @@ import com.youlai.system.model.query.TablePageQuery;
 import com.youlai.system.model.vo.TableColumnVO;
 import com.youlai.system.model.vo.TableGeneratePreviewVO;
 import com.youlai.system.model.vo.TablePageVO;
-import com.youlai.system.service.DatabaseService;
+import com.youlai.system.service.GeneratorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,14 +25,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GeneratorController {
 
-    private final DatabaseService databaseService;
+    private final GeneratorService generatorService;
 
     @Operation(summary = "获取数据表分页列表")
     @GetMapping("/table/page")
     public PageResult<TablePageVO> getTablePage(
             TablePageQuery queryParams
     ) {
-        Page<TablePageVO> result = databaseService.getTablePage(queryParams);
+        Page<TablePageVO> result = generatorService.getTablePage(queryParams);
         return PageResult.success(result);
     }
 
@@ -41,7 +41,7 @@ public class GeneratorController {
     public Result<List<TableColumnVO>> getTableColumns(
             @Parameter(description = "表名", example = "sys_user") @PathVariable String tableName
     ) {
-        List<TableColumnVO> list = databaseService.getTableColumns(tableName);
+        List<TableColumnVO> list = generatorService.getTableColumns(tableName);
         return Result.success(list);
     }
 
@@ -49,7 +49,7 @@ public class GeneratorController {
     @Operation(summary = "获取预览生成代码")
     @GetMapping("/table/{tableName}/preview")
     public Result<List<TableGeneratePreviewVO>> getTablePreviewData(@PathVariable String tableName) {
-        List<TableGeneratePreviewVO> list = databaseService.getTablePreviewData(tableName);
+        List<TableGeneratePreviewVO> list = generatorService.getTablePreviewData(tableName);
         return Result.success(list);
     }
 

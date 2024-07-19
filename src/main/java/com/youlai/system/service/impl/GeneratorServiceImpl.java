@@ -11,7 +11,7 @@ import com.youlai.system.model.query.TablePageQuery;
 import com.youlai.system.model.vo.TableColumnVO;
 import com.youlai.system.model.vo.TableGeneratePreviewVO;
 import com.youlai.system.model.vo.TablePageVO;
-import com.youlai.system.service.DatabaseService;
+import com.youlai.system.service.GeneratorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import cn.hutool.extra.template.TemplateConfig.ResourceMode;
@@ -27,7 +27,7 @@ import java.util.*;
  */
 @Service
 @RequiredArgsConstructor
-public class DatabaseServiceImpl implements DatabaseService {
+public class GeneratorServiceImpl implements GeneratorService {
 
     private final DatabaseMapper databaseMapper;
 
@@ -81,14 +81,28 @@ public class DatabaseServiceImpl implements DatabaseService {
 
         Template template = templateEngine.getTemplate("generator" + File.separator + "controller.java.vm");
         String content = template.render(bindingMap);
+        TableGeneratePreviewVO controller = new TableGeneratePreviewVO();
+        controller.setPath("youlai-boot/controller");
+        controller.setContent(content);
+        controller.setFileName("UserController.java");
+
+        list.add(controller);
+
         TableGeneratePreviewVO vo = new TableGeneratePreviewVO();
-        vo.setPath("controller");
+        vo.setPath("youlai-boot/model/vo");
         vo.setContent(content);
-        vo.setFileName("UserController.java");
+        vo.setFileName("UserVO.java");
 
         list.add(vo);
 
         return list;
     }
+
+
+    private String  generatePath(){
+
+    }
+
+
 
 }
