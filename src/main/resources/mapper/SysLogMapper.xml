@@ -11,7 +11,6 @@
             t1.module,
             t1.content,
             t1.request_uri,
-            t1.method,
             t1.ip,
             CONCAT(t1.province," ", t1.city) AS region,
             t1.execution_time,
