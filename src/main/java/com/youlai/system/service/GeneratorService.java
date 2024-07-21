@@ -3,7 +3,7 @@ package com.youlai.system.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.system.model.query.TablePageQuery;
 import com.youlai.system.model.vo.TableColumnVO;
-import com.youlai.system.model.vo.TableGeneratePreviewVO;
+import com.youlai.system.model.vo.GeneratorPreviewVO;
 import com.youlai.system.model.vo.TablePageVO;
 
 import java.util.List;
@@ -39,5 +39,5 @@ public interface GeneratorService {
      * @param tableName 表名
      * @return
      */
-    List<TableGeneratePreviewVO> getTablePreviewData(String tableName);
+    List<GeneratorPreviewVO> getTablePreviewData(String tableName);
 }

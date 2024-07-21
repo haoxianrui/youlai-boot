@@ -28,7 +28,7 @@ import cn.hutool.core.util.StrUtil;
  */
 @Service
 @RequiredArgsConstructor
-public class ${table.serviceImplName} extends ServiceImpl<${entityName}Mapper, ${entityName}> implements ${entityName}Service {
+public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, ${entityName}> implements ${entityName}Service {
 
     private final ${entityName}Converter ${lowerFirstEntityName}Converter;
 
@@ -88,7 +88,7 @@ public class ${table.serviceImplName} extends ServiceImpl<${entityName}Mapper, $
      * 删除$!{tableComment}
      *
      * @param ids $!{tableComment}ID，多个以英文逗号(,)分割
-     * @return true|false
+     * @return
      */
     @Override
     public boolean delete${entityName}s(String ids) {

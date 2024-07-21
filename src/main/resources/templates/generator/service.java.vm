@@ -6,14 +6,14 @@ import ${package}.model.query.${entityName}PageQuery;
 import ${package}.model.vo.${entityName}PageVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+
 /**
- * $!{tableComment} 服务类
+ * $!{tableComment}服务类
  *
  * @author ${author}
  * @since ${date}
  */
 public interface ${entityName}Service extends IService<${entityName}> {
-
 
     /**
      *$!{tableComment}分页列表
@@ -22,7 +22,6 @@ public interface ${entityName}Service extends IService<${entityName}> {
      */
     IPage<${entityName}VO> get${entityName}Page(${entityName}Query queryParams);
 
-
     /**
      * 获取$!{tableComment}表单数据
      *
@@ -30,7 +29,6 @@ public interface ${entityName}Service extends IService<${entityName}> {
      * @return
      */
      ${entityName}Form get${entityName}FormData(Long id);
-
 
     /**
      * 新增$!{tableComment}
@@ -48,7 +46,6 @@ public interface ${entityName}Service extends IService<${entityName}> {
      * @return
      */
     boolean update${entityName}(Long id, ${entityName}Form formData);
-
 
     /**
      * 删除$!{tableComment}

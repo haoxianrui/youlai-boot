@@ -5,7 +5,7 @@ import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.model.query.TablePageQuery;
 import com.youlai.system.model.vo.TableColumnVO;
-import com.youlai.system.model.vo.TableGeneratePreviewVO;
+import com.youlai.system.model.vo.GeneratorPreviewVO;
 import com.youlai.system.model.vo.TablePageVO;
 import com.youlai.system.service.GeneratorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,8 +48,8 @@ public class GeneratorController {
 
     @Operation(summary = "获取预览生成代码")
     @GetMapping("/table/{tableName}/preview")
-    public Result<List<TableGeneratePreviewVO>> getTablePreviewData(@PathVariable String tableName) {
-        List<TableGeneratePreviewVO> list = generatorService.getTablePreviewData(tableName);
+    public Result<List<GeneratorPreviewVO>> getTablePreviewData(@PathVariable String tableName) {
+        List<GeneratorPreviewVO> list = generatorService.getTablePreviewData(tableName);
         return Result.success(list);
     }
 

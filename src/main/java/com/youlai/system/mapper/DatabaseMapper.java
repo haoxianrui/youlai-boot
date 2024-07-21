@@ -11,6 +11,12 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 
+/**
+ * 数据库 Mapper 接口
+ *
+ * @author ray
+ * @since 2.10.0
+ */
 @Mapper
 public interface DatabaseMapper extends BaseMapper<SysDept> {
 
