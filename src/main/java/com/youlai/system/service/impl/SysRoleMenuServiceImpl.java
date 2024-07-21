@@ -52,7 +52,9 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
             list.forEach(item -> {
                 String roleCode = item.getRoleCode();
                 Set<String> perms = item.getPerms();
-                redisTemplate.opsForHash().put(SecurityConstants.ROLE_PERMS_PREFIX, roleCode, perms);
+                if (CollectionUtil.isNotEmpty(perms)) {
+                    redisTemplate.opsForHash().put(SecurityConstants.ROLE_PERMS_PREFIX, roleCode, perms);
+                }
             });
         }
     }
@@ -73,7 +75,9 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
             }
 
             Set<String> perms = rolePerms.getPerms();
-            redisTemplate.opsForHash().put(SecurityConstants.ROLE_PERMS_PREFIX, roleCode, perms);
+            if (CollectionUtil.isNotEmpty(perms)) {
+                redisTemplate.opsForHash().put(SecurityConstants.ROLE_PERMS_PREFIX, roleCode, perms);
+            }
         }
     }
 

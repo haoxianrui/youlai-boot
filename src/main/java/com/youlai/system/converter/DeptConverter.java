@@ -14,10 +14,10 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface DeptConverter {
 
-    DeptForm convertToForm(SysDept entity);
+    DeptForm toForm(SysDept entity);
     
     DeptVO convertToVo(SysDept entity);
 
-    SysDept convertToEntity(DeptForm deptForm);
+    SysDept toEntity(DeptForm deptForm);
 
 }

@@ -1,0 +1,103 @@
+package ${package}.service.impl;
+
+import ${package}.model.entity.${entityName};
+import ${package}.mapper.${entityName}Mapper;
+import ${package}.service.${entityName}Service;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import ${package}.model.form.${entityName}Form;
+import ${package}.model.query.${entityName}Query;
+import ${package}.model.vo.${entityName}PageVO;
+import ${package}.converter.${entityName}Converter;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
+
+/**
+ * $!{tableComment}服务实现类
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+@RequiredArgsConstructor
+public class ${table.serviceImplName} extends ServiceImpl<${entityName}Mapper, ${entityName}> implements ${entityName}Service {
+
+    private final ${entityName}Converter ${lowerFirstEntityName}Converter;
+
+    /**
+    * 获取$!{tableComment}分页列表
+    *
+    * @param queryParams 查询参数
+    * @return {@link IPage<${entityName}PageVO>} $!{tableComment}分页列表
+    */
+    @Override
+    public IPage<${entityName}VO> get${entityName}Page(${entityName}Query queryParams) {
+        Page<${entityName}VO> pageVO = this.baseMapper.get${entityName}Page(
+                new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),
+                queryParams
+        );
+        returnv pageVO;
+    }
+    
+    /**
+     * 获取$!{tableComment}表单数据
+     *
+     * @param id $!{tableComment}ID
+     * @return
+     */
+    @Override
+    public ${entityName}Form get${entityName}FormData(Long id) {
+        ${entityName} entity = this.getById(id);
+        return ${lowerFirstEntityName}Converter.toForm(entity);
+    }
+    
+    /**
+     * 新增$!{tableComment}
+     *
+     * @param formData $!{tableComment}表单对象
+     * @return
+     */
+    @Override
+    public boolean save${entityName}(${entityName}Form formData) {
+        ${entityName} entity = ${lowerFirstEntityName}Converter.toEntity(formData);
+        return this.save(entity);
+    }
+    
+    /**
+     * 更新$!{tableComment}
+     *
+     * @param id   $!{tableComment}ID
+     * @param formData $!{tableComment}表单对象
+     * @return
+     */
+    @Override
+    public boolean update${entityName}(Long id,${entityName}Form formData) {
+        ${entityName} entity = ${lowerFirstEntityName}Converter.toEntity(formData);
+        return this.updateById(entity);
+    }
+    
+    /**
+     * 删除$!{tableComment}
+     *
+     * @param ids $!{tableComment}ID，多个以英文逗号(,)分割
+     * @return true|false
+     */
+    @Override
+    public boolean delete${entityName}s(String ids) {
+        Assert.isTrue(StrUtil.isNotBlank(ids), "删除的$!{tableComment}数据为空");
+        // 逻辑删除
+        List<Long> idList = Arrays.stream(ids.split(","))
+                .map(Long::parseLong)
+                .toList();
+        return this.removeByIds(idList);
+    }
+
+}

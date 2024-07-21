@@ -31,7 +31,7 @@ public class SecurityProperties {
     public static class JwtProperty {
 
         /**
-         * JWT 秘钥
+         * JWT 密钥
          */
         private String key;
 

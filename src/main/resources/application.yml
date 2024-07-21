@@ -3,3 +3,5 @@ spring:
     name: youlai-boot
   profiles:
     active: dev
+    include:
+      - generator

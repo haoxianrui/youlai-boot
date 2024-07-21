@@ -141,7 +141,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         Assert.isTrue(count == 0, "部门编号已存在");
 
         // form->entity
-        SysDept entity = deptConverter.convertToEntity(formData);
+        SysDept entity = deptConverter.toEntity(formData);
 
         // 生成部门路径(tree_path)，格式：父节点tree_path + , + 父节点ID，用于删除部门时级联删除子部门
         String treePath = generateDeptTreePath(formData.getParentId());
@@ -164,7 +164,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Override
     public DeptForm getDeptForm(Long deptId) {
         SysDept entity = this.getById(deptId);
-        return deptConverter.convertToForm(entity);
+        return deptConverter.toForm(entity);
     }
 
 
@@ -187,7 +187,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
 
 
         // form->entity
-        SysDept entity = deptConverter.convertToEntity(formData);
+        SysDept entity = deptConverter.toEntity(formData);
         entity.setId(deptId);
 
         // 生成部门路径(tree_path)，格式：父节点tree_path + , + 父节点ID，用于删除部门时级联删除子部门

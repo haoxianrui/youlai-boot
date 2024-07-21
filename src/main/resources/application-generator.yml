@@ -1,0 +1,9 @@
+### 代码生成器配置
+generator:
+  ## 模板配置
+  templateConfigs:
+    Controller:
+      ## 模板路径
+      templatePath: templates/generator/controller.java.vm
+      ## 包名
+      packageName: controller

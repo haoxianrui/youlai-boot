@@ -104,7 +104,7 @@ public class UserImportListener extends MyAnalysisEventListener<UserImportDTO> {
 
         if (validationMsg.isEmpty()) {
             // 校验通过，持久化至数据库
-            SysUser entity = userConverter.convertToEntity(userImportDTO);
+            SysUser entity = userConverter.toEntity(userImportDTO);
             entity.setPassword(passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));   // 默认密码
             // 性别翻译
             String genderLabel = userImportDTO.getGenderLabel();

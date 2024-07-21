@@ -1,0 +1,27 @@
+package ${package}.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import ${package}.model.entity.${entityName};
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import ${package}.model.query.${entityName}Query;
+import org.apache.ibatis.annotations.Mapper;
+
+/**
+ * $!{tableComment} 数据库访问层
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Mapper
+public interface ${entityName}Mapper extends BaseMapper<${entityName}> {
+
+    /**
+     * 获取$!{tableComment}分页数据
+     *
+     * @param page 分页对象
+     * @param queryParams 查询参数
+     * @return
+     */
+    Page<${entityName}VO> get${entityName}Page(Page<${entityName}VO> page, ${entityName}Query queryParams);
+
+}
