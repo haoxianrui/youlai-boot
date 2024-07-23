@@ -1,5 +1,7 @@
 package com.youlai.system.model.form;
 
+import com.youlai.system.enums.FormTypeEnum;
+import com.youlai.system.enums.QueryTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -7,7 +9,7 @@ import java.util.List;
 
 @Schema(description = "代码生成配置表单")
 @Data
-public class GeneratorConfigForm {
+public class GenCodeConfigForm {
 
     @Schema(description = "表名")
     private String tableName;
@@ -50,10 +52,10 @@ public class GeneratorConfigForm {
         private Boolean showInQuery;
 
         @Schema(description = "表单类型")
-        private String formType;
+        private FormTypeEnum formType;
 
         @Schema(description = "查询方式")
-        private String queryMethod;
+        private QueryTypeEnum queryType;
 
     }
 }

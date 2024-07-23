@@ -17,6 +17,7 @@ import com.youlai.system.mapper.GenConfigMapper;
 import com.youlai.system.mapper.GenFieldConfigMapper;
 import com.youlai.system.model.entity.GenConfig;
 import com.youlai.system.model.entity.GenFieldConfig;
+import com.youlai.system.model.form.GenCodeConfigForm;
 import com.youlai.system.model.query.TablePageQuery;
 import com.youlai.system.model.vo.TableColumnVO;
 import com.youlai.system.model.vo.GeneratorPreviewVO;
@@ -73,6 +74,21 @@ public class GeneratorServiceImpl implements GeneratorService {
     public List<TableColumnVO> getTableColumns(String tableName) {
         return databaseMapper.getTableColumns(tableName);
     }
+
+
+    @Override
+    public GenCodeConfigForm getGenCodeConfig(String tableName) {
+
+        genConfigMapper.selectOne(new LambdaQueryWrapper<>(GenConfig.class).eq(GenConfig::getTableName, tableName));
+
+        return null;
+    }
+
+    @Override
+    public boolean saveGenCodeConfig(GenCodeConfigForm formData) {
+        return false;
+    }
+
 
     /**
      * 获取预览生成代码
@@ -135,6 +151,8 @@ public class GeneratorServiceImpl implements GeneratorService {
         }
         return list;
     }
+
+
 
 
     private String getFileName(String entityName, String templateName, String extension) {
