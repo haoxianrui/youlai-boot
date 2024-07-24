@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.math.BigDecimal;
 #end
 
+
 /**
  * $!{tableComment}分页查询对象
  *
@@ -23,14 +24,11 @@ import java.math.BigDecimal;
 public class ${entityName}Query extends BasePageQuery {
 
     private static final long serialVersionUID = 1L;
-#if($fieldConfigs)
-    #foreach($fieldConfig in ${fieldConfigs})
-        #if($fieldConfig.showInQuery)
-            #if("$!fieldConfig.fieldComment" != "")
-    @Schema(description = "${field.fieldComment}")
-            #end
-    private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
-         #end
+
+#foreach($field in ${fields})
+    #if("$!field.comment" != "")
+    @Schema(description = "${field.comment}")
     #end
+    private ${field.propertyType} ${field.propertyName};
 #end
 }

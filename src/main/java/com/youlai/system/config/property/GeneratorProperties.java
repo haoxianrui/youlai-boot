@@ -1,6 +1,5 @@
 package com.youlai.system.config.property;
 
-import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.map.MapUtil;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -30,11 +29,6 @@ public class GeneratorProperties {
         private String templatePath;
 
         private String packageName;
-
-        /**
-         * 文件扩展名，如 .java
-         */
-        private String extension= FileNameUtil.EXT_JAVA;
 
     }
 

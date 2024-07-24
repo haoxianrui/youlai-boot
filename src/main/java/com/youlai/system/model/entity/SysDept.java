@@ -3,7 +3,6 @@ package com.youlai.system.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.youlai.system.common.base.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +16,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SysDept extends BaseEntity {
+    /**
+     * 主键
+     */
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     /**
      * 部门名称
@@ -57,11 +61,5 @@ public class SysDept extends BaseEntity {
      * 更新人 ID
      */
     private Long updateBy;
-
-    /**
-     * 逻辑删除标识 (0-未删除 1-已删除)
-     */
-    @TableLogic
-    private Boolean isDeleted;
 
 }

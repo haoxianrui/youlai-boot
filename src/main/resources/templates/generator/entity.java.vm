@@ -23,14 +23,13 @@ import com.youlai.system.common.base.BaseEntity;
 public class ${entityName} extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
-#if($fieldConfigs)
-    #foreach($fieldConfig in ${fieldConfigs})
-    #if("$!fieldConfig.fieldComment" != "")
+
+#foreach($field in ${table.fields})
+#if("$!field.comment" != "")
     /**
-     * ${fieldConfig.fieldComment}
+     * ${field.comment}
      */
-    #end
-    private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
-    #end
+#end
+    private ${field.propertyType} ${field.propertyName};
 #end
 }

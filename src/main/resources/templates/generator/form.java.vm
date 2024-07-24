@@ -1,4 +1,4 @@
-package ${package}.${subPackage};
+package ${package}.model.form;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -11,12 +11,10 @@ import java.time.LocalDateTime;
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
 #end
-#if(${hasRequiredField})
-import jakarta.validation.constraints.*;
-#end
+
 
 /**
- * $!{tableComment}表单对象
+ * $!{tableComment} 表单对象
  *
  * @author ${author}
  * @since ${date}
@@ -30,22 +28,10 @@ public class ${entityName}Form implements Serializable {
     private static final long serialVersionUID = 1L;
 
 ## ----------  BEGIN 字段循环遍历  ----------
-#if($fieldConfigs)
-    #foreach($fieldConfig in ${fieldConfigs})
-        #if($fieldConfig.showInForm)
-            #if($fieldConfig.isRequired)
-                #if($fieldConfig.fieldType == 'String')
-    @NotBlank(message = "$fieldConfig.fieldComment不能为空")
-                #else
-    @NotNull(message = "$fieldConfig.fieldComment不能为空")
-                #end
-            #end
-            #if("$!fieldConfig.fieldComment" != "")
-    @Schema(description = "${fieldConfig.fieldComment}")
-            #end
-    private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
-        #end
+#foreach($field in ${fields})
+    #if("$!field.comment" != "")
+        @Schema(description = "${field.comment}")
     #end
+    private ${field.propertyType} ${field.propertyName};
 #end
-
 }
