@@ -35,6 +35,8 @@ public class GenConfigForm {
     @Schema(description = "字段配置")
     @Data
     public static class FieldConfig {
+        @Schema(description = "ID")
+        private Long configId;
 
         @Schema(description = "列名")
         private String columnName;
