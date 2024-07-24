@@ -124,7 +124,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         Assert.isTrue(genConfig != null, "未找到表生成配置");
 
         List<GenFieldConfig> fieldConfigs = genFieldConfigMapper.selectList(new LambdaQueryWrapper<GenFieldConfig>()
-                .eq(GenFieldConfig::getGenConfigId, genConfig.getId())
+                .eq(GenFieldConfig::getConfigId, genConfig.getId())
         );
         Assert.isTrue(CollectionUtil.isNotEmpty(fieldConfigs), "未找到字段生成配置");
 
@@ -227,7 +227,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         bindMap.put("tableName", genConfig.getTableName());
         bindMap.put("author", genConfig.getAuthor());
         bindMap.put("lowerFirstEntityName", StrUtil.lowerFirst(entityName));
-        bindMap.put("tableComment", StrUtil.replace(genConfig.getTableComment(), "表", Strings.EMPTY));
+        bindMap.put("tableComment", StrUtil.replace(genConfig.getComment(), "表", Strings.EMPTY));
         bindMap.put("fieldConfigs", fieldConfigs);
 
         for (GenFieldConfig fieldConfig : fieldConfigs) {
