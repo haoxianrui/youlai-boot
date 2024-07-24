@@ -3,14 +3,12 @@ package com.youlai.system.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
-import com.youlai.system.model.form.GenCodeConfigForm;
+import com.youlai.system.model.form.GenConfigForm;
 import com.youlai.system.model.query.TablePageQuery;
-import com.youlai.system.model.vo.TableColumnVO;
 import com.youlai.system.model.vo.GeneratorPreviewVO;
 import com.youlai.system.model.vo.TablePageVO;
 import com.youlai.system.service.GeneratorService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -44,14 +42,14 @@ public class GeneratorController {
 
     @Operation(summary = "获取代码生成配置")
     @GetMapping("/{tableName}/config")
-    public Result<GenCodeConfigForm> getGenCodeConfig(@PathVariable String tableName) {
-        GenCodeConfigForm formData = generatorService.getGenCodeConfig(tableName);
+    public Result<GenConfigForm> getGenConfig(@PathVariable String tableName) {
+        GenConfigForm formData = generatorService.getGenConfig(tableName);
         return Result.success(formData);
     }
 
     @Operation(summary = "保存代码生成配置")
     @PostMapping("/{tableName}/config")
-    public Result saveGenCodeConfig(@RequestBody GenCodeConfigForm formData) {
+    public Result saveGenCodeConfig(@RequestBody GenConfigForm formData) {
         boolean result = generatorService.saveGenCodeConfig(formData);
         return Result.judge(result);
     }

@@ -1,6 +1,5 @@
 package com.youlai.system.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Assert;
@@ -17,7 +16,7 @@ import com.youlai.system.mapper.GenConfigMapper;
 import com.youlai.system.mapper.GenFieldConfigMapper;
 import com.youlai.system.model.entity.GenConfig;
 import com.youlai.system.model.entity.GenFieldConfig;
-import com.youlai.system.model.form.GenCodeConfigForm;
+import com.youlai.system.model.form.GenConfigForm;
 import com.youlai.system.model.query.TablePageQuery;
 import com.youlai.system.model.vo.TableColumnVO;
 import com.youlai.system.model.vo.GeneratorPreviewVO;
@@ -75,17 +74,35 @@ public class GeneratorServiceImpl implements GeneratorService {
         return databaseMapper.getTableColumns(tableName);
     }
 
-
+    /**
+     * 获取代码生成配置
+     *
+     * @param tableName 表名 eg: sys_user
+     * @return 代码生成配置
+     */
     @Override
-    public GenCodeConfigForm getGenCodeConfig(String tableName) {
+    public GenConfigForm getGenConfig(String tableName) {
+        // 查询表生成配置
+        GenConfig genConfig = genConfigMapper.selectOne(
+                new LambdaQueryWrapper<>(GenConfig.class)
+                        .eq(GenConfig::getTableName, tableName)
+                        .last("LIMIT 1")
+        );
 
-        genConfigMapper.selectOne(new LambdaQueryWrapper<>(GenConfig.class).eq(GenConfig::getTableName, tableName));
+        // 查询字段生成配置
+        List<GenFieldConfig> fieldConfigs = genFieldConfigMapper.selectList(
+                new LambdaQueryWrapper<>(GenFieldConfig.class)
+                        .eq(GenFieldConfig::getConfigId, genConfig.getId())
+        );
+
+        GenConfigForm genConfigForm = new GenConfigForm();
+
 
         return null;
     }
 
     @Override
-    public boolean saveGenCodeConfig(GenCodeConfigForm formData) {
+    public boolean saveGenCodeConfig(GenConfigForm formData) {
         return false;
     }
 
@@ -107,7 +124,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         Assert.isTrue(genConfig != null, "未找到表生成配置");
 
         List<GenFieldConfig> fieldConfigs = genFieldConfigMapper.selectList(new LambdaQueryWrapper<GenFieldConfig>()
-                .eq(GenFieldConfig::getConfigId, genConfig.getId())
+                .eq(GenFieldConfig::getGenConfigId, genConfig.getId())
         );
         Assert.isTrue(CollectionUtil.isNotEmpty(fieldConfigs), "未找到字段生成配置");
 
@@ -153,8 +170,6 @@ public class GeneratorServiceImpl implements GeneratorService {
     }
 
 
-
-
     private String getFileName(String entityName, String templateName, String extension) {
         if (templateName.equals("Entity")) {
             return entityName + extension;
@@ -162,8 +177,8 @@ public class GeneratorServiceImpl implements GeneratorService {
         if (templateName.equals("MapperXml")) {
             return entityName + "Mapper" + extension;
         }
-        if (templateName.equals("API")|| templateName.equals("VIEW")) {
-            return StrUtil.toSymbolCase(entityName,'-') + extension;
+        if (templateName.equals("API") || templateName.equals("VIEW")) {
+            return StrUtil.toSymbolCase(entityName, '-') + extension;
         }
         return entityName + templateName + extension;
     }

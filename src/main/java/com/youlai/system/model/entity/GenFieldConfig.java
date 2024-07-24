@@ -1,37 +1,43 @@
 package com.youlai.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serializable;
-import java.util.Date;
 
 import com.youlai.system.common.base.BaseEntity;
 import com.youlai.system.enums.FormTypeEnum;
 import com.youlai.system.enums.QueryTypeEnum;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * 字段配置实体
+ * 字段生成配置实体
  *
  * @author Ray
  * @since 2.10.0
  */
 @TableName(value = "gen_field_config")
-@Data
+@Getter
+@Setter
 public class GenFieldConfig extends BaseEntity {
-    /**
-     * 主键
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
 
     /**
      * 关联的配置ID
      */
     private Long configId;
+
+    /**
+     * 列名
+     */
+    private String columnName;
+
+    /**
+     * 列类型
+     */
+    private String columnType;
+
+    /**
+     * 字段长度
+     */
+    private String columnLength;
 
     /**
      * 字段名称
@@ -46,7 +52,7 @@ public class GenFieldConfig extends BaseEntity {
     /**
      * 字段描述
      */
-    private String fieldComment;
+    private String comment;
 
     /**
      * 表单类型
@@ -61,22 +67,22 @@ public class GenFieldConfig extends BaseEntity {
     /**
      * 是否在列表显示
      */
-    private Boolean isShowInList;
+    private Integer isShowInList;
 
     /**
      * 是否在表单显示
      */
-    private Boolean isShowInForm;
+    private Integer isShowInForm;
 
     /**
      * 是否在查询条件显示
      */
-    private Boolean isShowInQuery;
+    private Integer isShowInQuery;
 
     /**
      * 是否必填
      */
-    private Boolean isRequired;
+    private Integer isRequired;
 
 
 }

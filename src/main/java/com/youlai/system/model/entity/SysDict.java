@@ -14,11 +14,6 @@ import lombok.Data;
  */
 @Data
 public class SysDict extends BaseEntity {
-    /**
-     * 主键 
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
 
     /**
      * 类型名称
