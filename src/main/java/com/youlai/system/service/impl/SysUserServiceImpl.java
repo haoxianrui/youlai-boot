@@ -157,7 +157,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 删除用户
      *
      * @param idsStr 用户ID，多个以英文逗号(,)分割
-     * @return true|false
+     * @return
      */
     @Override
     public boolean deleteUsers(String idsStr) {
@@ -175,7 +175,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      *
      * @param userId   用户ID
      * @param password 用户密码
-     * @return true|false
+     * @return
      */
     @Override
     public boolean updatePassword(Long userId, String password) {

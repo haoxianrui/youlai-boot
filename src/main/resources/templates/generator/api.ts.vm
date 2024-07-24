@@ -1,0 +1,121 @@
+import request from "@/utils/request";
+
+const ${className.toUpperCase()}_BASE_URL = "/api/v1/${className.toLowerCase()}s";
+
+class ${className}API {
+    /** 获取${className}分页数据 */
+    static getPage(queryParams?: ${className}PageQuery) {
+        return request<any, PageResult<${className}PageVO[]>>({
+            url: `${${className.toUpperCase()}_BASE_URL}/page`,
+            method: "get",
+            params: queryParams,
+        });
+    }
+
+    /** 获取${className}下拉数据源 */
+    static getOptions() {
+        return request<any, OptionType[]>({
+            url: `${${className.toUpperCase()}_BASE_URL}/options`,
+            method: "get",
+        });
+    }
+
+    /**
+     * 获取${className}的菜单ID集合
+     *
+     * @param ${className.toLowerCase()}Id ${className}ID
+     * @returns ${className}的菜单ID集合
+     */
+    static get${className}MenuIds(${className.toLowerCase()}Id: number) {
+        return request<any, number[]>({
+            url: `${${className.toUpperCase()}_BASE_URL}/${${className.toLowerCase()}Id}/menuIds`,
+            method: "get",
+        });
+    }
+
+    /**
+     * 分配菜单权限
+     *
+     * @param ${className.toLowerCase()}Id ${className}ID
+     * @param data 菜单ID集合
+     */
+    static update${className}Menus(${className.toLowerCase()}Id: number, data: number[]) {
+        return request({
+            url: `${${className.toUpperCase()}_BASE_URL}/${${className.toLowerCase()}Id}/menus`,
+            method: "put",
+            data: data,
+        });
+    }
+
+    /**
+     * 获取${className}表单数据
+     *
+     * @param id ${className}ID
+     * @returns ${className}表单数据
+     */
+    static getFormData(id: number) {
+        return request<any, ${className}Form>({
+            url: `${${className.toUpperCase()}_BASE_URL}/${id}/form`,
+            method: "get",
+        });
+    }
+
+    /** 添加${className} */
+    static add(data: ${className}Form) {
+        return request({
+            url: `${${className.toUpperCase()}_BASE_URL}`,
+            method: "post",
+            data: data,
+        });
+    }
+
+    /**
+     * 更新${className}
+     *
+     * @param id ${className}ID
+     * @param data ${className}表单数据
+     */
+    static update(id: number, data: ${className}Form) {
+        return request({
+            url: `${${className.toUpperCase()}_BASE_URL}/${id}`,
+            method: "put",
+            data: data,
+        });
+    }
+
+    /**
+     * 批量删除${className}，多个以英文逗号(,)分割
+     *
+     * @param ids ${className}ID字符串，多个以英文逗号(,)分割
+     */
+    static deleteByIds(ids: string) {
+        return request({
+            url: `${${className.toUpperCase()}_BASE_URL}/${ids}`,
+            method: "delete",
+        });
+    }
+}
+
+export default ${className}API;
+
+/** ${className}分页查询参数 */
+export interface ${className}PageQuery extends PageQuery {
+    /** 搜索关键字 */
+    keywords?: string;
+}
+
+/** ${className}分页对象 */
+export interface ${className}PageVO {
+    #foreach($field in $fields)
+        /** ${field.comment} */
+            ${field.name}?: ${field.type};
+    #end
+}
+
+/** ${className}表单对象 */
+export interface ${className}Form {
+    #foreach($field in $fields)
+        /** ${field.comment} */
+            ${field.name}?: ${field.type};
+    #end
+}

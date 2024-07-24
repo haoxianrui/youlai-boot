@@ -7,7 +7,7 @@ import ${package}.model.query.${entityName}Query;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * $!{tableComment} 数据库访问层
+ * $!{tableComment}Mapper接口
  *
  * @author ${author}
  * @since ${date}

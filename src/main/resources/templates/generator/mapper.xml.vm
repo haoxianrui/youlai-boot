@@ -3,7 +3,7 @@
 <mapper namespace="${package}.mapper.${entityName}Mapper">
 
     <!-- 获取${tableComment}分页列表 -->
-    <select id="listPaged${entityName}s" resultType="${package}.model.entity.${entityName}">
+    <select id="get${entityName}Page" resultType="${package}.model.vo.${entityName}VO">
         SELECT
             *
         FROM

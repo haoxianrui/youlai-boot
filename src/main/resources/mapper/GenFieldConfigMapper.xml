@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youlai.system.mapper.GenFieldConfigMapper">
+
+    <resultMap id="BaseResultMap" type="com.youlai.system.model.entity.GenFieldConfig">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="configId" column="config_id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="type" column="type" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="showInList" column="show_in_list" jdbcType="TINYINT"/>
+            <result property="showInForm" column="show_in_form" jdbcType="TINYINT"/>
+            <result property="showInQuery" column="show_in_query" jdbcType="TINYINT"/>
+            <result property="formType" column="form_type" jdbcType="VARCHAR"/>
+            <result property="queryMethod" column="query_method" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,config_id,name,
+        type,description,show_in_list,
+        show_in_form,show_in_query,form_type,
+        query_method,create_time,update_time
+    </sql>
+</mapper>

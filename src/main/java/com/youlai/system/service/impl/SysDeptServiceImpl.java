@@ -85,7 +85,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         return deptList.stream()
                 .filter(dept -> dept.getParentId().equals(parentId))
                 .map(dept -> {
-                    DeptVO deptVO = deptConverter.convertToVo(dept);
+                    DeptVO deptVO = deptConverter.toVo(dept);
                     List<DeptVO> children = recurDeptList(dept.getId(), deptList);
                     deptVO.setChildren(children);
                     return deptVO;
