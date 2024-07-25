@@ -9,6 +9,7 @@ import com.youlai.system.model.vo.GeneratorPreviewVO;
 import com.youlai.system.model.vo.TablePageVO;
 import com.youlai.system.service.GeneratorService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -32,26 +33,26 @@ public class GeneratorController {
         return PageResult.success(result);
     }
 
-    @Operation(summary = "获取预览生成代码")
-    @GetMapping("/{tableName}/preview")
-    public Result<List<GeneratorPreviewVO>> getTablePreviewData(@PathVariable String tableName) {
-        List<GeneratorPreviewVO> list = generatorService.getTablePreviewData(tableName);
-        return Result.success(list);
-    }
-
-
     @Operation(summary = "获取代码生成配置")
     @GetMapping("/{tableName}/config")
-    public Result<GenConfigForm> getGenConfig(@PathVariable String tableName) {
+    public Result<GenConfigForm> getGenConfig(
+            @Parameter(description = "表名", example = "sys_user") @PathVariable String tableName) {
         GenConfigForm formData = generatorService.getGenConfig(tableName);
         return Result.success(formData);
     }
 
     @Operation(summary = "保存代码生成配置")
     @PostMapping("/{tableName}/config")
-    public Result saveGenCodeConfig(@RequestBody GenConfigForm formData) {
-        boolean result = generatorService.saveGenCodeConfig(formData);
-        return Result.judge(result);
+    public Result saveGenConfig(@RequestBody GenConfigForm formData) {
+        generatorService.saveGenConfig(formData);
+        return Result.success();
+    }
+
+    @Operation(summary = "获取预览生成代码")
+    @GetMapping("/{tableName}/preview")
+    public Result<List<GeneratorPreviewVO>> getTablePreviewData(@PathVariable String tableName) {
+        List<GeneratorPreviewVO> list = generatorService.getTablePreviewData(tableName);
+        return Result.success(list);
     }
 
 }

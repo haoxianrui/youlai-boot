@@ -11,6 +11,9 @@ import java.util.List;
 @Data
 public class GenConfigForm {
 
+    @Schema(description = "主键")
+    private Long id;
+
     @Schema(description = "表名")
     private String tableName;
 

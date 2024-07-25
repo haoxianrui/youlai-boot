@@ -28,18 +28,15 @@ public interface GenConfigConverter {
 
     List<GenConfigForm.FieldConfig> toFieldConfigList(List<GenFieldConfig> fieldConfigs);
 
-    @Mapping(source = "configId", target = "configId")
-    @Mapping(source = "columnName", target = "columnName")
-    @Mapping(source = "columnType", target = "columnType")
-    @Mapping(source = "fieldName", target = "fieldName")
-    @Mapping(source = "fieldType", target = "fieldType")
-    @Mapping(source = "comment", target = "comment")
-    @Mapping(source = "formType", target = "formType")
-    @Mapping(source = "queryType", target = "queryType")
-    @Mapping(source = "isShowInList", target = "isShowInList")
-    @Mapping(source = "isShowInForm", target = "isShowInForm")
-    @Mapping(source = "isShowInQuery", target = "isShowInQuery")
-    @Mapping(source = "isRequired", target = "isRequired")
     GenConfigForm.FieldConfig toFieldConfig(GenFieldConfig genFieldConfig);
+
+
+
+    @Mapping(source = "formData", target = "genConfig")
+    @Mapping(source = "formData.fieldConfigs", target = "fieldConfigs")
+    GenConfig toGenConfig(GenConfigForm formData);
+
+    @Mapping(source = "formData.fieldConfigs", target = "fieldConfigs")
+    List<GenFieldConfig> toGenFieldConfigList(List<GenConfigForm.FieldConfig> fieldConfigs);
 
 }

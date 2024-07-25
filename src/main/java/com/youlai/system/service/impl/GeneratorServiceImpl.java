@@ -3,6 +3,7 @@ package com.youlai.system.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.template.Template;
 import cn.hutool.extra.template.TemplateConfig;
@@ -11,22 +12,23 @@ import cn.hutool.extra.template.TemplateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.system.config.property.GeneratorProperties;
+import com.youlai.system.converter.GenConfigConverter;
+import com.youlai.system.exception.BusinessException;
 import com.youlai.system.mapper.DatabaseMapper;
-import com.youlai.system.mapper.GenConfigMapper;
-import com.youlai.system.mapper.GenFieldConfigMapper;
 import com.youlai.system.model.entity.GenConfig;
 import com.youlai.system.model.entity.GenFieldConfig;
 import com.youlai.system.model.form.GenConfigForm;
 import com.youlai.system.model.query.TablePageQuery;
-import com.youlai.system.model.vo.TableColumnVO;
 import com.youlai.system.model.vo.GeneratorPreviewVO;
+import com.youlai.system.model.vo.TableColumnVO;
 import com.youlai.system.model.vo.TablePageVO;
 import com.youlai.system.service.GeneratorService;
+import com.youlai.system.service.GenConfigService;
+import com.youlai.system.service.GenFieldConfigService;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import cn.hutool.extra.template.TemplateConfig.ResourceMode;
 
 import java.io.File;
 import java.util.*;
@@ -35,22 +37,22 @@ import java.util.*;
  * 数据库服务实现类
  *
  * @author Ray
- * @since 2.11.0
+ * @since 2.10.0
  */
 @Service
 @RequiredArgsConstructor
 public class GeneratorServiceImpl implements GeneratorService {
 
     private final DatabaseMapper databaseMapper;
-
     private final GeneratorProperties generatorProperties;
-
-    private final GenConfigMapper genConfigMapper;
-    private final GenFieldConfigMapper genFieldConfigMapper;
+    private final GenConfigService genConfigService;
+    private final GenFieldConfigService genFieldConfigService;
 
     // 注入 spring.application.name
     @Value("${spring.application.name}")
     private String applicationName;
+
+    private final GenConfigConverter genConfigConverter;
 
     /**
      * 数据表分页列表
@@ -64,17 +66,6 @@ public class GeneratorServiceImpl implements GeneratorService {
     }
 
     /**
-     * 获取数据表字段列表
-     *
-     * @param tableName 表名
-     * @return 字段列表
-     */
-    @Override
-    public List<TableColumnVO> getTableColumns(String tableName) {
-        return databaseMapper.getTableColumns(tableName);
-    }
-
-    /**
      * 获取代码生成配置
      *
      * @param tableName 表名 eg: sys_user
@@ -83,27 +74,36 @@ public class GeneratorServiceImpl implements GeneratorService {
     @Override
     public GenConfigForm getGenConfig(String tableName) {
         // 查询表生成配置
-        GenConfig genConfig = genConfigMapper.selectOne(
+        GenConfig genConfig = genConfigService.getOne(
                 new LambdaQueryWrapper<>(GenConfig.class)
                         .eq(GenConfig::getTableName, tableName)
                         .last("LIMIT 1")
         );
 
         // 查询字段生成配置
-        List<GenFieldConfig> fieldConfigs = genFieldConfigMapper.selectList(
+        List<GenFieldConfig> fieldConfigs = genFieldConfigService.list(
                 new LambdaQueryWrapper<>(GenFieldConfig.class)
                         .eq(GenFieldConfig::getConfigId, genConfig.getId())
         );
 
-        GenConfigForm genConfigForm = new GenConfigForm();
-
-
-        return null;
+        GenConfigForm configFormData = genConfigConverter.toGenConfigForm(genConfig, fieldConfigs);
+        return configFormData;
     }
 
     @Override
-    public boolean saveGenCodeConfig(GenConfigForm formData) {
-        return false;
+    public void saveGenConfig(GenConfigForm formData) {
+        GenConfig genConfig = genConfigConverter.toGenConfig(formData);
+        genConfigService.saveOrUpdate(genConfig);
+
+        List<GenFieldConfig> genFieldConfigs = genConfigConverter.toGenFieldConfigList(formData.getFieldConfigs());
+
+        if (CollectionUtil.isEmpty(genFieldConfigs)) {
+            throw new BusinessException("字段配置不能为空");
+        }
+        genFieldConfigs.forEach(genFieldConfig -> {
+            genFieldConfig.setConfigId(genConfig.getId());
+        });
+        genFieldConfigService.saveOrUpdateBatch(genFieldConfigs);
     }
 
 
@@ -118,12 +118,12 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         List<GeneratorPreviewVO> list = new ArrayList<>();
 
-        GenConfig genConfig = genConfigMapper.selectOne(new LambdaQueryWrapper<GenConfig>()
+        GenConfig genConfig = genConfigService.getOne(new LambdaQueryWrapper<GenConfig>()
                 .eq(GenConfig::getTableName, tableName)
         );
         Assert.isTrue(genConfig != null, "未找到表生成配置");
 
-        List<GenFieldConfig> fieldConfigs = genFieldConfigMapper.selectList(new LambdaQueryWrapper<GenFieldConfig>()
+        List<GenFieldConfig> fieldConfigs = genFieldConfigService.list(new LambdaQueryWrapper<GenFieldConfig>()
                 .eq(GenFieldConfig::getConfigId, genConfig.getId())
         );
         Assert.isTrue(CollectionUtil.isNotEmpty(fieldConfigs), "未找到字段生成配置");
@@ -233,14 +233,15 @@ public class GeneratorServiceImpl implements GeneratorService {
         for (GenFieldConfig fieldConfig : fieldConfigs) {
             bindMap.put("hasLocalDateTime", "LocalDateTime".equals(fieldConfig.getFieldType()));
             bindMap.put("hasBigDecimal", "BigDecimal".equals(fieldConfig.getFieldType()));
-            bindMap.put("hasRequiredField", Boolean.TRUE.equals(fieldConfig.getIsRequired()));
+            bindMap.put("hasRequiredField", ObjectUtil.equals(fieldConfig.getIsRequired(), 1));
         }
 
-        TemplateEngine templateEngine = TemplateUtil.createEngine(new TemplateConfig("templates", ResourceMode.CLASSPATH));
+        TemplateEngine templateEngine = TemplateUtil.createEngine(new TemplateConfig("templates", TemplateConfig.ResourceMode.CLASSPATH));
         Template template = templateEngine.getTemplate(templateConfig.getTemplatePath());
         String content = template.render(bindMap);
 
         return content;
     }
+
 
 }
