@@ -26,17 +26,19 @@ public interface GenConfigConverter {
     @Mapping(source = "fieldConfigs", target = "fieldConfigs")
     GenConfigForm toGenConfigForm(GenConfig genConfig, List<GenFieldConfig> fieldConfigs);
 
-    List<GenConfigForm.FieldConfig> toFieldConfigList(List<GenFieldConfig> fieldConfigs);
+    List<GenConfigForm.FieldConfig> toGenFieldConfigForm(List<GenFieldConfig> fieldConfigs);
 
-    GenConfigForm.FieldConfig toFieldConfig(GenFieldConfig genFieldConfig);
+    GenConfigForm.FieldConfig toGenFieldConfigForm(GenFieldConfig genFieldConfig);
 
 
 
     @Mapping(source = "formData", target = "genConfig")
     @Mapping(source = "formData.fieldConfigs", target = "fieldConfigs")
-    GenConfig toGenConfig(GenConfigForm formData);
+    GenConfig toGenConfigEntity(GenConfigForm formData);
 
     @Mapping(source = "formData.fieldConfigs", target = "fieldConfigs")
-    List<GenFieldConfig> toGenFieldConfigList(List<GenConfigForm.FieldConfig> fieldConfigs);
+    List<GenFieldConfig> toGenFieldConfigEntity(List<GenConfigForm.FieldConfig> fieldConfigs);
+
+    GenFieldConfig toGenFieldConfigEntity(GenConfigForm.FieldConfig fieldConfig);
 
 }

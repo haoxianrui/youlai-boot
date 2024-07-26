@@ -1,6 +1,7 @@
 package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.youlai.system.model.bo.TableMetaData;
 import com.youlai.system.model.form.GenConfigForm;
 import com.youlai.system.model.query.TablePageQuery;
 import com.youlai.system.model.vo.GeneratorPreviewVO;
@@ -23,7 +24,7 @@ public interface GeneratorService {
      * @param queryParams 查询参数
      * @return
      */
-    Page<TablePageVO> getTablePage(TablePageQuery queryParams);
+    Page<TableMetaData> getTablePage(TablePageQuery queryParams);
 
     /**
      * 获取预览生成代码

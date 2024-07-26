@@ -11,17 +11,18 @@ import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.youlai.system.SystemApplication;
 import com.youlai.system.config.property.GeneratorProperties;
 import com.youlai.system.converter.GenConfigConverter;
 import com.youlai.system.exception.BusinessException;
 import com.youlai.system.mapper.DatabaseMapper;
+import com.youlai.system.model.bo.ColumnMetaData;
+import com.youlai.system.model.bo.TableMetaData;
 import com.youlai.system.model.entity.GenConfig;
 import com.youlai.system.model.entity.GenFieldConfig;
 import com.youlai.system.model.form.GenConfigForm;
 import com.youlai.system.model.query.TablePageQuery;
 import com.youlai.system.model.vo.GeneratorPreviewVO;
-import com.youlai.system.model.vo.TableColumnVO;
-import com.youlai.system.model.vo.TablePageVO;
 import com.youlai.system.service.GeneratorService;
 import com.youlai.system.service.GenConfigService;
 import com.youlai.system.service.GenFieldConfigService;
@@ -43,14 +44,13 @@ import java.util.*;
 @RequiredArgsConstructor
 public class GeneratorServiceImpl implements GeneratorService {
 
+    @Value("${spring.application.name}")
+    private String applicationName;
+
     private final DatabaseMapper databaseMapper;
     private final GeneratorProperties generatorProperties;
     private final GenConfigService genConfigService;
     private final GenFieldConfigService genFieldConfigService;
-
-    // 注入 spring.application.name
-    @Value("${spring.application.name}")
-    private String applicationName;
 
     private final GenConfigConverter genConfigConverter;
 
@@ -60,8 +60,8 @@ public class GeneratorServiceImpl implements GeneratorService {
      * @param queryParams 查询参数
      * @return 分页结果
      */
-    public Page<TablePageVO> getTablePage(TablePageQuery queryParams) {
-        Page<TablePageVO> page = new Page<>(queryParams.getPageNum(), queryParams.getPageSize());
+    public Page<TableMetaData> getTablePage(TablePageQuery queryParams) {
+        Page<TableMetaData> page = new Page<>(queryParams.getPageNum(), queryParams.getPageSize());
         return databaseMapper.getTablePage(page, queryParams);
     }
 
@@ -79,23 +79,73 @@ public class GeneratorServiceImpl implements GeneratorService {
                         .eq(GenConfig::getTableName, tableName)
                         .last("LIMIT 1")
         );
+        // 如果没有代码生成配置，则根据表的元数据生成默认配置
+        if (genConfig == null) {
+            TableMetaData tableMetadata = databaseMapper.getTableMetadata(tableName);
+            Assert.isTrue(tableMetadata != null, "未找到表元数据");
 
-        // 查询字段生成配置
-        List<GenFieldConfig> fieldConfigs = genFieldConfigService.list(
-                new LambdaQueryWrapper<>(GenFieldConfig.class)
-                        .eq(GenFieldConfig::getConfigId, genConfig.getId())
-        );
 
-        GenConfigForm configFormData = genConfigConverter.toGenConfigForm(genConfig, fieldConfigs);
+            genConfig = new GenConfig();
+            genConfig.setTableName(tableName);
+
+            String tableComment = tableMetadata.getTableComment();
+            if (StrUtil.isNotBlank(tableComment)) {
+                genConfig.setBusinessName(tableComment.replace("表", ""));
+            }
+            // 实体类名 = 表名去掉前缀后转驼峰，前缀默认为下划线分割的第一个元素
+            String entityName = StrUtil.toCamelCase(StrUtil.removePrefix(tableName, tableName.split("_")[0]));
+            genConfig.setEntityName(entityName);
+
+            String packageName = SystemApplication.class.getPackageName();
+            genConfig.setPackageName(packageName);
+
+        }
+
+
+        List<GenFieldConfig> genFieldConfigs = null;
+
+        // 获取表的列信息
+        List<ColumnMetaData> tableColumns = databaseMapper.getTableColumns(tableName);
+
+        if (CollectionUtil.isNotEmpty(tableColumns)) {
+
+            // 查询字段生成配置
+            List<GenFieldConfig> configList = genFieldConfigService.list(
+                    new LambdaQueryWrapper<>(GenFieldConfig.class)
+                            .eq(GenFieldConfig::getConfigId, genConfig.getId())
+            );
+            genFieldConfigs = new ArrayList<>();
+            for (ColumnMetaData tableColumn : tableColumns) {
+                GenFieldConfig fieldConfig = new GenFieldConfig();
+                fieldConfig.setFieldName(tableColumn.getColumnName());
+                fieldConfig.setFieldType(tableColumn.getDataType());
+                fieldConfig.setComment(tableColumn.getColumnComment());
+
+
+                // 如果没有字段生成配置，则根据表的元数据生成默认配置
+                if (CollectionUtil.isNotEmpty(configList)) {
+                    for (GenFieldConfig config : configList) {
+                        if (StrUtil.equals(config.getFieldName(), fieldConfig.getFieldName())) {
+                            fieldConfig = config;
+                            break;
+                        }
+                    }
+                }
+
+                genFieldConfigs.add(fieldConfig);
+            }
+        }
+
+        GenConfigForm configFormData = genConfigConverter.toGenConfigForm(genConfig, genFieldConfigs);
         return configFormData;
     }
 
     @Override
     public void saveGenConfig(GenConfigForm formData) {
-        GenConfig genConfig = genConfigConverter.toGenConfig(formData);
+        GenConfig genConfig = genConfigConverter.toGenConfigEntity(formData);
         genConfigService.saveOrUpdate(genConfig);
 
-        List<GenFieldConfig> genFieldConfigs = genConfigConverter.toGenFieldConfigList(formData.getFieldConfigs());
+        List<GenFieldConfig> genFieldConfigs = genConfigConverter.toGenFieldConfigEntity(formData.getFieldConfigs());
 
         if (CollectionUtil.isEmpty(genFieldConfigs)) {
             throw new BusinessException("字段配置不能为空");

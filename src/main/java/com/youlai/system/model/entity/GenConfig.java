@@ -4,12 +4,18 @@ import com.baomidou.mybatisplus.annotation.*;
 
 import com.youlai.system.common.base.BaseEntity;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 代码生成基础配置
+ *
+ * @author Ray
+ * @since 2.10.0
  */
-@TableName(value ="gen_config")
-@Data
+@TableName(value = "gen_config")
+@Getter
+@Setter
 public class GenConfig extends BaseEntity {
 
     /**
@@ -28,14 +34,14 @@ public class GenConfig extends BaseEntity {
     private String moduleName;
 
     /**
-     * 实体名
+     * 实体类名
      */
     private String entityName;
 
     /**
-     * 类描述
+     * 业务名
      */
-    private String comment;
+    private String businessName;
 
     /**
      * 上级菜单ID

@@ -5,7 +5,7 @@
 <mapper namespace="com.youlai.system.mapper.DatabaseMapper">
 
     <!-- 查询数据库表分页 -->
-    <select id="getTablePage" resultType="com.youlai.system.model.vo.TablePageVO">
+    <select id="getTablePage" resultType="com.youlai.system.model.bo.TableMetaData">
         SELECT
             TABLE_NAME ,
             TABLE_COMMENT ,
@@ -24,7 +24,21 @@
             CREATE_TIME DESC
     </select>
 
-    <select id="getTableColumns" resultType="com.youlai.system.model.vo.TableColumnVO">
+    <select id="getTableMetadata" resultType="com.youlai.system.model.bo.TableMetaData">
+        SELECT
+            TABLE_NAME ,
+            TABLE_COMMENT ,
+            TABLE_COLLATION,
+            ENGINE,
+            CREATE_TIME
+        FROM
+            information_schema.tables
+        WHERE
+            TABLE_SCHEMA = (SELECT DATABASE())
+          AND TABLE_NAME = #{tableName}
+    </select>
+
+    <select id="getTableColumns" resultType="com.youlai.system.model.bo.ColumnMetaData">
         SELECT
             COLUMN_NAME,
             DATA_TYPE,
@@ -40,4 +54,6 @@
             TABLE_SCHEMA = (SELECT DATABASE())
             AND TABLE_NAME = #{tableName}
     </select>
+
+
 </mapper>

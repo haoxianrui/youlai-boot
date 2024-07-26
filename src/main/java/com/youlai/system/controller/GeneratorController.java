@@ -3,6 +3,7 @@ package com.youlai.system.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
+import com.youlai.system.model.bo.TableMetaData;
 import com.youlai.system.model.form.GenConfigForm;
 import com.youlai.system.model.query.TablePageQuery;
 import com.youlai.system.model.vo.GeneratorPreviewVO;
@@ -26,10 +27,10 @@ public class GeneratorController {
 
     @Operation(summary = "获取数据表分页列表")
     @GetMapping("/table/page")
-    public PageResult<TablePageVO> getTablePage(
+    public PageResult<TableMetaData> getTablePage(
             TablePageQuery queryParams
     ) {
-        Page<TablePageVO> result = generatorService.getTablePage(queryParams);
+        Page<TableMetaData> result = generatorService.getTablePage(queryParams);
         return PageResult.success(result);
     }
 
