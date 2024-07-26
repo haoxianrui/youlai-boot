@@ -18,7 +18,7 @@ import java.util.List;
 public interface GenConfigConverter {
 
     @Mapping(source = "genConfig.tableName", target = "tableName")
-    @Mapping(source = "genConfig.comment", target = "comment")
+    @Mapping(source = "genConfig.businessName", target = "businessName")
     @Mapping(source = "genConfig.moduleName", target = "moduleName")
     @Mapping(source = "genConfig.packageName", target = "packageName")
     @Mapping(source = "genConfig.entityName", target = "entityName")
@@ -31,14 +31,10 @@ public interface GenConfigConverter {
     GenConfigForm.FieldConfig toGenFieldConfigForm(GenFieldConfig genFieldConfig);
 
 
+    GenConfig toGenConfig(GenConfigForm formData);
 
-    @Mapping(source = "formData", target = "genConfig")
-    @Mapping(source = "formData.fieldConfigs", target = "fieldConfigs")
-    GenConfig toGenConfigEntity(GenConfigForm formData);
+    List<GenFieldConfig> toGenFieldConfig(List<GenConfigForm.FieldConfig> fieldConfigs);
 
-    @Mapping(source = "formData.fieldConfigs", target = "fieldConfigs")
-    List<GenFieldConfig> toGenFieldConfigEntity(List<GenConfigForm.FieldConfig> fieldConfigs);
-
-    GenFieldConfig toGenFieldConfigEntity(GenConfigForm.FieldConfig fieldConfig);
+    GenFieldConfig toGenFieldConfig(GenConfigForm.FieldConfig fieldConfig);
 
 }

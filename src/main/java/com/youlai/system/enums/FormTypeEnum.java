@@ -1,6 +1,8 @@
 package com.youlai.system.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.youlai.system.common.base.IBaseEnum;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -63,8 +65,20 @@ public enum FormTypeEnum implements IBaseEnum<Integer> {
 
     //  Mybatis-Plus 提供注解表示插入数据库时插入该值
     @EnumValue
+    @JsonValue
     private final Integer value;
 
     // @JsonValue //  表示对枚举序列化时返回此字段
     private final String label;
+
+
+    @JsonCreator
+    public static QueryTypeEnum fromValue(Integer value) {
+        for (QueryTypeEnum type : QueryTypeEnum.values()) {
+            if (type.getValue().equals(value)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant with value " + value);
+    }
 }

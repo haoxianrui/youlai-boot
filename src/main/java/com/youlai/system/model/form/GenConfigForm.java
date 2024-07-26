@@ -7,29 +7,35 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * 代码生成配置表单
+ *
+ * @author Ray
+ * @since 2.10.0
+ */
 @Schema(description = "代码生成配置表单")
 @Data
 public class GenConfigForm {
 
-    @Schema(description = "主键")
+    @Schema(description = "主键",example = "1")
     private Long id;
 
-    @Schema(description = "表名")
+    @Schema(description = "表名",example = "sys_user")
     private String tableName;
 
-    @Schema(description = "类描述")
-    private String comment;
+    @Schema(description = "业务名",example = "用户")
+    private String businessName;
 
-    @Schema(description = "模块名")
+    @Schema(description = "模块名",example = "system")
     private String moduleName;
 
-    @Schema(description = "包名")
+    @Schema(description = "包名",example = "com.youlai.system")
     private String packageName;
 
-    @Schema(description = "实体名")
+    @Schema(description = "实体名",example = "User")
     private String entityName;
 
-    @Schema(description = "作者")
+    @Schema(description = "作者",example = "youlaitech")
     private String author;
 
     @Schema(description = "字段配置列表")
@@ -38,6 +44,9 @@ public class GenConfigForm {
     @Schema(description = "字段配置")
     @Data
     public static class FieldConfig {
+
+        @Schema(description = "主键")
+        private Long id;
 
         @Schema(description = "列名")
         private String columnName;

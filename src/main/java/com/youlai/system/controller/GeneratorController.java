@@ -17,6 +17,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 代码生成器控制层
+ *
+ * @author Ray
+ * @since 2.10.0
+ */
 @Tag(name = "09.代码生成")
 @RestController
 @RequestMapping("/api/v1/generator")

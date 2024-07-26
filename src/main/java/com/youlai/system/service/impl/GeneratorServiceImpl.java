@@ -14,15 +14,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.system.SystemApplication;
 import com.youlai.system.config.property.GeneratorProperties;
 import com.youlai.system.converter.GenConfigConverter;
+import com.youlai.system.enums.FormTypeEnum;
+import com.youlai.system.enums.QueryTypeEnum;
 import com.youlai.system.exception.BusinessException;
 import com.youlai.system.mapper.DatabaseMapper;
-import com.youlai.system.model.bo.ColumnMetaData;
-import com.youlai.system.model.bo.TableMetaData;
-import com.youlai.system.model.entity.GenConfig;
 import com.youlai.system.model.entity.GenFieldConfig;
 import com.youlai.system.model.form.GenConfigForm;
 import com.youlai.system.model.query.TablePageQuery;
-import com.youlai.system.model.vo.GeneratorPreviewVO;
 import com.youlai.system.service.GeneratorService;
 import com.youlai.system.service.GenConfigService;
 import com.youlai.system.service.GenFieldConfigService;
@@ -84,7 +82,6 @@ public class GeneratorServiceImpl implements GeneratorService {
             TableMetaData tableMetadata = databaseMapper.getTableMetadata(tableName);
             Assert.isTrue(tableMetadata != null, "未找到表元数据");
 
-
             genConfig = new GenConfig();
             genConfig.setTableName(tableName);
 
@@ -101,51 +98,54 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         }
 
+        // 根据表的列 + 已经存在的字段生成配置 得到 组合后的字段生成配置
+        List<GenFieldConfig> genFieldConfigs = new ArrayList<>();
 
-        List<GenFieldConfig> genFieldConfigs = null;
-
-        // 获取表的列信息
+        // 获取表的列
         List<ColumnMetaData> tableColumns = databaseMapper.getTableColumns(tableName);
-
         if (CollectionUtil.isNotEmpty(tableColumns)) {
-
             // 查询字段生成配置
-            List<GenFieldConfig> configList = genFieldConfigService.list(
+            List<GenFieldConfig> fieldConfigList = genFieldConfigService.list(
                     new LambdaQueryWrapper<>(GenFieldConfig.class)
                             .eq(GenFieldConfig::getConfigId, genConfig.getId())
             );
-            genFieldConfigs = new ArrayList<>();
             for (ColumnMetaData tableColumn : tableColumns) {
-                GenFieldConfig fieldConfig = new GenFieldConfig();
-                fieldConfig.setFieldName(tableColumn.getColumnName());
-                fieldConfig.setFieldType(tableColumn.getDataType());
-                fieldConfig.setComment(tableColumn.getColumnComment());
+                // 根据列名获取字段生成配置
+                String columnName = tableColumn.getColumnName();
+                GenFieldConfig genFieldConfig = fieldConfigList.stream()
+                        .filter(item -> StrUtil.equals(item.getColumnName(), columnName))
+                        .findFirst().orElseGet(() -> {
+                            GenFieldConfig fieldConfig = new GenFieldConfig();
+                            fieldConfig.setColumnName(tableColumn.getColumnName());
+                            fieldConfig.setColumnType(tableColumn.getDataType());
+                            fieldConfig.setComment(tableColumn.getColumnComment());
+                            fieldConfig.setFieldName(StrUtil.toCamelCase(columnName));
+                            fieldConfig.setFieldType(StrUtil.toCamelCase(tableColumn.getDataType()));
+                            fieldConfig.setIsRequired("YES".equals(tableColumn.getIsNullable()) ? 1 : 0);
+                            fieldConfig.setFormType(FormTypeEnum.INPUT);
+                            fieldConfig.setQueryType(QueryTypeEnum.EQ);
+                            return fieldConfig;
 
-
-                // 如果没有字段生成配置，则根据表的元数据生成默认配置
-                if (CollectionUtil.isNotEmpty(configList)) {
-                    for (GenFieldConfig config : configList) {
-                        if (StrUtil.equals(config.getFieldName(), fieldConfig.getFieldName())) {
-                            fieldConfig = config;
-                            break;
-                        }
-                    }
-                }
-
-                genFieldConfigs.add(fieldConfig);
+                        });
+                genFieldConfigs.add(genFieldConfig);
             }
         }
-
         GenConfigForm configFormData = genConfigConverter.toGenConfigForm(genConfig, genFieldConfigs);
         return configFormData;
     }
 
+
+    /**
+     * 保存代码生成配置
+     *
+     * @param formData 代码生成配置表单
+     */
     @Override
     public void saveGenConfig(GenConfigForm formData) {
-        GenConfig genConfig = genConfigConverter.toGenConfigEntity(formData);
+        GenConfig genConfig = genConfigConverter.toGenConfig(formData);
         genConfigService.saveOrUpdate(genConfig);
 
-        List<GenFieldConfig> genFieldConfigs = genConfigConverter.toGenFieldConfigEntity(formData.getFieldConfigs());
+        List<GenFieldConfig> genFieldConfigs = genConfigConverter.toGenFieldConfig(formData.getFieldConfigs());
 
         if (CollectionUtil.isEmpty(genFieldConfigs)) {
             throw new BusinessException("字段配置不能为空");
@@ -221,13 +221,13 @@ public class GeneratorServiceImpl implements GeneratorService {
 
 
     private String getFileName(String entityName, String templateName, String extension) {
-        if (templateName.equals("Entity")) {
+        if ("Entity".equals(templateName)) {
             return entityName + extension;
         }
-        if (templateName.equals("MapperXml")) {
+        if ("MapperXml".equals(templateName)) {
             return entityName + "Mapper" + extension;
         }
-        if (templateName.equals("API") || templateName.equals("VIEW")) {
+        if ("API".equals(templateName) || "VIEW".equals(templateName)) {
             return StrUtil.toSymbolCase(entityName, '-') + extension;
         }
         return entityName + templateName + extension;
@@ -235,13 +235,13 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     private String getFilePath(String templateName, String packageName, String subPackageName) {
         String path;
-        if (templateName.equals("MapperXml")) {
+        if ("MapperXml".equals(templateName)) {
             path = (applicationName
                     + File.separator
                     + "src" + File.separator + "main" + File.separator + "resources"
                     + File.separator + subPackageName
             ).replace(".", File.separator);
-        } else if (templateName.equals("API") || templateName.equals("VIEW")) {
+        } else if ("API".equals(templateName) || "VIEW".equals(templateName)) {
             path = ("vue3-element-admin"
                     + File.separator
                     + "src" + File.separator + subPackageName
@@ -277,7 +277,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         bindMap.put("tableName", genConfig.getTableName());
         bindMap.put("author", genConfig.getAuthor());
         bindMap.put("lowerFirstEntityName", StrUtil.lowerFirst(entityName));
-        bindMap.put("tableComment", StrUtil.replace(genConfig.getComment(), "表", Strings.EMPTY));
+        bindMap.put("tableComment", genConfig.getBusinessName());
         bindMap.put("fieldConfigs", fieldConfigs);
 
         for (GenFieldConfig fieldConfig : fieldConfigs) {
