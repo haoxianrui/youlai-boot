@@ -16,14 +16,14 @@ import jakarta.validation.constraints.*;
 #end
 
 /**
- * $!{tableComment}表单对象
+ * $!{businessName}表单对象
  *
  * @author ${author}
  * @since ${date}
  */
 @Getter
 @Setter
-@Schema(description = "$!{tableComment}表单对象")
+@Schema(description = "$!{businessName}表单对象")
 public class ${entityName}Form implements Serializable {
 
     @Serial
@@ -32,7 +32,7 @@ public class ${entityName}Form implements Serializable {
 ## ----------  BEGIN 字段循环遍历  ----------
 #if($fieldConfigs)
     #foreach($fieldConfig in ${fieldConfigs})
-        #if($fieldConfig.showInForm)
+        #if($fieldConfig.isShowInForm)
             #if($fieldConfig.isRequired)
                 #if($fieldConfig.fieldType == 'String')
     @NotBlank(message = "$fieldConfig.fieldComment不能为空")

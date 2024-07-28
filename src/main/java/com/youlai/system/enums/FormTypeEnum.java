@@ -33,19 +33,19 @@ public enum FormTypeEnum implements IBaseEnum<Integer> {
     RADIO(3, "单选框"),
 
     /**
+     * 复选框
+     */
+    CHECK_BOX(4, "复选框"),
+
+    /**
      * 数字输入框
      */
-    INPUT_NUMBER(4, "数字输入框"),
+    INPUT_NUMBER(5, "数字输入框"),
 
     /**
      * 开关
      */
-    SWITCH(5, "开关"),
-
-    /**
-     * 复选框
-     */
-    CHECK_BOX(6, "复选框"),
+    SWITCH(6, "开关"),
 
     /**
      * 文本域
@@ -60,7 +60,7 @@ public enum FormTypeEnum implements IBaseEnum<Integer> {
     /**
      * 日期框
      */
-    DATE(9, "日期框"),;
+    DATE(9, "日期框");
 
 
     //  Mybatis-Plus 提供注解表示插入数据库时插入该值

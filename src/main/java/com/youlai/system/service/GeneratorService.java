@@ -1,11 +1,9 @@
 package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.system.model.bo.TableMetaData;
 import com.youlai.system.model.form.GenConfigForm;
 import com.youlai.system.model.query.TablePageQuery;
 import com.youlai.system.model.vo.GeneratorPreviewVO;
-import com.youlai.system.model.vo.TableColumnVO;
 import com.youlai.system.model.vo.TablePageVO;
 
 import java.util.List;
@@ -24,7 +22,7 @@ public interface GeneratorService {
      * @param queryParams 查询参数
      * @return
      */
-    Page<TableMetaData> getTablePage(TablePageQuery queryParams);
+    Page<TablePageVO> getTablePage(TablePageQuery queryParams);
 
     /**
      * 获取预览生成代码
@@ -40,7 +38,7 @@ public interface GeneratorService {
      * @param tableName 表名
      * @return
      */
-    GenConfigForm getGenConfig(String tableName);
+    GenConfigForm getGenConfigFormData(String tableName);
 
     /**
      * 保存代码生成配置

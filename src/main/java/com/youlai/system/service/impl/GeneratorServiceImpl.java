@@ -15,18 +15,22 @@ import com.youlai.system.SystemApplication;
 import com.youlai.system.config.property.GeneratorProperties;
 import com.youlai.system.converter.GenConfigConverter;
 import com.youlai.system.enums.FormTypeEnum;
+import com.youlai.system.enums.JavaTypeEnum;
 import com.youlai.system.enums.QueryTypeEnum;
 import com.youlai.system.exception.BusinessException;
 import com.youlai.system.mapper.DatabaseMapper;
+import com.youlai.system.model.bo.ColumnMetaData;
+import com.youlai.system.model.bo.TableMetaData;
+import com.youlai.system.model.entity.GenConfig;
 import com.youlai.system.model.entity.GenFieldConfig;
 import com.youlai.system.model.form.GenConfigForm;
 import com.youlai.system.model.query.TablePageQuery;
+import com.youlai.system.model.vo.GeneratorPreviewVO;
+import com.youlai.system.model.vo.TablePageVO;
 import com.youlai.system.service.GeneratorService;
 import com.youlai.system.service.GenConfigService;
 import com.youlai.system.service.GenFieldConfigService;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.util.Strings;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -42,14 +46,10 @@ import java.util.*;
 @RequiredArgsConstructor
 public class GeneratorServiceImpl implements GeneratorService {
 
-    @Value("${spring.application.name}")
-    private String applicationName;
-
     private final DatabaseMapper databaseMapper;
     private final GeneratorProperties generatorProperties;
     private final GenConfigService genConfigService;
     private final GenFieldConfigService genFieldConfigService;
-
     private final GenConfigConverter genConfigConverter;
 
     /**
@@ -58,8 +58,8 @@ public class GeneratorServiceImpl implements GeneratorService {
      * @param queryParams 查询参数
      * @return 分页结果
      */
-    public Page<TableMetaData> getTablePage(TablePageQuery queryParams) {
-        Page<TableMetaData> page = new Page<>(queryParams.getPageNum(), queryParams.getPageSize());
+    public Page<TablePageVO> getTablePage(TablePageQuery queryParams) {
+        Page<TablePageVO> page = new Page<>(queryParams.getPageNum(), queryParams.getPageSize());
         return databaseMapper.getTablePage(page, queryParams);
     }
 
@@ -70,7 +70,7 @@ public class GeneratorServiceImpl implements GeneratorService {
      * @return 代码生成配置
      */
     @Override
-    public GenConfigForm getGenConfig(String tableName) {
+    public GenConfigForm getGenConfigFormData(String tableName) {
         // 查询表生成配置
         GenConfig genConfig = genConfigService.getOne(
                 new LambdaQueryWrapper<>(GenConfig.class)
@@ -96,6 +96,8 @@ public class GeneratorServiceImpl implements GeneratorService {
             String packageName = SystemApplication.class.getPackageName();
             genConfig.setPackageName(packageName);
 
+            genConfig.setAuthor(generatorProperties.getDefaultConfig().getAuthor());
+
         }
 
         // 根据表的列 + 已经存在的字段生成配置 得到 组合后的字段生成配置
@@ -114,19 +116,15 @@ public class GeneratorServiceImpl implements GeneratorService {
                 String columnName = tableColumn.getColumnName();
                 GenFieldConfig genFieldConfig = fieldConfigList.stream()
                         .filter(item -> StrUtil.equals(item.getColumnName(), columnName))
-                        .findFirst().orElseGet(() -> {
-                            GenFieldConfig fieldConfig = new GenFieldConfig();
-                            fieldConfig.setColumnName(tableColumn.getColumnName());
-                            fieldConfig.setColumnType(tableColumn.getDataType());
-                            fieldConfig.setComment(tableColumn.getColumnComment());
-                            fieldConfig.setFieldName(StrUtil.toCamelCase(columnName));
-                            fieldConfig.setFieldType(StrUtil.toCamelCase(tableColumn.getDataType()));
-                            fieldConfig.setIsRequired("YES".equals(tableColumn.getIsNullable()) ? 1 : 0);
-                            fieldConfig.setFormType(FormTypeEnum.INPUT);
-                            fieldConfig.setQueryType(QueryTypeEnum.EQ);
-                            return fieldConfig;
+                        .findFirst()
+                        .orElseGet(() -> createDefaultFieldConfig(tableColumn));
 
-                        });
+                // 根据列类型设置字段类型
+                String fieldType = genFieldConfig.getFieldType();
+                if (StrUtil.isBlank(fieldType)) {
+                    String javaType = JavaTypeEnum.getJavaTypeByDbType(genFieldConfig.getColumnType());
+                    genFieldConfig.setFieldType(javaType);
+                }
                 genFieldConfigs.add(genFieldConfig);
             }
         }
@@ -134,6 +132,24 @@ public class GeneratorServiceImpl implements GeneratorService {
         return configFormData;
     }
 
+
+    /**
+     * 创建默认字段配置
+     *
+     * @param tableColumn 表字段元数据
+     * @return
+     */
+    private GenFieldConfig createDefaultFieldConfig(ColumnMetaData tableColumn) {
+        GenFieldConfig fieldConfig = new GenFieldConfig();
+        fieldConfig.setColumnName(tableColumn.getColumnName());
+        fieldConfig.setColumnType(tableColumn.getDataType());
+        fieldConfig.setFieldComment(tableColumn.getColumnComment());
+        fieldConfig.setFieldName(StrUtil.toCamelCase(tableColumn.getColumnName()));
+        fieldConfig.setIsRequired("YES".equals(tableColumn.getIsNullable()) ? 1 : 0);
+        fieldConfig.setFormType(FormTypeEnum.INPUT);
+        fieldConfig.setQueryType(QueryTypeEnum.EQ);
+        return fieldConfig;
+    }
 
     /**
      * 保存代码生成配置
@@ -204,7 +220,7 @@ public class GeneratorServiceImpl implements GeneratorService {
             // controller
             String subPackageName = templateConfig.getPackageName();
             // 文件路径 com.youlai.system.controller
-            String filePath = getFilePath(templateName, packageName, subPackageName);
+            String filePath = getFilePath(templateName, packageName, subPackageName,entityName);
             previewVO.setPath(filePath);
 
             /* 3. 生成文件内容 */
@@ -227,32 +243,48 @@ public class GeneratorServiceImpl implements GeneratorService {
         if ("MapperXml".equals(templateName)) {
             return entityName + "Mapper" + extension;
         }
-        if ("API".equals(templateName) || "VIEW".equals(templateName)) {
+        if ("API".equals(templateName)) {
             return StrUtil.toSymbolCase(entityName, '-') + extension;
         }
+
+        if ("VIEW".equals(templateName)) {
+            return "index.vue";
+        }
+
         return entityName + templateName + extension;
     }
 
-    private String getFilePath(String templateName, String packageName, String subPackageName) {
+    private String getFilePath(String templateName, String packageName, String subPackageName,String entityName) {
         String path;
         if ("MapperXml".equals(templateName)) {
-            path = (applicationName
+            path = (generatorProperties.getBackendAppName()
                     + File.separator
                     + "src" + File.separator + "main" + File.separator + "resources"
                     + File.separator + subPackageName
-            ).replace(".", File.separator);
-        } else if ("API".equals(templateName) || "VIEW".equals(templateName)) {
-            path = ("vue3-element-admin"
+            );
+        } else if ("API".equals(templateName)  ) {
+            path = (generatorProperties.getFrontendAppName()
                     + File.separator
                     + "src" + File.separator + subPackageName
-            ).replace(".", File.separator);
-        } else {
-            path = (applicationName
+            );
+        } else if("VIEW".equals(templateName)){
+            path = (generatorProperties.getFrontendAppName()
+                    + File.separator
+                    + "src" + File.separator + subPackageName
+                    + File.separator
+                    + StrUtil.toSymbolCase(entityName, '-')
+            );
+        }else {
+            path = (generatorProperties.getBackendAppName()
                     + File.separator
                     + "src" + File.separator + "main" + File.separator + "java"
                     + File.separator + packageName + File.separator + subPackageName
-            ).replace(".", File.separator);
+            );
         }
+
+        // subPackageName = model.entity => model/entity
+        path = path.replace(".", File.separator);
+
         return path;
     }
 
@@ -277,13 +309,14 @@ public class GeneratorServiceImpl implements GeneratorService {
         bindMap.put("tableName", genConfig.getTableName());
         bindMap.put("author", genConfig.getAuthor());
         bindMap.put("lowerFirstEntityName", StrUtil.lowerFirst(entityName));
-        bindMap.put("tableComment", genConfig.getBusinessName());
+        bindMap.put("businessName", genConfig.getBusinessName());
         bindMap.put("fieldConfigs", fieldConfigs);
 
         for (GenFieldConfig fieldConfig : fieldConfigs) {
             bindMap.put("hasLocalDateTime", "LocalDateTime".equals(fieldConfig.getFieldType()));
             bindMap.put("hasBigDecimal", "BigDecimal".equals(fieldConfig.getFieldType()));
             bindMap.put("hasRequiredField", ObjectUtil.equals(fieldConfig.getIsRequired(), 1));
+            fieldConfig.setTsType(JavaTypeEnum.getTsTypeByJavaType(fieldConfig.getFieldType()));
         }
 
         TemplateEngine templateEngine = TemplateUtil.createEngine(new TemplateConfig("templates", TemplateConfig.ResourceMode.CLASSPATH));

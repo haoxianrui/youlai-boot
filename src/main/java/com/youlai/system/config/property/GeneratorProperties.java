@@ -19,13 +19,34 @@ import java.util.Map;
 @Data
 public class GeneratorProperties {
 
+
+    /**
+     * 默认配置
+     */
+    private DefaultConfig defaultConfig ;
+
+    /**
+     * 模板配置
+     */
     private Map<String, TemplateConfig> templateConfigs = MapUtil.newHashMap(true);
+
+
+    /**
+     * 后端应用名
+     */
+
+    private String backendAppName;
+
+    /**
+     * 前端应用名
+     */
+    private String frontendAppName;
 
     /**
      * 模板配置
      */
     @Data
-    public static  class TemplateConfig{
+    public static class TemplateConfig {
 
         private String templatePath;
 
@@ -34,7 +55,18 @@ public class GeneratorProperties {
         /**
          * 文件扩展名，如 .java
          */
-        private String extension= FileNameUtil.EXT_JAVA;
+        private String extension = FileNameUtil.EXT_JAVA;
+
+    }
+
+    /**
+     * 默认配置
+     */
+    @Data
+    public static class DefaultConfig {
+
+        private String author;
+
 
     }
 

@@ -1,4 +1,4 @@
-package com.youlai.system.common.util;
+package com.youlai.system.util;
 
 import cn.hutool.json.JSONUtil;
 import com.youlai.system.common.result.Result;

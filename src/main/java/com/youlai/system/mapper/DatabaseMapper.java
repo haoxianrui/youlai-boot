@@ -6,7 +6,6 @@ import com.youlai.system.model.bo.ColumnMetaData;
 import com.youlai.system.model.bo.TableMetaData;
 import com.youlai.system.model.entity.SysDept;
 import com.youlai.system.model.query.TablePageQuery;
-import com.youlai.system.model.vo.TableColumnVO;
 import com.youlai.system.model.vo.TablePageVO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -23,7 +22,7 @@ import java.util.List;
 public interface DatabaseMapper extends BaseMapper<SysDept> {
 
 
-    Page<TableMetaData> getTablePage(Page<TableMetaData> page, TablePageQuery queryParams);
+    Page<TablePageVO> getTablePage(Page<TablePageVO> page, TablePageQuery queryParams);
 
     List<ColumnMetaData> getTableColumns(String tableName);
 

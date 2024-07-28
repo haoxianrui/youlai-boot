@@ -17,38 +17,39 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum QueryTypeEnum implements IBaseEnum<Integer> {
 
-
+    /** 等于 */
     EQ(1, "="),
 
+    /** 模糊匹配 */
+    LIKE(2, "LIKE '%s%'"),
 
-    NE(2, "!="),
+    /** 包含 */
+    IN(3, "IN"),
 
+    /** 范围 */
+    BETWEEN(4, "BETWEEN"),
 
-    GT(3, ">"),
+    /** 大于 */
+    GT(5, ">"),
 
+    /** 大于等于 */
+    GE(6, ">="),
 
-    GE(4, ">="),
+    /** 小于 */
+    LT(7, "<"),
 
-    LT(5, "<"),
+    /** 小于等于 */
+    LE(8, "<="),
 
-    LE(6, "<="),
+    /** 不等于 */
+    NE(9, "!="),
 
-    BETWEEN(7, "BETWEEN"),
+    /** 左模糊匹配 */
+    LIKE_LEFT(10, "LIKE '%s'"),
 
-    LIKE(8, "LIKE '%s%'"),
+    /** 右模糊匹配 */
+    LIKE_RIGHT(11, "LIKE 's%'");
 
-    LIKE_LEFT(9, "LIKE '%s'"),
-
-    LIKE_RIGHT(10, "LIKE 's%'"),
-
-    IN(11, "IN"),
-
-    NOT_IN(12, "NOT IN"),
-
-    IS_NULL(13, "IS NULL"),
-
-    IS_NOT_NULL(14, "IS NOT NULL")
-    ;
 
     // 存储在数据库中的枚举属性值
     @EnumValue

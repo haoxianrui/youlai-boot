@@ -1,7 +1,9 @@
 package com.youlai.system.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.youlai.system.common.base.BaseEntity;
 import com.youlai.system.enums.FormTypeEnum;
 import com.youlai.system.enums.QueryTypeEnum;
@@ -53,7 +55,7 @@ public class GenFieldConfig extends BaseEntity {
     /**
      * 字段描述
      */
-    private String comment;
+    private String fieldComment;
 
     /**
      * 表单类型
@@ -84,6 +86,14 @@ public class GenFieldConfig extends BaseEntity {
      * 是否必填
      */
     private Integer isRequired;
+
+
+    /**
+     * TypeScript类型
+     */
+    @TableField(exist = false)
+    @JsonIgnore
+    private String tsType;
 
 
 }

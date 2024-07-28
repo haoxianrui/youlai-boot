@@ -1,7 +1,7 @@
 package com.youlai.system.security.exception;
 
 import com.youlai.system.common.result.ResultCode;
-import com.youlai.system.common.util.ResponseUtils;
+import com.youlai.system.util.ResponseUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;

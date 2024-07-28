@@ -1,5 +1,9 @@
-### 代码生成器配置
+# 代码生成器配置
 generator:
+  defaultConfig:
+    author: youlaitech
+  backendAppName: youlai-boot
+  frontendAppName: vue3-element-admin
   ## 模板配置
   templateConfigs:
     Controller:
@@ -18,6 +22,9 @@ generator:
       templatePath: generator/mapper.xml.vm
       packageName: mapper
       extension: .xml
+    Converter:
+      templatePath: generator/converter.java.vm
+      packageName: converter
     Query:
       templatePath: generator/query.java.vm
       packageName: model.query

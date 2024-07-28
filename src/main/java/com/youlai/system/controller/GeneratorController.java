@@ -3,7 +3,6 @@ package com.youlai.system.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
-import com.youlai.system.model.bo.TableMetaData;
 import com.youlai.system.model.form.GenConfigForm;
 import com.youlai.system.model.query.TablePageQuery;
 import com.youlai.system.model.vo.GeneratorPreviewVO;
@@ -33,18 +32,18 @@ public class GeneratorController {
 
     @Operation(summary = "获取数据表分页列表")
     @GetMapping("/table/page")
-    public PageResult<TableMetaData> getTablePage(
+    public PageResult<TablePageVO> getTablePage(
             TablePageQuery queryParams
     ) {
-        Page<TableMetaData> result = generatorService.getTablePage(queryParams);
+        Page<TablePageVO> result = generatorService.getTablePage(queryParams);
         return PageResult.success(result);
     }
 
     @Operation(summary = "获取代码生成配置")
     @GetMapping("/{tableName}/config")
-    public Result<GenConfigForm> getGenConfig(
+    public Result<GenConfigForm> getGenConfigFormData(
             @Parameter(description = "表名", example = "sys_user") @PathVariable String tableName) {
-        GenConfigForm formData = generatorService.getGenConfig(tableName);
+        GenConfigForm formData = generatorService.getGenConfigFormData(tableName);
         return Result.success(formData);
     }
 

@@ -61,7 +61,7 @@ public class GenConfigForm {
         private String fieldType;
 
         @Schema(description = "字段描述")
-        private String comment;
+        private String fieldComment;
 
         @Schema(description = "是否在列表显示")
         private Integer isShowInList;

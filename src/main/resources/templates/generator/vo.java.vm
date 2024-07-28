@@ -14,14 +14,14 @@ import java.math.BigDecimal;
 #end
 
 /**
- * $!{tableComment}视图对象
+ * $!{businessName}视图对象
  *
  * @author ${author}
  * @since ${date}
  */
 @Getter
 @Setter
-@Schema( description = "$!{tableComment}视图对象")
+@Schema( description = "$!{businessName}视图对象")
 public class ${entityName}VO implements Serializable {
 
     @Serial
@@ -29,10 +29,12 @@ public class ${entityName}VO implements Serializable {
 
 #if($fieldConfigs)
     #foreach($fieldConfig in ${fieldConfigs})
-        #if("$!fieldConfig.fieldComment" != "")
+        #if($fieldConfig.isShowInList)
+            #if("$!fieldConfig.fieldComment" != "")
     @Schema(description = "${fieldConfig.fieldComment}")
-        #end
+            #end
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
+        #end
     #end
 #end
 }

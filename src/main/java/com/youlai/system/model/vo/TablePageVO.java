@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 
-@Schema(description = "数据表VO")
+@Schema(description = "表视图对象")
 @Data
 public class TablePageVO {
 

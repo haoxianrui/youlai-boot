@@ -5,7 +5,7 @@
 <mapper namespace="com.youlai.system.mapper.DatabaseMapper">
 
     <!-- 查询数据库表分页 -->
-    <select id="getTablePage" resultType="com.youlai.system.model.bo.TableMetaData">
+    <select id="getTablePage" resultType="com.youlai.system.model.vo.TablePageVO">
         SELECT
             TABLE_NAME ,
             TABLE_COMMENT ,
