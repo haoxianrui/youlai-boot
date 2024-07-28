@@ -1,6 +1,5 @@
 package com.youlai.system.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.mapper.GenConfigMapper;
 import com.youlai.system.model.entity.GenConfig;
 import com.youlai.system.service.GenConfigService;
