@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 /**
- * $!{tableComment} 前端控制器
+ * $!{businessName}前端控制层
  *
  * @author ${author}
  * @since ${date}
  */
-@Tag(name = "${tableComment}接口")
+@Tag(name = "${businessName}接口")
 @RestController
 @RequestMapping("/api/v1/${lowerFirstEntityName}s")
 @RequiredArgsConstructor
@@ -30,41 +30,41 @@ public class ${entityName}Controller  {
 
     private final ${entityName}Serivie ${lowerFirstEntityName}Service;
 
-    @Operation(summary = "$!{tableComment}分页列表")
+    @Operation(summary = "$!{businessName}分页列表")
     @GetMapping("/page")
     public PageResult<${entityName}PageVO> get${entityName}Page(${entityName}PageQuery queryParams ) {
         IPage<${entityName}PageVO> result = ${lowerFirstEntityName}Service.get${entityName}Page(queryParams);
         return PageResult.success(result);
     }
 
-    @Operation(summary = "新增$!{tableComment}")
+    @Operation(summary = "新增${businessName}")
     @PostMapping
     public Result save${entityName}(@RequestBody @Valid ${entityName}Form formData ) {
         boolean result = ${lowerFirstEntityName}Service.save${entityName}(formData);
         return Result.judge(result);
     }
 
-    @Operation(summary = "$!{tableComment}表单数据")
+    @Operation(summary = "获取${businessName}表单数据")
     @GetMapping("/{id}/form")
     public Result<${entityName}Form> get${entityName}Form(
-        @Parameter(description = "$!{tableComment}ID") @PathVariable Long id
+        @Parameter(description = "$!{businessName}ID") @PathVariable Long id
     ) {
         ${entityName}Form formData = ${lowerFirstEntityName}Service.get${entityName}FormData(id);
         return Result.success(formData);
     }
 
-    @Operation(summary = "修改$!{tableComment}")
+    @Operation(summary = "修改${businessName}")
     @PutMapping(value = "/{id}")
-    public Result update${entityName}(@Parameter(description = "$!{tableComment}ID") @PathVariable Long id,
+    public Result update${entityName}(@Parameter(description = "$!{businessName}ID") @PathVariable Long id,
     @RequestBody @Validated ${entityName}Form formData) {
         boolean result = ${lowerFirstEntityName}Service.update${entityName}(id, formData);
         return Result.judge(result);
     }
 
-    @Operation(summary = "删除$!{tableComment}")
+    @Operation(summary = "删除${businessName}")
     @DeleteMapping("/{ids}")
     public Result delete${entityName}s(
-        @Parameter(description = "$!{tableComment}ID，多个以英文逗号(,)分割") @PathVariable String ids
+        @Parameter(description = "$!{businessName}ID，多个以英文逗号(,)分割") @PathVariable String ids
     ) {
         boolean result = ${lowerFirstEntityName}Service.delete${entityName}s(ids);
         return Result.judge(result);

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
-import com.youlai.system.common.util.ExcelUtils;
+import com.youlai.system.util.ExcelUtils;
 import com.youlai.system.enums.LogModuleEnum;
 import com.youlai.system.model.dto.UserImportDTO;
 import com.youlai.system.plugin.norepeat.annotation.PreventRepeatSubmit;

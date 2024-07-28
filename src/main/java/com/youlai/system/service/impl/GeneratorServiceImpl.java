@@ -1,20 +1,37 @@
 package com.youlai.system.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.template.Template;
 import cn.hutool.extra.template.TemplateConfig;
 import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.youlai.system.SystemApplication;
+import com.youlai.system.config.property.GeneratorProperties;
+import com.youlai.system.converter.GenConfigConverter;
+import com.youlai.system.enums.FormTypeEnum;
+import com.youlai.system.enums.JavaTypeEnum;
+import com.youlai.system.enums.QueryTypeEnum;
+import com.youlai.system.exception.BusinessException;
 import com.youlai.system.mapper.DatabaseMapper;
+import com.youlai.system.model.bo.ColumnMetaData;
+import com.youlai.system.model.bo.TableMetaData;
+import com.youlai.system.model.entity.GenConfig;
+import com.youlai.system.model.entity.GenFieldConfig;
+import com.youlai.system.model.form.GenConfigForm;
 import com.youlai.system.model.query.TablePageQuery;
-import com.youlai.system.model.vo.TableColumnVO;
-import com.youlai.system.model.vo.TableGeneratePreviewVO;
+import com.youlai.system.model.vo.GeneratorPreviewVO;
 import com.youlai.system.model.vo.TablePageVO;
 import com.youlai.system.service.GeneratorService;
+import com.youlai.system.service.GenConfigService;
+import com.youlai.system.service.GenFieldConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import cn.hutool.extra.template.TemplateConfig.ResourceMode;
 
 import java.io.File;
 import java.util.*;
@@ -23,13 +40,17 @@ import java.util.*;
  * 数据库服务实现类
  *
  * @author Ray
- * @since 2.11.0
+ * @since 2.10.0
  */
 @Service
 @RequiredArgsConstructor
 public class GeneratorServiceImpl implements GeneratorService {
 
     private final DatabaseMapper databaseMapper;
+    private final GeneratorProperties generatorProperties;
+    private final GenConfigService genConfigService;
+    private final GenFieldConfigService genFieldConfigService;
+    private final GenConfigConverter genConfigConverter;
 
     /**
      * 数据表分页列表
@@ -43,15 +64,114 @@ public class GeneratorServiceImpl implements GeneratorService {
     }
 
     /**
-     * 获取数据表字段列表
+     * 获取代码生成配置
      *
-     * @param tableName 表名
-     * @return 字段列表
+     * @param tableName 表名 eg: sys_user
+     * @return 代码生成配置
      */
     @Override
-    public List<TableColumnVO> getTableColumns(String tableName) {
-        return databaseMapper.getTableColumns(tableName);
+    public GenConfigForm getGenConfigFormData(String tableName) {
+        // 查询表生成配置
+        GenConfig genConfig = genConfigService.getOne(
+                new LambdaQueryWrapper<>(GenConfig.class)
+                        .eq(GenConfig::getTableName, tableName)
+                        .last("LIMIT 1")
+        );
+        // 如果没有代码生成配置，则根据表的元数据生成默认配置
+        if (genConfig == null) {
+            TableMetaData tableMetadata = databaseMapper.getTableMetadata(tableName);
+            Assert.isTrue(tableMetadata != null, "未找到表元数据");
+
+            genConfig = new GenConfig();
+            genConfig.setTableName(tableName);
+
+            String tableComment = tableMetadata.getTableComment();
+            if (StrUtil.isNotBlank(tableComment)) {
+                genConfig.setBusinessName(tableComment.replace("表", ""));
+            }
+            // 实体类名 = 表名去掉前缀后转驼峰，前缀默认为下划线分割的第一个元素
+            String entityName = StrUtil.toCamelCase(StrUtil.removePrefix(tableName, tableName.split("_")[0]));
+            genConfig.setEntityName(entityName);
+
+            String packageName = SystemApplication.class.getPackageName();
+            genConfig.setPackageName(packageName);
+
+            genConfig.setAuthor(generatorProperties.getDefaultConfig().getAuthor());
+
+        }
+
+        // 根据表的列 + 已经存在的字段生成配置 得到 组合后的字段生成配置
+        List<GenFieldConfig> genFieldConfigs = new ArrayList<>();
+
+        // 获取表的列
+        List<ColumnMetaData> tableColumns = databaseMapper.getTableColumns(tableName);
+        if (CollectionUtil.isNotEmpty(tableColumns)) {
+            // 查询字段生成配置
+            List<GenFieldConfig> fieldConfigList = genFieldConfigService.list(
+                    new LambdaQueryWrapper<>(GenFieldConfig.class)
+                            .eq(GenFieldConfig::getConfigId, genConfig.getId())
+            );
+            for (ColumnMetaData tableColumn : tableColumns) {
+                // 根据列名获取字段生成配置
+                String columnName = tableColumn.getColumnName();
+                GenFieldConfig genFieldConfig = fieldConfigList.stream()
+                        .filter(item -> StrUtil.equals(item.getColumnName(), columnName))
+                        .findFirst()
+                        .orElseGet(() -> createDefaultFieldConfig(tableColumn));
+
+                // 根据列类型设置字段类型
+                String fieldType = genFieldConfig.getFieldType();
+                if (StrUtil.isBlank(fieldType)) {
+                    String javaType = JavaTypeEnum.getJavaTypeByDbType(genFieldConfig.getColumnType());
+                    genFieldConfig.setFieldType(javaType);
+                }
+                genFieldConfigs.add(genFieldConfig);
+            }
+        }
+        GenConfigForm configFormData = genConfigConverter.toGenConfigForm(genConfig, genFieldConfigs);
+        return configFormData;
     }
+
+
+    /**
+     * 创建默认字段配置
+     *
+     * @param tableColumn 表字段元数据
+     * @return
+     */
+    private GenFieldConfig createDefaultFieldConfig(ColumnMetaData tableColumn) {
+        GenFieldConfig fieldConfig = new GenFieldConfig();
+        fieldConfig.setColumnName(tableColumn.getColumnName());
+        fieldConfig.setColumnType(tableColumn.getDataType());
+        fieldConfig.setFieldComment(tableColumn.getColumnComment());
+        fieldConfig.setFieldName(StrUtil.toCamelCase(tableColumn.getColumnName()));
+        fieldConfig.setIsRequired("YES".equals(tableColumn.getIsNullable()) ? 1 : 0);
+        fieldConfig.setFormType(FormTypeEnum.INPUT);
+        fieldConfig.setQueryType(QueryTypeEnum.EQ);
+        return fieldConfig;
+    }
+
+    /**
+     * 保存代码生成配置
+     *
+     * @param formData 代码生成配置表单
+     */
+    @Override
+    public void saveGenConfig(GenConfigForm formData) {
+        GenConfig genConfig = genConfigConverter.toGenConfig(formData);
+        genConfigService.saveOrUpdate(genConfig);
+
+        List<GenFieldConfig> genFieldConfigs = genConfigConverter.toGenFieldConfig(formData.getFieldConfigs());
+
+        if (CollectionUtil.isEmpty(genFieldConfigs)) {
+            throw new BusinessException("字段配置不能为空");
+        }
+        genFieldConfigs.forEach(genFieldConfig -> {
+            genFieldConfig.setConfigId(genConfig.getId());
+        });
+        genFieldConfigService.saveOrUpdateBatch(genFieldConfigs);
+    }
+
 
     /**
      * 获取预览生成代码
@@ -60,49 +180,151 @@ public class GeneratorServiceImpl implements GeneratorService {
      * @return 预览数据
      */
     @Override
-    public List<TableGeneratePreviewVO> getTablePreviewData(String tableName) {
+    public List<GeneratorPreviewVO> getTablePreviewData(String tableName) {
 
-        List<TableGeneratePreviewVO> list = new ArrayList<>();
+        List<GeneratorPreviewVO> list = new ArrayList<>();
 
-        TemplateConfig templateConfig = new TemplateConfig("templates" , ResourceMode.CLASSPATH);
-        TemplateEngine templateEngine = TemplateUtil.createEngine(templateConfig);
+        GenConfig genConfig = genConfigService.getOne(new LambdaQueryWrapper<GenConfig>()
+                .eq(GenConfig::getTableName, tableName)
+        );
+        Assert.isTrue(genConfig != null, "未找到表生成配置");
+
+        List<GenFieldConfig> fieldConfigs = genFieldConfigService.list(new LambdaQueryWrapper<GenFieldConfig>()
+                .eq(GenFieldConfig::getConfigId, genConfig.getId())
+        );
+        Assert.isTrue(CollectionUtil.isNotEmpty(fieldConfigs), "未找到字段生成配置");
+
+        // 遍历模板配置
+        Map<String, GeneratorProperties.TemplateConfig> templateConfigs = generatorProperties.getTemplateConfigs();
+        for (Map.Entry<String, GeneratorProperties.TemplateConfig> templateConfigEntry : templateConfigs.entrySet()) {
+            GeneratorPreviewVO previewVO = new GeneratorPreviewVO();
+
+            GeneratorProperties.TemplateConfig templateConfig = templateConfigEntry.getValue();
+
+            /* 1. 生成文件名 UserController */
+            // User Role Menu Dept
+            String entityName = genConfig.getEntityName();
+            // Controller Service Mapper Entity
+            String templateName = templateConfigEntry.getKey();
+            // .java .ts .vue
+            String extension = templateConfig.getExtension();
+
+            // 文件名 UserController.java
+            String fileName = getFileName(entityName, templateName, extension);
+            previewVO.setFileName(fileName);
 
 
-        Map<String, Object> bindingMap = new HashMap<>();
-        bindingMap.put("tableName", "sys_user");
-        bindingMap.put("author", "Ray");
-        bindingMap.put("date", DateUtil.format(new Date(), "yyyy-MM-dd HH:mm"));
-        bindingMap.put("entityName", "User" );
-        bindingMap.put("lowerFirstEntityName", "user");
-        bindingMap.put("tableComment", "用户");
+            /* 2. 生成文件路径 */
+            // com.youlai.system
+            String packageName = genConfig.getPackageName();
+            // controller
+            String subPackageName = templateConfig.getPackageName();
+            // 文件路径 com.youlai.system.controller
+            String filePath = getFilePath(templateName, packageName, subPackageName,entityName);
+            previewVO.setPath(filePath);
 
-        // 包路径
-        bindingMap.put("package", "com.youlai.system");
+            /* 3. 生成文件内容 */
 
-        Template template = templateEngine.getTemplate("generator" + File.separator + "controller.java.vm");
-        String content = template.render(bindingMap);
-        TableGeneratePreviewVO controller = new TableGeneratePreviewVO();
-        controller.setPath("youlai-boot/controller");
-        controller.setContent(content);
-        controller.setFileName("UserController.java");
+            // 生成文件内容
+            String content = getCodeContent(templateConfig, genConfig, fieldConfigs);
+            previewVO.setContent(content);
 
-        list.add(controller);
 
-        TableGeneratePreviewVO vo = new TableGeneratePreviewVO();
-        vo.setPath("youlai-boot/model/vo");
-        vo.setContent(content);
-        vo.setFileName("UserVO.java");
-
-        list.add(vo);
-
+            list.add(previewVO);
+        }
         return list;
     }
 
 
-    private String  generatePath(){
+    private String getFileName(String entityName, String templateName, String extension) {
+        if ("Entity".equals(templateName)) {
+            return entityName + extension;
+        }
+        if ("MapperXml".equals(templateName)) {
+            return entityName + "Mapper" + extension;
+        }
+        if ("API".equals(templateName)) {
+            return StrUtil.toSymbolCase(entityName, '-') + extension;
+        }
 
+        if ("VIEW".equals(templateName)) {
+            return "index.vue";
+        }
+
+        return entityName + templateName + extension;
     }
 
+    private String getFilePath(String templateName, String packageName, String subPackageName,String entityName) {
+        String path;
+        if ("MapperXml".equals(templateName)) {
+            path = (generatorProperties.getBackendAppName()
+                    + File.separator
+                    + "src" + File.separator + "main" + File.separator + "resources"
+                    + File.separator + subPackageName
+            );
+        } else if ("API".equals(templateName)  ) {
+            path = (generatorProperties.getFrontendAppName()
+                    + File.separator
+                    + "src" + File.separator + subPackageName
+            );
+        } else if("VIEW".equals(templateName)){
+            path = (generatorProperties.getFrontendAppName()
+                    + File.separator
+                    + "src" + File.separator + subPackageName
+                    + File.separator
+                    + StrUtil.toSymbolCase(entityName, '-')
+            );
+        }else {
+            path = (generatorProperties.getBackendAppName()
+                    + File.separator
+                    + "src" + File.separator + "main" + File.separator + "java"
+                    + File.separator + packageName + File.separator + subPackageName
+            );
+        }
+
+        // subPackageName = model.entity => model/entity
+        path = path.replace(".", File.separator);
+
+        return path;
+    }
+
+    /**
+     * 生成代码内容
+     *
+     * @param templateConfig 模板配置
+     * @param genConfig      生成配置
+     * @param fieldConfigs   字段配置
+     * @return 代码内容
+     */
+    private String getCodeContent(GeneratorProperties.TemplateConfig templateConfig, GenConfig genConfig, List<GenFieldConfig> fieldConfigs) {
+
+        Map<String, Object> bindMap = new HashMap<>();
+
+        String entityName = genConfig.getEntityName();
+
+        bindMap.put("package", genConfig.getPackageName());
+        bindMap.put("subPackage", templateConfig.getPackageName());
+        bindMap.put("date", DateUtil.format(new Date(), "yyyy-MM-dd HH:mm"));
+        bindMap.put("entityName", entityName);
+        bindMap.put("tableName", genConfig.getTableName());
+        bindMap.put("author", genConfig.getAuthor());
+        bindMap.put("lowerFirstEntityName", StrUtil.lowerFirst(entityName));
+        bindMap.put("businessName", genConfig.getBusinessName());
+        bindMap.put("fieldConfigs", fieldConfigs);
+
+        for (GenFieldConfig fieldConfig : fieldConfigs) {
+            bindMap.put("hasLocalDateTime", "LocalDateTime".equals(fieldConfig.getFieldType()));
+            bindMap.put("hasBigDecimal", "BigDecimal".equals(fieldConfig.getFieldType()));
+            bindMap.put("hasRequiredField", ObjectUtil.equals(fieldConfig.getIsRequired(), 1));
+            fieldConfig.setTsType(JavaTypeEnum.getTsTypeByJavaType(fieldConfig.getFieldType()));
+        }
+
+        TemplateEngine templateEngine = TemplateUtil.createEngine(new TemplateConfig("templates", TemplateConfig.ResourceMode.CLASSPATH));
+        Template template = templateEngine.getTemplate(templateConfig.getTemplatePath());
+        String content = template.render(bindMap);
+
+        return content;
+    }
 
 
 }

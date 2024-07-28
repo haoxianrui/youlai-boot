@@ -2,7 +2,7 @@ package com.youlai.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.system.common.util.DateUtils;
+import com.youlai.system.util.DateUtils;
 import com.youlai.system.model.bo.VisitCount;
 import com.youlai.system.model.entity.SysLog;
 import com.youlai.system.model.query.LogPageQuery;

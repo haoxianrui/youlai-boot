@@ -1,21 +1,20 @@
 package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.youlai.system.model.form.GenConfigForm;
 import com.youlai.system.model.query.TablePageQuery;
-import com.youlai.system.model.vo.TableColumnVO;
-import com.youlai.system.model.vo.TableGeneratePreviewVO;
+import com.youlai.system.model.vo.GeneratorPreviewVO;
 import com.youlai.system.model.vo.TablePageVO;
 
 import java.util.List;
 
 /**
- * 数据库服务接口
+ * 代码生成配置接口
  *
- * @author haoxr
- * @since 2.11.0
+ * @author Ray
+ * @since 2.10.0
  */
 public interface GeneratorService {
-
 
     /**
      * 获取数据表分页列表
@@ -26,18 +25,28 @@ public interface GeneratorService {
     Page<TablePageVO> getTablePage(TablePageQuery queryParams);
 
     /**
-     * 获取数据表字段列表
-     *
-     * @param tableName 表名
-     * @return
-     */
-    List<TableColumnVO> getTableColumns(String tableName);
-
-    /**
      * 获取预览生成代码
      *
      * @param tableName 表名
      * @return
      */
-    List<TableGeneratePreviewVO> getTablePreviewData(String tableName);
+    List<GeneratorPreviewVO> getTablePreviewData(String tableName);
+
+    /**
+     * 获取代码生成配置
+     *
+     * @param tableName 表名
+     * @return
+     */
+    GenConfigForm getGenConfigFormData(String tableName);
+
+    /**
+     * 保存代码生成配置
+     *
+     * @param formData 表单数据
+     * @return
+     */
+    void saveGenConfig(GenConfigForm formData);
+
+
 }

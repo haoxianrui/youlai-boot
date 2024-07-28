@@ -21,22 +21,22 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * $!{tableComment}服务实现类
+ * $!{businessName}服务实现类
  *
  * @author ${author}
  * @since ${date}
  */
 @Service
 @RequiredArgsConstructor
-public class ${table.serviceImplName} extends ServiceImpl<${entityName}Mapper, ${entityName}> implements ${entityName}Service {
+public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, ${entityName}> implements ${entityName}Service {
 
     private final ${entityName}Converter ${lowerFirstEntityName}Converter;
 
     /**
-    * 获取$!{tableComment}分页列表
+    * 获取${businessName}分页列表
     *
     * @param queryParams 查询参数
-    * @return {@link IPage<${entityName}PageVO>} $!{tableComment}分页列表
+    * @return {@link IPage<${entityName}PageVO>} $!{businessName}分页列表
     */
     @Override
     public IPage<${entityName}VO> get${entityName}Page(${entityName}Query queryParams) {
@@ -48,9 +48,9 @@ public class ${table.serviceImplName} extends ServiceImpl<${entityName}Mapper, $
     }
     
     /**
-     * 获取$!{tableComment}表单数据
+     * 获取${businessName}表单数据
      *
-     * @param id $!{tableComment}ID
+     * @param id $!{businessName}ID
      * @return
      */
     @Override
@@ -60,9 +60,9 @@ public class ${table.serviceImplName} extends ServiceImpl<${entityName}Mapper, $
     }
     
     /**
-     * 新增$!{tableComment}
+     * 新增${businessName}
      *
-     * @param formData $!{tableComment}表单对象
+     * @param formData $!{businessName}表单对象
      * @return
      */
     @Override
@@ -72,10 +72,10 @@ public class ${table.serviceImplName} extends ServiceImpl<${entityName}Mapper, $
     }
     
     /**
-     * 更新$!{tableComment}
+     * 更新${businessName}
      *
-     * @param id   $!{tableComment}ID
-     * @param formData $!{tableComment}表单对象
+     * @param id   $!{businessName}ID
+     * @param formData $!{businessName}表单对象
      * @return
      */
     @Override
@@ -85,14 +85,14 @@ public class ${table.serviceImplName} extends ServiceImpl<${entityName}Mapper, $
     }
     
     /**
-     * 删除$!{tableComment}
+     * 删除${businessName}
      *
-     * @param ids $!{tableComment}ID，多个以英文逗号(,)分割
-     * @return true|false
+     * @param ids $!{businessName}ID，多个以英文逗号(,)分割
+     * @return
      */
     @Override
     public boolean delete${entityName}s(String ids) {
-        Assert.isTrue(StrUtil.isNotBlank(ids), "删除的$!{tableComment}数据为空");
+        Assert.isTrue(StrUtil.isNotBlank(ids), "删除的${businessName}数据为空");
         // 逻辑删除
         List<Long> idList = Arrays.stream(ids.split(","))
                 .map(Long::parseLong)

@@ -6,54 +6,51 @@ import ${package}.model.query.${entityName}PageQuery;
 import ${package}.model.vo.${entityName}PageVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+
 /**
- * $!{tableComment} 服务类
+ * $!{businessName}服务类
  *
  * @author ${author}
  * @since ${date}
  */
 public interface ${entityName}Service extends IService<${entityName}> {
 
-
     /**
-     *$!{tableComment}分页列表
+     *$!{businessName}分页列表
      *
      * @return
      */
     IPage<${entityName}VO> get${entityName}Page(${entityName}Query queryParams);
 
-
     /**
-     * 获取$!{tableComment}表单数据
+     * 获取${businessName}表单数据
      *
-     * @param id $!{tableComment}ID
+     * @param id $!{businessName}ID
      * @return
      */
      ${entityName}Form get${entityName}FormData(Long id);
 
-
     /**
-     * 新增$!{tableComment}
+     * 新增${businessName}
      *
-     * @param formData $!{tableComment}表单对象
+     * @param formData $!{businessName}表单对象
      * @return
      */
     boolean save${entityName}(${entityName}Form formData);
 
     /**
-     * 修改$!{tableComment}
+     * 修改${businessName}
      *
-     * @param id   $!{tableComment}ID
-     * @param formData $!{tableComment}表单对象
+     * @param id   $!{businessName}ID
+     * @param formData $!{businessName}表单对象
      * @return
      */
     boolean update${entityName}(Long id, ${entityName}Form formData);
 
-
     /**
-     * 删除$!{tableComment}
+     * 删除${businessName}
      *
-     * @param ids $!{tableComment}ID，多个以英文逗号(,)分割
+     * @param ids $!{businessName}ID，多个以英文逗号(,)分割
      * @return
      */
     boolean delete${entityName}s(String ids);

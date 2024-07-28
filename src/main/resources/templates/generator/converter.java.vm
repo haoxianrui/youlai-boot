@@ -6,7 +6,7 @@ import ${package}.model.entity.${entityName};
 import ${package}.model.form.${entityName}Form;
 
 /**
- * $!{tableComment}转换器
+ * $!{businessName}对象转换器
  *
  * @author ${author}
  * @since ${date}
