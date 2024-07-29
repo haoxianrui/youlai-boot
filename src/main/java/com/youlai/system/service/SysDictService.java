@@ -72,4 +72,10 @@ public interface SysDictService extends IService<SysDict> {
     List<Option> listDictItemsByCode(String code);
 
 
+    /**
+     * 获取字典列表
+     *
+     * @return
+     */
+    List<Option> getDictList();
 }

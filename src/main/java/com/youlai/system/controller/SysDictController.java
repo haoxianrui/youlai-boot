@@ -44,6 +44,13 @@ public class SysDictController {
         return PageResult.success(result);
     }
 
+    @Operation(summary = "字典列表")
+    @GetMapping("/list")
+    public Result<List<Option>> getDictList() {
+        List<Option> list = dictService.getDictList();
+        return Result.success(list);
+    }
+
     @Operation(summary = "字典数据项列表")
     @GetMapping("/{code}/options")
     public Result<List<Option>> getDictOptions(
