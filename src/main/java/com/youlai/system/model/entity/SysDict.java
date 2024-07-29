@@ -1,7 +1,5 @@
 package com.youlai.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.youlai.system.common.base.BaseEntity;
 import lombok.Data;
 
@@ -13,11 +11,6 @@ import lombok.Data;
  */
 @Data
 public class SysDict extends BaseEntity {
-    /**
-     * 主键 
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
 
     /**
      * 类型名称
