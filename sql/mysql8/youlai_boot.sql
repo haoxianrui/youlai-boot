@@ -19,6 +19,25 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 
+
+-- ----------------------------
+-- Table structure for sys_config
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_config`;
+CREATE TABLE `sys_config` (
+      `id` bigint NOT NULL AUTO_INCREMENT,
+      `sys_name` varchar(50) NOT NULL COMMENT '配置名称',
+      `sys_key` varchar(50) NOT NULL COMMENT '配置key',
+      `sys_value` varchar(100) NOT NULL COMMENT '配置值',
+      `remark` varchar(200) DEFAULT NULL COMMENT '描述、备注',
+      `create_time` datetime NOT NULL COMMENT '创建时间',
+      `create_by` bigint NOT NULL COMMENT '创建人ID',
+      `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+      `update_by` bigint DEFAULT NULL COMMENT '更新人ID',
+      `is_deleted` tinyint(1) NOT NULL COMMENT '逻辑删除标识(0-未删除 1-已删除)',
+      PRIMARY KEY (`id`)
+) ENGINE=InnoDB COMMENT='系统配置';
+
 -- ----------------------------
 -- Table structure for sys_dept
 -- ----------------------------
