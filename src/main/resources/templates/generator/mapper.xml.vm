@@ -5,25 +5,59 @@
     <!-- 获取${businessName}分页列表 -->
     <select id="get${entityName}Page" resultType="${package}.model.vo.${entityName}VO">
         SELECT
-            *
+        #if($fieldConfigs)
+            #set ($fields = [])
+            #foreach($fieldConfig in ${fieldConfigs})
+                #if($fieldConfig.isShowInList)
+                #set ($discard = $fields.add(${fieldConfig.columnName}))
+                #end
+            #end
+            #foreach($field in $fields)
+                ${field}#if($foreach.hasNext),#end
+            #end
+        #end
         FROM
             ${tableName}
         <where>
-            is_deleted = 0
-            <if test='queryParams.keywords!=null and queryParams.keywords.trim() neq ""'>
-                AND (
-                    name LIKE CONCAT('%',#{queryParams.keywords},'%')
-                )
+            #if($fieldConfigs)
+                #foreach($fieldConfig in ${fieldConfigs})
+                    #if($fieldConfig.isShowInQuery)
+            <if test="queryParams.${fieldConfig.fieldName} != null">
+                            #set ($queryType = ${fieldConfig.queryType})
+                            #if($queryType == "EQ")
+                AND ${fieldConfig.columnName} = #{queryParams.${fieldConfig.fieldName}}
+                            #elseif($queryType == "LIKE")
+                AND ${fieldConfig.columnName} LIKE CONCAT('%', #{queryParams.${fieldConfig.fieldName}}, '%')
+                            #elseif($queryType == "IN")
+                <if test="queryParams.${fieldConfig.fieldName}.size() > 0">
+                    AND ${fieldConfig.columnName} IN  <foreach collection="queryParams.${fieldConfig.fieldName}" item="item" open="(" close=")" separator=",">#{item}</foreach>
+                </if>
+                            #elseif($queryType == "BETWEEN")
+                                #if(${fieldConfig.fieldType} == "LocalDateTime")
+                AND ${fieldConfig.columnName} BETWEEN STR_TO_DATE(#{queryParams.${fieldConfig.fieldName}Start}, '%Y-%m-%d %H:%i:%s') AND STR_TO_DATE(#{queryParams.${fieldConfig.fieldName}End}, '%Y-%m-%d %H:%i:%s')
+                                #else
+                AND ${fieldConfig.columnName} BETWEEN #{queryParams.${fieldConfig.fieldName}Start} AND #{queryParams.${fieldConfig.fieldName}End}
+                                #end
+                            #elseif($queryType == "GT")
+                AND ${fieldConfig.columnName} > #{queryParams.${fieldConfig.fieldName}}
+                            #elseif($queryType == "GE")
+                AND ${fieldConfig.columnName} >= #{queryParams.${fieldConfig.fieldName}}
+                            #elseif($queryType == "LT")
+                AND ${fieldConfig.columnName} &lt; #{queryParams.${fieldConfig.fieldName}}
+                            #elseif($queryType == "LE")
+                AND ${fieldConfig.columnName} &lt;= #{queryParams.${fieldConfig.fieldName}}
+                            #elseif($queryType == "NE")
+                AND ${fieldConfig.columnName} != #{queryParams.${fieldConfig.fieldName}}
+                            #elseif($queryType == "LIKE_LEFT")
+                AND ${fieldConfig.columnName} LIKE CONCAT('%', #{queryParams.${fieldConfig.fieldName}})
+                            #elseif($queryType == "LIKE_RIGHT")
+                AND ${fieldConfig.columnName} LIKE CONCAT(#{queryParams.${fieldConfig.fieldName}}, '%')
+                            #end
             </if>
-            <if test="queryParams.startTime != null">
-                AND create_time &gt;= #{queryParams.startTime}
-            </if>
-            <if test="queryParams.endTime != null">
-                AND create_time &lt;= #{queryParams.endTime}
-            </if>
+                    #end
+                #end
+            #end
         </where>
-        ORDER BY
-            create_time DESC
     </select>
 
 </mapper>
