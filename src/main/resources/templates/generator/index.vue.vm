@@ -4,14 +4,19 @@
       <el-form ref="queryFormRef" :model="queryParams" :inline="true">
         #foreach($fieldConfig in $fieldConfigs)
           #if($fieldConfig.isShowInQuery == 1)
-            <el-form-item :label="$fieldConfig.fieldComment" :key="$fieldConfig.fieldName">
+            <el-form-item label="$fieldConfig.fieldComment" prop="$fieldConfig.fieldName">
               #if($fieldConfig.formType == "INPUT")
                 <el-input v-model="queryParams.$fieldConfig.fieldName" :placeholder="$fieldConfig.fieldComment" clearable @keyup.enter="handleQuery" />
               #elseif($fieldConfig.formType == "SELECT")
-                <el-select v-model="queryParams.$fieldConfig.fieldName" :placeholder="$fieldConfig.fieldComment" clearable>
-                  <!-- 这里可以根据具体需求生成select options -->
-                  <el-option v-for="option in $fieldConfig.options" :key="option.value" :label="option.label" :value="option.value"></el-option>
-                </el-select>
+                #if($fieldConfig.dictType != "")
+                  <dictionary v-model="formData.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
+                #else
+                  <el-select v-model="formData.$fieldConfig.fieldName" :placeholder="'请选择$fieldConfig.fieldComment">
+                    <el-option :key="1" :value="1" label="下拉项1"/>
+                    <el-option :key="2" :value="2" label="下拉项2"/>
+                    <el-option :key="3" :value="3" label="下拉项3"/>
+                  </el-select>
+                #end
               #elseif($fieldConfig.formType == "RADIO")
                 <el-radio-group v-model="queryParams.$fieldConfig.fieldName">
                   <el-radio v-for="option in $fieldConfig.options" :key="option.value" :label="option.value">{{ option.label }}</el-radio>
@@ -88,14 +93,19 @@
       <el-form ref="dataFormRef" :model="formData" :rules="rules" label-width="100px">
         #foreach($fieldConfig in $fieldConfigs)
           #if($fieldConfig.isShowInForm == 1)
-          <el-form-item :label="$fieldConfig.fieldComment" :key="$fieldConfig.fieldName">
+          <el-form-item abel="$fieldConfig.fieldComment" prop="$fieldConfig.fieldName">
             #if($fieldConfig.formType == "INPUT")
               <el-input v-model="formData.$fieldConfig.fieldName" :placeholder="'请输入$fieldConfig.fieldComment" />
             #elseif($fieldConfig.formType == "SELECT")
+              #if($fieldConfig.dictType != "")
+              <dictionary v-model="formData.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
+              #else
               <el-select v-model="formData.$fieldConfig.fieldName" :placeholder="'请选择$fieldConfig.fieldComment">
-                <!-- 这里可以根据具体需求生成select options -->
-                <el-option v-for="option in $fieldConfig.options" :key="option.value" :label="option.label" :value="option.value"></el-option>
+                  <el-option :key="1" :value="1" label="下拉项1"/>
+                  <el-option :key="2" :value="2" label="下拉项2"/>
+                  <el-option :key="3" :value="3" label="下拉项3"/>
               </el-select>
+              #end
             #elseif($fieldConfig.formType == "RADIO")
               <el-radio-group v-model="formData.$fieldConfig.fieldName">
                 <el-radio v-for="option in $fieldConfig.options" :key="option.value" :label="option.value">{{ option.label }}</el-radio>

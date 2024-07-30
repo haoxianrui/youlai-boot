@@ -60,6 +60,10 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     public Page<TablePageVO> getTablePage(TablePageQuery queryParams) {
         Page<TablePageVO> page = new Page<>(queryParams.getPageNum(), queryParams.getPageSize());
+        // 设置排除的表
+        List<String> excludeTables = generatorProperties.getExcludeTables();
+        queryParams.setExcludeTables(excludeTables);
+
         return databaseMapper.getTablePage(page, queryParams);
     }
 
