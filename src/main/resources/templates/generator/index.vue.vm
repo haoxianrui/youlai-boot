@@ -157,9 +157,6 @@
   const queryParams = reactive<${entityName}PageQuery>({
     pageNum: 1,
     pageSize: 10,
-    keywords: '',
-    name: '',
-    code: '',
   });
 
   // $!{businessName}表格数据
@@ -170,16 +167,19 @@
     title: "",
     visible: false,
   });
-  // $!{businessName}表单
-  const formData = reactive<${entityName}Form>({
-    keywords: '',
-    name: '',
-    code: '',
-  });
 
+  // $!{businessName}表单数据
+  const formData = reactive<${entityName}Form>({});
+
+  // $!{businessName}表单校验规则
   const rules = reactive({
-    name: [{ required: true, message: "请输入$!{businessName}名称", trigger: "blur" }],
-    code: [{ required: true, message: "请输入$!{businessName}编码", trigger: "blur" }],
+    #if($fieldConfigs)
+      #foreach($fieldConfig in ${fieldConfigs})
+        #if($fieldConfig.isShowInForm && $fieldConfig.isRequired)
+        ${fieldConfig.fieldName}: [{ required: true, message: "请输入${fieldConfig.fieldComment}", trigger: "blur" }],
+        #end
+      #end
+    #end
   });
 
   /** 查询$!{businessName} */
@@ -194,6 +194,7 @@
               loading.value = false;
             });
   }
+
   /** 重置$!{businessName}查询 */
   function handleResetQuery() {
     queryFormRef.value!.resetFields();
