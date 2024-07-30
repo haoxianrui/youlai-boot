@@ -75,6 +75,9 @@ public class GenConfigForm {
         @Schema(description = "是否必填")
         private Integer isRequired;
 
+        @Schema(description = "最大长度")
+        private Integer maxLength;
+
         @Schema(description = "表单类型")
         private FormTypeEnum formType;
 

@@ -33,6 +33,9 @@ public class ${entityName}Form implements Serializable {
 #if($fieldConfigs)
     #foreach($fieldConfig in ${fieldConfigs})
         #if($fieldConfig.isShowInForm)
+            #if("$!fieldConfig.fieldComment" != "")
+    @Schema(description = "${fieldConfig.fieldComment}")
+            #end
             #if($fieldConfig.isRequired)
                 #if($fieldConfig.fieldType == 'String')
     @NotBlank(message = "$fieldConfig.fieldComment不能为空")
@@ -40,10 +43,11 @@ public class ${entityName}Form implements Serializable {
     @NotNull(message = "$fieldConfig.fieldComment不能为空")
                 #end
             #end
-            #if("$!fieldConfig.fieldComment" != "")
-    @Schema(description = "${fieldConfig.fieldComment}")
-            #end
+    #if($fieldConfig.maxLength)
+    @Size(max=$fieldConfig.maxLength, message="$fieldConfig.fieldComment长度不能超过${fieldConfig.maxLength}个字符")
+    #end
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
+
         #end
     #end
 #end
