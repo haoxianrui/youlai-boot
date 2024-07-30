@@ -48,21 +48,18 @@ public class JwtValidationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-
         try {
             if (StrUtil.isNotBlank(token) && token.startsWith(SecurityConstants.JWT_TOKEN_PREFIX)) {
-                token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length()); // 去除 Bearer 前缀
-
+                // 去除 Bearer 前缀
+                token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
                 // 解析 Token
                 JWT jwt = JWTUtil.parseToken(token);
-
                 // 检查 Token 是否有效(验签 + 是否过期)
                 boolean isValidate = jwt.setKey(secretKey).validate(0);
                 if (!isValidate) {
                     ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
                     return;
                 }
-
                 // 检查 Token 是否已被加入黑名单(注销)
                 JSONObject payloads = jwt.getPayloads();
                 String jti = payloads.getStr(JWTPayload.JWT_ID);
@@ -71,11 +68,9 @@ public class JwtValidationFilter extends OncePerRequestFilter {
                     ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
                     return;
                 }
-
                 // Token 有效将其解析为 Authentication 对象，并设置到 Spring Security 上下文中
                 Authentication authentication = JwtUtils.getAuthentication(payloads);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
             }
         } catch (Exception e) {
             SecurityContextHolder.clearContext();

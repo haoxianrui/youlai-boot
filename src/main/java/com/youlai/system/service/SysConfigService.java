@@ -30,6 +30,14 @@ public interface SysConfigService extends IService<SysConfig> {
     boolean save(ConfigForm sysConfigForm);
 
     /**
+     * 获取系统配置表单数据
+     *
+     * @param id 系统配置ID
+     * @return
+     */
+    ConfigForm getConfigFormData(Long id);
+
+    /**
      * 编辑系统配置
      * @param id  系统配置ID
      * @param sysConfigForm 系统配置表单
@@ -43,5 +51,19 @@ public interface SysConfigService extends IService<SysConfig> {
      * @return 是否删除成功
      */
     boolean delete(Long ids);
+
+
+    /**
+     * 刷新系统配置缓存
+     * @return 是否刷新成功
+     */
+    boolean refreshCache();
+
+    /**
+     * 获取系统配置
+     * @param key 配置key
+     * @return 配置value
+     */
+    Object getSystemConfig(String key);
 
 }

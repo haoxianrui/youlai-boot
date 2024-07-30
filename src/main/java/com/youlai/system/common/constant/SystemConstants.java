@@ -23,4 +23,15 @@ public interface SystemConstants {
      * 超级管理员角色编码
      */
     String ROOT_ROLE_CODE = "ROOT";
+
+    /**
+     * 未删除状态
+     */
+    Integer NOT_DELETED_STATUS = 0;
+
+    /**
+     * 删除状态
+     */
+    Integer DELETED_STATUS = 1;
+
 }

@@ -2,6 +2,7 @@ package com.youlai.system.common.constant;
 
 /**
  * 符号和特殊符号常用类
+ *
  * @author Theo
  * @since 2024-7-29 11:46:08
  */

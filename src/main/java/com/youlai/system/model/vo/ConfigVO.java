@@ -10,10 +10,10 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
+ * 系统配置视图对象
+ *
  * @author Theo
- * @description: 系统配置VO
- * @Company 利盈智能
- * @date 2024-07-29 11:17:26
+ * @since 2024-07-30 14:49
  */
 @Data
 @Builder
@@ -21,6 +21,7 @@ import java.io.Serializable;
 @Schema(description = "系统配置VO")
 public class ConfigVO {
 
+    @Schema(description = "主键")
     private Long id;
 
     @Schema(description = "配置名称")
