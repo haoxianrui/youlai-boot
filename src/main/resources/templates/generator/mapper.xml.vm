@@ -9,7 +9,7 @@
             #set ($fields = [])
             #foreach($fieldConfig in ${fieldConfigs})
                 #if($fieldConfig.isShowInList)
-                    #set ($discard = $fields.add(${fieldConfig.columnName}))
+                #set ($discard = $fields.add(${fieldConfig.columnName}))
                 #end
             #end
             #foreach($field in $fields)
@@ -22,32 +22,38 @@
             #if($fieldConfigs)
                 #foreach($fieldConfig in ${fieldConfigs})
                     #if($fieldConfig.isShowInQuery)
-                        <if test="queryParams.${fieldConfig.fieldName} != null">
+            <if test="queryParams.${fieldConfig.fieldName} != null">
                             #set ($queryType = ${fieldConfig.queryType})
                             #if($queryType == "EQ")
-                                AND ${fieldConfig.columnName} = #{queryParams.${fieldConfig.fieldName}}
+                AND ${fieldConfig.columnName} = #{queryParams.${fieldConfig.fieldName}}
                             #elseif($queryType == "LIKE")
-                                AND ${fieldConfig.columnName} LIKE CONCAT('%', #{queryParams.${fieldConfig.fieldName}}, '%')
+                AND ${fieldConfig.columnName} LIKE CONCAT('%', #{queryParams.${fieldConfig.fieldName}}, '%')
                             #elseif($queryType == "IN")
-                                AND ${fieldConfig.columnName} IN
+                <if test="queryParams.${fieldConfig.fieldName}.size() > 0">
+                    AND ${fieldConfig.columnName} IN  <foreach collection="queryParams.${fieldConfig.fieldName}" item="item" open="(" close=")" separator=",">#{item}</foreach>
+                </if>
                             #elseif($queryType == "BETWEEN")
-                                AND ${fieldConfig.columnName} BETWEEN #{queryParams.${fieldConfig.fieldName}Start} AND #{queryParams.${fieldConfig.fieldName}End}
+                                #if(${fieldConfig.fieldType} == "LocalDateTime")
+                AND ${fieldConfig.columnName} BETWEEN STR_TO_DATE(#{queryParams.${fieldConfig.fieldName}Start}, '%Y-%m-%d %H:%i:%s') AND STR_TO_DATE(#{queryParams.${fieldConfig.fieldName}End}, '%Y-%m-%d %H:%i:%s')
+                                #else
+                AND ${fieldConfig.columnName} BETWEEN #{queryParams.${fieldConfig.fieldName}Start} AND #{queryParams.${fieldConfig.fieldName}End}
+                                #end
                             #elseif($queryType == "GT")
-                                AND ${fieldConfig.columnName} > #{queryParams.${fieldConfig.fieldName}}
+                AND ${fieldConfig.columnName} > #{queryParams.${fieldConfig.fieldName}}
                             #elseif($queryType == "GE")
-                                AND ${fieldConfig.columnName} >= #{queryParams.${fieldConfig.fieldName}}
+                AND ${fieldConfig.columnName} >= #{queryParams.${fieldConfig.fieldName}}
                             #elseif($queryType == "LT")
-                                AND ${fieldConfig.columnName} &lt; #{queryParams.${fieldConfig.fieldName}}
+                AND ${fieldConfig.columnName} &lt; #{queryParams.${fieldConfig.fieldName}}
                             #elseif($queryType == "LE")
-                                AND ${fieldConfig.columnName} &lt;= #{queryParams.${fieldConfig.fieldName}}
+                AND ${fieldConfig.columnName} &lt;= #{queryParams.${fieldConfig.fieldName}}
                             #elseif($queryType == "NE")
-                                AND ${fieldConfig.columnName} != #{queryParams.${fieldConfig.fieldName}}
+                AND ${fieldConfig.columnName} != #{queryParams.${fieldConfig.fieldName}}
                             #elseif($queryType == "LIKE_LEFT")
-                                AND ${fieldConfig.columnName} LIKE CONCAT('%', #{queryParams.${fieldConfig.fieldName}})
+                AND ${fieldConfig.columnName} LIKE CONCAT('%', #{queryParams.${fieldConfig.fieldName}})
                             #elseif($queryType == "LIKE_RIGHT")
-                                AND ${fieldConfig.columnName} LIKE CONCAT(#{queryParams.${fieldConfig.fieldName}}, '%')
+                AND ${fieldConfig.columnName} LIKE CONCAT(#{queryParams.${fieldConfig.fieldName}}, '%')
                             #end
-                        </if>
+            </if>
                     #end
                 #end
             #end
