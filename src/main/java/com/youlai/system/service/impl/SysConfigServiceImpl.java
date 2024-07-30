@@ -50,7 +50,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         Page<SysConfig> page = new Page<>(configPageQuery.getPageNum(), configPageQuery.getPageSize());
         QueryWrapper<SysConfig> query = new QueryWrapper<>();
         if(StringUtils.isNotBlank(configPageQuery.getKeywords())) {
-            query.and(q -> q.like("sys_key", configPageQuery.getKeywords()).or().like("sys_name", configPageQuery.getKeywords()));
+            query.and(q -> q.like("config_key", configPageQuery.getKeywords()).or().like("config_name", configPageQuery.getKeywords()));
         }
         Page<SysConfig> pageList = this.page(page, query);
         return sysConfigConverter.convertToPageVo(pageList);
@@ -63,7 +63,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public boolean save(ConfigForm configForm) {
-        Assert.isTrue(super.count(new QueryWrapper<SysConfig>().eq("sys_key", configForm.getSysKey())) == 0, "配置key已存在");
+        Assert.isTrue(super.count(new QueryWrapper<SysConfig>().eq("config_key", configForm.getConfigKey())) == 0, "配置key已存在");
         SysConfig sysConfig = sysConfigConverter.toEntity(configForm);
         sysConfig.setCreateBy(SecurityUtils.getUserId());
         sysConfig.setIsDeleted(SystemConstants.NOT_DELETED_STATUS);
@@ -90,7 +90,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public boolean edit(Long id, ConfigForm configForm) {
-        Assert.isTrue(super.count(new QueryWrapper<SysConfig>().eq("sys_key", configForm.getSysKey()).ne("id", id)) == 0, "配置key已存在");
+        Assert.isTrue(super.count(new QueryWrapper<SysConfig>().eq("config_key", configForm.getConfigKey()).ne("id", id)) == 0, "配置key已存在");
         SysConfig sysConfig = sysConfigConverter.toEntity(configForm);
         sysConfig.setUpdateBy(SecurityUtils.getUserId());
         return this.update(sysConfig, new QueryWrapper<SysConfig>().eq("id", id));
@@ -118,7 +118,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         redisTemplate.delete(RedisKeyConstants.SYSTEM_CONFIG_KEY);
         List<SysConfig> list = this.list();
         if (list != null) {
-            Map<String, String> map = list.stream().collect(Collectors.toMap(SysConfig::getSysKey, SysConfig::getSysValue));
+            Map<String, String> map = list.stream().collect(Collectors.toMap(SysConfig::getConfigKey, SysConfig::getConfigValue));
             redisTemplate.opsForHash().putAll(RedisKeyConstants.SYSTEM_CONFIG_KEY,map);
             return true;
         }

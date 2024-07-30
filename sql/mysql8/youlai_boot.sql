@@ -26,9 +26,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `sys_config`;
 CREATE TABLE `sys_config` (
       `id` bigint NOT NULL AUTO_INCREMENT,
-      `sys_name` varchar(50) NOT NULL COMMENT '配置名称',
-      `sys_key` varchar(50) NOT NULL COMMENT '配置key',
-      `sys_value` varchar(100) NOT NULL COMMENT '配置值',
+      `config_name` varchar(50) NOT NULL COMMENT '配置名称',
+      `config_key` varchar(50) NOT NULL COMMENT '配置key',
+      `config_value` varchar(100) NOT NULL COMMENT '配置值',
       `remark` varchar(200) DEFAULT NULL COMMENT '描述、备注',
       `create_time` datetime NOT NULL COMMENT '创建时间',
       `create_by` bigint NOT NULL COMMENT '创建人ID',
@@ -218,6 +218,12 @@ INSERT INTO `sys_menu` VALUES (112, 110, '0,110', '参数(type=2)', 1, NULL, 'ro
 INSERT INTO `sys_menu` VALUES (117, 1, '0,1', '系统日志', 1, 'Log', 'log', 'system/log/index', NULL, 0, 1, 1, 6, 'document', NULL, '2024-06-28 07:43:16', '2024-06-28 07:43:16', NULL);
 INSERT INTO `sys_menu` VALUES (118, 0, '0', '系统工具', 2, NULL, '/tool', 'Layout', NULL, 0, 1, 1, 2, 'menu', NULL, '2024-07-13 08:41:07', '2024-07-13 08:41:07', NULL);
 INSERT INTO `sys_menu` VALUES (119, 118, '0,118', '代码生成(Alpha)', 1, 'Generator', 'generator', 'generator/index', NULL, 0, 1, 1, 1, 'code', NULL, '2024-07-13 08:44:51', '2024-07-13 08:44:51', NULL);
+INSERT INTO `sys_menu` VALUES (120,1,'0,1','系统配置',1,'Config','config','system/config/index',NULL,0,1,1,7,'setting',NULL,'2024-07-30 16:29:24','2024-07-30 16:29:32',NULL);
+INSERT INTO `sys_menu` VALUES (121,120,'0,1,120','查询系统配置',4,NULL,'',NULL,'sys:config:query',0,1,1,1,'',NULL,'2024-07-30 16:29:54','2024-07-30 16:29:54',NULL);
+INSERT INTO `sys_menu` VALUES (122,120,'0,1,120','新增系统配置',4,NULL,'',NULL,'sys:config:add',0,1,1,2,'',NULL,'2024-07-30 16:30:12','2024-07-30 16:30:48',NULL);
+INSERT INTO `sys_menu` VALUES (123,120,'0,1,120','修改系统配置',4,NULL,'',NULL,'sys:config:update',0,1,1,3,'',NULL,'2024-07-30 16:30:31','2024-07-30 16:30:31',NULL);
+INSERT INTO `sys_menu` VALUES (124,120,'0,1,120','删除系统配置',4,NULL,'',NULL,'sys:config:delete',0,1,1,4,'',NULL,'2024-07-30 16:31:07','2024-07-30 16:31:07',NULL);
+INSERT INTO `sys_menu` VALUES (125,120,'0,1,120','刷新系统配置',4,NULL,'',NULL,'sys:config:refresh',0,1,1,5,'',NULL,'2024-07-30 16:31:25','2024-07-30 16:31:25',NULL);
 
 -- ----------------------------
 -- Table structure for sys_message
@@ -345,6 +351,12 @@ INSERT INTO `sys_role_menu` VALUES (2, 116);
 INSERT INTO `sys_role_menu` VALUES (2, 117);
 INSERT INTO `sys_role_menu` VALUES (2, 118);
 INSERT INTO `sys_role_menu` VALUES (2, 119);
+INSERT INTO `sys_role_menu` VALUES (2, 120);
+INSERT INTO `sys_role_menu` VALUES (2, 121);
+INSERT INTO `sys_role_menu` VALUES (2, 122);
+INSERT INTO `sys_role_menu` VALUES (2, 123);
+INSERT INTO `sys_role_menu` VALUES (2, 124);
+INSERT INTO `sys_role_menu` VALUES (2, 125);
 -- ----------------------------
 -- Table structure for sys_user
 -- ----------------------------

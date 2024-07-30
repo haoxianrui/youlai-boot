@@ -73,7 +73,7 @@ public class SysConfigController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "删除系统配置")
-    @PreAuthorize("@ss.hasPerm('business:config:delete')")
+    @PreAuthorize("@ss.hasPerm('sys:config:delete')")
     public Result<?> delete(@PathVariable Long id) {
         return Result.judge(sysConfigService.delete(id));
     }

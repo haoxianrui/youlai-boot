@@ -25,13 +25,13 @@ public class ConfigVO {
     private Long id;
 
     @Schema(description = "配置名称")
-    private String sysName;
+    private String configName;
 
     @Schema(description = "配置key")
-    private String sysKey;
+    private String configKey;
 
     @Schema(description = "配置值")
-    private String sysValue;
+    private String configValue;
 
     @Schema(description = "描述、备注")
     private String remark;
