@@ -81,5 +81,8 @@ public class GenConfigForm {
         @Schema(description = "查询类型")
         private QueryTypeEnum queryType;
 
+        @Schema(description = "字典类型")
+        private String dictType;
+
     }
 }

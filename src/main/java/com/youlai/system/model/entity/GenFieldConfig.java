@@ -96,4 +96,10 @@ public class GenFieldConfig extends BaseEntity {
     private String tsType;
 
 
+    /**
+     * 字典类型
+     */
+    private String dictType;
+
+
 }

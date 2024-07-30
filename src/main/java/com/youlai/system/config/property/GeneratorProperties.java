@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +31,6 @@ public class GeneratorProperties {
      */
     private Map<String, TemplateConfig> templateConfigs = MapUtil.newHashMap(true);
 
-
     /**
      * 后端应用名
      */
@@ -41,6 +41,11 @@ public class GeneratorProperties {
      * 前端应用名
      */
     private String frontendAppName;
+
+    /**
+     * 排除数据表
+     */
+    private List<String> excludeTables;
 
     /**
      * 模板配置

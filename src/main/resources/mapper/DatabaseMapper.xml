@@ -20,6 +20,13 @@
             <if test="queryParams.keywords != null and queryParams.keywords.trim() neq ''">
                 AND TABLE_NAME LIKE CONCAT('%',#{queryParams.keywords},'%')
             </if>
+        <!-- 排除的表 -->
+        <if test="queryParams.excludeTables != null and queryParams.excludeTables.size() > 0">
+            AND TABLE_NAME NOT IN
+            <foreach collection="queryParams.excludeTables" item="excludeTable" open="(" close=")" separator=",">
+                #{excludeTable}
+            </foreach>
+        </if>
         ORDER BY
             CREATE_TIME DESC
     </select>

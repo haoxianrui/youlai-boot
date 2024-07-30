@@ -222,7 +222,18 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         return dictItemConverter.convertToOption(dictItems);
     }
 
-
+    /**
+     * 获取字典列表
+     */
+    @Override
+    public List<Option> getDictList() {
+        return this.list(new LambdaQueryWrapper<SysDict>()
+                        .eq(SysDict::getStatus, 1)
+                        .select(SysDict::getName, SysDict::getCode)
+                ).stream()
+                .map(dict -> new Option(dict.getCode(), dict.getName()))
+                .toList();
+    }
 }
 
 

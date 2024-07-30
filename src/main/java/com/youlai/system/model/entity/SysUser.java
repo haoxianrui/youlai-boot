@@ -1,7 +1,5 @@
 package com.youlai.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.youlai.system.common.base.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,11 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SysUser extends BaseEntity {
-    /**
-     * 用户 ID
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
 
     /**
      * 用户名
