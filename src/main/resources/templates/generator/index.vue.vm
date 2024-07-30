@@ -6,12 +6,12 @@
           #if($fieldConfig.isShowInQuery == 1)
             <el-form-item label="$fieldConfig.fieldComment" prop="$fieldConfig.fieldName">
               #if($fieldConfig.formType == "INPUT")
-                <el-input v-model="queryParams.$fieldConfig.fieldName" :placeholder="$fieldConfig.fieldComment" clearable @keyup.enter="handleQuery" />
+                <el-input v-model="queryParams.$fieldConfig.fieldName" placeholder="$fieldConfig.fieldComment" clearable @keyup.enter="handleQuery" />
               #elseif($fieldConfig.formType == "SELECT")
                 #if($fieldConfig.dictType != "")
                   <dictionary v-model="formData.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
                 #else
-                  <el-select v-model="formData.$fieldConfig.fieldName" :placeholder="'请选择$fieldConfig.fieldComment">
+                  <el-select v-model="formData.$fieldConfig.fieldName" placeholder="'请选择$fieldConfig.fieldComment">
                     <el-option :key="1" :value="1" label="下拉项1"/>
                     <el-option :key="2" :value="2" label="下拉项2"/>
                     <el-option :key="3" :value="3" label="下拉项3"/>
@@ -64,9 +64,9 @@
         #foreach($fieldConfig in $fieldConfigs)
           #if($fieldConfig.isShowInList == 1)
             <el-table-column
-                :key="$fieldConfig.fieldName"
-                :label="$fieldConfig.fieldComment"
-                :prop="$fieldConfig.fieldName"
+                key="$fieldConfig.fieldName"
+                label="$fieldConfig.fieldComment"
+                prop="$fieldConfig.fieldName"
                 min-width="100"
             />
           #end
@@ -95,12 +95,12 @@
           #if($fieldConfig.isShowInForm == 1)
           <el-form-item abel="$fieldConfig.fieldComment" prop="$fieldConfig.fieldName">
             #if($fieldConfig.formType == "INPUT")
-              <el-input v-model="formData.$fieldConfig.fieldName" :placeholder="'请输入$fieldConfig.fieldComment" />
+              <el-input v-model="formData.$fieldConfig.fieldName" placeholder="'请输入$fieldConfig.fieldComment" />
             #elseif($fieldConfig.formType == "SELECT")
               #if($fieldConfig.dictType != "")
               <dictionary v-model="formData.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
               #else
-              <el-select v-model="formData.$fieldConfig.fieldName" :placeholder="'请选择$fieldConfig.fieldComment">
+              <el-select v-model="formData.$fieldConfig.fieldName" placeholder="'请选择$fieldConfig.fieldComment">
                   <el-option :key="1" :value="1" label="下拉项1"/>
                   <el-option :key="2" :value="2" label="下拉项2"/>
                   <el-option :key="3" :value="3" label="下拉项3"/>
@@ -115,15 +115,15 @@
                 <el-checkbox v-for="option in $fieldConfig.options" :key="option.value" :label="option.value">{{ option.label }}</el-checkbox>
               </el-checkbox-group>
             #elseif($fieldConfig.formType == "INPUT_NUMBER")
-              <el-input-number v-model="formData.$fieldConfig.fieldName" :placeholder="'请输入$fieldConfig.fieldComment" />
+              <el-input-number v-model="formData.$fieldConfig.fieldName" placeholder="'请输入$fieldConfig.fieldComment" />
             #elseif($fieldConfig.formType == "SWITCH")
               <el-switch v-model="formData.$fieldConfig.fieldName" />
             #elseif($fieldConfig.formType == "TEXT_AREA")
-              <el-input type="textarea" v-model="formData.$fieldConfig.fieldName" :placeholder="'请输入$fieldConfig.fieldComment" />
+              <el-input type="textarea" v-model="formData.$fieldConfig.fieldName" placeholder="'请输入$fieldConfig.fieldComment" />
             #elseif($fieldConfig.formType == "DATE_TIME")
-              <el-date-picker v-model="formData.$fieldConfig.fieldName" type="datetime" :placeholder="'请选择$fieldConfig.fieldComment" />
+              <el-date-picker v-model="formData.$fieldConfig.fieldName" type="datetime" placeholder="'请选择$fieldConfig.fieldComment" />
             #elseif($fieldConfig.formType == "DATE")
-              <el-date-picker v-model="formData.$fieldConfig.fieldName" type="date" :placeholder="'请选择$fieldConfig.fieldComment" />
+              <el-date-picker v-model="formData.$fieldConfig.fieldName" type="date" placeholder="'请选择$fieldConfig.fieldComment" />
             #end
           </el-form-item>
           #end
@@ -147,14 +147,14 @@
 
   import ${entityName}API, { ${entityName}PageVO, ${entityName}Form, ${entityName}PageQuery } from "@/api/${lowerFirstEntityName}";
 
-  const queryFormRef = ref(null);
-  const dataFormRef = ref(null);
+  const queryFormRef = ref(ElForm);
+  const dataFormRef = ref(ElForm);
 
   const loading = ref(false);
   const ids = ref<number[]>([]);
   const total = ref(0);
 
-  const queryParams = reactive<RolePageQuery>({
+  const queryParams = reactive<${entityName}PageQuery>({
     pageNum: 1,
     pageSize: 10,
     keywords: '',
@@ -163,7 +163,7 @@
   });
 
   // $!{businessName}表格数据
-  const pageData = ref<RolePageVO[]>([]);
+  const pageData = ref<${entityName}PageVO[]>([]);
 
   // 弹窗
   const dialog = reactive({
@@ -171,7 +171,7 @@
     visible: false,
   });
   // $!{businessName}表单
-  const formData = reactive<RoleForm>({
+  const formData = reactive<${entityName}Form>({
     keywords: '',
     name: '',
     code: '',
@@ -196,7 +196,7 @@
   }
   /** 重置$!{businessName}查询 */
   function handleResetQuery() {
-    queryFormRef.value.resetFields();
+    queryFormRef.value!.resetFields();
     queryParams.pageNum = 1;
     handleQuery();
   }
