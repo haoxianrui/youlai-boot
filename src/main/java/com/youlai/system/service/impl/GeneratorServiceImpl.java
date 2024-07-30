@@ -140,18 +140,19 @@ public class GeneratorServiceImpl implements GeneratorService {
     /**
      * 创建默认字段配置
      *
-     * @param tableColumn 表字段元数据
+     * @param columnMetaData 表字段元数据
      * @return
      */
-    private GenFieldConfig createDefaultFieldConfig(ColumnMetaData tableColumn) {
+    private GenFieldConfig createDefaultFieldConfig(ColumnMetaData columnMetaData) {
         GenFieldConfig fieldConfig = new GenFieldConfig();
-        fieldConfig.setColumnName(tableColumn.getColumnName());
-        fieldConfig.setColumnType(tableColumn.getDataType());
-        fieldConfig.setFieldComment(tableColumn.getColumnComment());
-        fieldConfig.setFieldName(StrUtil.toCamelCase(tableColumn.getColumnName()));
-        fieldConfig.setIsRequired("YES".equals(tableColumn.getIsNullable()) ? 1 : 0);
+        fieldConfig.setColumnName(columnMetaData.getColumnName());
+        fieldConfig.setColumnType(columnMetaData.getDataType());
+        fieldConfig.setFieldComment(columnMetaData.getColumnComment());
+        fieldConfig.setFieldName(StrUtil.toCamelCase(columnMetaData.getColumnName()));
+        fieldConfig.setIsRequired("YES".equals(columnMetaData.getIsNullable()) ? 1 : 0);
         fieldConfig.setFormType(FormTypeEnum.INPUT);
         fieldConfig.setQueryType(QueryTypeEnum.EQ);
+        fieldConfig.setMaxLength(columnMetaData.getCharacterMaximumLength());
         return fieldConfig;
     }
 
@@ -316,12 +317,26 @@ public class GeneratorServiceImpl implements GeneratorService {
         bindMap.put("businessName", genConfig.getBusinessName());
         bindMap.put("fieldConfigs", fieldConfigs);
 
+        boolean hasLocalDateTime = false;
+        boolean hasBigDecimal = false;
+        boolean hasRequiredField = false;
+
         for (GenFieldConfig fieldConfig : fieldConfigs) {
-            bindMap.put("hasLocalDateTime", "LocalDateTime".equals(fieldConfig.getFieldType()));
-            bindMap.put("hasBigDecimal", "BigDecimal".equals(fieldConfig.getFieldType()));
-            bindMap.put("hasRequiredField", ObjectUtil.equals(fieldConfig.getIsRequired(), 1));
+            if ("LocalDateTime".equals(fieldConfig.getFieldType())) {
+                hasLocalDateTime = true;
+            }
+            if ("BigDecimal".equals(fieldConfig.getFieldType())) {
+                hasBigDecimal = true;
+            }
+            if (ObjectUtil.equals(fieldConfig.getIsRequired(), 1)) {
+                hasRequiredField = true;
+            }
             fieldConfig.setTsType(JavaTypeEnum.getTsTypeByJavaType(fieldConfig.getFieldType()));
         }
+
+        bindMap.put("hasLocalDateTime", hasLocalDateTime);
+        bindMap.put("hasBigDecimal", hasBigDecimal);
+        bindMap.put("hasRequiredField", hasRequiredField);
 
         TemplateEngine templateEngine = TemplateUtil.createEngine(new TemplateConfig("templates", TemplateConfig.ResourceMode.CLASSPATH));
         Template template = templateEngine.getTemplate(templateConfig.getTemplatePath());
