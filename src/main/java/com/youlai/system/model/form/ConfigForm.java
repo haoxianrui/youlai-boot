@@ -28,8 +28,8 @@ public class ConfigForm implements Serializable {
     @Schema(description = "配置名称")
     private String configName;
 
-    @NotBlank(message = "配置key不能为空")
-    @Schema(description = "配置key")
+    @NotBlank(message = "配置键不能为空")
+    @Schema(description = "配置键")
     private String configKey;
 
     @NotBlank(message = "配置值不能为空")

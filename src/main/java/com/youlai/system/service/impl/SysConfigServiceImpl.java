@@ -63,7 +63,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public boolean save(ConfigForm configForm) {
-        Assert.isTrue(super.count(new QueryWrapper<SysConfig>().eq("config_key", configForm.getConfigKey())) == 0, "配置key已存在");
+        Assert.isTrue(super.count(new QueryWrapper<SysConfig>().eq("config_key", configForm.getConfigKey())) == 0, "配置键已存在");
         SysConfig sysConfig = sysConfigConverter.toEntity(configForm);
         sysConfig.setCreateBy(SecurityUtils.getUserId());
         sysConfig.setIsDeleted(SystemConstants.NOT_DELETED_STATUS);
@@ -90,7 +90,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public boolean edit(Long id, ConfigForm configForm) {
-        Assert.isTrue(super.count(new QueryWrapper<SysConfig>().eq("config_key", configForm.getConfigKey()).ne("id", id)) == 0, "配置key已存在");
+        Assert.isTrue(super.count(new QueryWrapper<SysConfig>().eq("config_key", configForm.getConfigKey()).ne("id", id)) == 0, "配置键已存在");
         SysConfig sysConfig = sysConfigConverter.toEntity(configForm);
         sysConfig.setUpdateBy(SecurityUtils.getUserId());
         return this.update(sysConfig, new QueryWrapper<SysConfig>().eq("id", id));
@@ -127,7 +127,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
     /**
      * 获取系统配置
-     * @param key 配置key
+     * @param key 配置键
      * @return 配置value
      */
     @Override

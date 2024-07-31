@@ -27,7 +27,7 @@ public class ConfigVO {
     @Schema(description = "配置名称")
     private String configName;
 
-    @Schema(description = "配置key")
+    @Schema(description = "配置键")
     private String configKey;
 
     @Schema(description = "配置值")

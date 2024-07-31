@@ -61,7 +61,7 @@ public interface SysConfigService extends IService<SysConfig> {
 
     /**
      * 获取系统配置
-     * @param key 配置key
+     * @param key 配置键
      * @return 配置value
      */
     Object getSystemConfig(String key);
