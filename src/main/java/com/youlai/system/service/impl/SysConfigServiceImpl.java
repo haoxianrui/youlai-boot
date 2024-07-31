@@ -1,5 +1,6 @@
 package com.youlai.system.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -43,22 +44,27 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
     /**
      * 分页查询系统配置
+     *
      * @param configPageQuery 查询参数
      * @return 系统配置分页列表
      */
     @Override
     public IPage<ConfigVO> page(ConfigPageQuery configPageQuery) {
         Page<SysConfig> page = new Page<>(configPageQuery.getPageNum(), configPageQuery.getPageSize());
-        LambdaQueryWrapper<SysConfig> query = new LambdaQueryWrapper<>();
-        if(StringUtils.isNotBlank(configPageQuery.getKeywords())) {
-            query.and(q -> q.like(SysConfig::getConfigKey, configPageQuery.getKeywords()).or().like(SysConfig::getConfigName, configPageQuery.getKeywords()));
-        }
+        String keywords = configPageQuery.getKeywords();
+        LambdaQueryWrapper<SysConfig> query = new LambdaQueryWrapper<SysConfig>()
+                .and(StrUtil.isNotBlank(keywords),
+                    q -> q.like(StrUtil.isNotBlank(keywords), SysConfig::getConfigKey, keywords)
+                        .or()
+                        .like(StrUtil.isNotBlank(keywords), SysConfig::getConfigName, keywords)
+                );
         Page<SysConfig> pageList = this.page(page, query);
         return sysConfigConverter.convertToPageVo(pageList);
     }
 
     /**
      * 保存系统配置
+     *
      * @param configForm 系统配置表单
      * @return 是否保存成功
      */
@@ -86,7 +92,8 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
     /**
      * 编辑系统配置
-     * @param id  系统配置ID
+     *
+     * @param id         系统配置ID
      * @param configForm 系统配置表单
      * @return 是否编辑成功
      */
@@ -97,24 +104,26 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
                 "配置键已存在");
         SysConfig sysConfig = sysConfigConverter.toEntity(configForm);
         sysConfig.setUpdateBy(SecurityUtils.getUserId());
-        return this.update(sysConfig, new QueryWrapper<SysConfig>().eq("id", id));
+        return this.update(sysConfig, new LambdaQueryWrapper<SysConfig>().eq(SysConfig::getId,id));
     }
 
     /**
      * 删除系统配置
+     *
      * @param id 系统配置ID
      * @return 是否删除成功
      */
     @Override
     public boolean delete(Long id) {
         if (id != null) {
-            return super.remove(new LambdaQueryWrapper<SysConfig>().eq(SysConfig::getId, id));
+            return super.remove(new LambdaQueryWrapper<SysConfig>().eq(SysConfig::getId,id));
         }
         return false;
     }
 
     /**
      * 刷新系统配置缓存
+     *
      * @return 是否刷新成功
      */
     @Override
@@ -123,7 +132,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         List<SysConfig> list = this.list();
         if (list != null) {
             Map<String, String> map = list.stream().collect(Collectors.toMap(SysConfig::getConfigKey, SysConfig::getConfigValue));
-            redisTemplate.opsForHash().putAll(RedisKeyConstants.SYSTEM_CONFIG_KEY,map);
+            redisTemplate.opsForHash().putAll(RedisKeyConstants.SYSTEM_CONFIG_KEY, map);
             return true;
         }
         return false;
@@ -131,12 +140,13 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
     /**
      * 获取系统配置
+     *
      * @param key 配置键
      * @return 配置值
      */
     @Override
     public Object getSystemConfig(String key) {
-        if(StringUtils.isNotBlank(key)){
+        if (StringUtils.isNotBlank(key)) {
             return redisTemplate.opsForHash().get(RedisKeyConstants.SYSTEM_CONFIG_KEY, key);
         }
         return null;
