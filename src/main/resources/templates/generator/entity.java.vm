@@ -24,12 +24,12 @@ public class ${entityName} extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-#foreach($field in ${table.fields})
-#if("$!field.comment" != "")
+#foreach($fieldConfig in ${fieldConfigs})
+#if("$!fieldConfig.fieldComment" != "")
     /**
-     * ${field.comment}
+     * ${fieldConfig.fieldComment}
      */
 #end
-    private ${field.propertyType} ${field.propertyName};
+    private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
 #end
 }
