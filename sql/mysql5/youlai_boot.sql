@@ -446,7 +446,7 @@ CREATE TABLE `gen_config` (
                               `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                               `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
                               PRIMARY KEY (`id`),
-                              UNIQUE KEY `uk_tablename` (`table_name`)
+                              UNIQUE KEY `uk_tablename_deleted` (`table_name`,`is_deleted`) USING BTREE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='代码生成基础配置表';
 
 -- ----------------------------
