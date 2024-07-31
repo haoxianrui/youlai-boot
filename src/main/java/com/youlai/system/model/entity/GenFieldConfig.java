@@ -1,6 +1,7 @@
 package com.youlai.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -101,5 +102,6 @@ public class GenFieldConfig extends BaseEntity {
      */
     private String dictType;
 
-
+    @TableLogic
+    private Integer isDeleted;
 }

@@ -48,5 +48,11 @@ public interface GeneratorService {
      */
     void saveGenConfig(GenConfigForm formData);
 
-
+    /**
+     * 删除代码生成配置
+     *
+     * @param tableName 表名
+     * @return
+     */
+    boolean deleteGenConfig(String tableName);
 }

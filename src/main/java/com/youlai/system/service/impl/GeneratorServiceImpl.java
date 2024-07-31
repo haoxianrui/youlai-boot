@@ -177,6 +177,28 @@ public class GeneratorServiceImpl implements GeneratorService {
         genFieldConfigService.saveOrUpdateBatch(genFieldConfigs);
     }
 
+    /**
+     * 删除代码生成配置
+     *
+     * @param tableName 表名
+     * @return
+     */
+    @Override
+    public boolean deleteGenConfig(String tableName) {
+        GenConfig genConfig = genConfigService.getOne(new LambdaQueryWrapper<GenConfig>()
+                .eq(GenConfig::getTableName, tableName));
+
+        boolean result = genConfigService.remove(new LambdaQueryWrapper<GenConfig>()
+                .eq(GenConfig::getTableName, tableName)
+        );
+        if (result) {
+            genFieldConfigService.remove(new LambdaQueryWrapper<GenFieldConfig>()
+                    .eq(GenFieldConfig::getConfigId, genConfig.getId())
+            );
+        }
+        return result;
+    }
+
 
     /**
      * 获取预览生成代码
@@ -225,7 +247,7 @@ public class GeneratorServiceImpl implements GeneratorService {
             // controller
             String subPackageName = templateConfig.getPackageName();
             // 文件路径 com.youlai.system.controller
-            String filePath = getFilePath(templateName, packageName, subPackageName,entityName);
+            String filePath = getFilePath(templateName, packageName, subPackageName, entityName);
             previewVO.setPath(filePath);
 
             /* 3. 生成文件内容 */
@@ -259,7 +281,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         return entityName + templateName + extension;
     }
 
-    private String getFilePath(String templateName, String packageName, String subPackageName,String entityName) {
+    private String getFilePath(String templateName, String packageName, String subPackageName, String entityName) {
         String path;
         if ("MapperXml".equals(templateName)) {
             path = (generatorProperties.getBackendAppName()
@@ -267,19 +289,19 @@ public class GeneratorServiceImpl implements GeneratorService {
                     + "src" + File.separator + "main" + File.separator + "resources"
                     + File.separator + subPackageName
             );
-        } else if ("API".equals(templateName)  ) {
+        } else if ("API".equals(templateName)) {
             path = (generatorProperties.getFrontendAppName()
                     + File.separator
                     + "src" + File.separator + subPackageName
             );
-        } else if("VIEW".equals(templateName)){
+        } else if ("VIEW".equals(templateName)) {
             path = (generatorProperties.getFrontendAppName()
                     + File.separator
                     + "src" + File.separator + subPackageName
                     + File.separator
                     + StrUtil.toSymbolCase(entityName, '-')
             );
-        }else {
+        } else {
             path = (generatorProperties.getBackendAppName()
                     + File.separator
                     + "src" + File.separator + "main" + File.separator + "java"

@@ -42,7 +42,8 @@ public class GeneratorController {
     @Operation(summary = "获取代码生成配置")
     @GetMapping("/{tableName}/config")
     public Result<GenConfigForm> getGenConfigFormData(
-            @Parameter(description = "表名", example = "sys_user") @PathVariable String tableName) {
+            @Parameter(description = "表名", example = "sys_user") @PathVariable String tableName
+    ) {
         GenConfigForm formData = generatorService.getGenConfigFormData(tableName);
         return Result.success(formData);
     }
@@ -52,6 +53,15 @@ public class GeneratorController {
     public Result saveGenConfig(@RequestBody GenConfigForm formData) {
         generatorService.saveGenConfig(formData);
         return Result.success();
+    }
+
+    @Operation(summary = "删除代码生成配置")
+    @DeleteMapping("/{tableName}/config")
+    public Result deleteGenConfig(
+            @Parameter(description = "表名", example = "sys_user") @PathVariable String tableName
+    ) {
+        boolean result = generatorService.deleteGenConfig(tableName);
+        return Result.judge(result);
     }
 
     @Operation(summary = "获取预览生成代码")
