@@ -38,6 +38,9 @@ public class GenConfigForm {
     @Schema(description = "作者",example = "youlaitech")
     private String author;
 
+    @Schema(description = "上级菜单ID",example = "1")
+    private Long parentMenuId;
+
     @Schema(description = "字段配置列表")
     private List<FieldConfig> fieldConfigs;
 

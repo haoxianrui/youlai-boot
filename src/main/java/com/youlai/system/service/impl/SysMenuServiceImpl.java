@@ -351,4 +351,41 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     }
 
+    /**
+     * 为代码生成添加菜单
+     *
+     * @param parentMenuId 父菜单ID
+     * @param entityName   实体名称
+     */
+    @Override
+    public void addMenuForCodeGeneration(Long parentMenuId, String businessName, String entityName) {
+        SysMenu parentMenu = this.getById(parentMenuId);
+        Assert.notNull(parentMenu, "父菜单不存在");
+
+        long count = this.count(new LambdaQueryWrapper<SysMenu>().eq(SysMenu::getRouteName, entityName));
+        if (count > 0) {
+            return;
+        }
+
+        SysMenu menu = new SysMenu();
+        menu.setParentId(parentMenuId);
+        menu.setName(businessName);
+
+        menu.setRouteName(entityName);
+        menu.setRoutePath(StrUtil.toUnderlineCase(entityName));
+        menu.setComponent(StrUtil.toUnderlineCase(entityName) + "/index");
+        menu.setType(MenuTypeEnum.CATALOG);
+        menu.setSort(0);
+        menu.setVisible(1);
+        boolean result = this.save(menu);
+
+        if (result) {
+            // 生成treePath
+            String treePath = generateMenuTreePath(parentMenuId);
+            menu.setTreePath(treePath);
+            this.updateById(menu);
+        }
+
+    }
+
 }

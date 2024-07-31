@@ -93,7 +93,6 @@ public class GenFieldConfig extends BaseEntity {
      */
     private Integer isRequired;
 
-
     /**
      * TypeScript类型
      */
@@ -101,12 +100,8 @@ public class GenFieldConfig extends BaseEntity {
     @JsonIgnore
     private String tsType;
 
-
     /**
      * 字典类型
      */
     private String dictType;
-
-    @TableLogic
-    private Integer isDeleted;
 }

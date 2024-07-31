@@ -30,6 +30,7 @@ import com.youlai.system.model.vo.TablePageVO;
 import com.youlai.system.service.GeneratorService;
 import com.youlai.system.service.GenConfigService;
 import com.youlai.system.service.GenFieldConfigService;
+import com.youlai.system.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     private final GenConfigService genConfigService;
     private final GenFieldConfigService genFieldConfigService;
     private final GenConfigConverter genConfigConverter;
+    private final SysMenuService menuService;
 
     /**
      * 数据表分页列表
@@ -98,9 +100,6 @@ public class GeneratorServiceImpl implements GeneratorService {
             String entityName = StrUtil.toCamelCase(StrUtil.removePrefix(tableName, tableName.split("_")[0]));
             genConfig.setEntityName(entityName);
 
-            String packageName = SystemApplication.class.getPackageName();
-            genConfig.setPackageName(packageName);
-
             genConfig.setAuthor(generatorProperties.getDefaultConfig().getAuthor());
 
         }
@@ -125,7 +124,7 @@ public class GeneratorServiceImpl implements GeneratorService {
                         .filter(item -> StrUtil.equals(item.getColumnName(), columnName))
                         .findFirst()
                         .orElseGet(() -> createDefaultFieldConfig(tableColumn));
-                if (genFieldConfig.getFieldSort() == null){
+                if (genFieldConfig.getFieldSort() == null) {
                     genFieldConfig.setFieldSort(++maxSort);
                 }
                 // 根据列类型设置字段类型
@@ -171,6 +170,12 @@ public class GeneratorServiceImpl implements GeneratorService {
     public void saveGenConfig(GenConfigForm formData) {
         GenConfig genConfig = genConfigConverter.toGenConfig(formData);
         genConfigService.saveOrUpdate(genConfig);
+
+        // 如果选择上级菜单
+        Long parentMenuId = formData.getParentMenuId();
+        if (parentMenuId != null) {
+            menuService.addMenuForCodeGeneration(parentMenuId,genConfig.getBusinessName(),genConfig.getEntityName());
+        }
 
         List<GenFieldConfig> genFieldConfigs = genConfigConverter.toGenFieldConfig(formData.getFieldConfigs());
 

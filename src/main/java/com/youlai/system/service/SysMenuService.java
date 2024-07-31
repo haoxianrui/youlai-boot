@@ -63,4 +63,12 @@ public interface SysMenuService extends IService<SysMenu> {
      * @param id 菜单ID
      */
     boolean deleteMenu(Long id);
+
+    /**
+     * 为代码生成添加菜单
+     *
+     * @param parentMenuId 父菜单ID
+     * @param entityName   实体名
+     */
+    void addMenuForCodeGeneration(Long parentMenuId,String businessName, String entityName);
 }

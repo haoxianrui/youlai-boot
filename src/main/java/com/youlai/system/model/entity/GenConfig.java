@@ -3,7 +3,6 @@ package com.youlai.system.model.entity;
 import com.baomidou.mybatisplus.annotation.*;
 
 import com.youlai.system.common.base.BaseEntity;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,7 +43,7 @@ public class GenConfig extends BaseEntity {
     private String businessName;
 
     /**
-     * 上级菜单ID
+     * 父菜单ID
      */
     private Long parentMenuId;
 
