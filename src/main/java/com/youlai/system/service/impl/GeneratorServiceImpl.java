@@ -190,7 +190,7 @@ public class GeneratorServiceImpl implements GeneratorService {
      * @return
      */
     @Override
-    public boolean deleteGenConfig(String tableName) {
+    public void deleteGenConfig(String tableName) {
         GenConfig genConfig = genConfigService.getOne(new LambdaQueryWrapper<GenConfig>()
                 .eq(GenConfig::getTableName, tableName));
 
@@ -202,7 +202,6 @@ public class GeneratorServiceImpl implements GeneratorService {
                     .eq(GenFieldConfig::getConfigId, genConfig.getId())
             );
         }
-        return result;
     }
 
 

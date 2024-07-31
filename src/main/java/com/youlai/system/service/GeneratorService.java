@@ -54,5 +54,5 @@ public interface GeneratorService {
      * @param tableName 表名
      * @return
      */
-    boolean deleteGenConfig(String tableName);
+    void deleteGenConfig(String tableName);
 }

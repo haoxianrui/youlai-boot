@@ -60,8 +60,8 @@ public class GeneratorController {
     public Result deleteGenConfig(
             @Parameter(description = "表名", example = "sys_user") @PathVariable String tableName
     ) {
-        boolean result = generatorService.deleteGenConfig(tableName);
-        return Result.judge(result);
+        generatorService.deleteGenConfig(tableName);
+        return Result.success();
     }
 
     @Operation(summary = "获取预览生成代码")

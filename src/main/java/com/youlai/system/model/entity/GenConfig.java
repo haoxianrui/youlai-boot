@@ -52,8 +52,4 @@ public class GenConfig extends BaseEntity {
      * 作者
      */
     private String author;
-
-
-    @TableLogic
-    private Integer isDeleted;
 }
