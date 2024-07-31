@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 数据库服务实现类
@@ -112,9 +113,11 @@ public class GeneratorServiceImpl implements GeneratorService {
         if (CollectionUtil.isNotEmpty(tableColumns)) {
             // 查询字段生成配置
             List<GenFieldConfig> fieldConfigList = genFieldConfigService.list(
-                    new LambdaQueryWrapper<>(GenFieldConfig.class)
+                    new LambdaQueryWrapper<GenFieldConfig>()
                             .eq(GenFieldConfig::getConfigId, genConfig.getId())
+                            .orderByAsc(GenFieldConfig::getFieldSort)
             );
+            Integer maxSort = fieldConfigList.stream().map(GenFieldConfig::getFieldSort).max(Integer::compareTo).orElseGet(() -> 0);
             for (ColumnMetaData tableColumn : tableColumns) {
                 // 根据列名获取字段生成配置
                 String columnName = tableColumn.getColumnName();
@@ -122,7 +125,9 @@ public class GeneratorServiceImpl implements GeneratorService {
                         .filter(item -> StrUtil.equals(item.getColumnName(), columnName))
                         .findFirst()
                         .orElseGet(() -> createDefaultFieldConfig(tableColumn));
-
+                if (genFieldConfig.getFieldSort() == null){
+                    genFieldConfig.setFieldSort(++maxSort);
+                }
                 // 根据列类型设置字段类型
                 String fieldType = genFieldConfig.getFieldType();
                 if (StrUtil.isBlank(fieldType)) {
@@ -132,8 +137,9 @@ public class GeneratorServiceImpl implements GeneratorService {
                 genFieldConfigs.add(genFieldConfig);
             }
         }
-        GenConfigForm configFormData = genConfigConverter.toGenConfigForm(genConfig, genFieldConfigs);
-        return configFormData;
+        //对genFieldConfigs按照fieldSort排序
+        genFieldConfigs = genFieldConfigs.stream().sorted(Comparator.comparing(GenFieldConfig::getFieldSort)).collect(Collectors.toList());
+        return genConfigConverter.toGenConfigForm(genConfig, genFieldConfigs);
     }
 
 
@@ -218,6 +224,8 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         List<GenFieldConfig> fieldConfigs = genFieldConfigService.list(new LambdaQueryWrapper<GenFieldConfig>()
                 .eq(GenFieldConfig::getConfigId, genConfig.getId())
+                .orderByAsc(GenFieldConfig::getFieldSort)
+
         );
         Assert.isTrue(CollectionUtil.isNotEmpty(fieldConfigs), "未找到字段生成配置");
 

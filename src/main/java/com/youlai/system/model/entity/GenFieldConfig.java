@@ -49,6 +49,11 @@ public class GenFieldConfig extends BaseEntity {
     private String fieldName;
 
     /**
+     * 字段排序
+     */
+    private Integer fieldSort;
+
+    /**
      * 字段类型
      */
     private String fieldType;
