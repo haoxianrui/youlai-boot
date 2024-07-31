@@ -33,8 +33,8 @@ CREATE TABLE `sys_config` (
           `create_by` bigint NOT NULL COMMENT '创建人ID',
           `update_time` datetime DEFAULT NULL COMMENT '更新时间',
           `update_by` bigint DEFAULT NULL COMMENT '更新人ID',
-          `is_deleted` tinyint(1) NOT NULL COMMENT '逻辑删除标识(0-未删除 1-已删除)',
-                              PRIMARY KEY (`id`)
+          `is_deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除标识(0-未删除 1-已删除)',
+          PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='系统配置';
 
 -- ----------------------------

@@ -7,6 +7,7 @@ package com.youlai.system.common.constant;
  * @since 2024-7-29 11:46:08
  */
 public interface SymbolConstant {
+
     /**
      * 符号：点
      */
@@ -28,7 +29,7 @@ public interface SymbolConstant {
     String COMMA = ",";
 
     /**
-     * 符号：左花括号 }
+     * 符号：左花括号 {
      */
     String LEFT_CURLY_BRACKET = "{";
 
