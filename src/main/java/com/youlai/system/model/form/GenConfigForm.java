@@ -57,6 +57,9 @@ public class GenConfigForm {
         @Schema(description = "字段名")
         private String fieldName;
 
+        @Schema(description = "字段排序")
+        private Integer fieldSort;
+
         @Schema(description = "字段类型")
         private String fieldType;
 

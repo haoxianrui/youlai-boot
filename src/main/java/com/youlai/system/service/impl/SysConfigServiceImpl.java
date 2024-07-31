@@ -1,13 +1,11 @@
 package com.youlai.system.service.impl;
 
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.RedisKeyConstants;
-import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.converter.SysConfigConverter;
 import com.youlai.system.model.form.ConfigForm;
 import com.youlai.system.model.query.ConfigPageQuery;
@@ -53,10 +51,10 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         Page<SysConfig> page = new Page<>(configPageQuery.getPageNum(), configPageQuery.getPageSize());
         String keywords = configPageQuery.getKeywords();
         LambdaQueryWrapper<SysConfig> query = new LambdaQueryWrapper<SysConfig>()
-                .and(StrUtil.isNotBlank(keywords),
-                    q -> q.like(StrUtil.isNotBlank(keywords), SysConfig::getConfigKey, keywords)
+                .and(StringUtils.isNotBlank(keywords),
+                    q -> q.like(SysConfig::getConfigKey, keywords)
                         .or()
-                        .like(StrUtil.isNotBlank(keywords), SysConfig::getConfigName, keywords)
+                        .like(SysConfig::getConfigName, keywords)
                 );
         Page<SysConfig> pageList = this.page(page, query);
         return sysConfigConverter.convertToPageVo(pageList);
@@ -104,7 +102,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
                 "配置键已存在");
         SysConfig sysConfig = sysConfigConverter.toEntity(configForm);
         sysConfig.setUpdateBy(SecurityUtils.getUserId());
-        return this.update(sysConfig, new LambdaQueryWrapper<SysConfig>().eq(SysConfig::getId,id));
+        return this.updateById(sysConfig);
     }
 
     /**

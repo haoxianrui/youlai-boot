@@ -11,7 +11,7 @@
                 #if($fieldConfig.dictType != "")
                   <dictionary v-model="formData.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
                 #else
-                  <el-select v-model="formData.$fieldConfig.fieldName" placeholder="'请选择$fieldConfig.fieldComment">
+                  <el-select v-model="formData.$fieldConfig.fieldName" placeholder="请选择$fieldConfig.fieldComment">
                     <el-option :key="1" :value="1" label="下拉项1"/>
                     <el-option :key="2" :value="2" label="下拉项2"/>
                     <el-option :key="3" :value="3" label="下拉项3"/>
@@ -26,15 +26,15 @@
                   <el-checkbox v-for="option in $fieldConfig.options" :key="option.value" :label="option.value">{{ option.label }}</el-checkbox>
                 </el-checkbox-group>
               #elseif($fieldConfig.formType == "INPUT_NUMBER")
-                <el-input-number v-model="queryParams.$fieldConfig.fieldName" :placeholder="$fieldConfig.fieldComment" />
+                <el-input-number v-model="queryParams.$fieldConfig.fieldName" placeholder="$fieldConfig.fieldComment" />
               #elseif($fieldConfig.formType == "SWITCH")
                 <el-switch v-model="queryParams.$fieldConfig.fieldName" />
               #elseif($fieldConfig.formType == "TEXT_AREA")
-                <el-input type="textarea" v-model="queryParams.$fieldConfig.fieldName" :placeholder="$fieldConfig.fieldComment" />
+                <el-input type="textarea" v-model="queryParams.$fieldConfig.fieldName" placeholder="$fieldConfig.fieldComment" />
               #elseif($fieldConfig.formType == "DATE_TIME")
-                <el-date-picker v-model="queryParams.$fieldConfig.fieldName" type="datetime" :placeholder="$fieldConfig.fieldComment" />
+                <el-date-picker v-model="queryParams.$fieldConfig.fieldName" type="datetime" placeholder="$fieldConfig.fieldComment" />
               #elseif($fieldConfig.formType == "DATE")
-                <el-date-picker v-model="queryParams.$fieldConfig.fieldName" type="date" :placeholder="$fieldConfig.fieldComment" />
+                <el-date-picker v-model="queryParams.$fieldConfig.fieldName" type="date" placeholder="$fieldConfig.fieldComment" />
               #end
             </el-form-item>
           #end
