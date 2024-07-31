@@ -470,11 +470,11 @@ CREATE TABLE `gen_field_config` (
                                     `is_show_in_query` tinyint(1) DEFAULT '0' COMMENT '是否在查询条件显示',
                                     `query_type` tinyint DEFAULT NULL COMMENT '查询方式',
                                     `form_type` tinyint DEFAULT NULL COMMENT '表单类型',
+                                    `dict_type` varchar(100) DEFAULT NULL COMMENT '字典类型(sys_dict表的code)',
                                     `create_time` datetime  COMMENT '创建时间',
                                     `update_time` datetime  COMMENT '更新时间',
                                     `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
                                     PRIMARY KEY (`id`),
-                                    KEY `config_id` (`config_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='代码生成字段配置表';
 
 
