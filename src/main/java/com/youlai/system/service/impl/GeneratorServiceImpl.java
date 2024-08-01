@@ -100,6 +100,9 @@ public class GeneratorServiceImpl implements GeneratorService {
             String entityName = StrUtil.toCamelCase(StrUtil.removePrefix(tableName, tableName.split("_")[0]));
             genConfig.setEntityName(entityName);
 
+            String packageName = SystemApplication.class.getPackageName();
+            genConfig.setPackageName(packageName);
+
             genConfig.setAuthor(generatorProperties.getDefaultConfig().getAuthor());
 
         }
