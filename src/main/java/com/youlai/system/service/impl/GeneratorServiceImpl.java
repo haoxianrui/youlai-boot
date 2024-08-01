@@ -101,7 +101,8 @@ public class GeneratorServiceImpl implements GeneratorService {
             genConfig.setEntityName(entityName);
 
             String packageName = SystemApplication.class.getPackageName();
-            genConfig.setPackageName(packageName);
+            genConfig.setPackageName( StrUtil.subBefore(packageName, ".", true));
+            genConfig.setModuleName(StrUtil.subAfter(packageName, ".", true));
 
             genConfig.setAuthor(generatorProperties.getDefaultConfig().getAuthor());
 
@@ -177,7 +178,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         // 如果选择上级菜单
         Long parentMenuId = formData.getParentMenuId();
         if (parentMenuId != null) {
-            menuService.addMenuForCodeGeneration(parentMenuId,genConfig.getBusinessName(),genConfig.getEntityName());
+            menuService.saveMenu(parentMenuId,genConfig);
         }
 
         List<GenFieldConfig> genFieldConfigs = genConfigConverter.toGenFieldConfig(formData.getFieldConfigs());

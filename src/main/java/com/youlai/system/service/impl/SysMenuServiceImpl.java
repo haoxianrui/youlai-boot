@@ -18,6 +18,7 @@ import com.youlai.system.common.model.Option;
 import com.youlai.system.converter.MenuConverter;
 import com.youlai.system.mapper.SysMenuMapper;
 import com.youlai.system.model.bo.RouteBO;
+import com.youlai.system.model.entity.GenConfig;
 import com.youlai.system.model.entity.SysMenu;
 import com.youlai.system.model.form.MenuForm;
 import com.youlai.system.model.query.MenuQuery;
@@ -102,11 +103,15 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     /**
      * 菜单下拉数据
+     *
+     * @param onlyParent 是否只查询父级菜单 如果为true，排除按钮
      */
     @Override
-    public List<Option> listMenuOptions() {
+    public List<Option> listMenuOptions(boolean onlyParent) {
         List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>()
-                .orderByAsc(SysMenu::getSort));
+                .in(onlyParent, SysMenu::getType, MenuTypeEnum.CATALOG.getValue(), MenuTypeEnum.MENU.getValue())
+                .orderByAsc(SysMenu::getSort)
+        );
         return buildMenuOptions(SystemConstants.ROOT_NODE_ID, menuList);
     }
 
@@ -355,27 +360,40 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * 为代码生成添加菜单
      *
      * @param parentMenuId 父菜单ID
-     * @param entityName   实体名称
+     * @param genConfig    实体名称
      */
     @Override
-    public void addMenuForCodeGeneration(Long parentMenuId, String businessName, String entityName) {
+    public void saveMenu(Long parentMenuId, GenConfig genConfig) {
         SysMenu parentMenu = this.getById(parentMenuId);
-        Assert.notNull(parentMenu, "父菜单不存在");
+        Assert.notNull(parentMenu, "上级菜单不存在");
+
+        String entityName = genConfig.getEntityName();
 
         long count = this.count(new LambdaQueryWrapper<SysMenu>().eq(SysMenu::getRouteName, entityName));
         if (count > 0) {
             return;
         }
 
+        // 获取父级菜单子菜单最带的排序
+        SysMenu maxSortMenu = this.getOne(new LambdaQueryWrapper<SysMenu>().eq(SysMenu::getParentId, parentMenuId)
+                .orderByDesc(SysMenu::getSort)
+                .last("limit 1")
+        );
+        int sort = 1;
+        if (maxSortMenu != null) {
+            sort = maxSortMenu.getSort() + 1;
+        }
+
+
         SysMenu menu = new SysMenu();
         menu.setParentId(parentMenuId);
-        menu.setName(businessName);
+        menu.setName(genConfig.getBusinessName());
 
         menu.setRouteName(entityName);
-        menu.setRoutePath(StrUtil.toUnderlineCase(entityName));
-        menu.setComponent(StrUtil.toUnderlineCase(entityName) + "/index");
-        menu.setType(MenuTypeEnum.CATALOG);
-        menu.setSort(0);
+        menu.setRoutePath(StrUtil.toSymbolCase(entityName, '-'));
+        menu.setComponent(genConfig.getModuleName() + "/" + StrUtil.toSymbolCase(entityName, '-') + "/index");
+        menu.setType(MenuTypeEnum.MENU);
+        menu.setSort(sort);
         menu.setVisible(1);
         boolean result = this.save(menu);
 

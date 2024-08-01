@@ -1,6 +1,7 @@
 package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.youlai.system.model.entity.GenConfig;
 import com.youlai.system.model.form.MenuForm;
 import com.youlai.system.common.model.Option;
 import com.youlai.system.model.entity.SysMenu;
@@ -24,11 +25,12 @@ public interface SysMenuService extends IService<SysMenu> {
      */
     List<MenuVO> listMenus(MenuQuery queryParams);
 
-
     /**
      * 获取菜单下拉列表
+     *
+     * @param onlyParent 是否只查询父级菜单
      */
-    List<Option> listMenuOptions();
+    List<Option> listMenuOptions(boolean onlyParent);
 
     /**
      * 新增菜单
@@ -68,7 +70,7 @@ public interface SysMenuService extends IService<SysMenu> {
      * 为代码生成添加菜单
      *
      * @param parentMenuId 父菜单ID
-     * @param entityName   实体名
+     * @param genConfig   实体名
      */
-    void addMenuForCodeGeneration(Long parentMenuId,String businessName, String entityName);
+    void saveMenu(Long parentMenuId, GenConfig genConfig);
 }
