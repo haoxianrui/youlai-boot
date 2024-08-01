@@ -33,6 +33,7 @@ import com.youlai.system.service.GenFieldConfigService;
 import com.youlai.system.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -58,6 +59,9 @@ public class GeneratorServiceImpl implements GeneratorService {
     private final GenFieldConfigService genFieldConfigService;
     private final GenConfigConverter genConfigConverter;
     private final SysMenuService menuService;
+
+    @Value("${spring.profiles.active}")
+    private String springProfilesActive ;
 
     /**
      * 数据表分页列表
@@ -124,7 +128,11 @@ public class GeneratorServiceImpl implements GeneratorService {
                             .eq(GenFieldConfig::getConfigId, genConfig.getId())
                             .orderByAsc(GenFieldConfig::getFieldSort)
             );
-            Integer maxSort = fieldConfigList.stream().map(GenFieldConfig::getFieldSort).max(Integer::compareTo).orElseGet(() -> 0);
+            Integer maxSort = fieldConfigList.stream()
+                    .map(GenFieldConfig::getFieldSort)
+                    .filter(Objects::nonNull) // 过滤掉空值
+                    .max(Integer::compareTo)
+                    .orElse(0);
             for (ColumnMetaData tableColumn : tableColumns) {
                 // 根据列名获取字段生成配置
                 String columnName = tableColumn.getColumnName();
@@ -181,7 +189,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         // 如果选择上级菜单
         Long parentMenuId = formData.getParentMenuId();
-        if (parentMenuId != null) {
+        if (parentMenuId != null && springProfilesActive.equals("dev") ) {
             menuService.saveMenu(parentMenuId,genConfig);
         }
 
