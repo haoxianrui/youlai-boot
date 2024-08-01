@@ -32,11 +32,15 @@ import com.youlai.system.service.GenConfigService;
 import com.youlai.system.service.GenFieldConfigService;
 import com.youlai.system.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.zip.ZipOutputStream;
+
 
 /**
  * 数据库服务实现类
@@ -383,5 +387,43 @@ public class GeneratorServiceImpl implements GeneratorService {
         return content;
     }
 
+    /**
+     * 下载代码
+     * @param tableNames 表名，可以支持多张表。
+     * @return 压缩文件字节数组
+     */
+    @Override
+    public byte[] downloadCode(String[] tableNames) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ZipOutputStream zip = new ZipOutputStream(outputStream);
+        for (String tableName : tableNames)
+        {
+            generatorCode(tableName, zip);
+        }
+        IOUtils.closeQuietly(zip);
+        return outputStream.toByteArray();
+    }
+
+    /**
+     * 根据表名生成代码并且压缩到zip文件中
+     *
+     * @param tableName 单个表名
+     * @param zip 压缩文件
+     */
+    private void generatorCode(String tableName, ZipOutputStream zip) {
+        List<GeneratorPreviewVO> previewVOList = getTablePreviewData(tableName);
+        for (GeneratorPreviewVO previewVO : previewVOList) {
+            String fileName = previewVO.getFileName();
+            String content = previewVO.getContent();
+            String path = previewVO.getPath();
+            try {
+                zip.putNextEntry(new java.util.zip.ZipEntry(path + File.separator + fileName));
+                zip.write(content.getBytes("UTF-8"));
+                zip.closeEntry();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }
