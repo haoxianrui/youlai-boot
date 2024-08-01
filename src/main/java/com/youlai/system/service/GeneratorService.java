@@ -55,4 +55,11 @@ public interface GeneratorService {
      * @return
      */
     void deleteGenConfig(String tableName);
+
+    /**
+     * 下载代码
+     * @param tableNames 表名
+     * @return
+     */
+    byte[] downloadCode(String[] tableNames);
 }

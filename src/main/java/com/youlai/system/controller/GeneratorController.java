@@ -11,9 +11,12 @@ import com.youlai.system.service.GeneratorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -71,4 +74,22 @@ public class GeneratorController {
         return Result.success(list);
     }
 
+
+
+    @Operation(summary = "下载代码zip")
+    @GetMapping("/{tableName}/downloadZip")
+    public void downloadZip(HttpServletResponse response, @PathVariable String tableName) throws IOException {
+        String[] tableNames = tableName.split(",");
+        byte[] data = generatorService.downloadCode(tableNames);
+        response.reset();
+        response.setHeader("Content-Disposition", "attachment; filename=\"youlai-admin-code.zip\"");
+        response.addHeader("Content-Length", "" + data.length);
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.addHeader("Access-Control-Expose-Headers", "Content-Disposition");
+        response.setContentType("application/octet-stream; charset=UTF-8");
+        response.setDateHeader("Expires", 0);
+        IOUtils.write(data, response.getOutputStream());
+    }
 }
