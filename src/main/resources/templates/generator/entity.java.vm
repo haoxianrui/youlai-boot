@@ -25,12 +25,12 @@ public class ${entityName} extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
 #foreach($fieldConfig in ${fieldConfigs})
-    #if("$!fieldConfig.fieldComment" != "")
+    #if(!$fieldConfig.fieldName.equals("id") && !$fieldConfig.fieldName.equals("createTime") && !$fieldConfig.fieldName.equals("updateTime"))
+        #if("$!fieldConfig.fieldComment" != "")
     /**
      * ${fieldConfig.fieldComment}
      */
-    #end
-    #if(!$fieldConfig.fieldName.equals("id") && !$fieldConfig.fieldName.equals("createTime") && !$fieldConfig.fieldName.equals("updateTime"))
+        #end
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
     #end
 #end
