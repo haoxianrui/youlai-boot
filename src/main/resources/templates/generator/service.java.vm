@@ -1,9 +1,9 @@
-package ${package}.Service;
+package ${packageName}.${moduleName}.${subpackageName};
 
-import ${package}.model.entity.${entityName};
-import ${package}.model.form.${entityName}Form;
-import ${package}.model.query.${entityName}PageQuery;
-import ${package}.model.vo.${entityName}PageVO;
+import ${packageName}.${moduleName}.model.entity.${entityName};
+import ${packageName}.${moduleName}.model.form.${entityName}Form;
+import ${packageName}.${moduleName}.model.query.${entityName}PageQuery;
+import ${packageName}.${moduleName}.model.vo.${entityName}PageVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 

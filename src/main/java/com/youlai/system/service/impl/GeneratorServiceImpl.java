@@ -270,12 +270,14 @@ public class GeneratorServiceImpl implements GeneratorService {
 
 
             /* 2. 生成文件路径 */
-            // com.youlai.system
+            // com.youlai
             String packageName = genConfig.getPackageName();
+            // system
+            String moduleName = genConfig.getModuleName();
             // controller
-            String subPackageName = templateConfig.getPackageName();
-            // 文件路径 com.youlai.system.controller
-            String filePath = getFilePath(templateName, packageName, subPackageName, entityName);
+            String subpackageName = templateConfig.getSubpackageName();
+            // 文件路径  src/main/java/com/youlai/system/controller
+            String filePath = getFilePath(templateName,moduleName, packageName, subpackageName, entityName);
             previewVO.setPath(filePath);
 
             /* 3. 生成文件内容 */
@@ -309,7 +311,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         return entityName + templateName + extension;
     }
 
-    private String getFilePath(String templateName, String packageName, String subPackageName, String entityName) {
+    private String getFilePath(String templateName,String moduleName, String packageName, String subPackageName, String entityName) {
         String path;
         if ("MapperXml".equals(templateName)) {
             path = (generatorProperties.getBackendAppName()
@@ -324,16 +326,18 @@ public class GeneratorServiceImpl implements GeneratorService {
             );
         } else if ("VIEW".equals(templateName)) {
             path = (generatorProperties.getFrontendAppName()
-                    + File.separator
-                    + "src" + File.separator + subPackageName
-                    + File.separator
-                    + StrUtil.toSymbolCase(entityName, '-')
+                    + File.separator  + "src"
+                    + File.separator + moduleName
+                    + File.separator + subPackageName
+                    + File.separator + StrUtil.toSymbolCase(entityName, '-')
             );
         } else {
             path = (generatorProperties.getBackendAppName()
                     + File.separator
                     + "src" + File.separator + "main" + File.separator + "java"
-                    + File.separator + packageName + File.separator + subPackageName
+                    + File.separator + packageName
+                    + File.separator + moduleName
+                    + File.separator + subPackageName
             );
         }
 
@@ -357,8 +361,8 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         String entityName = genConfig.getEntityName();
 
-        bindMap.put("package", genConfig.getPackageName());
-        bindMap.put("subPackage", templateConfig.getPackageName());
+        bindMap.put("packageName", genConfig.getPackageName());
+        bindMap.put("moduleName", genConfig.getModuleName());
         bindMap.put("date", DateUtil.format(new Date(), "yyyy-MM-dd HH:mm"));
         bindMap.put("entityName", entityName);
         bindMap.put("tableName", genConfig.getTableName());

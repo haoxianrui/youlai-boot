@@ -15,42 +15,42 @@ generator:
   templateConfigs:
     Controller:
       templatePath: generator/controller.java.vm
-      packageName: controller
+      subpackageName: controller
     Service:
       templatePath: generator/service.java.vm
-      packageName: service
+      subpackageName: service
     ServiceImpl:
       templatePath: generator/serviceImpl.java.vm
-      packageName: service.impl
+      subpackageName: service.impl
     Mapper:
       templatePath: generator/mapper.java.vm
-      packageName: mapper
+      subpackageName: mapper
     MapperXml:
       templatePath: generator/mapper.xml.vm
-      packageName: mapper
+      subpackageName: mapper
       extension: .xml
     Converter:
       templatePath: generator/converter.java.vm
-      packageName: converter
+      subpackageName: converter
     Query:
       templatePath: generator/query.java.vm
-      packageName: model.query
+      subpackageName: model.query
     Form:
       templatePath: generator/form.java.vm
-      packageName: model.form
+      subpackageName: model.form
     VO:
       templatePath: generator/vo.java.vm
-      packageName: model.vo
+      subpackageName: model.vo
     Entity:
       templatePath: generator/entity.java.vm
-      packageName: model.entity
+      subpackageName: model.entity
     API:
       templatePath: generator/api.ts.vm
-      packageName: api
+      subpackageName: api
       extension: .ts
     VIEW:
       templatePath: generator/index.vue.vm
-      packageName: views
+      subpackageName: views
       extension: .vue
 
 

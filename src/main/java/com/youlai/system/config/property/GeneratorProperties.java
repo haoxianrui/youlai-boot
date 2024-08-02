@@ -55,7 +55,7 @@ public class GeneratorProperties {
 
         private String templatePath;
 
-        private String packageName;
+        private String subpackageName;
 
         /**
          * 文件扩展名，如 .java

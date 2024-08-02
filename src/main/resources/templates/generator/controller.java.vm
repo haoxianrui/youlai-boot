@@ -1,11 +1,11 @@
-package ${package}.controller;
+package ${packageName}.${moduleName}.${subpackageName};
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ${package}.model.form.${entityName}Form;
-import ${package}.model.query.${entityName}PageQuery;
-import ${package}.model.vo.${entityName}PageVO;
+import ${packageName}.${moduleName}.model.form.${entityName}Form;
+import ${packageName}.${moduleName}.model.query.${entityName}PageQuery;
+import ${packageName}.${moduleName}.model.vo.${entityName}PageVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.youlai.common.result.PageResult;
 import com.youlai.common.result.Result;

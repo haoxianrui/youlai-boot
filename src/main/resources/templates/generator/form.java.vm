@@ -1,4 +1,4 @@
-package ${package}.${subPackage};
+package ${packageName}.${moduleName}.${subpackageName};
 
 import java.io.Serial;
 import java.io.Serializable;

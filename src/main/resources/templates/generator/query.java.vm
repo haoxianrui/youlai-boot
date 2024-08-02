@@ -1,4 +1,4 @@
-package ${package}.model.query;
+package ${packageName}.${moduleName}.${subpackageName};
 
 import com.youlai.common.base.BasePageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;

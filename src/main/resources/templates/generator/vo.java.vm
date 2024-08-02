@@ -1,4 +1,4 @@
-package ${package}.model.vo;
+package ${packageName}.${moduleName}.model.vo;
 
 import java.io.Serial;
 import java.io.Serializable;

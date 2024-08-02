@@ -1,4 +1,4 @@
-package ${package}.model.entity;
+package ${packageName}.${moduleName}.${subpackageName};
 
 import lombok.Getter;
 import lombok.Setter;

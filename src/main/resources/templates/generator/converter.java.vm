@@ -1,9 +1,9 @@
-package ${package}.converter;
+package ${packageName}.${moduleName}.${subpackageName};
 
 import org.mapstruct.Mapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import ${package}.model.entity.${entityName};
-import ${package}.model.form.${entityName}Form;
+import ${packageName}.${moduleName}.model.entity.${entityName};
+import ${packageName}.${moduleName}.model.form.${entityName}Form;
 
 /**
  * $!{businessName}对象转换器
@@ -16,5 +16,5 @@ public interface ${entityName}Converter{
 
     ${entityName}Form toForm(${entityName} entity);
 
-    ${entityName} toEntity(${entityName}Form entity);
+    ${entityName} toEntity(${entityName}Form formData);
 }
