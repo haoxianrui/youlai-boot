@@ -327,8 +327,8 @@ public class GeneratorServiceImpl implements GeneratorService {
         } else if ("VIEW".equals(templateName)) {
             path = (generatorProperties.getFrontendAppName()
                     + File.separator  + "src"
-                    + File.separator + moduleName
                     + File.separator + subPackageName
+                    + File.separator + moduleName
                     + File.separator + StrUtil.toSymbolCase(entityName, '-')
             );
         } else {
