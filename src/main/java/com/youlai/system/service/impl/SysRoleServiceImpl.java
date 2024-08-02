@@ -79,7 +79,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @return {@link List<Option>} – 角色下拉列表
      */
     @Override
-    public List<Option> listRoleOptions() {
+    public List<Option<Long>> listRoleOptions() {
         // 查询数据
         List<SysRole> roleList = this.list(new LambdaQueryWrapper<SysRole>()
                 .ne(!SecurityUtils.isRoot(), SysRole::getCode, SystemConstants.ROOT_ROLE_CODE)

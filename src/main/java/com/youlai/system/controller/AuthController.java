@@ -42,7 +42,7 @@ public class AuthController {
     @Operation(summary = "注销")
     @DeleteMapping("/logout")
     @LogAnnotation(value = "注销", module = LogModuleEnum.LOGIN)
-    public Result logout() {
+    public Result<?> logout() {
         authService.logout();
         return Result.success();
     }

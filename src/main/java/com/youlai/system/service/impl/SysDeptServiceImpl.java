@@ -5,6 +5,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.youlai.system.common.constant.SymbolConstant;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.enums.StatusEnum;
 import com.youlai.system.converter.DeptConverter;
@@ -98,7 +99,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      * @return 部门下拉List集合
      */
     @Override
-    public List<Option> listDeptOptions() {
+    public List<Option<Long>> listDeptOptions() {
 
         List<SysDept> deptList = this.list(new LambdaQueryWrapper<SysDept>()
                 .eq(SysDept::getStatus, StatusEnum.ENABLE.getValue())
@@ -208,12 +209,12 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      * @param deptList 部门列表
      * @return 部门表格层级列表
      */
-    public static List<Option> recurDeptTreeOptions(long parentId, List<SysDept> deptList) {
+    public static List<Option<Long>> recurDeptTreeOptions(long parentId, List<SysDept> deptList) {
         return CollectionUtil.emptyIfNull(deptList).stream()
                 .filter(dept -> dept.getParentId().equals(parentId))
                 .map(dept -> {
-                    Option option = new Option(dept.getId(), dept.getName());
-                    List<Option> children = recurDeptTreeOptions(dept.getId(), deptList);
+                    Option<Long> option = new Option<>(dept.getId(), dept.getName());
+                    List<Option<Long>> children = recurDeptTreeOptions(dept.getId(), deptList);
                     if (CollectionUtil.isNotEmpty(children)) {
                         option.setChildren(children);
                     }
@@ -233,7 +234,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     public boolean deleteByIds(String ids) {
         // 删除部门及子部门
         if (StrUtil.isNotBlank(ids)) {
-            String[] menuIds = ids.split(",");
+            String[] menuIds = ids.split(SymbolConstant.COMMA);
             for (String deptId : menuIds) {
                 this.remove(new LambdaQueryWrapper<SysDept>()
                         .eq(SysDept::getId, deptId)
@@ -258,7 +259,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         } else {
             SysDept parent = this.getById(parentId);
             if (parent != null) {
-                treePath = parent.getTreePath() + "," + parent.getId();
+                treePath = parent.getTreePath() + SymbolConstant.COMMA + parent.getId();
             }
         }
         return treePath;

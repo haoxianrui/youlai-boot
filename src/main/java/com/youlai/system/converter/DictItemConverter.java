@@ -35,6 +35,6 @@ public interface DictItemConverter {
             @Mapping(target = "value", source = "id"),
             @Mapping(target = "label", source = "name")
     })
-    Option convertToOption(SysDictItem dictItem);
-    List<Option> convertToOption(List<SysDictItem> dictItems);
+    Option<Long> convertToOption(SysDictItem dictItem);
+    List<Option<Long>> convertToOption(List<SysDictItem> dictItems);
 }

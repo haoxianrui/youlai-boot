@@ -200,7 +200,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
      * @param code 字典编码
      */
     @Override
-    public List<Option> listDictItemsByCode(String code) {
+    public List<Option<Long>> listDictItemsByCode(String code) {
         // 根据字典编码获取字典ID
         SysDict dict = this.getOne(new LambdaQueryWrapper<SysDict>()
                 .eq(SysDict::getCode, code)
@@ -226,12 +226,12 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
      * 获取字典列表
      */
     @Override
-    public List<Option> getDictList() {
+    public List<Option<String>> getDictList() {
         return this.list(new LambdaQueryWrapper<SysDict>()
                         .eq(SysDict::getStatus, 1)
                         .select(SysDict::getName, SysDict::getCode)
                 ).stream()
-                .map(dict -> new Option(dict.getCode(), dict.getName()))
+                .map(dict -> new Option<>(dict.getCode(), dict.getName()))
                 .toList();
     }
 }

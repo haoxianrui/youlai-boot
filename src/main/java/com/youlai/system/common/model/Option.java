@@ -23,7 +23,7 @@ public class Option<T> {
         this.label = label;
     }
 
-    public Option(T value, String label, List<Option> children) {
+    public Option(T value, String label, List<Option<T>> children) {
         this.value = value;
         this.label = label;
         this.children= children;
@@ -37,6 +37,6 @@ public class Option<T> {
 
     @Schema(description="子选项列表")
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-    private List<Option> children;
+    private List<Option<T>> children;
 
 }

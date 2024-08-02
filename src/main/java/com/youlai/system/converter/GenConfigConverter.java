@@ -30,7 +30,6 @@ public interface GenConfigConverter {
 
     GenConfigForm.FieldConfig toGenFieldConfigForm(GenFieldConfig genFieldConfig);
 
-
     GenConfig toGenConfig(GenConfigForm formData);
 
     List<GenFieldConfig> toGenFieldConfig(List<GenConfigForm.FieldConfig> fieldConfigs);

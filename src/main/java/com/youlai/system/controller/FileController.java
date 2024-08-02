@@ -37,7 +37,7 @@ public class FileController {
     @DeleteMapping
     @Operation(summary = "文件删除")
     @SneakyThrows
-    public Result deleteFile(
+    public Result<?> deleteFile(
             @Parameter(description = "文件路径") @RequestParam String filePath
     ) {
         boolean result = ossService.deleteFile(filePath);
