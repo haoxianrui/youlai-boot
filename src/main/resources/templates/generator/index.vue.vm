@@ -54,7 +54,7 @@
                   type="daterange"
                   range-separator="~"
                   start-placeholder="开始时间"
-                  end-placeholder="截止时间"
+                  end-placeholder="结束时间"
                   #else
                   type="datetime"
                   placeholder="$fieldConfig.fieldComment"
@@ -69,7 +69,7 @@
                   type="daterange"
                   range-separator="~"
                   start-placeholder="开始时间"
-                  end-placeholder="截止时间"
+                  end-placeholder="结束时间"
                   #else
                   type="date"
                   placeholder="$fieldConfig.fieldComment"
@@ -89,8 +89,22 @@
 
     <el-card shadow="never" class="table-container">
       <template #header>
-        <el-button type="success" @click="handleOpenDialog"><i-ep-plus />新增</el-button>
-        <el-button type="danger" :disabled="ids.length === 0" @click="handleDelete"><i-ep-delete />删除</el-button>
+        <el-button
+          v-hasPerm="['${moduleName}:${lowerFirstEntityName}:add']"
+          type="success"
+          @click="handleOpenDialog"
+        >
+          <i-ep-plus />
+          新增
+        </el-button>
+        <el-button
+          v-hasPerm="['${moduleName}:${lowerFirstEntityName}:delete']"
+          type="danger"
+          :disabled="ids.length === 0"
+          @click="handleDelete"
+        ><i-ep-delete />
+          删除
+        </el-button>
       </template>
 
       <el-table
@@ -115,6 +129,7 @@
         <el-table-column fixed="right" label="操作" width="220">
           <template #default="scope">
             <el-button
+              v-hasPerm="['${moduleName}:${lowerFirstEntityName}:edit']"
               type="primary"
               size="small"
               link
@@ -124,6 +139,7 @@
               编辑
             </el-button>
             <el-button
+              v-hasPerm="['${moduleName}:${lowerFirstEntityName}:delete']"
               type="danger"
               size="small"
               link
