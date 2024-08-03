@@ -255,7 +255,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         } else {
             entity.setParams(null);
         }
-        if(menuType != MenuTypeEnum.BUTTON){
+        if (menuType != MenuTypeEnum.BUTTON) {
             Assert.isFalse(this.exists(new LambdaQueryWrapper<SysMenu>()
                     .eq(SysMenu::getRouteName, entity.getRouteName())
                     .ne(menuForm.getId() != null, SysMenu::getId, menuForm.getId())
@@ -408,6 +408,21 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             String treePath = generateMenuTreePath(parentMenuId);
             menu.setTreePath(treePath);
             this.updateById(menu);
+
+            // 生成CURD按钮权限
+            String permPrefix = genConfig.getModuleName() + ":" + StrUtil.lowerFirst(entityName) + ":";
+            String[] actions = {"查询", "新增", "编辑", "删除"};
+            String[] perms = {"query", "add", "edit", "delete"};
+
+            for (int i = 0; i < actions.length; i++) {
+                SysMenu button = new SysMenu();
+                button.setParentId(menu.getId());
+                button.setType(MenuTypeEnum.BUTTON);
+                button.setName(actions[i]);
+                button.setPerm(permPrefix + perms[i]);
+                this.save(button);
+            }
+
         }
 
     }
