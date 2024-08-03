@@ -37,15 +37,17 @@
             <if test='queryParams.deptId!=null'>
                 AND concat(',',concat(d.tree_path,',',d.id),',') like concat('%,',#{queryParams.deptId},',%')
             </if>
-            <if test="queryParams.startTime != null">
-                AND u.create_time &gt;= #{queryParams.startTime}
+            <if test='queryParams.createTimeRange != null'>
+                <if test="queryParams.createTimeRange[0] != null and queryParams.createTimeRange[0].trim() neq ''">
+                    AND u.create_time >=CONCAT(#{queryParams.createTimeRange[0]}, ' 00:00:00')
+                </if>
+                <if test="queryParams.createTimeRange[1] != null and queryParams.createTimeRange[0].trim() neq ''">
+                    AND u.create_time &lt;= CONCAT(#{queryParams.createTimeRange[1]}, ' 23:59:59')
+                </if>
             </if>
-            <if test="queryParams.endTime != null">
-                AND u.create_time &lt;= #{queryParams.endTime}
-            </if>
-
         </where>
-        GROUP BY u.id
+        GROUP BY
+            u.id
     </select>
 
     <!-- 用户表单信息映射 -->

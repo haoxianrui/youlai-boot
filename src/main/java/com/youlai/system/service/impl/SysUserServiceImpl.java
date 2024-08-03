@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SystemConstants;
-import com.youlai.system.util.DateUtils;
 import com.youlai.system.converter.UserConverter;
 import com.youlai.system.security.util.SecurityUtils;
 import com.youlai.system.mapper.SysUserMapper;
@@ -68,10 +67,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         int pageNum = queryParams.getPageNum();
         int pageSize = queryParams.getPageSize();
         Page<UserBO> page = new Page<>(pageNum, pageSize);
-
-        // 格式化为数据库日期格式，避免日期比较使用格式化函数导致索引失效
-        DateUtils.toDatabaseFormat(queryParams, "startTime", "endTime");
-
         // 查询数据
         Page<UserBO> userPage = this.baseMapper.listPagedUsers(page, queryParams);
 
