@@ -69,7 +69,7 @@ public interface SysDictService extends IService<SysDict> {
      * @param code 字典编码
      * @return
      */
-    List<Option> listDictItemsByCode(String code);
+    List<Option<Long>> listDictItemsByCode(String code);
 
 
     /**
@@ -77,5 +77,5 @@ public interface SysDictService extends IService<SysDict> {
      *
      * @return
      */
-    List<Option> getDictList();
+    List<Option<String>> getDictList();
 }

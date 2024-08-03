@@ -255,6 +255,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         } else {
             entity.setParams(null);
         }
+        if(menuType != MenuTypeEnum.BUTTON){
+            Assert.isFalse(this.exists(new LambdaQueryWrapper<SysMenu>()
+                    .eq(SysMenu::getRouteName, entity.getRouteName())
+                    .ne(menuForm.getId() != null, SysMenu::getId, menuForm.getId())
+            ), "路由名称已存在");
+        }
 
         boolean result = this.saveOrUpdate(entity);
         if (result) {

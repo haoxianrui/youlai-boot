@@ -34,7 +34,7 @@ public interface SysRoleService extends IService<SysRole> {
      *
      * @return
      */
-    List<Option> listRoleOptions();
+    List<Option<Long>> listRoleOptions();
 
     /**
      *

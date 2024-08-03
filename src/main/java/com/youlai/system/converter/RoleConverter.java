@@ -26,10 +26,9 @@ public interface RoleConverter {
             @Mapping(target = "value", source = "id"),
             @Mapping(target = "label", source = "name")
     })
-    Option entity2Option(SysRole role);
+    Option<Long> entity2Option(SysRole role);
 
-
-    List<Option> entities2Options(List<SysRole> roles);
+    List<Option<Long>> entities2Options(List<SysRole> roles);
 
     SysRole toEntity(RoleForm roleForm);
 

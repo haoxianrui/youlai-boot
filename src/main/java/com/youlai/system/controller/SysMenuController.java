@@ -47,7 +47,7 @@ public class SysMenuController {
 
     @Operation(summary = "菜单下拉列表")
     @GetMapping("/options")
-    public Result listMenuOptions(
+    public Result<?> listMenuOptions(
           @Parameter(description = "是否只查询父级菜单")
           @RequestParam(required = false, defaultValue = "false") boolean onlyParent
     ) {
@@ -76,7 +76,7 @@ public class SysMenuController {
     @PostMapping
     @PreAuthorize("@ss.hasPerm('sys:menu:add')")
     @PreventRepeatSubmit
-    public Result addMenu(@RequestBody MenuForm menuForm) {
+    public Result<?> addMenu(@RequestBody MenuForm menuForm) {
         boolean result = menuService.saveMenu(menuForm);
         return Result.judge(result);
     }
@@ -84,7 +84,7 @@ public class SysMenuController {
     @Operation(summary = "修改菜单")
     @PutMapping(value = "/{id}")
     @PreAuthorize("@ss.hasPerm('sys:menu:edit')")
-    public Result updateMenu(
+    public Result<?> updateMenu(
             @RequestBody MenuForm menuForm
     ) {
         boolean result = menuService.saveMenu(menuForm);
@@ -94,7 +94,7 @@ public class SysMenuController {
     @Operation(summary = "删除菜单")
     @DeleteMapping("/{id}")
     @PreAuthorize("@ss.hasPerm('sys:menu:delete')")
-    public Result deleteMenu(
+    public Result<?> deleteMenu(
             @Parameter(description = "菜单ID，多个以英文(,)分割") @PathVariable("id") Long id
     ) {
         boolean result = menuService.deleteMenu(id);
@@ -103,7 +103,7 @@ public class SysMenuController {
 
     @Operation(summary = "修改菜单显示状态")
     @PatchMapping("/{menuId}")
-    public Result updateMenuVisible(
+    public Result<?> updateMenuVisible(
             @Parameter(description = "菜单ID") @PathVariable Long menuId,
             @Parameter(description = "显示状态(1:显示;0:隐藏)") Integer visible
 

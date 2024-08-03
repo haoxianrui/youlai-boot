@@ -46,17 +46,17 @@ public class SysDictController {
 
     @Operation(summary = "字典列表")
     @GetMapping("/list")
-    public Result<List<Option>> getDictList() {
-        List<Option> list = dictService.getDictList();
+    public Result<List<Option<String>>> getDictList() {
+        List<Option<String>> list = dictService.getDictList();
         return Result.success(list);
     }
 
     @Operation(summary = "字典数据项列表")
     @GetMapping("/{code}/options")
-    public Result<List<Option>> getDictOptions(
+    public Result<List<Option<Long>>> getDictOptions(
             @Parameter(description = "字典编码") @PathVariable String code
     ) {
-        List<Option> options = dictService.listDictItemsByCode(code);
+        List<Option<Long>> options = dictService.listDictItemsByCode(code);
         return Result.success(options);
     }
 
@@ -73,7 +73,7 @@ public class SysDictController {
     @PostMapping
     @PreAuthorize("@ss.hasPerm('sys:dict:add')")
     @PreventRepeatSubmit
-    public Result saveDict(@RequestBody DictForm formData) {
+    public Result<?> saveDict(@RequestBody DictForm formData) {
         boolean result = dictService.saveDict(formData);
         return Result.judge(result);
     }
@@ -81,7 +81,7 @@ public class SysDictController {
     @Operation(summary = "修改字典")
     @PutMapping("/{id}")
     @PreAuthorize("@ss.hasPerm('sys:dict:edit')")
-    public Result updateDict(
+    public Result<?> updateDict(
             @PathVariable Long id,
             @RequestBody DictForm DictForm
     ) {
@@ -92,7 +92,7 @@ public class SysDictController {
     @Operation(summary = "删除字典")
     @DeleteMapping("/{ids}")
     @PreAuthorize("@ss.hasPerm('sys:dict:delete')")
-    public Result deleteDictionaries(
+    public Result<?> deleteDictionaries(
             @Parameter(description = "字典ID，多个以英文逗号(,)拼接") @PathVariable String ids
     ) {
         dictService.deleteDictByIds(ids);

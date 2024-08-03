@@ -57,14 +57,14 @@ public class GeneratorController {
     @Operation(summary = "保存代码生成配置")
     @PostMapping("/{tableName}/config")
     @LogAnnotation(value = "生成代码", module = LogModuleEnum.OTHER)
-    public Result saveGenConfig(@RequestBody GenConfigForm formData) {
+    public Result<?> saveGenConfig(@RequestBody GenConfigForm formData) {
         generatorService.saveGenConfig(formData);
         return Result.success();
     }
 
     @Operation(summary = "删除代码生成配置")
     @DeleteMapping("/{tableName}/config")
-    public Result deleteGenConfig(
+    public Result<?> deleteGenConfig(
             @Parameter(description = "表名", example = "sys_user") @PathVariable String tableName
     ) {
         generatorService.deleteGenConfig(tableName);
@@ -87,7 +87,7 @@ public class GeneratorController {
         byte[] data = generatorService.downloadCode(tableNames);
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"youlai-admin-code.zip\"");
-        response.addHeader("Content-Length", "" + data.length);
+        response.addHeader("Content-Length", String.valueOf(data.length));
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");
