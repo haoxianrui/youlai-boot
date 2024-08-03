@@ -62,10 +62,24 @@ class ${entityName}API {
 
 export default ${entityName}API;
 
-/** $${businessName}分页查询参数 */
+/** ${businessName}分页查询参数 */
 export interface ${entityName}PageQuery extends PageQuery {
-    /** 搜索关键字 */
-    keywords?: string;
+    #foreach($fieldConfig in $fieldConfigs)
+        #if($fieldConfig.isShowInList)
+            #if("$!fieldConfig.fieldComment" != "")
+    /** ${fieldConfig.fieldComment} */
+            #end
+            #if($fieldConfig.formType == "DATE" || $fieldConfig.formType == "DATE_TIME")
+                #if($fieldConfig.queryType == "BETWEEN")
+    ${fieldConfig.fieldName}?: [string, string];
+                #else
+    ${fieldConfig.fieldName}?: ${fieldConfig.tsType};
+                #end
+            #else
+    ${fieldConfig.fieldName}?: ${fieldConfig.tsType};
+            #end
+        #end
+    #end
 }
 
 /** ${businessName}表单对象 */

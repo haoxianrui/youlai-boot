@@ -22,7 +22,11 @@
             #if($fieldConfigs)
                 #foreach($fieldConfig in ${fieldConfigs})
                     #if($fieldConfig.isShowInQuery)
+                #if($fieldConfig.fieldType == "String")
+            <if test="queryParams.${fieldConfig.fieldName} != null and queryParams.${fieldConfig.fieldName} != ''">
+                #else
             <if test="queryParams.${fieldConfig.fieldName} != null">
+                #end
                             #set ($queryType = ${fieldConfig.queryType})
                             #if($queryType == "EQ")
                 AND ${fieldConfig.columnName} = #{queryParams.${fieldConfig.fieldName}}
@@ -33,11 +37,14 @@
                     AND ${fieldConfig.columnName} IN  <foreach collection="queryParams.${fieldConfig.fieldName}" item="item" open="(" close=")" separator=",">#{item}</foreach>
                 </if>
                             #elseif($queryType == "BETWEEN")
-                                #if(${fieldConfig.fieldType} == "LocalDateTime")
-                AND ${fieldConfig.columnName} BETWEEN STR_TO_DATE(#{queryParams.${fieldConfig.fieldName}Start}, '%Y-%m-%d %H:%i:%s') AND STR_TO_DATE(#{queryParams.${fieldConfig.fieldName}End}, '%Y-%m-%d %H:%i:%s')
-                                #else
-                AND ${fieldConfig.columnName} BETWEEN #{queryParams.${fieldConfig.fieldName}Start} AND #{queryParams.${fieldConfig.fieldName}End}
-                                #end
+                <if test="queryParams.${fieldConfig.fieldName}[0] != null and queryParams.${fieldConfig.fieldName}[0] != ''">
+                    <bind name="startDate" value="queryParams.${fieldConfig.fieldName}[0].length() == 10 ? queryParams.${fieldConfig.fieldName}[0] + ' 00:00:00' : queryParams.${fieldConfig.fieldName}[0]"/>
+                    AND u.create_time &gt;= #{startDate}
+                </if>
+                <if test="queryParams.${fieldConfig.fieldName}[1] != null and queryParams.${fieldConfig.fieldName}[1] != ''">
+                    <bind name="endDate" value="queryParams.${fieldConfig.fieldName}[1].length() == 10 ? queryParams.${fieldConfig.fieldName}[1] + ' 23:59:59' : queryParams.${fieldConfig.fieldName}[1]"/>
+                    AND u.create_time &lt;= #{endDate}
+                </if>
                             #elseif($queryType == "GT")
                 AND ${fieldConfig.columnName} > #{queryParams.${fieldConfig.fieldName}}
                             #elseif($queryType == "GE")

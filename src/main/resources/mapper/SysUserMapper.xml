@@ -37,13 +37,13 @@
             <if test='queryParams.deptId!=null'>
                 AND concat(',',concat(d.tree_path,',',d.id),',') like concat('%,',#{queryParams.deptId},',%')
             </if>
-            <if test='queryParams.createTimeRange != null'>
-                <if test="queryParams.createTimeRange[0] != null and queryParams.createTimeRange[0].trim() neq ''">
-                    AND u.create_time >=CONCAT(#{queryParams.createTimeRange[0]}, ' 00:00:00')
-                </if>
-                <if test="queryParams.createTimeRange[1] != null and queryParams.createTimeRange[0].trim() neq ''">
-                    AND u.create_time &lt;= CONCAT(#{queryParams.createTimeRange[1]}, ' 23:59:59')
-                </if>
+            <if test="queryParams.createTime[0] != null and queryParams.createTime[0] != ''">
+                <bind name="startDate" value="queryParams.createTime[0].length() == 10 ? queryParams.createTime[0] + ' 00:00:00' : queryParams.createTime[0]"/>
+                AND u.create_time &gt;= #{startDate}
+            </if>
+            <if test="queryParams.createTime[1] != null and queryParams.createTime[1] != ''">
+                <bind name="endDate" value="queryParams.createTime[1].length() == 10 ? queryParams.createTime[1] + ' 23:59:59' : queryParams.createTime[1]"/>
+                AND u.create_time &lt;= #{endDate}
             </if>
         </where>
         GROUP BY

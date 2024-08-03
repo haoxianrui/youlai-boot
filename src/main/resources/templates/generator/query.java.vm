@@ -29,7 +29,15 @@ public class ${entityName}Query extends BasePageQuery {
             #if("$!fieldConfig.fieldComment" != "")
     @Schema(description = "${fieldConfig.fieldComment}")
             #end
+            #if($fieldConfig.formType == "DATE" || $fieldConfig.formType == "DATE_TIME")
+                #if($fieldConfig.queryType == "BETWEEN")
+    private List<String> ${fieldConfig.fieldName};
+                #else
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
+                #end
+            #else
+    private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
+            #end
          #end
     #end
 #end

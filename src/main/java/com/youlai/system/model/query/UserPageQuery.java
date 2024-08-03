@@ -26,6 +26,6 @@ public class UserPageQuery extends BasePageQuery {
     private Long deptId;
 
     @Schema(description="创建时间范围")
-    private List<String> createTimeRange;
+    private List<String> createTime;
 
 }
