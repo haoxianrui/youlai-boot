@@ -443,7 +443,7 @@ CREATE TABLE `gen_config` (
                               `author` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '作者',
                               `parent_menu_id` bigint DEFAULT NULL COMMENT '上级菜单ID，对应sys_menu的id ',
                               `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-                              `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                              `update_time` datetime DEFAULT NULL  COMMENT '更新时间',
                               PRIMARY KEY (`id`),
                               UNIQUE KEY `uk_tablename_deleted` (`table_name`) USING BTREE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='代码生成基础配置表';
@@ -469,8 +469,8 @@ CREATE TABLE `gen_field_config` (
                                     `query_type` tinyint DEFAULT NULL COMMENT '查询方式',
                                     `form_type` tinyint DEFAULT NULL COMMENT '表单类型',
                                     `dict_type` varchar(100) DEFAULT NULL COMMENT '字典类型(sys_dict表的code)',
-                                    `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                                    `update_time` datetime  COMMENT '更新时间',
+                                    `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+                                    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
                                     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='代码生成字段配置表';
 

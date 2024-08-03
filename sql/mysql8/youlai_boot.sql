@@ -472,7 +472,7 @@ CREATE TABLE `gen_field_config` (
                                     `dict_type` varchar(100) DEFAULT NULL COMMENT '字典类型(sys_dict表的code)',
                                     `create_time` datetime  COMMENT '创建时间',
                                     `update_time` datetime  COMMENT '更新时间',
-                                    PRIMARY KEY (`id`),
+                                    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='代码生成字段配置表';
 
 
