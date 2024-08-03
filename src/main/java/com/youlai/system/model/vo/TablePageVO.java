@@ -26,4 +26,7 @@ public class TablePageVO {
     @Schema(description = "创建时间",example = "2023-08-08 08:08:08")
     private String createTime;
 
+    @Schema(description="是否已配置")
+    private Integer isConfigured;
+
 }

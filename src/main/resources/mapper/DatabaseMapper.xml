@@ -7,22 +7,24 @@
     <!-- 查询数据库表分页 -->
     <select id="getTablePage" resultType="com.youlai.system.model.vo.TablePageVO">
         SELECT
-            TABLE_NAME ,
-            TABLE_COMMENT ,
-            TABLE_COLLATION,
-            ENGINE,
-            CREATE_TIME
+            t1.TABLE_NAME ,
+            t1.TABLE_COMMENT ,
+            t1.TABLE_COLLATION,
+            t1.ENGINE,
+            t1.CREATE_TIME,
+            CASE WHEN t2.id IS NOT NULL THEN 1 ELSE 0 END AS isConfigured
         FROM
-            information_schema.tables
+            information_schema.tables t1
+            LEFT JOIN gen_config t2 on t1.TABLE_NAME = t2.table_name
         WHERE
-            TABLE_SCHEMA = (SELECT DATABASE())
-            AND table_type = 'BASE TABLE'
+            t1.TABLE_SCHEMA = (SELECT DATABASE())
+            AND t1.table_type = 'BASE TABLE'
             <if test="queryParams.keywords != null and queryParams.keywords.trim() neq ''">
-                AND TABLE_NAME LIKE CONCAT('%',#{queryParams.keywords},'%')
+                AND t1.TABLE_NAME LIKE CONCAT('%',#{queryParams.keywords},'%')
             </if>
         <!-- 排除的表 -->
         <if test="queryParams.excludeTables != null and queryParams.excludeTables.size() > 0">
-            AND TABLE_NAME NOT IN
+            AND t1.TABLE_NAME NOT IN
             <foreach collection="queryParams.excludeTables" item="excludeTable" open="(" close=")" separator=",">
                 #{excludeTable}
             </foreach>
