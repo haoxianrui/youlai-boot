@@ -420,11 +420,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 button.setType(MenuTypeEnum.BUTTON);
                 button.setName(actions[i]);
                 button.setPerm(permPrefix + perms[i]);
+                button.setSort(i + 1);
                 this.save(button);
+
+                // 生成 treepath
+                button.setTreePath(treePath + "," + button.getId());
+                this.updateById(button);
             }
-
         }
-
     }
 
 }
