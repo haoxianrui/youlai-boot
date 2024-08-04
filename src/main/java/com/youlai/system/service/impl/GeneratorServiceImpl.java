@@ -363,6 +363,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         bindMap.put("packageName", genConfig.getPackageName());
         bindMap.put("moduleName", genConfig.getModuleName());
+        bindMap.put("subpackageName", templateConfig.getSubpackageName());
         bindMap.put("date", DateUtil.format(new Date(), "yyyy-MM-dd HH:mm"));
         bindMap.put("entityName", entityName);
         bindMap.put("tableName", genConfig.getTableName());
@@ -376,6 +377,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         boolean hasRequiredField = false;
 
         for (GenFieldConfig fieldConfig : fieldConfigs) {
+
             if ("LocalDateTime".equals(fieldConfig.getFieldType())) {
                 hasLocalDateTime = true;
             }
@@ -386,6 +388,8 @@ public class GeneratorServiceImpl implements GeneratorService {
                 hasRequiredField = true;
             }
             fieldConfig.setTsType(JavaTypeEnum.getTsTypeByJavaType(fieldConfig.getFieldType()));
+
+
         }
 
         bindMap.put("hasLocalDateTime", hasLocalDateTime);
