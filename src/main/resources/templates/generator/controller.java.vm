@@ -1,14 +1,15 @@
 package ${packageName}.${moduleName}.${subpackageName};
 
+import ${packageName}.${moduleName}.service.${entityName}Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ${packageName}.${moduleName}.model.form.${entityName}Form;
-import ${packageName}.${moduleName}.model.query.${entityName}PageQuery;
-import ${packageName}.${moduleName}.model.vo.${entityName}PageVO;
+import ${packageName}.${moduleName}.model.query.${entityName}Query;
+import ${packageName}.${moduleName}.model.vo.${entityName}VO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.youlai.common.result.PageResult;
-import com.youlai.common.result.Result;
+import com.youlai.system.common.result.PageResult;
+import com.youlai.system.common.result.Result;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,13 +30,13 @@ import jakarta.validation.Valid;
 @RequiredArgsConstructor
 public class ${entityName}Controller  {
 
-    private final ${entityName}Serivie ${lowerFirstEntityName}Service;
+    private final ${entityName}Service ${lowerFirstEntityName}Service;
 
     @Operation(summary = "$!{businessName}分页列表")
     @GetMapping("/page")
     @PreAuthorize("@ss.hasPerm('${moduleName}:${lowerFirstEntityName}:query')")
-    public PageResult<${entityName}PageVO> get${entityName}Page(${entityName}PageQuery queryParams ) {
-        IPage<${entityName}PageVO> result = ${lowerFirstEntityName}Service.get${entityName}Page(queryParams);
+    public PageResult<${entityName}VO> get${entityName}Page(${entityName}Query queryParams ) {
+        IPage<${entityName}VO> result = ${lowerFirstEntityName}Service.get${entityName}Page(queryParams);
         return PageResult.success(result);
     }
 

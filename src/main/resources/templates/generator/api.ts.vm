@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 
-const ${entityName.toUpperCase()}_BASE_URL = "/api/v1/${entityName.toLowerCase()}s";
+const ${entityName.toUpperCase()}_BASE_URL = "/api/v1/${lowerFirstEntityName}s";
 
 class ${entityName}API {
     /** 获取${businessName}分页数据 */
