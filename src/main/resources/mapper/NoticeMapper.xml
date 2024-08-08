@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youlai.system.mapper.NoticeMapper">
+
+    <!-- 获取通知公告分页列表 -->
+    <select id="getNoticePage" resultType="com.youlai.system.model.vo.NoticeVO">
+        SELECT
+                title,
+                content,
+                notice_type,
+                release,
+                priority,
+                tar_type,
+                send_status,
+                send_time
+        FROM
+            sys_notice
+        <where>
+            <if test="queryParams.id != null">
+                AND id = #{queryParams.id}
+            </if>
+            <if test="queryParams.title != null and queryParams.title != ''">
+                AND title = #{queryParams.title}
+            </if>
+            <if test="queryParams.content != null and queryParams.content != ''">
+                AND content = #{queryParams.content}
+            </if>
+            <if test="queryParams.noticeType != null">
+                AND notice_type = #{queryParams.noticeType}
+            </if>
+            <if test="queryParams.release != null">
+                AND release = #{queryParams.release}
+            </if>
+            <if test="queryParams.priority != null">
+                AND priority = #{queryParams.priority}
+            </if>
+            <if test="queryParams.tarType != null">
+                AND tar_type = #{queryParams.tarType}
+            </if>
+            <if test="queryParams.sendStatus != null">
+                AND send_status = #{queryParams.sendStatus}
+            </if>
+            <if test="queryParams.sendTime != null">
+                AND send_time = #{queryParams.sendTime}
+            </if>
+            <if test="queryParams.recallTime != null">
+                AND recall_time = #{queryParams.recallTime}
+            </if>
+            <if test="queryParams.createBy != null">
+                AND create_by = #{queryParams.createBy}
+            </if>
+            <if test="queryParams.createTime != null">
+                AND create_time = #{queryParams.createTime}
+            </if>
+            <if test="queryParams.updateBy != null">
+                AND update_by = #{queryParams.updateBy}
+            </if>
+            <if test="queryParams.updateTime != null">
+                AND update_time = #{queryParams.updateTime}
+            </if>
+            <if test="queryParams.isDelete != null">
+                AND is_delete = #{queryParams.isDelete}
+            </if>
+        </where>
+    </select>
+
+</mapper>
