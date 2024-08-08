@@ -475,5 +475,33 @@ CREATE TABLE `gen_field_config` (
                                     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='代码生成字段配置表';
 
+CREATE TABLE `sys_notice` (
+                              `id` bigint(20) NOT NULL AUTO_INCREMENT,
+                              `title` varchar(50) DEFAULT NULL COMMENT '通知标题',
+                              `content` text COMMENT '通知内容',
+                              `notice_type` int(11) NOT NULL COMMENT '通知类型',
+                              `release` bigint(20) DEFAULT NULL COMMENT '发布人',
+                              `priority` tinyint(4) NOT NULL COMMENT '优先级(0-低 1-中 2-高)',
+                              `tar_type` tinyint(4) NOT NULL COMMENT '目标类型(0-全体 1-指定)',
+                              `send_status` tinyint(4) NOT NULL COMMENT '发布状态(0-未发布 1已发布 2已撤回)',
+                              `send_time` datetime DEFAULT NULL COMMENT '发布时间',
+                              `recall_time` datetime DEFAULT NULL COMMENT '撤回时间',
+                              `create_by` bigint(20) NOT NULL COMMENT '创建人ID',
+                              `create_time` datetime NOT NULL COMMENT '创建时间',
+                              `update_by` bigint(20) DEFAULT NULL COMMENT '更新人ID',
+                              `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+                              `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '逻辑删除标识(0-未删除 1-已删除)',
+                              PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='通知公告';
+
+CREATE TABLE `sys_notice_status` (
+                                     `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                     `notice_id` bigint(20) NOT NULL COMMENT '公共通知id',
+                                     `user_id` int(11) NOT NULL COMMENT '用户id',
+                                     `read_status` bigint(4) DEFAULT NULL COMMENT '读取状态，0未读，1已读取',
+                                     `read_tiem` datetime DEFAULT NULL COMMENT '用户阅读时间',
+                                     PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户公告状态表';
+
 
 SET FOREIGN_KEY_CHECKS = 1;
