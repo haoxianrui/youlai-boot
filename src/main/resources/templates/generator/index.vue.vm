@@ -10,7 +10,7 @@
                           v-model="queryParams.$fieldConfig.fieldName"
                           placeholder="$fieldConfig.fieldComment"
                           clearable
-                          @keyup.enter="handleQuery"
+                          @keyup.enter="handleQuery()"
                       />
                     #elseif($fieldConfig.formType == "SELECT")
                         #if($fieldConfig.dictType != "")
@@ -81,8 +81,8 @@
               #end
           #end
         <el-form-item>
-          <el-button type="primary" @click="handleQuery"><i-ep-search />搜索</el-button>
-          <el-button @click="handleResetQuery"><i-ep-refresh />重置</el-button>
+          <el-button type="primary" @click="handleQuery()"><i-ep-search />搜索</el-button>
+          <el-button @click="handleResetQuery()"><i-ep-refresh />重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -92,7 +92,7 @@
         <el-button
             v-hasPerm="['${moduleName}:${lowerFirstEntityName}:add']"
             type="success"
-            @click="handleOpenDialog"
+            @click="handleOpenDialog()"
         >
           <i-ep-plus />
           新增
@@ -101,7 +101,7 @@
             v-hasPerm="['${moduleName}:${lowerFirstEntityName}:delete']"
             type="danger"
             :disabled="ids.length === 0"
-            @click="handleDelete"
+            @click="handleDelete()"
         ><i-ep-delete />
           删除
         </el-button>
@@ -157,7 +157,7 @@
           v-model:total="total"
           v-model:page="queryParams.pageNum"
           v-model:limit="queryParams.pageSize"
-          @pagination="handleQuery"
+          @pagination="handleQuery()"
       />
     </el-card>
 
@@ -177,7 +177,7 @@
                           v-model="queryParams.$fieldConfig.fieldName"
                           placeholder="$fieldConfig.fieldComment"
                           clearable
-                          @keyup.enter="handleQuery"
+                          @keyup.enter="handleQuery()"
                       />
                     #elseif($fieldConfig.formType == "SELECT")
                         #if($fieldConfig.dictType != "")
@@ -236,8 +236,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="handleSubmit">确定</el-button>
-          <el-button @click="handleCloseDialog">取消</el-button>
+          <el-button type="primary" @click="handleSubmit()">确定</el-button>
+          <el-button @click="handleCloseDialog()">取消</el-button>
         </div>
       </template>
     </el-dialog>
