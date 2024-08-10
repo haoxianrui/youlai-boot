@@ -38,10 +38,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog>
      */
     @Override
     public Page<LogPageVO> listPagedLogs(LogPageQuery queryParams) {
-        // 格式化为数据库日期格式，避免日期比较使用格式化函数导致索引失效
-        DateUtils.toDatabaseFormat(queryParams, "startDate", "endDate");
-
-        return this.baseMapper.listPagedLogs(new Page(queryParams.getPageNum(), queryParams.getPageSize()),
+        return this.baseMapper.listPagedLogs(new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),
                 queryParams);
     }
 

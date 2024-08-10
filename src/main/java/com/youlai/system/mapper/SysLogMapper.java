@@ -28,7 +28,7 @@ public interface SysLogMapper extends BaseMapper<SysLog> {
      * @param queryParams
      * @return
      */
-    Page<LogPageVO> listPagedLogs(Page page, LogPageQuery queryParams);
+    Page<LogPageVO> listPagedLogs(Page<LogPageVO> page, LogPageQuery queryParams);
 
     /**
      * 统计浏览数(PV)

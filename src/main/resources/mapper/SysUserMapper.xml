@@ -37,7 +37,7 @@
             <if test='queryParams.deptId!=null'>
                 AND concat(',',concat(d.tree_path,',',d.id),',') like concat('%,',#{queryParams.deptId},',%')
             </if>
-            <if test="queryParams.createTime != null ">
+            <if test="queryParams.createTime != null and queryParams.createTime.size > 0">
                 <if test="queryParams.createTime[0] != null and queryParams.createTime[0] != ''">
                     <bind name="startDate" value="queryParams.createTime[0].length() == 10 ? queryParams.createTime[0] + ' 00:00:00' : queryParams.createTime[0]"/>
                     AND u.create_time &gt;= #{startDate}

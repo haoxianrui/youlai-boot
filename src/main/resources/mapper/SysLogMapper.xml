@@ -32,11 +32,15 @@
                     t2.nickname LIKE concat('%',#{queryParams.keywords},'%')
                 )
             </if>
-            <if test="queryParams.startDate != null">
-                AND t1.create_time &gt;= #{queryParams.startDate}
-            </if>
-            <if test="queryParams.endDate != null">
-                AND t1.create_time &lt;= #{queryParams.endDate}
+            <if test="queryParams.createTime != null and queryParams.createTime.size > 0">
+                <if test="queryParams.createTime[0] != null and queryParams.createTime[0] != ''">
+                    <bind name="startDate" value="queryParams.createTime[0].length() == 10 ? queryParams.createTime[0] + ' 00:00:00' : queryParams.createTime[0]"/>
+                    AND t1.create_time &gt;= #{startDate}
+                </if>
+                <if test="queryParams.createTime[1] != null and queryParams.createTime[1] != ''">
+                    <bind name="endDate" value="queryParams.createTime[1].length() == 10 ? queryParams.createTime[1] + ' 23:59:59' : queryParams.createTime[1]"/>
+                    AND t1.create_time &lt;= #{endDate}
+                </if>
             </if>
         </where>
         ORDER BY
