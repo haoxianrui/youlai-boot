@@ -37,7 +37,7 @@ CREATE TABLE `sys_config` (
           PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='系统配置';
 
-INSERT INTO `sys_config` VALUES(1,'IP请求限制QPS阈值','IP_RATE_LIMIT_COUNT_QPS','10','IP请求限制QPS阈值','2024-08-10 14:31:34','2','2024-08-10 14:53:51','2',0);
+INSERT INTO `sys_config` VALUES(1,'IP请求限制QPS阈值','IP_QPS_THRESHOLD_LIMIT','10','IP请求限制QPS阈值','2024-08-10 14:31:34','2','2024-08-10 14:53:51','2',0);
 
 -- ----------------------------
 -- Table structure for sys_dept

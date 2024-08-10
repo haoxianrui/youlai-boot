@@ -49,13 +49,13 @@ public class RedisRateLimiterFilter extends OncePerRequestFilter {
         if (count == null || count == 1) {
             redisTemplate.expire(key,1, TimeUnit.SECONDS);
         }
-        Object systemConfig = sysConfigService.getSystemConfig(SystemConstants.CONFIG_IP_RATE_LIMIT_QPS_KEY);
+        Object systemConfig = sysConfigService.getSystemConfig(SystemConstants.IP_QPS_THRESHOLD_LIMIT_KEY);
         long limit = 10;
         if(systemConfig != null){
             limit =  Long.parseLong(systemConfig.toString());
         }else{
             log.warn("[RedisRateLimiterFilter.rateLimit]系统配置中未配置IP请求限制QPS阈值配置,使用默认值:{},请检查配置项:{}",
-                    limit,SystemConstants.CONFIG_IP_RATE_LIMIT_QPS_KEY);
+                    limit,SystemConstants.IP_QPS_THRESHOLD_LIMIT_KEY);
         }
         return count != null && count > limit;
     }

@@ -24,8 +24,8 @@ public interface SystemConstants {
     String ROOT_ROLE_CODE = "ROOT";
 
     /**
-     * IP请求限制QPS阈值配置KEY
+     * 单个IP请求的最大每秒查询数（QPS）阈值Key
      */
-    String CONFIG_IP_RATE_LIMIT_QPS_KEY = "IP_RATE_LIMIT_COUNT_QPS";
+    String IP_QPS_THRESHOLD_LIMIT_KEY = "IP_QPS_THRESHOLD_LIMIT";
 
 }
