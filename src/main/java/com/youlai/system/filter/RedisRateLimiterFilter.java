@@ -37,7 +37,7 @@ public class RedisRateLimiterFilter extends OncePerRequestFilter {
 
     /**
      * 确认是否限流方法
-     * 默认情况下：限制同一个IP在一分钟内只能访问10次，可以通过修改系统配置进行调整
+     * 默认情况下：限制同一个IP在一分钟内只能访问100次，可以通过修改系统配置进行调整
      * 这里也可以进行扩展，比如redis记录同一个ip每天出发限流的上限次数，记录在redis中，达到某个阈值后，进行永久封禁这·
      *
      * @param ip ip地址
@@ -58,7 +58,7 @@ public class RedisRateLimiterFilter extends OncePerRequestFilter {
             redisTemplate.expire(key,expire, TimeUnit.MINUTES);
         }
         Object systemConfig = sysConfigService.getSystemConfig(SystemConstants.CONFIG_IP_RATE_LIMIT_COUNT_KEY);
-        long limit = 10;
+        long limit = 100;
         if(systemConfig != null){
             limit =  Long.parseLong(systemConfig.toString());
         }else{
