@@ -37,8 +37,8 @@ public class RedisRateLimiterFilter extends OncePerRequestFilter {
 
     /**
      * 确认是否限流方法
-     * 默认情况下：限制同一个IP在一分钟内只能访问100次，可以通过修改系统配置进行调整
-     * 这里也可以进行扩展，比如redis记录同一个ip每天出发限流的上限次数，记录在redis中，达到某个阈值后，进行永久封禁这·
+     * 默认情况下：限制同一个IP的QPS最大为10,可以通过修改系统配置进行调整
+     * 这里也可以进行扩展，比如redis记录同一个ip每天出发限流的上限次数，记录在redis中，达到某个阈值后，进行永久封禁这个ip
      *
      * @param ip ip地址
      * @return  是否限流
@@ -47,23 +47,15 @@ public class RedisRateLimiterFilter extends OncePerRequestFilter {
         String key = RedisKeyConstants.IP_RATE_LIMITER_KEY + ip;
         Long count = redisTemplate.opsForValue().increment(key);
         if (count == null || count == 1) {
-            Object ipRateLimitMinute = sysConfigService.getSystemConfig(SystemConstants.CONFIG_IP_RATE_LIMIT_MINUTE_KEY);
-            long expire = 1;
-            if(ipRateLimitMinute != null){
-                expire = Long.parseLong(ipRateLimitMinute.toString());
-            }else {
-                log.warn("[RedisRateLimiterFilter.rateLimit]系统配置中未配置IP限流最大分钟数,使用默认分钟数:{},请检查配置项:{}",
-                        expire,SystemConstants.CONFIG_IP_RATE_LIMIT_MINUTE_KEY);
-            }
-            redisTemplate.expire(key,expire, TimeUnit.MINUTES);
+            redisTemplate.expire(key,1, TimeUnit.SECONDS);
         }
-        Object systemConfig = sysConfigService.getSystemConfig(SystemConstants.CONFIG_IP_RATE_LIMIT_COUNT_KEY);
-        long limit = 100;
+        Object systemConfig = sysConfigService.getSystemConfig(SystemConstants.CONFIG_IP_RATE_LIMIT_QPS_KEY);
+        long limit = 10;
         if(systemConfig != null){
             limit =  Long.parseLong(systemConfig.toString());
         }else{
-            log.warn("[RedisRateLimiterFilter.rateLimit]系统配置中未配置IP限流次数配置,使用默认次数:{},请检查配置项:{}",
-                    limit,SystemConstants.CONFIG_IP_RATE_LIMIT_COUNT_KEY);
+            log.warn("[RedisRateLimiterFilter.rateLimit]系统配置中未配置IP请求限制QPS阈值配置,使用默认值:{},请检查配置项:{}",
+                    limit,SystemConstants.CONFIG_IP_RATE_LIMIT_QPS_KEY);
         }
         return count != null && count > limit;
     }
