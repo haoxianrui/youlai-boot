@@ -37,6 +37,9 @@ CREATE TABLE `sys_config` (
           PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='系统配置';
 
+INSERT INTO `sys_config` VALUES(1,'IP限流控制单位时长','IP_RATE_LIMIT_MINUTE','1','IP限流控制单位时长(分钟)','2024-08-10 14:31:34','2','2024-08-10 14:53:51','2',0);
+INSERT INTO `sys_config` VALUES(2,'IP限流控制最大访问次数配置','IP_RATE_LIMIT_COUNT','100','IP限流控制一个单位时长内最大访问次数','2024-08-10 14:31:51','2','2024-08-10 14:53:09','2',0);
+
 -- ----------------------------
 -- Table structure for sys_dept
 -- ----------------------------

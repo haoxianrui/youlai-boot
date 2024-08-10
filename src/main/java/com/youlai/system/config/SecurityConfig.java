@@ -4,10 +4,12 @@ import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.collection.CollectionUtil;
 import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.config.property.SecurityProperties;
+import com.youlai.system.filter.RedisRateLimiterFilter;
 import com.youlai.system.security.exception.MyAccessDeniedHandler;
 import com.youlai.system.security.exception.MyAuthenticationEntryPoint;
 import com.youlai.system.filter.JwtValidationFilter;
 import com.youlai.system.filter.CaptchaValidationFilter;
+import com.youlai.system.service.SysConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,6 +45,7 @@ public class SecurityConfig {
     private final RedisTemplate<String, Object> redisTemplate;
     private final CodeGenerator codeGenerator;
     private final SecurityProperties securityProperties;
+    private final SysConfigService sysConfigService;
 
 
 
@@ -64,7 +67,8 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
 
         ;
-
+        // 限流过滤器
+        http.addFilterBefore(new RedisRateLimiterFilter(redisTemplate, sysConfigService), UsernamePasswordAuthenticationFilter.class);
         // 验证码校验过滤器
         http.addFilterBefore(new CaptchaValidationFilter(redisTemplate, codeGenerator), UsernamePasswordAuthenticationFilter.class);
         // JWT 校验过滤器

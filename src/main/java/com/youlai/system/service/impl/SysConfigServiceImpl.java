@@ -1,7 +1,6 @@
 package com.youlai.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,6 +9,7 @@ import com.youlai.system.converter.SysConfigConverter;
 import com.youlai.system.model.form.ConfigForm;
 import com.youlai.system.model.query.ConfigPageQuery;
 import com.youlai.system.security.util.SecurityUtils;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -39,6 +39,15 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     private final SysConfigConverter sysConfigConverter;
 
     private final RedisTemplate<String, Object> redisTemplate;
+
+
+    /**
+     * 系统启动完成后，加载系统配置到缓存
+     */
+    @PostConstruct
+    public void init() {
+        refreshCache();
+    }
 
     /**
      * 分页查询系统配置

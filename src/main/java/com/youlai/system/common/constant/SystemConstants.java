@@ -23,4 +23,16 @@ public interface SystemConstants {
      */
     String ROOT_ROLE_CODE = "ROOT";
 
+    /**
+     * IP限流最大分钟数配置系统配置KEY
+     */
+    String CONFIG_IP_RATE_LIMIT_MINUTE_KEY = "IP_RATE_LIMIT_MINUTE";
+
+    /**
+     * IP限流次数配置系统配置KEY
+     * 在最大分钟数内，允许访问的次数
+     * @since 1.0.0
+     */
+    String CONFIG_IP_RATE_LIMIT_COUNT_KEY = "IP_RATE_LIMIT_COUNT";
+
 }
