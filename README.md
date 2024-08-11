@@ -17,7 +17,7 @@
    </a>
 </div>
 
-!![](https://raw.gitmirror.com/youlaitech/image/main/docs/rainbow.png)
+!
 
 <div align="center">
   <a target="_blank" href="https://admin.youlai.tech/">🔍 在线预览</a> |  <a target="_blank" href="https://doc.youlai.tech/%E5%89%8D%E5%90%8E%E7%AB%AF%E6%A8%A1%E6%9D%BF/%E5%90%8E%E7%AB%AF%E6%89%8B%E5%86%8C/%E9%A1%B9%E7%9B%AE%E7%AE%80%E4%BB%8B.html">📖 阅读文档</a> | <a href="./README.en-US.md">🌐English</a>
