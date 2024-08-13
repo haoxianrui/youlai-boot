@@ -15,7 +15,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface DictConverter {
 
-    Page<DictPageVO> convertToPageVo(Page<SysDict> page);
+    Page<DictPageVO> toPageVo(Page<SysDict> page);
 
     DictForm toForm(SysDict entity);
 

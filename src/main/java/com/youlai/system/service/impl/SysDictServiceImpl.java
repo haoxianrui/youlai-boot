@@ -98,7 +98,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
                 .eq(SysDictItem::getDictId, id)
         );
         // 转换数据项
-        List<DictForm.DictItem> dictItemList = dictItemConverter.convertToDictFormDictItem(dictItems);
+        List<DictForm.DictItem> dictItemList = dictItemConverter.toDictItem(dictItems);
         dictForm.setDictItems(dictItemList);
         return dictForm;
     }
@@ -219,7 +219,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         );
 
         // 转换为 Option
-        return dictItemConverter.convertToOption(dictItems);
+        return dictItemConverter.toOption(dictItems);
     }
 
     /**

@@ -70,7 +70,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         );
 
         // 实体转换
-        return roleConverter.convertToPageVo(rolePage);
+        return roleConverter.toPageVo(rolePage);
     }
 
     /**

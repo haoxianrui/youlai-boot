@@ -5,7 +5,6 @@ import com.youlai.system.common.model.Option;
 import com.youlai.system.model.entity.SysDictItem;
 import com.youlai.system.model.form.DictForm;
 import com.youlai.system.model.vo.DictPageVO;
-import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -21,20 +20,20 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface DictItemConverter {
 
-    Page<DictPageVO> convertToPageVo(Page<SysDictItem> page);
+    Page<DictPageVO> toPageVo(Page<SysDictItem> page);
 
     DictForm toForm(SysDictItem entity);
 
-    SysDictItem toEntity(DictForm.DictItem dictFormDictItems);
-    List<SysDictItem> toEntity(List<DictForm.DictItem> dictFormDictItems);
+    SysDictItem toEntity(DictForm.DictItem dictItems);
+    List<SysDictItem> toEntity(List<DictForm.DictItem> dictItems);
 
-    DictForm.DictItem convertToDictFormDictItem(SysDictItem entity);
-    List<DictForm.DictItem> convertToDictFormDictItem(List<SysDictItem> entities);
+    DictForm.DictItem toDictItem(SysDictItem entity);
+    List<DictForm.DictItem> toDictItem(List<SysDictItem> entities);
 
     @Mappings({
             @Mapping(target = "value", source = "id"),
             @Mapping(target = "label", source = "name")
     })
-    Option<Long> convertToOption(SysDictItem dictItem);
-    List<Option<Long>> convertToOption(List<SysDictItem> dictItems);
+    Option<Long> toOption(SysDictItem dictItem);
+    List<Option<Long>> toOption(List<SysDictItem> dictItems);
 }
