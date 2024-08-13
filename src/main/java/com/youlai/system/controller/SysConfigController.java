@@ -27,7 +27,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "系统配置")
+@Tag(name = "10.系统配置")
 @RequestMapping("/api/v1/config")
 public class SysConfigController {
 
