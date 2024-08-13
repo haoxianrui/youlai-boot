@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
+import com.youlai.system.model.form.UserProfileForm;
 import com.youlai.system.util.ExcelUtils;
 import com.youlai.system.enums.LogModuleEnum;
 import com.youlai.system.model.dto.UserImportDTO;
@@ -103,7 +104,7 @@ public class SysUserController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "修改用户密码")
+    @Operation(summary = "重置用户密码")
     @PatchMapping(value = "/{userId}/password")
     @PreAuthorize("@ss.hasPerm('sys:user:password:reset')")
     public Result<?> updatePassword(
@@ -169,4 +170,24 @@ public class SysUserController {
         EasyExcel.write(response.getOutputStream(), UserExportDTO.class).sheet("用户列表")
                 .doWrite(exportUserList);
     }
+
+    @Operation(summary = "获取个人中心用户信息")
+    @GetMapping("/{userId}/profile")
+    public Result<UserProfileForm> getUserProfile(
+            @PathVariable Long userId
+    ) {
+        UserProfileForm userProfile = userService.getUserProfile(userId);
+        return Result.success(userProfile);
+    }
+
+    @Operation(summary = "修改个人中心用户信息")
+    @PutMapping("/{userId}/profile")
+    public Result<?> updateUserProfile(
+            @PathVariable Long userId,
+            @RequestBody UserProfileForm formData
+    ) {
+        boolean result = userService.updateUserProfile(formData);
+        return Result.judge(result);
+    }
+
 }
