@@ -15,7 +15,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface SysConfigConverter {
 
-    Page<ConfigVO> convertToPageVo(Page<SysConfig> page);
+    Page<ConfigVO> toPageVo(Page<SysConfig> page);
 
     SysConfig toEntity(ConfigForm configForm);
 

@@ -66,7 +66,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
                         .like(SysConfig::getConfigName, keywords)
                 );
         Page<SysConfig> pageList = this.page(page, query);
-        return sysConfigConverter.convertToPageVo(pageList);
+        return sysConfigConverter.toPageVo(pageList);
     }
 
     /**
