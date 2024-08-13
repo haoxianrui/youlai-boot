@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.youlai.system.model.entity.SysUser;
 import com.youlai.system.model.form.UserForm;
 import com.youlai.system.model.dto.UserAuthInfo;
+import com.youlai.system.model.form.UserProfileForm;
 import com.youlai.system.model.query.UserPageQuery;
 import com.youlai.system.model.dto.UserExportDTO;
 import com.youlai.system.model.vo.UserInfoVO;
@@ -87,7 +88,7 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 获取导出用户列表
      *
-     * @param queryParams
+     * @param queryParams 查询参数
      * @return
      */
     List<UserExportDTO> listExportUsers(UserPageQuery queryParams);
@@ -99,4 +100,19 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     UserInfoVO getCurrentUserInfo();
+
+    /**
+     * 获取个人中心用户信息
+     *
+     * @return
+     */
+    UserProfileForm getUserProfile(Long userId);
+
+    /**
+     * 修改个人中心用户信息
+     *
+     * @param formData 表单数据
+     * @return
+     */
+    boolean updateUserProfile(UserProfileForm formData);
 }
