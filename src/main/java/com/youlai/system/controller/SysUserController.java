@@ -187,6 +187,7 @@ public class SysUserController {
             @PathVariable Long userId,
             @RequestBody UserProfileForm formData
     ) {
+        System.out.println("test");
         boolean result = userService.updateUserProfile(formData);
         return Result.judge(result);
     }
