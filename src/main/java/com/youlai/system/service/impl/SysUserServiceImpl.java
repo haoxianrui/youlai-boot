@@ -10,6 +10,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.converter.UserConverter;
+import com.youlai.system.exception.BusinessException;
+import com.youlai.system.model.form.PasswordChangeForm;
+import com.youlai.system.model.form.PasswordResetForm;
 import com.youlai.system.model.form.UserProfileForm;
 import com.youlai.system.model.vo.UserProfileVO;
 import com.youlai.system.security.util.SecurityUtils;
@@ -168,21 +171,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 修改用户密码
-     *
-     * @param userId   用户ID
-     * @param password 用户密码
-     * @return true|false
-     */
-    @Override
-    public boolean updatePassword(Long userId, String password) {
-        return this.update(new LambdaUpdateWrapper<SysUser>()
-                .eq(SysUser::getId, userId)
-                .set(SysUser::getPassword, passwordEncoder.encode(password))
-        );
-    }
-
-    /**
      * 根据用户名获取认证信息
      *
      * @param username 用户名
@@ -277,4 +265,47 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
 
+    /**
+     * 修改用户密码
+     *
+     * @param userId 用户ID
+     * @param data   密码修改表单数据
+     * @return
+     */
+    @Override
+    public boolean changePassword(Long userId, PasswordChangeForm data) {
+
+        SysUser user = this.getById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+
+        String oldPassword = data.getOldPassword();
+
+        // 校验原密码
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new BusinessException("原密码错误");
+        }
+
+        String newPassword = data.getNewPassword();
+        return this.update(new LambdaUpdateWrapper<SysUser>()
+                .eq(SysUser::getId, userId)
+                .set(SysUser::getPassword, passwordEncoder.encode(newPassword))
+        );
+    }
+
+    /**
+     * 重置密码
+     *
+     * @param userId 用户ID
+     * @param password   密码重置表单数据
+     * @return
+     */
+    @Override
+    public boolean resetPassword(Long userId, String password) {
+        return this.update(new LambdaUpdateWrapper<SysUser>()
+                .eq(SysUser::getId, userId)
+                .set(SysUser::getPassword, passwordEncoder.encode(password))
+        );
+    }
 }

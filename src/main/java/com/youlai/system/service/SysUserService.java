@@ -4,6 +4,8 @@ package com.youlai.system.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.youlai.system.model.entity.SysUser;
+import com.youlai.system.model.form.PasswordChangeForm;
+import com.youlai.system.model.form.PasswordResetForm;
 import com.youlai.system.model.form.UserForm;
 import com.youlai.system.model.dto.UserAuthInfo;
 import com.youlai.system.model.form.UserProfileForm;
@@ -68,15 +70,6 @@ public interface SysUserService extends IService<SysUser> {
 
 
     /**
-     * 修改用户密码
-     *
-     * @param userId   用户ID
-     * @param password 用户密码
-     * @return
-     */
-    boolean updatePassword(Long userId, String password);
-
-    /**
      * 根据用户名获取认证信息
      *
      * @param username 用户名
@@ -116,4 +109,22 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     boolean updateUserProfile(UserProfileForm formData);
+
+    /**
+     * 修改用户密码
+     *
+     * @param userId 用户ID
+     * @param data   修改密码表单数据
+     * @return
+     */
+    boolean changePassword(Long userId, PasswordChangeForm data);
+
+    /**
+     * 重置用户密码
+     *
+     * @param userId 用户ID
+     * @param password 重置后的密码
+     * @return
+     */
+    boolean resetPassword(Long userId, String password);
 }

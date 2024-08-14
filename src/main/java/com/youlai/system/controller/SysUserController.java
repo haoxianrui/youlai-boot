@@ -6,8 +6,11 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
+import com.youlai.system.model.form.PasswordChangeForm;
+import com.youlai.system.model.form.PasswordResetForm;
 import com.youlai.system.model.form.UserProfileForm;
 import com.youlai.system.model.vo.UserProfileVO;
+import com.youlai.system.security.util.SecurityUtils;
 import com.youlai.system.util.ExcelUtils;
 import com.youlai.system.enums.LogModuleEnum;
 import com.youlai.system.model.dto.UserImportDTO;
@@ -105,17 +108,6 @@ public class SysUserController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "重置用户密码")
-    @PatchMapping(value = "/{userId}/password")
-    @PreAuthorize("@ss.hasPerm('sys:user:password:reset')")
-    public Result<?> updatePassword(
-            @Parameter(description = "用户ID") @PathVariable Long userId,
-            @RequestParam String password
-    ) {
-        boolean result = userService.updatePassword(userId, password);
-        return Result.judge(result);
-    }
-
     @Operation(summary = "修改用户状态")
     @PatchMapping(value = "/{userId}/status")
     public Result<?> updateUserStatus(
@@ -165,7 +157,7 @@ public class SysUserController {
     public void exportUsers(UserPageQuery queryParams, HttpServletResponse response) throws IOException {
         String fileName = "用户列表.xlsx";
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+        response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
 
         List<UserExportDTO> exportUserList = userService.listExportUsers(queryParams);
         EasyExcel.write(response.getOutputStream(), UserExportDTO.class).sheet("用户列表")
@@ -187,8 +179,28 @@ public class SysUserController {
             @PathVariable Long userId,
             @RequestBody UserProfileForm formData
     ) {
-        System.out.println("test");
         boolean result = userService.updateUserProfile(formData);
+        return Result.judge(result);
+    }
+
+    @Operation(summary = "重置用户密码")
+    @PutMapping(value = "/{userId}/password/reset")
+    @PreAuthorize("@ss.hasPerm('sys:user:password:reset')")
+    public Result<?> resetPassword(
+            @Parameter(description = "用户ID") @PathVariable Long userId,
+            @RequestParam String  password
+    ) {
+        boolean result = userService.resetPassword(userId, password);
+        return Result.judge(result);
+    }
+
+    @Operation(summary = "修改用户密码")
+    @PutMapping(value = "/password")
+    public Result<?> changePassword(
+            @RequestParam PasswordChangeForm data
+    ) {
+        Long currUserId = SecurityUtils.getUserId();
+        boolean result = userService.changePassword(currUserId, data);
         return Result.judge(result);
     }
 
