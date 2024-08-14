@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.model.form.UserProfileForm;
+import com.youlai.system.model.vo.UserProfileVO;
 import com.youlai.system.util.ExcelUtils;
 import com.youlai.system.enums.LogModuleEnum;
 import com.youlai.system.model.dto.UserImportDTO;
@@ -173,10 +174,10 @@ public class SysUserController {
 
     @Operation(summary = "获取个人中心用户信息")
     @GetMapping("/{userId}/profile")
-    public Result<UserProfileForm> getUserProfile(
+    public Result<UserProfileVO> getUserProfile(
             @PathVariable Long userId
     ) {
-        UserProfileForm userProfile = userService.getUserProfile(userId);
+        UserProfileVO userProfile = userService.getUserProfile(userId);
         return Result.success(userProfile);
     }
 

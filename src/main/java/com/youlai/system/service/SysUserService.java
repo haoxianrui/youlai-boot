@@ -11,6 +11,7 @@ import com.youlai.system.model.query.UserPageQuery;
 import com.youlai.system.model.dto.UserExportDTO;
 import com.youlai.system.model.vo.UserInfoVO;
 import com.youlai.system.model.vo.UserPageVO;
+import com.youlai.system.model.vo.UserProfileVO;
 
 import java.util.List;
 
@@ -106,7 +107,7 @@ public interface SysUserService extends IService<SysUser> {
      *
      * @return
      */
-    UserProfileForm getUserProfile(Long userId);
+    UserProfileVO getUserProfile(Long userId);
 
     /**
      * 修改个人中心用户信息

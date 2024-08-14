@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.system.common.constant.SystemConstants;
 import com.youlai.system.converter.UserConverter;
 import com.youlai.system.model.form.UserProfileForm;
+import com.youlai.system.model.vo.UserProfileVO;
 import com.youlai.system.security.util.SecurityUtils;
 import com.youlai.system.mapper.SysUserMapper;
 import com.youlai.system.model.dto.UserAuthInfo;
@@ -258,9 +259,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return
      */
     @Override
-    public UserProfileForm getUserProfile(Long userId) {
+    public UserProfileVO getUserProfile(Long userId) {
         SysUser entity = this.getById(userId);
-        return userConverter.toProfileForm(entity);
+        return userConverter.toProfileVO(entity);
     }
 
     /**
