@@ -24,20 +24,18 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_config`;
 CREATE TABLE `sys_config` (
-          `id` bigint NOT NULL AUTO_INCREMENT,
-          `config_name` varchar(50) NOT NULL COMMENT '配置名称',
-          `config_key` varchar(50) NOT NULL COMMENT '配置key',
-          `config_value` varchar(100) NOT NULL COMMENT '配置值',
-          `remark` varchar(200) DEFAULT NULL COMMENT '描述、备注',
-          `create_time` datetime NOT NULL COMMENT '创建时间',
-          `create_by` bigint NOT NULL COMMENT '创建人ID',
-          `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-          `update_by` bigint DEFAULT NULL COMMENT '更新人ID',
-          `is_deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除标识(0-未删除 1-已删除)',
-          PRIMARY KEY (`id`)
+                              `id` bigint NOT NULL AUTO_INCREMENT,
+                              `sys_name` varchar(50) NOT NULL COMMENT '配置名称',
+                              `sys_key` varchar(50) NOT NULL COMMENT '配置key',
+                              `sys_value` varchar(100) NOT NULL COMMENT '配置值',
+                              `remark` varchar(200) DEFAULT NULL COMMENT '描述、备注',
+                              `create_time` datetime NOT NULL COMMENT '创建时间',
+                              `create_by` bigint NOT NULL COMMENT '创建人ID',
+                              `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+                              `update_by` bigint DEFAULT NULL COMMENT '更新人ID',
+                              `is_deleted` tinyint(1) NOT NULL COMMENT '逻辑删除标识(0-未删除 1-已删除)',
+                              PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='系统配置';
-
-INSERT INTO `sys_config` VALUES(1,'IP请求限制QPS阈值','IP_QPS_THRESHOLD_LIMIT','10','IP请求限制QPS阈值','2024-08-10 14:31:34','2','2024-08-10 14:53:51','2',0);
 
 -- ----------------------------
 -- Table structure for sys_dept
@@ -219,12 +217,6 @@ INSERT INTO `sys_menu` VALUES (112, 110, '0,110', '参数(type=2)', 1, NULL, 'ro
 INSERT INTO `sys_menu` VALUES (117, 1, '0,1', '系统日志', 1, 'Log', 'log', 'system/log/index', NULL, 0, 1, 1, 6, 'document', NULL, '2024-06-28 07:43:16', '2024-06-28 07:43:16', NULL);
 INSERT INTO `sys_menu` VALUES (118, 0, '0', '系统工具', 2, NULL, '/tool', 'Layout', NULL, 0, 1, 1, 2, 'menu', NULL, '2024-07-13 08:41:07', '2024-07-13 08:41:07', NULL);
 INSERT INTO `sys_menu` VALUES (119, 118, '0,118', '代码生成(Alpha)', 1, 'Generator', 'generator', 'generator/index', NULL, 0, 1, 1, 1, 'code', NULL, '2024-07-13 08:44:51', '2024-07-13 08:44:51', NULL);
-INSERT INTO `sys_menu` VALUES (120,1,'0,1','系统配置',1,'Config','config','system/config/index',NULL,0,1,1,7,'setting',NULL,'2024-07-30 16:29:24','2024-07-30 16:29:32',NULL);
-INSERT INTO `sys_menu` VALUES (121,120,'0,1,120','查询系统配置',4,NULL,'',NULL,'sys:config:query',0,1,1,1,'',NULL,'2024-07-30 16:29:54','2024-07-30 16:29:54',NULL);
-INSERT INTO `sys_menu` VALUES (122,120,'0,1,120','新增系统配置',4,NULL,'',NULL,'sys:config:add',0,1,1,2,'',NULL,'2024-07-30 16:30:12','2024-07-30 16:30:48',NULL);
-INSERT INTO `sys_menu` VALUES (123,120,'0,1,120','修改系统配置',4,NULL,'',NULL,'sys:config:update',0,1,1,3,'',NULL,'2024-07-30 16:30:31','2024-07-30 16:30:31',NULL);
-INSERT INTO `sys_menu` VALUES (124,120,'0,1,120','删除系统配置',4,NULL,'',NULL,'sys:config:delete',0,1,1,4,'',NULL,'2024-07-30 16:31:07','2024-07-30 16:31:07',NULL);
-INSERT INTO `sys_menu` VALUES (125,120,'0,1,120','刷新系统配置',4,NULL,'',NULL,'sys:config:refresh',0,1,1,5,'',NULL,'2024-07-30 16:31:25','2024-07-30 16:31:25',NULL);
 
 -- ----------------------------
 -- Table structure for sys_message
@@ -352,12 +344,6 @@ INSERT INTO `sys_role_menu` VALUES (2, 116);
 INSERT INTO `sys_role_menu` VALUES (2, 117);
 INSERT INTO `sys_role_menu` VALUES (2, 118);
 INSERT INTO `sys_role_menu` VALUES (2, 119);
-INSERT INTO `sys_role_menu` VALUES (2, 120);
-INSERT INTO `sys_role_menu` VALUES (2, 121);
-INSERT INTO `sys_role_menu` VALUES (2, 122);
-INSERT INTO `sys_role_menu` VALUES (2, 123);
-INSERT INTO `sys_role_menu` VALUES (2, 124);
-INSERT INTO `sys_role_menu` VALUES (2, 125);
 -- ----------------------------
 -- Table structure for sys_user
 -- ----------------------------
@@ -437,17 +423,18 @@ CREATE TABLE `sys_log` (
 DROP TABLE IF EXISTS `gen_config`;
 CREATE TABLE `gen_config` (
                               `id` bigint NOT NULL AUTO_INCREMENT,
-                              `table_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '表名',
-                              `module_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '模块名',
-                              `package_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '包名',
-                              `business_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '业务名',
-                              `entity_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '实体类名',
-                              `author` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '作者',
+                              `table_name` varchar(100) CHARACTER SET utf8 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '表名',
+                              `module_name` varchar(100) CHARACTER SET utf8 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '模块名',
+                              `package_name` varchar(255) CHARACTER SET utf8 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '包名',
+                              `business_name` varchar(100) CHARACTER SET utf8 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '业务名',
+                              `entity_name` varchar(100) CHARACTER SET utf8 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '实体类名',
+                              `author` varchar(50) CHARACTER SET utf8 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '作者',
                               `parent_menu_id` bigint DEFAULT NULL COMMENT '上级菜单ID，对应sys_menu的id ',
                               `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-                              `update_time` datetime DEFAULT NULL  COMMENT '更新时间',
+                              `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                              `is_deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
                               PRIMARY KEY (`id`),
-                              UNIQUE KEY `uk_tablename_deleted` (`table_name`) USING BTREE
+                              UNIQUE KEY `uk_tablename` (`table_name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='代码生成基础配置表';
 
 -- ----------------------------
@@ -457,23 +444,26 @@ DROP TABLE IF EXISTS `gen_field_config`;
 CREATE TABLE `gen_field_config` (
                                     `id` bigint NOT NULL AUTO_INCREMENT,
                                     `config_id` bigint NOT NULL COMMENT '关联的配置ID',
-                                    `column_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                                    `column_type` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                                    `max_length` int DEFAULT NULL COMMENT '最大长度',
-                                    `field_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '字段名称',
-                                    `field_type` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '字段类型',
+                                    `column_name` varchar(100) CHARACTER SET utf8 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+                                    `column_type` varchar(50) CHARACTER SET utf8 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+                                    `column_length` int DEFAULT NULL,
+                                    `field_name` varchar(100) CHARACTER SET utf8 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '字段名称',
+                                    `field_type` varchar(100) CHARACTER SET utf8 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '字段类型',
                                     `field_sort` int DEFAULT NULL COMMENT '字段排序',
-                                    `field_comment` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '字段描述',
+                                    `field_comment` varchar(255) CHARACTER SET utf8 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '字段描述',
+                                    `max_length` int NULL DEFAULT NULL,
                                     `is_required` tinyint(1) DEFAULT NULL COMMENT '是否必填',
                                     `is_show_in_list` tinyint(1) DEFAULT '0' COMMENT '是否在列表显示',
                                     `is_show_in_form` tinyint(1) DEFAULT '0' COMMENT '是否在表单显示',
                                     `is_show_in_query` tinyint(1) DEFAULT '0' COMMENT '是否在查询条件显示',
                                     `query_type` tinyint DEFAULT NULL COMMENT '查询方式',
                                     `form_type` tinyint DEFAULT NULL COMMENT '表单类型',
-                                    `dict_type` varchar(100) DEFAULT NULL COMMENT '字典类型(sys_dict表的code)',
-                                    `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-                                    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-                                    PRIMARY KEY (`id`)
+                                    `dict_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '字典类型',
+                                    `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                    `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                    PRIMARY KEY (`id`),
+                                    KEY `config_id` (`config_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='代码生成字段配置表';
+
 
 SET FOREIGN_KEY_CHECKS = 1;
