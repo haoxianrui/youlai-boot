@@ -1,0 +1,107 @@
+{
+  "properties": [
+    {
+      "name": "oss.type",
+      "type": "java.lang.String",
+      "description": "OSS 类型 (目前支持aliyun、minio)"
+    },
+    {
+      "name": "oss.minio.endpoint",
+      "type": "java.lang.String",
+      "description": "MinIO 服务 Endpoint"
+    },
+    {
+      "name": "oss.minio.access-key",
+      "type": "java.lang.String",
+      "description": "MinIO 访问凭据"
+    },
+    {
+      "name": "oss.minio.secret-key",
+      "type": "java.lang.String",
+      "description": "MinIO 凭据密钥"
+    },
+    {
+      "name": "oss.minio.bucket-name",
+      "type": "java.lang.String",
+      "description": "MinIO 存储桶名称"
+    },
+    {
+      "name": "oss.minio.custom-domain",
+      "type": "java.lang.String",
+      "description": "MinIO 自定义域名"
+    },
+    {
+      "name": "oss.aliyun.endpoint",
+      "type": "java.lang.String",
+      "description": "阿里云 OSS 服务 Endpoint"
+    },
+    {
+      "name": "oss.aliyun.access-key-id",
+      "type": "java.lang.String",
+      "description": "阿里云 OSS 访问凭据 ID"
+    },
+    {
+      "name": "oss.aliyun.access-key-secret",
+      "type": "java.lang.String",
+      "description": "阿里云 OSS 凭据密钥"
+    },
+    {
+      "name": "oss.aliyun.bucket-name",
+      "type": "java.lang.String",
+      "description": "阿里云 OSS 存储桶名称"
+    },
+
+
+    {
+      "name": "xxl.job.enabled",
+      "type": "java.lang.Boolean",
+      "description": "定时任务开关"
+    },
+    {
+      "name": "xxl.job.admin.addresses",
+      "type": "java.lang.String",
+      "description": "多个地址使用,分割"
+    },
+    {
+      "name": "xxl.job.accessToken",
+      "type": "java.lang.String",
+      "description": "访问令牌"
+    },
+    {
+      "name": "xxl.job.executor.appname",
+      "type": "java.lang.String",
+      "description": "执行器应用名称"
+    },
+    {
+      "name": "xxl.job.executor.address",
+      "type": "java.lang.String",
+      "description": "执行器地址"
+    },
+    {
+      "name": "xxl.job.executor.ip",
+      "type": "java.lang.String",
+      "description": "执行器IP"
+    },
+    {
+      "name": "xxl.job.executor.port",
+      "type": "java.lang.Integer",
+      "description": "执行器端口"
+    },
+    {
+      "name": "xxl.job.executor.logpath",
+      "type": "java.lang.String",
+      "description": "日志路径"
+    },
+    {
+      "name": "xxl.job.executor.logretentiondays",
+      "type": "java.lang.Integer",
+      "description": "日志保留天数"
+    },
+    {
+      "name": "spring.cache.enabled",
+      "type": "java.lang.Boolean",
+      "description": "缓存开关"
+    }
+
+  ]
+}

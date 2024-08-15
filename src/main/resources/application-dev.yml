@@ -90,7 +90,7 @@ oss:
     # 凭据密钥
     secret-key: minioadmin
     # 存储桶名称
-    bucket-name: default
+    bucket-name: public
     # (可选)自定义域名，如果配置了域名，生成的文件URL是域名格式，未配置则URL则是IP格式 (eg: https://oss.youlai.tech)
     custom-domain:
   # 阿里云OSS对象存储服务
