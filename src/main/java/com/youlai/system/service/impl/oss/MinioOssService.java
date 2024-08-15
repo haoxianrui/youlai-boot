@@ -39,7 +39,7 @@ import java.time.LocalDateTime;
 public class MinioOssService implements OssService {
 
     /**
-     * 服务Endpoint(http://localhost:9000)
+     * 服务Endpoint
      */
     private String endpoint;
     /**
@@ -55,7 +55,7 @@ public class MinioOssService implements OssService {
      */
     private String bucketName;
     /**
-     * 自定义域名(https://oss.youlai.tech)
+     * 自定义域名
      */
     private String customDomain;
 
@@ -68,6 +68,8 @@ public class MinioOssService implements OssService {
                 .endpoint(endpoint)
                 .credentials(accessKey, secretKey)
                 .build();
+        // 创建存储桶
+        createBucketIfAbsent(bucketName);
     }
 
 
@@ -79,6 +81,8 @@ public class MinioOssService implements OssService {
      */
     @Override
     public FileInfo uploadFile(MultipartFile file) {
+
+
 
         // 生成文件名(日期文件夹)
         String suffix = FileUtil.getSuffix(file.getOriginalFilename());
