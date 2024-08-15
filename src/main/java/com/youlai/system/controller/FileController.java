@@ -4,6 +4,8 @@ import com.youlai.system.common.result.Result;
 import com.youlai.system.model.dto.FileInfo;
 import com.youlai.system.service.OssService;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,8 @@ public class FileController {
     @PostMapping
     @Operation(summary = "文件上传")
     public Result<FileInfo> uploadFile(
-            @Parameter(description = "表单文件对象") @RequestParam(value = "file") MultipartFile file
+            @Parameter(name = "file", description = "表单文件对象", required = true, in = ParameterIn.DEFAULT, schema = @Schema(name = "file", format = "binary"))
+            @RequestPart(value = "file") MultipartFile file
     ) {
         FileInfo fileInfo = ossService.uploadFile(file);
         return Result.success(fileInfo);
