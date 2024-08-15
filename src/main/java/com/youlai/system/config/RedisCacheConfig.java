@@ -66,7 +66,8 @@ public class RedisCacheConfig {
         if (!redisProperties.isUseKeyPrefix()) {
             config = config.disableKeyPrefix();
         }
-        config = config.computePrefixWith(name -> name + ":");//覆盖默认key双冒号  CacheKeyPrefix#prefixed
+        // 覆盖默认key双冒号  CacheKeyPrefix#prefixed
+        config = config.computePrefixWith(name -> name + ":");
         return config;
     }
 
