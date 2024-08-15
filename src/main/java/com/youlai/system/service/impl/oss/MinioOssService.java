@@ -69,7 +69,7 @@ public class MinioOssService implements OssService {
                 .credentials(accessKey, secretKey)
                 .build();
         // 创建存储桶
-        createBucketIfAbsent(bucketName);
+        // createBucketIfAbsent(bucketName);
     }
 
 
@@ -81,8 +81,6 @@ public class MinioOssService implements OssService {
      */
     @Override
     public FileInfo uploadFile(MultipartFile file) {
-
-
 
         // 生成文件名(日期文件夹)
         String suffix = FileUtil.getSuffix(file.getOriginalFilename());
