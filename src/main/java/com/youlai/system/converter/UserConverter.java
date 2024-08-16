@@ -43,7 +43,7 @@ public interface UserConverter {
     SysUser toEntity(UserImportDTO vo);
 
 
-    UserProfileVO toProfileVO(SysUser entity);
+    UserProfileVO toProfileVO(UserBO bo);
 
     SysUser toEntity(UserProfileForm formData);
 }

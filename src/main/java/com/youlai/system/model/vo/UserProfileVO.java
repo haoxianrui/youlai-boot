@@ -1,7 +1,10 @@
 package com.youlai.system.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * 个人中心用户信息
@@ -34,5 +37,14 @@ public class UserProfileVO {
     @Schema(description = "邮箱")
     private String email;
 
+    @Schema(description = "部门名称")
+    private String deptName;
+
+    @Schema(description = "角色名称")
+    private String roleNames;
+
+    @Schema(description = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date createTime;
 
 }
