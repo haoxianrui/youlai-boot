@@ -248,7 +248,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public UserProfileVO getUserProfile(Long userId) {
-        SysUser entity = this.getById(userId);
+        UserBO entity = this.baseMapper.getUserProfile(userId);
         return userConverter.toProfileVO(entity);
     }
 

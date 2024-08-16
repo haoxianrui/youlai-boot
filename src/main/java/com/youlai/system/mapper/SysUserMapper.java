@@ -56,4 +56,12 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      */
     @DataPermission(deptAlias = "u")
     List<UserExportDTO> listExportUsers(UserPageQuery queryParams);
+
+    /**
+     * 获取用户个人中心信息
+     *
+     * @param userId 用户ID
+     * @return
+     */
+    UserBO getUserProfile(Long userId);
 }
