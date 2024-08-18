@@ -1,6 +1,11 @@
 {
   "properties": [
     {
+      "name": "oss.enabled",
+      "type": "java.lang.Boolean",
+      "description":  "OSS 开关"
+    },
+    {
       "name": "oss.type",
       "type": "java.lang.String",
       "description": "OSS 类型 (目前支持aliyun、minio)"
