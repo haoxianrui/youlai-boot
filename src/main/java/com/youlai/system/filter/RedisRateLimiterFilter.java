@@ -1,7 +1,6 @@
 package com.youlai.system.filter;
 
-import com.youlai.system.common.constant.RedisKeyConstants;
-import com.youlai.system.common.constant.SystemConstants;
+import com.youlai.system.common.constant.RedisConstants;
 import com.youlai.system.common.result.ResultCode;
 import com.youlai.system.service.SysConfigService;
 import com.youlai.system.util.IPUtils;
@@ -44,18 +43,18 @@ public class RedisRateLimiterFilter extends OncePerRequestFilter {
      * @return  是否限流
      */
     public boolean rateLimit(String ip) {
-        String key = RedisKeyConstants.IP_RATE_LIMITER_KEY + ip;
+        String key = RedisConstants.IP_RATE_LIMITER_KEY + ip;
         Long count = redisTemplate.opsForValue().increment(key);
         if (count == null || count == 1) {
             redisTemplate.expire(key,1, TimeUnit.SECONDS);
         }
-        Object systemConfig = sysConfigService.getSystemConfig(SystemConstants.IP_QPS_THRESHOLD_LIMIT_KEY);
+        Object systemConfig = sysConfigService.getSystemConfig(RedisConstants.IP_QPS_THRESHOLD_LIMIT_KEY);
         long limit = 10;
         if(systemConfig != null){
             limit =  Long.parseLong(systemConfig.toString());
         }else{
             log.warn("[RedisRateLimiterFilter.rateLimit]系统配置中未配置IP请求限制QPS阈值配置,使用默认值:{},请检查配置项:{}",
-                    limit,SystemConstants.IP_QPS_THRESHOLD_LIMIT_KEY);
+                    limit,RedisConstants.IP_QPS_THRESHOLD_LIMIT_KEY);
         }
         return count != null && count > limit;
     }
