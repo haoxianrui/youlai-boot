@@ -50,6 +50,10 @@
 
         <!-- IP 地区转换 -->
         <ip2region.version>2.7.0</ip2region.version>
+
+        <!-- 阿里云短信 -->
+        <aliyun.java.sdk.core.version>4.6.4</aliyun.java.sdk.core.version>
+        <aliyun.java.sdk.dysmsapi.version>2.2.1</aliyun.java.sdk.dysmsapi.version>
     </properties>
 
     <dependencies>
@@ -205,6 +209,24 @@
             <artifactId>ip2region</artifactId>
             <version>${ip2region.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>${aliyun.java.sdk.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+            <version>${aliyun.java.sdk.dysmsapi.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
