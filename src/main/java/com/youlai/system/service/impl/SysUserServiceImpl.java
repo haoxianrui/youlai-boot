@@ -8,8 +8,11 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.youlai.system.common.constant.RedisConstants;
 import com.youlai.system.common.constant.SystemConstants;
+import com.youlai.system.config.property.AliyunSmsProperties;
 import com.youlai.system.converter.UserConverter;
+import com.youlai.system.enums.ContactType;
 import com.youlai.system.exception.BusinessException;
 import com.youlai.system.model.form.PasswordChangeForm;
 import com.youlai.system.model.form.PasswordResetForm;
@@ -28,6 +31,8 @@ import com.youlai.system.model.vo.UserPageVO;
 import com.youlai.system.security.service.PermissionService;
 import com.youlai.system.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -58,6 +64,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private final SysRoleService roleService;
 
     private final PermissionService permissionService;
+
+    private final SmsService smsService;
+
+    private final MailService mailService;
+
+    private final AliyunSmsProperties aliyunSmsProperties;
+
+    private final StringRedisTemplate redisTemplate;
 
     /**
      * 获取用户分页列表
@@ -286,6 +300,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new BusinessException("原密码错误");
         }
+        // 新旧密码不能相同
+        if (passwordEncoder.matches(data.getNewPassword(), user.getPassword())) {
+            throw new BusinessException("新密码不能与原密码相同");
+        }
 
         String newPassword = data.getNewPassword();
         return this.update(new LambdaUpdateWrapper<SysUser>()
@@ -297,8 +315,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 重置密码
      *
-     * @param userId 用户ID
-     * @param password   密码重置表单数据
+     * @param userId   用户ID
+     * @param password 密码重置表单数据
      * @return
      */
     @Override
@@ -307,5 +325,39 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .eq(SysUser::getId, userId)
                 .set(SysUser::getPassword, passwordEncoder.encode(password))
         );
+    }
+
+    /**
+     * 发送验证码
+     *
+     * @param contact 联系方式 手机号/邮箱
+     * @param type    联系方式类型 {@link ContactType}
+     * @return
+     */
+    @Override
+    public boolean sendVerificationCode(String contact, ContactType type) {
+
+        // 随机生成4位验证码
+        String code = String.valueOf((int) ((Math.random() * 9 + 1) * 1000));
+        // 发送验证码
+
+        String verificationCodePrefix = null;
+        switch (type) {
+            case MOBILE:
+                // 获取修改密码的模板code
+                String changePasswordSmsTemplateCode = aliyunSmsProperties.getTemplateCodes().get("changePassword");
+                smsService.sendSms(contact, changePasswordSmsTemplateCode, "[{\"code\":\"" + code + "\"}]");
+                verificationCodePrefix = RedisConstants.MOBILE_VERIFICATION_CODE_PREFIX;
+                break;
+            case EMAIL:
+                mailService.sendSimpleMail(contact, "验证码", "您的验证码是：" + code);
+                verificationCodePrefix = RedisConstants.EMAIL_VERIFICATION_CODE_PREFIX;
+                break;
+            default:
+                throw new BusinessException("不支持的联系方式类型");
+        }
+        // 存入 redis 用于校验, 5分钟有效
+        redisTemplate.opsForValue().set(verificationCodePrefix + contact, code, 5, TimeUnit.MINUTES );
+        return true;
     }
 }

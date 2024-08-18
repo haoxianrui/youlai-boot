@@ -3,9 +3,9 @@ package com.youlai.system.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.youlai.system.enums.ContactType;
 import com.youlai.system.model.entity.SysUser;
 import com.youlai.system.model.form.PasswordChangeForm;
-import com.youlai.system.model.form.PasswordResetForm;
 import com.youlai.system.model.form.UserForm;
 import com.youlai.system.model.dto.UserAuthInfo;
 import com.youlai.system.model.form.UserProfileForm;
@@ -127,4 +127,13 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     boolean resetPassword(Long userId, String password);
+
+    /**
+     * 发送验证码
+     *
+     * @param contact 联系方式
+     * @param type    联系方式类型
+     * @return
+     */
+    boolean sendVerificationCode(String contact, ContactType type);
 }

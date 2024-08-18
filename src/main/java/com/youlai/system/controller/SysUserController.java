@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
+import com.youlai.system.enums.ContactType;
 import com.youlai.system.model.form.PasswordChangeForm;
-import com.youlai.system.model.form.PasswordResetForm;
 import com.youlai.system.model.form.UserProfileForm;
 import com.youlai.system.model.vo.UserProfileVO;
 import com.youlai.system.security.util.SecurityUtils;
@@ -167,7 +167,7 @@ public class SysUserController {
     @Operation(summary = "获取个人中心用户信息")
     @GetMapping("/{userId}/profile")
     public Result<UserProfileVO> getUserProfile(
-            @PathVariable Long userId
+            @Parameter(description = "用户ID") @PathVariable Long userId
     ) {
         UserProfileVO userProfile = userService.getUserProfile(userId);
         return Result.success(userProfile);
@@ -188,20 +188,31 @@ public class SysUserController {
     @PreAuthorize("@ss.hasPerm('sys:user:password:reset')")
     public Result<?> resetPassword(
             @Parameter(description = "用户ID") @PathVariable Long userId,
-            @RequestParam String  password
+            @RequestParam String password
     ) {
         boolean result = userService.resetPassword(userId, password);
         return Result.judge(result);
     }
 
-    @Operation(summary = "修改用户密码")
+    @Operation(summary = "修改密码")
     @PutMapping(value = "/password")
     public Result<?> changePassword(
-            @RequestParam PasswordChangeForm data
+            @RequestBody PasswordChangeForm data
     ) {
         Long currUserId = SecurityUtils.getUserId();
         boolean result = userService.changePassword(currUserId, data);
         return Result.judge(result);
     }
+
+    @Operation(summary = "发送短信/邮箱验证码")
+    @PostMapping(value = "/send-verification-code")
+    public Result<?> sendVerificationCode(
+            @Parameter(description = "联系方式（手机号码或邮箱地址）", required = true) @RequestParam String contact,
+            @Parameter(description = "联系方式类型（Mobile或Email）", required = true) @RequestParam ContactType contactType
+    ) {
+        boolean result = userService.sendVerificationCode(contact, contactType);
+        return Result.judge(result);
+    }
+
 
 }
