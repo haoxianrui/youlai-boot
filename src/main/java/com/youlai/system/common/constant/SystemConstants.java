@@ -23,9 +23,6 @@ public interface SystemConstants {
      */
     String ROOT_ROLE_CODE = "ROOT";
 
-    /**
-     * 单个IP请求的最大每秒查询数（QPS）阈值Key
-     */
-    String IP_QPS_THRESHOLD_LIMIT_KEY = "IP_QPS_THRESHOLD_LIMIT";
+
 
 }

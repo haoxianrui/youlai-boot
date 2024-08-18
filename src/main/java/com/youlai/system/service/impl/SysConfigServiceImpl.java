@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.system.common.constant.RedisKeyConstants;
+import com.youlai.system.common.constant.RedisConstants;
 import com.youlai.system.converter.SysConfigConverter;
 import com.youlai.system.model.form.ConfigForm;
 import com.youlai.system.model.query.ConfigPageQuery;
@@ -135,11 +135,11 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public boolean refreshCache() {
-        redisTemplate.delete(RedisKeyConstants.SYSTEM_CONFIG_KEY);
+        redisTemplate.delete(RedisConstants.SYSTEM_CONFIG_KEY);
         List<SysConfig> list = this.list();
         if (list != null) {
             Map<String, String> map = list.stream().collect(Collectors.toMap(SysConfig::getConfigKey, SysConfig::getConfigValue));
-            redisTemplate.opsForHash().putAll(RedisKeyConstants.SYSTEM_CONFIG_KEY, map);
+            redisTemplate.opsForHash().putAll(RedisConstants.SYSTEM_CONFIG_KEY, map);
             return true;
         }
         return false;
@@ -154,7 +154,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     @Override
     public Object getSystemConfig(String key) {
         if (StringUtils.isNotBlank(key)) {
-            return redisTemplate.opsForHash().get(RedisKeyConstants.SYSTEM_CONFIG_KEY, key);
+            return redisTemplate.opsForHash().get(RedisConstants.SYSTEM_CONFIG_KEY, key);
         }
         return null;
     }

@@ -3,7 +3,7 @@ package com.youlai.system.plugin.norepeat.aspect;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.RegisteredPayload;
-import com.youlai.system.common.constant.RedisKeyConstants;
+import com.youlai.system.common.constant.RedisConstants;
 import com.youlai.system.common.constant.SecurityConstants;
 import com.youlai.system.exception.BusinessException;
 import com.youlai.system.common.result.ResultCode;
@@ -74,7 +74,7 @@ public class DuplicateSubmitAspect {
             token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
             // 从 JWT Token 中获取 jti
             String jti = (String) JWTUtil.parseToken(token).getPayload(RegisteredPayload.JWT_ID);
-            resubmitLockKey = RedisKeyConstants.RESUBMIT_LOCK_PREFIX + jti + ":" + request.getMethod() + "-" + request.getRequestURI();
+            resubmitLockKey = RedisConstants.RESUBMIT_LOCK_PREFIX + jti + ":" + request.getMethod() + "-" + request.getRequestURI();
         }
         return resubmitLockKey;
     }
