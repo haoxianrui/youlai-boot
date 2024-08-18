@@ -273,8 +273,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return
      */
     @Override
-    public boolean updateUserProfile(UserProfileForm formData) {
+    public boolean updateUserProfile(Long userId, UserProfileForm formData) {
         SysUser entity = userConverter.toEntity(formData);
+        entity.setId(userId);
         return this.updateById(entity);
     }
 

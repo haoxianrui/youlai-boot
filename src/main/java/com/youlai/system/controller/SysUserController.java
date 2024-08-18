@@ -179,7 +179,7 @@ public class SysUserController {
             @PathVariable Long userId,
             @RequestBody UserProfileForm formData
     ) {
-        boolean result = userService.updateUserProfile(formData);
+        boolean result = userService.updateUserProfile(userId,formData);
         return Result.judge(result);
     }
 

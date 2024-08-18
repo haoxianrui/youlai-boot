@@ -105,10 +105,11 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 修改个人中心用户信息
      *
+     * @param userId   用户ID
      * @param formData 表单数据
      * @return
      */
-    boolean updateUserProfile(UserProfileForm formData);
+    boolean updateUserProfile(Long userId, UserProfileForm formData);
 
     /**
      * 修改用户密码
@@ -122,7 +123,7 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 重置用户密码
      *
-     * @param userId 用户ID
+     * @param userId   用户ID
      * @param password 重置后的密码
      * @return
      */

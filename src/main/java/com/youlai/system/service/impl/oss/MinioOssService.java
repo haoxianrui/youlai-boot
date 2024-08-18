@@ -14,6 +14,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,7 @@ import java.time.LocalDateTime;
  * @since 2023/6/2
  */
 @Component
-@ConditionalOnProperty(value = "oss.type", havingValue = "minio")
+@ConditionalOnExpression("'${oss.enabled}' == 'true' and '${oss.type}' == 'minio'")
 @ConfigurationProperties(prefix = "oss.minio")
 @RequiredArgsConstructor
 @Data
@@ -69,7 +70,7 @@ public class MinioOssService implements OssService {
                 .credentials(accessKey, secretKey)
                 .build();
         // 创建存储桶
-        // createBucketIfAbsent(bucketName);
+        createBucketIfAbsent(bucketName);
     }
 
 
