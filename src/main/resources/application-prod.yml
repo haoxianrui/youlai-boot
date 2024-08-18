@@ -75,7 +75,8 @@ security:
     - /api/v1/auth/captcha
     - /ws/**
     - /ws-app/**
-# 文件上传配置
+
+# 文件存储配置
 oss:
   # OSS 类型 (目前支持aliyun、minio)
   type: minio
@@ -101,6 +102,23 @@ oss:
     access-key-secret: your-access-key-secret
     # 存储桶名称
     bucket-name: default
+
+# 短信配置
+sms:
+  # 阿里云短信
+  aliyun:
+    accessKeyId: LTAI5tSMgfxxxxxxdiBJLyR
+    accessKeySecret: SoOWRqpjtS7xxxxxxZ2PZiMTJOVC
+    domain: dysmsapi.aliyuncs.com
+    regionId: cn-shanghai
+    signName: 有来技术
+    templateCodes:
+      # 注册（预留）
+      register: SMS_22xxx771
+      # 登录（预留）
+      login: SMS_22xxx772
+      # 修改密码
+      changePassword: SMS_22xxx773
 
 # springdoc配置： https://springdoc.org/properties.html
 springdoc:

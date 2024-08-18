@@ -14,7 +14,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -33,7 +32,7 @@ import java.time.LocalDateTime;
  * @since 2023/6/2
  */
 @Component
-@ConditionalOnExpression("'${oss.enabled}' == 'true' and '${oss.type}' == 'minio'")
+@ConditionalOnProperty(value = "oss.enabled", havingValue = "true" )
 @ConfigurationProperties(prefix = "oss.minio")
 @RequiredArgsConstructor
 @Data
@@ -69,8 +68,8 @@ public class MinioOssService implements OssService {
                 .endpoint(endpoint)
                 .credentials(accessKey, secretKey)
                 .build();
-        // 创建存储桶
-        createBucketIfAbsent(bucketName);
+        // 创建存储桶(存储桶不存在)
+        // createBucketIfAbsent(bucketName);
     }
 
 
@@ -82,6 +81,9 @@ public class MinioOssService implements OssService {
      */
     @Override
     public FileInfo uploadFile(MultipartFile file) {
+
+        // 创建存储桶(存储桶不存在)，如果有搭建好的minio服务，建议放在init方法中
+        createBucketIfAbsent(bucketName);
 
         // 生成文件名(日期文件夹)
         String suffix = FileUtil.getSuffix(file.getOriginalFilename());

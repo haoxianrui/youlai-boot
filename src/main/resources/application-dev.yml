@@ -41,6 +41,21 @@ spring:
       time-to-live: 3600000
       # 缓存null值，防止缓存穿透
       cache-null-values: true
+  # 邮件配置
+  mail:
+    host: smtp.youlai.tech
+    port: 587
+    username: your-email@example.com
+    password: 123456
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    # 邮件发送者
+    from: youlaitech@163.com
+
 mybatis-plus:
   global-config:
     db-config:
@@ -78,9 +93,10 @@ security:
     - /ws/**
     - /ws-app/**
 
+# 文件存储配置
 oss:
   # OSS 类型 (目前支持aliyun、minio)
-  type: minio
+  type: aliyun
   # MinIO 对象存储服务
   minio:
     # 服务Endpoint
@@ -103,6 +119,23 @@ oss:
     access-key-secret: your-access-key-secret
     # 存储桶名称
     bucket-name: default
+
+# 短信配置
+sms:
+  # 阿里云短信
+  aliyun:
+    accessKeyId: LTAI5tSMgfxxxxxxdiBJLyR
+    accessKeySecret: SoOWRqpjtS7xxxxxxZ2PZiMTJOVC
+    domain: dysmsapi.aliyuncs.com
+    regionId: cn-shanghai
+    signName: 有来技术
+    templateCodes:
+      # 注册（预留）
+      register: SMS_22xxx771
+      # 登录（预留）
+      login: SMS_22xxx772
+      # 修改密码
+      changePassword: SMS_22xxx773
 
 # springdoc配置： https://springdoc.org/properties.html
 springdoc:

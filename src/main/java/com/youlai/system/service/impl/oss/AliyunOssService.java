@@ -14,7 +14,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -30,7 +29,7 @@ import java.time.LocalDateTime;
  * @since 2.3.0
  */
 @Component
-@ConditionalOnExpression("'${oss.enabled}' == 'true' and '${oss.type}' == 'aliyun'")
+@ConditionalOnProperty(value = "oss.type", havingValue = "aliyun")
 @ConfigurationProperties(prefix = "oss.aliyun")
 @RequiredArgsConstructor
 @Data
