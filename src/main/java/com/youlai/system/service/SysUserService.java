@@ -5,10 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.youlai.system.enums.ContactType;
 import com.youlai.system.model.entity.SysUser;
-import com.youlai.system.model.form.PasswordChangeForm;
-import com.youlai.system.model.form.UserForm;
+import com.youlai.system.model.form.*;
 import com.youlai.system.model.dto.UserAuthInfo;
-import com.youlai.system.model.form.UserProfileForm;
 import com.youlai.system.model.query.UserPageQuery;
 import com.youlai.system.model.dto.UserExportDTO;
 import com.youlai.system.model.vo.UserInfoVO;
@@ -105,11 +103,10 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 修改个人中心用户信息
      *
-     * @param userId   用户ID
      * @param formData 表单数据
      * @return
      */
-    boolean updateUserProfile(Long userId, UserProfileForm formData);
+    boolean updateUserProfile(UserProfileForm formData);
 
     /**
      * 修改用户密码
@@ -137,4 +134,20 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     boolean sendVerificationCode(String contact, ContactType type);
+
+    /**
+     * 修改当前用户手机号
+     *
+     * @param data 表单数据
+     * @return
+     */
+    boolean bindMobile(MobileBindingForm data);
+
+    /**
+     * 修改当前用户邮箱
+     *
+     * @param data 表单数据
+     * @return
+     */
+    boolean bindEmail(EmailChangeForm data);
 }

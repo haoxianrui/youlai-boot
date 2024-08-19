@@ -14,16 +14,13 @@ import com.youlai.system.config.property.AliyunSmsProperties;
 import com.youlai.system.converter.UserConverter;
 import com.youlai.system.enums.ContactType;
 import com.youlai.system.exception.BusinessException;
-import com.youlai.system.model.form.PasswordChangeForm;
-import com.youlai.system.model.form.PasswordResetForm;
-import com.youlai.system.model.form.UserProfileForm;
+import com.youlai.system.model.form.*;
 import com.youlai.system.model.vo.UserProfileVO;
 import com.youlai.system.security.util.SecurityUtils;
 import com.youlai.system.mapper.SysUserMapper;
 import com.youlai.system.model.dto.UserAuthInfo;
 import com.youlai.system.model.bo.UserBO;
 import com.youlai.system.model.entity.SysUser;
-import com.youlai.system.model.form.UserForm;
 import com.youlai.system.model.query.UserPageQuery;
 import com.youlai.system.model.dto.UserExportDTO;
 import com.youlai.system.model.vo.UserInfoVO;
@@ -31,7 +28,6 @@ import com.youlai.system.model.vo.UserPageVO;
 import com.youlai.system.security.service.PermissionService;
 import com.youlai.system.service.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -273,7 +269,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return
      */
     @Override
-    public boolean updateUserProfile(Long userId, UserProfileForm formData) {
+    public boolean updateUserProfile(UserProfileForm formData) {
+        Long userId = SecurityUtils.getUserId();
         SysUser entity = userConverter.toEntity(formData);
         entity.setId(userId);
         return this.updateById(entity);
@@ -360,5 +357,61 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 存入 redis 用于校验, 5分钟有效
         redisTemplate.opsForValue().set(verificationCodePrefix + contact, code, 5, TimeUnit.MINUTES );
         return true;
+    }
+
+    /**
+     * 修改当前用户手机号码
+     *
+     * @param data 表单数据
+     * @return
+     */
+    @Override
+    public boolean bindMobile(MobileBindingForm data) {
+        Long userId = SecurityUtils.getUserId();
+        SysUser user = this.getById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+        // 校验验证码
+        String verificationCode = data.getCode();
+        String contact = data.getMobile();
+        String verificationCodeKey = RedisConstants.MOBILE_VERIFICATION_CODE_PREFIX + contact;
+        String code = redisTemplate.opsForValue().get(verificationCodeKey);
+        if (!verificationCode.equals(code)) {
+            throw new BusinessException("验证码错误");
+        }
+        // 更新手机号码
+        return this.update(new LambdaUpdateWrapper<SysUser>()
+                .eq(SysUser::getId, userId)
+                .set(SysUser::getMobile, contact)
+        );
+    }
+
+    /**
+     * 修改当前用户邮箱
+     *
+     * @param data 表单数据
+     * @return
+     */
+    @Override
+    public boolean bindEmail(EmailChangeForm data) {
+        Long userId = SecurityUtils.getUserId();
+        SysUser user = this.getById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+        // 校验验证码
+        String verificationCode = data.getCode();
+        String email = data.getEmail();
+        String verificationCodeKey = RedisConstants.EMAIL_VERIFICATION_CODE_PREFIX + email;
+        String code = redisTemplate.opsForValue().get(verificationCodeKey);
+        if (!verificationCode.equals(code)) {
+            throw new BusinessException("验证码错误");
+        }
+        // 更新邮箱
+        return this.update(new LambdaUpdateWrapper<SysUser>()
+                .eq(SysUser::getId, userId)
+                .set(SysUser::getEmail, email)
+        );
     }
 }

@@ -7,8 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
 import com.youlai.system.enums.ContactType;
-import com.youlai.system.model.form.PasswordChangeForm;
-import com.youlai.system.model.form.UserProfileForm;
+import com.youlai.system.model.form.*;
 import com.youlai.system.model.vo.UserProfileVO;
 import com.youlai.system.security.util.SecurityUtils;
 import com.youlai.system.util.ExcelUtils;
@@ -16,7 +15,6 @@ import com.youlai.system.enums.LogModuleEnum;
 import com.youlai.system.model.dto.UserImportDTO;
 import com.youlai.system.plugin.norepeat.annotation.PreventRepeatSubmit;
 import com.youlai.system.plugin.easyexcel.UserImportListener;
-import com.youlai.system.model.form.UserForm;
 import com.youlai.system.model.entity.SysUser;
 import com.youlai.system.model.query.UserPageQuery;
 import com.youlai.system.model.dto.UserExportDTO;
@@ -174,12 +172,9 @@ public class SysUserController {
     }
 
     @Operation(summary = "修改个人中心用户信息")
-    @PutMapping("/{userId}/profile")
-    public Result<?> updateUserProfile(
-            @PathVariable Long userId,
-            @RequestBody UserProfileForm formData
-    ) {
-        boolean result = userService.updateUserProfile(userId,formData);
+    @PutMapping("/profile")
+    public Result<?> updateUserProfile(@RequestBody UserProfileForm formData) {
+        boolean result = userService.updateUserProfile(formData);
         return Result.judge(result);
     }
 
@@ -213,6 +208,27 @@ public class SysUserController {
         boolean result = userService.sendVerificationCode(contact, contactType);
         return Result.judge(result);
     }
+
+    @Operation(summary = "绑定个人中心用户手机号")
+    @PutMapping(value = "/mobile")
+    public Result<?> bindMobile(
+            @RequestBody @Validated MobileBindingForm data
+    ) {
+        boolean result = userService.bindMobile(data);
+        return Result.judge(result);
+    }
+
+
+    @Operation(summary = "绑定个人中心用户邮箱")
+    @PutMapping(value = "/email")
+    public Result<?> bindEmail(
+            @RequestBody @Validated EmailChangeForm data
+    ) {
+        boolean result = userService.bindEmail(data);
+        return Result.judge(result);
+    }
+
+
 
 
 }
