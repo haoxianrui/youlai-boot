@@ -4,6 +4,7 @@ import com.youlai.system.enums.MenuTypeEnum;
 import com.youlai.system.common.model.KeyValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.hibernate.validator.constraints.Range;
 
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class MenuForm {
     private String perm;
 
     @Schema(description = "显示状态(1:显示;0:隐藏)")
+    @Range(max = 1, min = 0, message = "显示状态不正确")
     private Integer visible;
 
     @Schema(description = "排序(数字越小排名越靠前)")

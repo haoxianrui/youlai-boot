@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Range;
 
 @Schema(description = "部门表单对象")
 @Getter
@@ -24,6 +25,7 @@ public class DeptForm {
     private Long parentId;
 
     @Schema(description="状态(1:启用;0:禁用)", example = "1")
+    @Range(min = 0, max = 1, message = "状态值不正确")
     private Integer status;
 
     @Schema(description="排序(数字越小排名越靠前)", example = "1")
