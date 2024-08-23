@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Range;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class DictForm {
     private String code;
 
     @Schema(description = "字典状态（1-启用，0-禁用）", example = "1")
+    @Range(min = 0, max = 1, message = "字典状态不正确")
     private Integer status;
 
     @Schema(description = "字典数据项列表",example = "[{\"id\":1,\"name\":\"男\",\"value\":\"1\",\"sort\":1,\"status\":1},{\"id\":2,\"name\":\"女\",\"value\":\"2\",\"sort\":2,\"status\":1}]")
