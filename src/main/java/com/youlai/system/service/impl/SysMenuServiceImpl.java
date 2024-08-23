@@ -20,6 +20,7 @@ import com.youlai.system.mapper.SysMenuMapper;
 import com.youlai.system.model.bo.RouteBO;
 import com.youlai.system.model.entity.GenConfig;
 import com.youlai.system.model.entity.SysMenu;
+import com.youlai.system.model.entity.SysRoleMenu;
 import com.youlai.system.model.form.MenuForm;
 import com.youlai.system.model.query.MenuQuery;
 import com.youlai.system.model.vo.MenuVO;
@@ -31,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -347,19 +349,26 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     @CacheEvict(cacheNames = "menu", key = "'routes'")
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteMenu(Long id) {
-        boolean result = this.remove(new LambdaQueryWrapper<SysMenu>()
-                .eq(SysMenu::getId, id)
-                .or()
-                .apply("CONCAT (',',tree_path,',') LIKE CONCAT('%,',{0},',%')", id));
-
-
+        List<Long> sysMenuListIds = this.list(
+                        new LambdaQueryWrapper<SysMenu>()
+                                .select(SysMenu::getId)
+                                .eq(SysMenu::getId, id)
+                                .or()
+                                .apply("CONCAT (',',tree_path,',') LIKE CONCAT('%,',{0},',%')", id)
+                ).stream()
+                .map(SysMenu::getId)
+                .collect(Collectors.toList());
+        boolean result = this.removeBatchByIds(sysMenuListIds);
         // 刷新角色权限缓存
         if (result) {
             roleMenuService.refreshRolePermsCache();
+            //删除角色菜单关联数据
+            roleMenuService.remove(new LambdaQueryWrapper<SysRoleMenu>()
+                    .in(SysRoleMenu::getMenuId, sysMenuListIds));
         }
         return result;
-
     }
 
     /**
