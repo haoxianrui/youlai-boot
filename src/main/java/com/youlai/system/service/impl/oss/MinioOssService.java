@@ -32,7 +32,7 @@ import java.time.LocalDateTime;
  * @since 2023/6/2
  */
 @Component
-@ConditionalOnProperty(value = "oss.enabled", havingValue = "true" )
+@ConditionalOnProperty(value = "oss.type", havingValue = "minio")
 @ConfigurationProperties(prefix = "oss.minio")
 @RequiredArgsConstructor
 @Data
