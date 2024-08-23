@@ -5,6 +5,7 @@ import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
 import com.youlai.system.common.constant.SecurityConstants;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.Message;
@@ -39,11 +40,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry
                 // 注册 /ws 的端点
                 .addEndpoint("/ws")
-                // 允许跨域的 WebSocket 连接
+                // 允许跨域
                 .setAllowedOriginPatterns("*")
                 // 启用 SockJS (浏览器不支持WebSocket，SockJS 将会提供兼容性支持)
                 .withSockJS();
-        registry.addEndpoint("/ws-app").setAllowedOriginPatterns("*");  // 注册了一个 /ws-app 的端点，支持 uni-app 的 ws 连接协议
     }
 
 
@@ -74,7 +74,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new ChannelInterceptor() {
             @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+            public Message<?> preSend(@NotNull Message<?> message, @NotNull MessageChannel channel) {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
                 // 如果是连接请求（CONNECT 命令），从请求头中取出 token 并设置到认证信息中
                 if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
