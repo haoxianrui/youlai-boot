@@ -163,10 +163,9 @@ public class SysUserController {
     }
 
     @Operation(summary = "获取个人中心用户信息")
-    @GetMapping("/{userId}/profile")
-    public Result<UserProfileVO> getUserProfile(
-            @Parameter(description = "用户ID") @PathVariable Long userId
-    ) {
+    @GetMapping("/profile")
+    public Result<UserProfileVO> getUserProfile() {
+        Long userId = SecurityUtils.getUserId();
         UserProfileVO userProfile = userService.getUserProfile(userId);
         return Result.success(userProfile);
     }
