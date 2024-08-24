@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 public class ${entityName}Query extends BasePageQuery {
 
     private static final long serialVersionUID = 1L;
+
 #if($fieldConfigs)
     #foreach($fieldConfig in ${fieldConfigs})
         #if($fieldConfig.isShowInQuery)

@@ -55,12 +55,12 @@ public enum FormTypeEnum implements IBaseEnum<Integer> {
     /**
      * 日期时间框
      */
-    DATE_TIME(8, "日期时间框"),
+    DATE(8, "日期框"),
 
     /**
      * 日期框
      */
-    DATE(9, "日期框");
+    DATE_TIME(9, "日期时间框");
 
 
     //  Mybatis-Plus 提供注解表示插入数据库时插入该值
