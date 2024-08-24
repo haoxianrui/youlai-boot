@@ -41,9 +41,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 // 注册 /ws 的端点
                 .addEndpoint("/ws")
                 // 允许跨域
-                .setAllowedOriginPatterns("*")
-                // 启用 SockJS (浏览器不支持WebSocket，SockJS 将会提供兼容性支持)
-                .withSockJS();
+                .setAllowedOriginPatterns("*");
     }
 
 
