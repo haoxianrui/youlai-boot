@@ -34,13 +34,17 @@ public class GeneratorProperties {
     /**
      * 后端应用名
      */
-
     private String backendAppName;
 
     /**
      * 前端应用名
      */
     private String frontendAppName;
+
+    /**
+     * 下载文件名
+     */
+    private String downloadFileName;
 
     /**
      * 排除数据表
@@ -71,7 +75,6 @@ public class GeneratorProperties {
     public static class DefaultConfig {
 
         private String author;
-
 
     }
 

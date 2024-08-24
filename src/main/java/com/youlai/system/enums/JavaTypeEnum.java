@@ -56,11 +56,11 @@ public enum JavaTypeEnum {
     /**
      * 根据数据库类型获取对应的Java类型
      *
-     * @param dbType 数据库类型
+     * @param columnType 列类型
      * @return 对应的Java类型
      */
-    public static String getJavaTypeByDbType(String dbType) {
-        JavaTypeEnum javaTypeEnum = typeMap.get(dbType);
+    public static String getJavaTypeByColumnType(String columnType) {
+        JavaTypeEnum javaTypeEnum = typeMap.get(columnType);
         if (javaTypeEnum != null) {
             return javaTypeEnum.getJavaType();
         }

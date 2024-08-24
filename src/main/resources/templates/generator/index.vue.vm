@@ -250,7 +250,7 @@
     inheritAttrs: false,
   });
 
-  import ${entityName}API, { ${entityName}PageVO, ${entityName}Form, ${entityName}PageQuery } from "@/api/${lowerFirstEntityName}";
+  import ${entityName}API, { ${entityName}PageVO, ${entityName}Form, ${entityName}PageQuery } from "@/api/${kebabCaseEntityName}";
 
   const queryFormRef = ref(ElForm);
   const dataFormRef = ref(ElForm);

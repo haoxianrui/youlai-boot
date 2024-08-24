@@ -29,7 +29,7 @@ public class GenConfigForm {
     @Schema(description = "模块名",example = "system")
     private String moduleName;
 
-    @Schema(description = "包名",example = "com.youlai.system")
+    @Schema(description = "包名",example = "com.youlai")
     private String packageName;
 
     @Schema(description = "实体名",example = "User")
@@ -43,6 +43,12 @@ public class GenConfigForm {
 
     @Schema(description = "字段配置列表")
     private List<FieldConfig> fieldConfigs;
+
+    @Schema(description = "后端应用名")
+    private String backendAppName;
+
+    @Schema(description = "前端应用名")
+    private String frontendAppName;
 
     @Schema(description = "字段配置")
     @Data

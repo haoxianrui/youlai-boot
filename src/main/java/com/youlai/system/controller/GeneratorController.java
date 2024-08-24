@@ -3,6 +3,7 @@ package com.youlai.system.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.system.common.result.PageResult;
 import com.youlai.system.common.result.Result;
+import com.youlai.system.config.property.GeneratorProperties;
 import com.youlai.system.enums.LogModuleEnum;
 import com.youlai.system.model.form.GenConfigForm;
 import com.youlai.system.model.query.TablePageQuery;
@@ -17,8 +18,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -34,6 +38,7 @@ import java.util.List;
 public class GeneratorController {
 
     private final GeneratorService generatorService;
+    private final GeneratorProperties generatorProperties;
 
     @Operation(summary = "获取数据表分页列表")
     @GetMapping("/table/page")
@@ -86,8 +91,7 @@ public class GeneratorController {
         String[] tableNames = tableName.split(",");
         byte[] data = generatorService.downloadCode(tableNames);
         response.reset();
-        response.setHeader("Content-Disposition", "attachment; filename=\"youlai-admin-code.zip\"");
-        response.addHeader("Content-Length", String.valueOf(data.length));
+        response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(generatorProperties.getDownloadFileName(), StandardCharsets.UTF_8));
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");

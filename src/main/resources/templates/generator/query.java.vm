@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 #if(${hasLocalDateTime})
 import java.time.LocalDateTime;
+import java.util.List;
 #end
 #if(${hasBigDecimal})
 import java.math.BigDecimal;

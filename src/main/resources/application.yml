@@ -6,6 +6,8 @@ spring:
 
 # 代码生成器配置
 generator:
+  # 下载代码文件名称
+  downloadFileName: youlai-admin-code.zip
   # 后端项目名称
   backendAppName: youlai-boot
   # 前端项目名称
@@ -19,6 +21,14 @@ generator:
     - gen_field_config
   ## 模板配置
   templateConfigs:
+    API:
+      templatePath: generator/api.ts.vm
+      subpackageName: api
+      extension: .ts
+    VIEW:
+      templatePath: generator/index.vue.vm
+      subpackageName: views
+      extension: .vue
     Controller:
       templatePath: generator/controller.java.vm
       subpackageName: controller
@@ -50,13 +60,5 @@ generator:
     Entity:
       templatePath: generator/entity.java.vm
       subpackageName: model.entity
-    API:
-      templatePath: generator/api.ts.vm
-      subpackageName: api
-      extension: .ts
-    VIEW:
-      templatePath: generator/index.vue.vm
-      subpackageName: views
-      extension: .vue
 
 
