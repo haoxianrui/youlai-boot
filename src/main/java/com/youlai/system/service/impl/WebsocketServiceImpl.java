@@ -1,9 +1,10 @@
 package com.youlai.system.service.impl;
 
+import com.youlai.system.event.UserConnectionEvent;
 import com.youlai.system.service.WebsocketService;
-import groovy.lang.Lazy;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -12,13 +13,13 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class WebsocketServiceImpl implements WebsocketService {
 
-    @Lazy
-    @Autowired
-    private  SimpMessagingTemplate messagingTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    private static final Set<String> onlineUsers = ConcurrentHashMap.newKeySet();
+    private final Set<String> onlineUsers = ConcurrentHashMap.newKeySet();
 
     @Override
     public void addUser(String username) {
@@ -30,15 +31,22 @@ public class WebsocketServiceImpl implements WebsocketService {
         onlineUsers.remove(username);
     }
 
-    @Override
-    public int getOnlineUserCount() {
-        return onlineUsers.size();
+    @EventListener
+    public void handleUserConnectionEvent(UserConnectionEvent event) {
+        String username = event.getUsername();
+        if (event.isConnected()) {
+            onlineUsers.add(username);
+            log.info("User connected: {}", username);
+        } else {
+            onlineUsers.remove(username);
+            log.info("User disconnected: {}", username);
+        }
+        // 推送在线用户人数
+        messagingTemplate.convertAndSend("/topic/onlineUserCount", onlineUsers.size());
     }
 
     @Scheduled(fixedRate = 5000)
     public void sendOnlineUserCount() {
-        int onlineUserCount = this.getOnlineUserCount();
-        messagingTemplate.convertAndSend("/topic/onlineUserCount", onlineUserCount);
+        messagingTemplate.convertAndSend("/topic/onlineUserCount", onlineUsers.size());
     }
-
 }

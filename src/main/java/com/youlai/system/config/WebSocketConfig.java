@@ -4,12 +4,14 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
 import com.youlai.system.common.constant.SecurityConstants;
+import com.youlai.system.event.UserConnectionEvent;
 import com.youlai.system.service.WebsocketService;
 import groovy.lang.Lazy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.Message;
@@ -36,8 +38,11 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Slf4j
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    @Autowired
-    private    WebsocketService websocketService;
+    private final ApplicationEventPublisher eventPublisher;
+
+    public WebSocketConfig(ApplicationEventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
+    }
     /**
      * 注册一个端点，客户端通过这个端点进行连接
      */
@@ -88,13 +93,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                             String username = JWTUtil.parseToken(bearerToken).getPayloads().getStr(JWTPayload.SUBJECT);
                             if (StrUtil.isNotBlank(username)) {
                                 accessor.setUser(() -> username);
-                                websocketService.addUser(username);
+                                eventPublisher.publishEvent(new UserConnectionEvent(this, username, true));
                             }
                         }
                     } else if (StompCommand.DISCONNECT.equals(accessor.getCommand())) {
                         if (accessor.getUser() != null) {
                             String username = accessor.getUser().getName();
-                            websocketService.removeUser(username);
+                            eventPublisher.publishEvent(new UserConnectionEvent(this, username, false));
                         }
                     }
                 }

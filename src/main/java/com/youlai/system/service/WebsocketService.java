@@ -6,5 +6,4 @@ public interface WebsocketService {
 
    void removeUser(String username) ;
 
-   int getOnlineUserCount() ;
 }
