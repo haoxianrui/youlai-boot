@@ -4,8 +4,12 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
 import com.youlai.system.common.constant.SecurityConstants;
+import com.youlai.system.service.WebsocketService;
+import groovy.lang.Lazy;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.Message;
@@ -32,6 +36,8 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Slf4j
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    @Autowired
+    private    WebsocketService websocketService;
     /**
      * 注册一个端点，客户端通过这个端点进行连接
      */
@@ -74,27 +80,24 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             @Override
             public Message<?> preSend(@NotNull Message<?> message, @NotNull MessageChannel channel) {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-                // 如果是连接请求（CONNECT 命令），从请求头中取出 token 并设置到认证信息中
-                if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    // 从连接头中提取授权令牌
-                    String bearerToken = accessor.getFirstNativeHeader(HttpHeaders.AUTHORIZATION);
-
-                    // 验证令牌格式并提取用户信息
-                    if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith("Bearer ")) {
-                        try {
-                            // 移除 "Bearer " 前缀，从令牌中提取用户信息(username), 并设置到认证信息中
+                if (accessor != null) {
+                    if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+                        String bearerToken = accessor.getFirstNativeHeader(HttpHeaders.AUTHORIZATION);
+                        if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith("Bearer ")) {
                             bearerToken = bearerToken.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
                             String username = JWTUtil.parseToken(bearerToken).getPayloads().getStr(JWTPayload.SUBJECT);
                             if (StrUtil.isNotBlank(username)) {
                                 accessor.setUser(() -> username);
-                                return message;
+                                websocketService.addUser(username);
                             }
-                        } catch (Exception e) {
-                            log.error("Failed to process authentication token.", e);
+                        }
+                    } else if (StompCommand.DISCONNECT.equals(accessor.getCommand())) {
+                        if (accessor.getUser() != null) {
+                            String username = accessor.getUser().getName();
+                            websocketService.removeUser(username);
                         }
                     }
                 }
-                // 不是连接请求，直接放行
                 return ChannelInterceptor.super.preSend(message, channel);
             }
         });
