@@ -31,7 +31,7 @@ public interface DictItemConverter {
     List<DictForm.DictItem> toDictItem(List<SysDictItem> entities);
 
     @Mappings({
-            @Mapping(target = "value", source = "id"),
+            @Mapping(target = "value", source = "value"),
             @Mapping(target = "label", source = "name")
     })
     Option<Long> toOption(SysDictItem dictItem);
