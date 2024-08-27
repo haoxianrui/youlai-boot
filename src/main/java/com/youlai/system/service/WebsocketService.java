@@ -6,4 +6,9 @@ public interface WebsocketService {
 
    void removeUser(String username) ;
 
+   /**
+    * 发送消息到前端
+    * @param message
+    */
+   void sendStringToFrontend(String message);
 }

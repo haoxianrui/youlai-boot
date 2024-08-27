@@ -49,4 +49,10 @@ public class WebsocketServiceImpl implements WebsocketService {
     public void sendOnlineUserCount() {
         messagingTemplate.convertAndSend("/topic/onlineUserCount", onlineUsers.size());
     }
+
+    @Override
+    public void sendStringToFrontend(String message) {
+        messagingTemplate.convertAndSend("/topic/chat", message);
+    }
+
 }

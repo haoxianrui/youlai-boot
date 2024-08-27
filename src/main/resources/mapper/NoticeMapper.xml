@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youlai.system.mapper.NoticeMapper">
+
+    <!-- 获取通知公告分页列表 -->
+    <select id="getNoticePage" resultType="com.youlai.system.model.vo.NoticeVO">
+        SELECT
+                id,
+                title,
+                content,
+                notice_type,
+                release_by,
+                priority,
+                tar_type,
+                send_status,
+                send_time,
+                recall_time,
+                create_time,
+                update_time
+        FROM
+            sys_notice
+        <where>
+            <if test="queryParams.title != null and queryParams.title != ''">
+                AND title = #{queryParams.title}
+            </if>
+            <if test="queryParams.content != null and queryParams.content != ''">
+                AND content = #{queryParams.content}
+            </if>
+            <if test="queryParams.noticeType != null">
+                AND notice_type = #{queryParams.noticeType}
+            </if>
+            <if test="queryParams.releaseBy != null">
+                AND release_by = #{queryParams.releaseBy}
+            </if>
+            <if test="queryParams.priority != null">
+                AND priority = #{queryParams.priority}
+            </if>
+            <if test="queryParams.tarType != null">
+                AND tar_type = #{queryParams.tarType}
+            </if>
+            <if test="queryParams.sendStatus != null">
+                AND send_status = #{queryParams.sendStatus}
+            </if>
+            <if test="queryParams.sendTime != null">
+                <if test="queryParams.sendTime[0] != null and queryParams.sendTime[0] != ''">
+                    <bind name="startDate" value="queryParams.sendTime[0].length() == 10 ? queryParams.sendTime[0] + ' 00:00:00' : queryParams.sendTime[0]"/>
+                    AND send_time &gt;= #{startDate}
+                </if>
+                <if test="queryParams.sendTime[1] != null and queryParams.sendTime[1] != ''">
+                    <bind name="endDate" value="queryParams.sendTime[1].length() == 10 ? queryParams.sendTime[1] + ' 23:59:59' : queryParams.sendTime[1]"/>
+                    AND send_time &lt;= #{endDate}
+                </if>
+            </if>
+            <if test="queryParams.recallTime != null">
+                <if test="queryParams.recallTime[0] != null and queryParams.recallTime[0] != ''">
+                    <bind name="startDate" value="queryParams.recallTime[0].length() == 10 ? queryParams.recallTime[0] + ' 00:00:00' : queryParams.recallTime[0]"/>
+                    AND recall_time &gt;= #{startDate}
+                </if>
+                <if test="queryParams.recallTime[1] != null and queryParams.recallTime[1] != ''">
+                    <bind name="endDate" value="queryParams.recallTime[1].length() == 10 ? queryParams.recallTime[1] + ' 23:59:59' : queryParams.recallTime[1]"/>
+                    AND recall_time &lt;= #{endDate}
+                </if>
+            </if>
+        </where>
+    </select>
+
+</mapper>
