@@ -10,7 +10,7 @@ import com.youlai.system.common.base.BaseEntity;
  * 用户公告状态实体对象
  *
  * @author youlaitech
- * @since 2024-08-27 09:53
+ * @since 2024-08-28 16:56
  */
 @Getter
 @Setter

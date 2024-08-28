@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * 用户公告状态服务类
  *
  * @author youlaitech
- * @since 2024-08-27 09:53
+ * @since 2024-08-28 16:56
  */
 public interface NoticeStatusService extends IService<NoticeStatus> {
 

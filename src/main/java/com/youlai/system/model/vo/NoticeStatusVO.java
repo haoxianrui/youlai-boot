@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * 用户公告状态视图对象
  *
  * @author youlaitech
- * @since 2024-08-27 09:53
+ * @since 2024-08-28 16:56
  */
 @Getter
 @Setter
@@ -22,4 +22,14 @@ public class NoticeStatusVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(description = "id")
+    private Long id;
+    @Schema(description = "公共通知id")
+    private Long noticeId;
+    @Schema(description = "用户id")
+    private Integer userId;
+    @Schema(description = "读取状态，0未读，1已读取")
+    private Long readStatus;
+    @Schema(description = "用户阅读时间")
+    private LocalDateTime readTiem;
 }

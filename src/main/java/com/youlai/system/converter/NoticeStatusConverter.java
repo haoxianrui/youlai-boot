@@ -9,7 +9,7 @@ import com.youlai.system.model.form.NoticeStatusForm;
  * 用户公告状态对象转换器
  *
  * @author youlaitech
- * @since 2024-08-27 09:53
+ * @since 2024-08-28 16:56
  */
 @Mapper(componentModel = "spring")
 public interface NoticeStatusConverter{

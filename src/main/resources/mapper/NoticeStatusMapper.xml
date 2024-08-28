@@ -5,9 +5,36 @@
     <!-- 获取用户公告状态分页列表 -->
     <select id="getNoticeStatusPage" resultType="com.youlai.system.model.vo.NoticeStatusVO">
         SELECT
+                id,
+                notice_id,
+                user_id,
+                read_status,
+                read_tiem
         FROM
             sys_notice_status
         <where>
+            <if test="queryParams.id != null">
+                AND id = #{queryParams.id}
+            </if>
+            <if test="queryParams.noticeId != null">
+                AND notice_id = #{queryParams.noticeId}
+            </if>
+            <if test="queryParams.userId != null">
+                AND user_id = #{queryParams.userId}
+            </if>
+            <if test="queryParams.readStatus != null">
+                AND read_status = #{queryParams.readStatus}
+            </if>
+            <if test="queryParams.readTiem != null">
+                <if test="queryParams.readTiem[0] != null and queryParams.readTiem[0] != ''">
+                    <bind name="startDate" value="queryParams.readTiem[0].length() == 10 ? queryParams.readTiem[0] + ' 00:00:00' : queryParams.readTiem[0]"/>
+                    AND read_tiem &gt;= #{startDate}
+                </if>
+                <if test="queryParams.readTiem[1] != null and queryParams.readTiem[1] != ''">
+                    <bind name="endDate" value="queryParams.readTiem[1].length() == 10 ? queryParams.readTiem[1] + ' 23:59:59' : queryParams.readTiem[1]"/>
+                    AND read_tiem &lt;= #{endDate}
+                </if>
+            </if>
         </where>
     </select>
 
