@@ -48,7 +48,6 @@ public class FastAutoGeneratorTest {
                 // 注入配置(设置扩展类的模板路径和包路径)
                 .injectionConfig(consumer -> {
                     List<CustomFile> customFiles = new ArrayList<>();
-                    customFiles.add(new CustomFile.Builder().fileName("DTO.java").templatePath("/templates/generator/dto.java.vm").packageName("model.dto").build());
                     customFiles.add(new CustomFile.Builder().fileName("VO.java").templatePath("/templates/generator/vo.java.vm").packageName("model.vo").build());
                     customFiles.add(new CustomFile.Builder().fileName("BO.java").templatePath("/templates/generator/bo.java.vm").packageName("model.bo").build());
                     customFiles.add(new CustomFile.Builder().fileName("PageQuery.java").templatePath("/templates/generator/query.java.vm").packageName("model.query").build());
