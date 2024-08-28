@@ -62,6 +62,7 @@
         WHERE
             TABLE_SCHEMA = (SELECT DATABASE())
             AND TABLE_NAME = #{tableName}
+        ORDER BY ORDINAL_POSITION ASC
     </select>
 
 
