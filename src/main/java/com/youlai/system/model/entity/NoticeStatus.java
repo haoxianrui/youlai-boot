@@ -1,7 +1,11 @@
 package com.youlai.system.model.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.youlai.system.common.base.BaseEntity;
@@ -15,9 +19,15 @@ import com.youlai.system.common.base.BaseEntity;
 @Getter
 @Setter
 @TableName("sys_notice_status")
-public class NoticeStatus extends BaseEntity {
+public class NoticeStatus implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 主键ID
+     */
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     /**
      * 公共通知id
@@ -26,7 +36,7 @@ public class NoticeStatus extends BaseEntity {
     /**
      * 用户id
      */
-    private Integer userId;
+    private Long userId;
     /**
      * 读取状态，0未读，1已读取
      */

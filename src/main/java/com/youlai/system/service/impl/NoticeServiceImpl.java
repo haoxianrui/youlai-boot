@@ -1,9 +1,15 @@
 package com.youlai.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.google.gson.*;
+import com.youlai.system.model.entity.NoticeStatus;
+import com.youlai.system.model.entity.SysUser;
 import com.youlai.system.security.util.SecurityUtils;
+import com.youlai.system.service.NoticeStatusService;
+import com.youlai.system.service.SysUserService;
 import com.youlai.system.service.WebsocketService;
+import jodd.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -39,6 +45,11 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
     private final NoticeConverter noticeConverter;
 
     private final WebsocketService webSocketServer;
+
+    private final NoticeStatusService noticeStatusService;
+
+    private final SysUserService sysUserService;
+
     private final Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (localDateTime, type, jsonSerializationContext) ->
                     new JsonPrimitive(localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
@@ -47,18 +58,30 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
             .create();
 
     private void sendWebSocketMsg(Notice notice) {
-        if(notice.getSendStatus() > 0){
+        if (notice.getSendStatus() > 0) {
             String jsonNotice = gson.toJson(noticeConverter.toVO(notice));
-             webSocketServer.sendStringToFrontend(jsonNotice);
+            webSocketServer.sendStringToFrontend(SecurityUtils.getUsername(), jsonNotice);
+            List<SysUser> list = sysUserService.list();
+            for (SysUser sysUser : list) {
+                NoticeStatus noticeStatus = noticeStatusService.getOne(new LambdaQueryWrapper<NoticeStatus>().eq(NoticeStatus::getUserId, sysUser.getId()).eq(NoticeStatus::getNoticeId, notice.getId()));
+                if (noticeStatus == null) {
+                    noticeStatus = new NoticeStatus();
+                    noticeStatus.setUserId(sysUser.getId());
+                    noticeStatus.setNoticeId(notice.getId());
+                    noticeStatus.setReadStatus(0L);
+                    noticeStatusService.save(noticeStatus);
+                }
+            }
+
         }
     }
 
     /**
-    * 获取通知公告分页列表
-    *
-    * @param queryParams 查询参数
-    * @return {@link IPage<NoticeVO>} 通知公告分页列表
-    */
+     * 获取通知公告分页列表
+     *
+     * @param queryParams 查询参数
+     * @return {@link IPage<NoticeVO>} 通知公告分页列表
+     */
     @Override
     public IPage<NoticeVO> getNoticePage(NoticeQuery queryParams) {
         Page<NoticeVO> pageVO = this.baseMapper.getNoticePage(
@@ -67,7 +90,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
         );
         return pageVO;
     }
-    
+
     /**
      * 获取通知公告表单数据
      *
@@ -79,7 +102,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
         Notice entity = this.getById(id);
         return noticeConverter.toForm(entity);
     }
-    
+
     /**
      * 新增通知公告
      *
@@ -94,31 +117,31 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
         entity.setUpdateBy(SecurityUtils.getUserId());
         entity.setIsDelete(0);
         boolean result = this.save(entity);
-        if(result){
+        if (result) {
             sendWebSocketMsg(entity);
         }
         return result;
     }
-    
+
     /**
      * 更新通知公告
      *
-     * @param id   通知公告ID
+     * @param id       通知公告ID
      * @param formData 通知公告表单对象
      * @return
      */
     @Override
-    public boolean updateNotice(Long id,NoticeForm formData) {
+    public boolean updateNotice(Long id, NoticeForm formData) {
         Notice entity = noticeConverter.toEntity(formData);
         entity.setUpdateBy(SecurityUtils.getUserId());
         entity.setIsDelete(0);
         boolean result = this.updateById(entity);
-        if(result) {
+        if (result) {
             sendWebSocketMsg(entity);
         }
         return result;
     }
-    
+
     /**
      * 删除通知公告
      *
