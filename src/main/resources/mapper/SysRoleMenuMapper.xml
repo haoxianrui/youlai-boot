@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.youlai.system.mapper.SysRoleMenuMapper">
+<mapper namespace="com.youlai.boot.module.system.mapper.SysRoleMenuMapper">
 
     <!-- 获取角色拥有的菜单ID集合 -->
     <select id="listMenuIdsByRoleId" resultType="java.lang.Long">
@@ -16,7 +16,7 @@
     </select>
 
     <!-- 权限和拥有权限的角色的映射 -->
-    <resultMap id="PremRolesMap" type="com.youlai.system.model.bo.RolePermsBO">
+    <resultMap id="PremRolesMap" type="com.youlai.boot.module.system.model.bo.RolePermsBO">
         <result property="roleCode" column="role_code"/>
         <collection property="perms" ofType="string" javaType="java.util.Set">
             <result column="perm"/>
