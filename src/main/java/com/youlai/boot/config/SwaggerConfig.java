@@ -68,7 +68,7 @@ public class SwaggerConfig {
             if (openApi.getPaths() != null) {
                 openApi.getPaths().forEach((s, pathItem) -> {
                     // 登录接口/验证码不需要添加鉴权参数
-                    if (s.equals("/api/v1/auth/login") || s.equals("/api/v1/auth/captcha")) {
+                    if ("/api/v1/auth/login".equals(s) || "/api/v1/auth/captcha".equals(s)) {
                         return;
                     }
                     // 接口添加鉴权参数

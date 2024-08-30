@@ -45,7 +45,7 @@ mybatis-plus:
       # 主键ID类型
       id-type: none
       # 逻辑删除字段名称
-      logic-delete-field: deleted
+      logic-delete-field: is_deleted
       # 逻辑删除-删除值
       logic-delete-value: 1
       # 逻辑删除-未删除值
@@ -132,7 +132,7 @@ springdoc:
   group-configs:
     - group: 'default'
       paths-to-match: '/**'
-      packages-to-scan: com.youlai.system.controller
+      packages-to-scan: com.**.controller
   default-flat-param-object: true
 
 # knife4j 接口文档配置
@@ -140,7 +140,7 @@ knife4j:
   # 是否开启 Knife4j 增强功能
   enable: true  # 设置为 true 表示开启增强功能
   # 生产环境配置
-  production: true  # 设置为 true 表示在生产环境中不显示文档，为 false 表示显示文档（通常在开发环境中使用）
+  production: false # 设置为 true 表示在生产环境中不显示文档，为 false 表示显示文档（通常在开发环境中使用）
   setting:
     language: zh_cn
 

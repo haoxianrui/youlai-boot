@@ -2,13 +2,13 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.youlai.boot.module.system.mapper.SysDictMapper">
+<mapper namespace="com.youlai.boot.system.mapper.SysDictMapper">
 
     <!-- 字典映射 -->
-    <resultMap id="DictMap" type="com.youlai.boot.module.system.model.vo.DictPageVO">
+    <resultMap id="DictMap" type="com.youlai.boot.system.model.vo.DictPageVO">
         <collection property="dictItems"
                     column="{dictId=id}"
-                    select="com.youlai.boot.module.system.mapper.SysDictItemMapper.listDictItemsByDictId">
+                    select="com.youlai.boot.system.mapper.SysDictItemMapper.listDictItemsByDictId">
         </collection>
     </resultMap>
     <!-- 字典分页列表 -->

@@ -4,12 +4,12 @@ import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.collection.CollectionUtil;
 import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.config.property.SecurityProperties;
-import com.youlai.boot.framework.filter.RateLimiterFilter;
-import com.youlai.boot.framework.security.exception.MyAccessDeniedHandler;
-import com.youlai.boot.framework.security.exception.MyAuthenticationEntryPoint;
-import com.youlai.boot.framework.security.filter.JwtValidationFilter;
-import com.youlai.boot.framework.security.filter.CaptchaValidationFilter;
-import com.youlai.boot.module.system.service.SysConfigService;
+import com.youlai.boot.core.filter.RateLimiterFilter;
+import com.youlai.boot.core.security.exception.MyAccessDeniedHandler;
+import com.youlai.boot.core.security.exception.MyAuthenticationEntryPoint;
+import com.youlai.boot.core.security.filter.JwtValidationFilter;
+import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
+import com.youlai.boot.system.service.SysConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,8 +46,6 @@ public class SecurityConfig {
     private final CodeGenerator codeGenerator;
     private final SecurityProperties securityProperties;
     private final SysConfigService sysConfigService;
-
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

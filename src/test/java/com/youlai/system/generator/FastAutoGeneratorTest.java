@@ -1,4 +1,4 @@
-package com.youlai.system.generator;
+package com.youlai.boot.system.generator;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 
@@ -36,7 +36,7 @@ public class FastAutoGeneratorTest {
                 // 包配置
                 .packageConfig(builder -> {
                             builder
-                                    .parent("com.youlai.system")
+                                    .parent("com.youlai.boot.system")
                                     .entity("model.entity")
                                     .mapper("mapper")
                                     .service("service")

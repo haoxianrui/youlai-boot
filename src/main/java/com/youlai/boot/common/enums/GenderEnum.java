@@ -1,6 +1,6 @@
 package com.youlai.boot.common.enums;
 
-import com.youlai.system.common.base.IBaseEnum;
+import com.youlai.boot.common.base.IBaseEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 

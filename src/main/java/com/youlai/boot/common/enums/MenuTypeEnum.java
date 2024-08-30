@@ -1,7 +1,7 @@
 package com.youlai.boot.common.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
-import com.youlai.system.common.base.IBaseEnum;
+import com.youlai.boot.common.base.IBaseEnum;
 import lombok.Getter;
 
 /**

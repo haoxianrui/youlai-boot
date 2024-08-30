@@ -2,8 +2,8 @@ package com.youlai.boot.common.exception;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.youlai.system.common.result.Result;
-import com.youlai.system.common.result.ResultCode;
+import com.youlai.boot.common.result.Result;
+import com.youlai.boot.common.result.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;

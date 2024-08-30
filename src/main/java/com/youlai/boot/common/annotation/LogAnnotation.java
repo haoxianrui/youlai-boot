@@ -1,6 +1,6 @@
 package com.youlai.boot.common.annotation;
 
-import com.youlai.system.enums.LogModuleEnum;
+import com.youlai.boot.common.enums.LogModuleEnum;
 
 import java.lang.annotation.*;
 

@@ -1,6 +1,6 @@
 package com.youlai.boot.common.enums;
 
-import com.youlai.system.common.base.IBaseEnum;
+import com.youlai.boot.common.base.IBaseEnum;
 import lombok.Getter;
 
 /**
