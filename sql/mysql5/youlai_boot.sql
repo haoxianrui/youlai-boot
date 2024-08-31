@@ -327,7 +327,7 @@ INSERT INTO `sys_menu` VALUES (110, 0, '0', '路由参数', 2, NULL, '/route-par
 INSERT INTO `sys_menu` VALUES (111, 110, '0,110', '参数(type=1)', 1, NULL, 'route-param-type1', 'demo/route-param', NULL, 0, 1, 1, 1, 'el-icon-Star', NULL, '2024-05-26 21:59:24', '2024-05-26 21:59:37', '{\"type\": \"1\"}');
 INSERT INTO `sys_menu` VALUES (112, 110, '0,110', '参数(type=2)', 1, NULL, 'route-param-type2', 'demo/route-param', NULL, 0, 1, 1, 2, 'el-icon-StarFilled', NULL, '2024-05-26 21:46:55', '2024-05-26 21:59:45', '{\"type\": \"2\"}');
 INSERT INTO `sys_menu` VALUES (117, 1, '0,1', '系统日志', 1, 'Log', 'log', 'system/log/index', NULL, 0, 1, 1, 6, 'document', NULL, '2024-06-28 07:43:16', '2024-06-28 07:43:16', NULL);
-INSERT INTO `sys_menu` VALUES (118, 0, '0', '系统工具', 2, NULL, '/tool', 'Layout', NULL, 0, 1, 1, 2, 'menu', NULL, '2024-07-13 08:41:07', '2024-07-13 08:41:07', NULL);
+INSERT INTO `sys_menu` VALUES (118, 0, '0', '系统工具', 2, NULL, '/generator', 'Layout', NULL, 0, 1, 1, 2, 'menu', NULL, '2024-07-13 08:41:07', '2024-07-13 08:41:07', NULL);
 INSERT INTO `sys_menu` VALUES (119, 118, '0,118', '代码生成(Alpha)', 1, 'Generator', 'generator', 'generator/index', NULL, 0, 1, 1, 1, 'code', NULL, '2024-07-13 08:44:51', '2024-07-13 08:44:51', NULL);
 INSERT INTO `sys_menu` VALUES (120, 1, '0,1', '系统配置', 1, 'Config', 'config', 'system/config/index', NULL, 0, 1, 1, 7, 'setting', NULL, '2024-07-30 16:29:24', '2024-07-30 16:29:32', NULL);
 INSERT INTO `sys_menu` VALUES (121, 120, '0,1,120', '查询系统配置', 4, NULL, '', NULL, 'sys:config:query', 0, 1, 1, 1, '', NULL, '2024-07-30 16:29:54', '2024-07-30 16:29:54', NULL);
