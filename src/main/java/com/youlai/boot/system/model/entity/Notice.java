@@ -1,12 +1,15 @@
-package com.youlai.system.model.entity;
+package com.youlai.boot.system.model.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.youlai.boot.common.base.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
-import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.youlai.system.common.base.BaseEntity;
 
+import java.time.LocalDateTime;
 /**
  * 通知公告实体对象
  *
@@ -45,14 +48,18 @@ public class Notice extends BaseEntity {
      */
     private Integer tarType;
     /**
+     * 目标ID
+     */
+    private String tarIds;
+    /**
      * 发布状态(0-未发布 1已发布 2已撤回)
      */
-    private Integer sendStatus;
+    private Integer releaseStatus;
     /**
      * 发布时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime sendTime;
+    private LocalDateTime releaseTime;
     /**
      * 撤回时间
      */
@@ -61,13 +68,16 @@ public class Notice extends BaseEntity {
     /**
      * 创建人ID
      */
+    @TableField(fill = FieldFill.INSERT)
     private Long createBy;
     /**
      * 更新人ID
      */
+    @TableField(fill = FieldFill.UPDATE)
     private Long updateBy;
     /**
      * 逻辑删除标识(0-未删除 1-已删除)
      */
-    private Integer isDelete;
+    @TableLogic(value = "0", delval = "1")
+    private Integer isDeleted;
 }

@@ -1,11 +1,12 @@
-package com.youlai.system.mapper;
+package com.youlai.boot.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.youlai.system.model.entity.Notice;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.system.model.query.NoticeQuery;
-import com.youlai.system.model.vo.NoticeVO;
+import com.youlai.boot.system.model.entity.Notice;
+import com.youlai.boot.system.model.query.NoticeQuery;
+import com.youlai.boot.system.model.vo.NoticeVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 通知公告Mapper接口
@@ -21,8 +22,8 @@ public interface NoticeMapper extends BaseMapper<Notice> {
      *
      * @param page 分页对象
      * @param queryParams 查询参数
-     * @return
+     * @return 通知公告分页数据
      */
-    Page<NoticeVO> getNoticePage(Page<NoticeVO> page, NoticeQuery queryParams);
+    Page<NoticeVO> getNoticePage(Page<NoticeVO> page, @Param("queryParams") NoticeQuery queryParams);
 
 }

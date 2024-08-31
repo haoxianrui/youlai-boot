@@ -25,7 +25,7 @@ public class PageResult<T> implements Serializable {
         PageResult<T> result = new PageResult<>();
         result.setCode(ResultCode.SUCCESS.getCode());
 
-        Data data = new Data<T>();
+        Data<T> data = new Data<>();
         data.setList(page.getRecords());
         data.setTotal(page.getTotal());
 

@@ -1,14 +1,13 @@
-package com.youlai.system.model.entity;
+package com.youlai.boot.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.youlai.system.common.base.BaseEntity;
 
 /**
  * 用户公告状态实体对象
@@ -38,11 +37,11 @@ public class NoticeStatus implements Serializable {
      */
     private Long userId;
     /**
-     * 读取状态，0未读，1已读取
+     * 读取状态，0未读，1已读
      */
-    private Long readStatus;
+    private Integer readStatus;
     /**
      * 用户阅读时间
      */
-    private LocalDateTime readTiem;
+    private LocalDateTime readTime;
 }

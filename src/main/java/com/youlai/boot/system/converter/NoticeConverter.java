@@ -1,10 +1,9 @@
-package com.youlai.system.converter;
+package com.youlai.boot.system.converter;
 
-import com.youlai.system.model.vo.NoticeVO;
+import com.youlai.boot.system.model.entity.Notice;
+import com.youlai.boot.system.model.form.NoticeForm;
+import com.youlai.boot.system.model.vo.NoticeVO;
 import org.mapstruct.Mapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.system.model.entity.Notice;
-import com.youlai.system.model.form.NoticeForm;
 
 /**
  * 通知公告对象转换器

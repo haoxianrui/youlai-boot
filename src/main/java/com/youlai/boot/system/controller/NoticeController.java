@@ -1,22 +1,20 @@
-package com.youlai.system.controller;
+package com.youlai.boot.system.controller;
 
-import com.youlai.system.service.NoticeService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.youlai.system.model.form.NoticeForm;
-import com.youlai.system.model.query.NoticeQuery;
-import com.youlai.system.model.vo.NoticeVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.youlai.system.common.result.PageResult;
-import com.youlai.system.common.result.Result;
+import com.youlai.boot.common.result.PageResult;
+import com.youlai.boot.common.result.Result;
+import com.youlai.boot.system.model.form.NoticeForm;
+import com.youlai.boot.system.model.query.NoticeQuery;
+import com.youlai.boot.system.model.vo.NoticeVO;
+import com.youlai.boot.system.service.NoticeService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
 
 /**
  * 通知公告前端控制层
@@ -43,7 +41,7 @@ public class NoticeController  {
     @Operation(summary = "新增通知公告")
     @PostMapping
     @PreAuthorize("@ss.hasPerm('system:notice:add')")
-    public Result saveNotice(@RequestBody @Valid NoticeForm formData ) {
+    public Result<?> saveNotice(@RequestBody @Valid NoticeForm formData ) {
         boolean result = noticeService.saveNotice(formData);
         return Result.judge(result);
     }
@@ -61,7 +59,7 @@ public class NoticeController  {
     @Operation(summary = "修改通知公告")
     @PutMapping(value = "/{id}")
     @PreAuthorize("@ss.hasPerm('system:notice:edit')")
-    public Result updateNotice(
+    public Result<?> updateNotice(
             @Parameter(description = "通知公告ID") @PathVariable Long id,
             @RequestBody @Validated NoticeForm formData
     ) {
@@ -69,10 +67,26 @@ public class NoticeController  {
         return Result.judge(result);
     }
 
+    @Operation(summary = "发布通知公告")
+    @PatchMapping(value = "/release/{id}")
+    @PreAuthorize("@ss.hasPerm('system:notice:release')")
+    public Result<?> releaseNotice(@Parameter(description = "通知公告ID") @PathVariable Long id) {
+        boolean result = noticeService.releaseNotice(id);
+        return Result.judge(result);
+    }
+
+    @Operation(summary = "撤回通知公告")
+    @PatchMapping(value = "/recall/{id}")
+    @PreAuthorize("@ss.hasPerm('system:notice:recall')")
+    public Result<?> recallNotice(@Parameter(description = "通知公告ID") @PathVariable Long id) {
+        boolean result = noticeService.recallNotice(id);
+        return Result.judge(result);
+    }
+
     @Operation(summary = "删除通知公告")
     @DeleteMapping("/{ids}")
     @PreAuthorize("@ss.hasPerm('system:notice:delete')")
-    public Result deleteNotices(
+    public Result<?> deleteNotices(
         @Parameter(description = "通知公告ID，多个以英文逗号(,)分割") @PathVariable String ids
     ) {
         boolean result = noticeService.deleteNotices(ids);
