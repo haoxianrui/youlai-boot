@@ -1,7 +1,7 @@
 package com.youlai.boot.system.converter;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.boot.system.model.entity.SysDictItem;
+import com.youlai.boot.system.model.entity.DictItem;
 import com.youlai.boot.system.model.vo.DictPageVO;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.form.DictForm;
@@ -20,20 +20,20 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface DictItemConverter {
 
-    Page<DictPageVO> toPageVo(Page<SysDictItem> page);
+    Page<DictPageVO> toPageVo(Page<DictItem> page);
 
-    DictForm toForm(SysDictItem entity);
+    DictForm toForm(DictItem entity);
 
-    SysDictItem toEntity(DictForm.DictItem dictItems);
-    List<SysDictItem> toEntity(List<DictForm.DictItem> dictItems);
+    DictItem toEntity(DictForm.DictItem dictItems);
+    List<DictItem> toEntity(List<DictForm.DictItem> dictItems);
 
-    DictForm.DictItem toDictItem(SysDictItem entity);
-    List<DictForm.DictItem> toDictItem(List<SysDictItem> entities);
+    DictForm.DictItem toDictItem(DictItem entity);
+    List<DictForm.DictItem> toDictItem(List<DictItem> entities);
 
     @Mappings({
             @Mapping(target = "value", source = "value"),
             @Mapping(target = "label", source = "name")
     })
-    Option<Long> toOption(SysDictItem dictItem);
-    List<Option<Long>> toOption(List<SysDictItem> dictItems);
+    Option<Long> toOption(DictItem dictItem);
+    List<Option<Long>> toOption(List<DictItem> dictItems);
 }

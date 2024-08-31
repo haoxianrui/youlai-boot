@@ -1,7 +1,7 @@
 package com.youlai.boot.system.converter;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.boot.system.model.entity.SysConfig;
+import com.youlai.boot.system.model.entity.Config;
 import com.youlai.boot.system.model.vo.ConfigVO;
 import com.youlai.boot.system.model.form.ConfigForm;
 import org.mapstruct.Mapper;
@@ -15,9 +15,9 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ConfigConverter {
 
-    Page<ConfigVO> toPageVo(Page<SysConfig> page);
+    Page<ConfigVO> toPageVo(Page<Config> page);
 
-    SysConfig toEntity(ConfigForm configForm);
+    Config toEntity(ConfigForm configForm);
 
-    ConfigForm toForm(SysConfig entity);
+    ConfigForm toForm(Config entity);
 }

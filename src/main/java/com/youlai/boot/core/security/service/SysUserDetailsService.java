@@ -2,7 +2,7 @@ package com.youlai.boot.core.security.service;
 
 import com.youlai.boot.core.security.model.SysUserDetails;
 import com.youlai.boot.system.model.dto.UserAuthInfo;
-import com.youlai.boot.system.service.SysUserService;
+import com.youlai.boot.system.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SysUserDetailsService implements UserDetailsService {
 
-    private final SysUserService sysUserService;
+    private final UserService userService;
 
     /**
      * 根据用户名获取用户信息
@@ -33,7 +33,7 @@ public class SysUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            UserAuthInfo userAuthInfo = sysUserService.getUserAuthInfo(username);
+            UserAuthInfo userAuthInfo = userService.getUserAuthInfo(username);
             if (userAuthInfo == null) {
                 throw new UsernameNotFoundException(username);
             }

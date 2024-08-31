@@ -5,7 +5,6 @@ import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
 import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.system.event.UserConnectionEvent;
-import com.youlai.boot.system.service.WebsocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;

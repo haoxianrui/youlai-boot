@@ -1,5 +1,4 @@
-server:
-  port: 8989
+
 
 spring:
   jackson:
@@ -147,11 +146,12 @@ springdoc:
     path: /v3/api-docs
   group-configs:
     - group: '系统管理'
-      paths-to-match: '/**'
-      packages-to-scan: com.youlai.boot.system.controller
-    - group: '登录认证'
-      paths-to-match: '/**'
-      packages-to-scan: com.youlai.boot.infrastructure.auth.controller
+      paths-to-match: "/**"
+      packages-to-scan:
+        - com.youlai.boot.system.controller
+        - com.youlai.boot.platform.auth.controller
+        - com.youlai.boot.platform.file.controller
+        - com.youlai.boot.platform.generator.controller
   default-flat-param-object: true
 
 # knife4j 接口文档配置

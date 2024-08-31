@@ -1,3 +1,5 @@
+server:
+  port: 8989
 spring:
   main:
     allow-circular-references: true

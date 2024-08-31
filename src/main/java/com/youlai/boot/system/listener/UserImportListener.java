@@ -8,20 +8,20 @@ import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.context.AnalysisContext;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.youlai.boot.common.base.BaseAnalysisEventListener;
-import com.youlai.boot.system.model.entity.SysDept;
-import com.youlai.boot.system.model.entity.SysRole;
-import com.youlai.boot.system.model.entity.SysUser;
-import com.youlai.boot.system.model.entity.SysUserRole;
+import com.youlai.boot.system.model.entity.Dept;
+import com.youlai.boot.system.model.entity.Role;
+import com.youlai.boot.system.model.entity.User;
+import com.youlai.boot.system.model.entity.UserRole;
 import com.youlai.boot.common.base.IBaseEnum;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.common.enums.GenderEnum;
 import com.youlai.boot.common.enums.StatusEnum;
 import com.youlai.boot.system.converter.UserConverter;
 import com.youlai.boot.system.model.dto.UserImportDTO;
-import com.youlai.boot.system.service.SysDeptService;
-import com.youlai.boot.system.service.SysRoleService;
-import com.youlai.boot.system.service.SysUserRoleService;
-import com.youlai.boot.system.service.SysUserService;
+import com.youlai.boot.system.service.DeptService;
+import com.youlai.boot.system.service.RoleService;
+import com.youlai.boot.system.service.UserRoleService;
+import com.youlai.boot.system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -49,19 +49,19 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
     // 导入返回信息
     StringBuilder msg = new StringBuilder();
 
-    private final SysUserService userService;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final UserConverter userConverter;
-    private final SysRoleService roleService;
-    private final SysUserRoleService userRoleService;
-    private final SysDeptService deptService;
+    private final RoleService roleService;
+    private final UserRoleService userRoleService;
+    private final DeptService deptService;
 
     public UserImportListener() {
-        this.userService = SpringUtil.getBean(SysUserService.class);
+        this.userService = SpringUtil.getBean(UserService.class);
         this.passwordEncoder = SpringUtil.getBean(PasswordEncoder.class);
-        this.roleService = SpringUtil.getBean(SysRoleService.class);
-        this.userRoleService = SpringUtil.getBean(SysUserRoleService.class);
-        this.deptService = SpringUtil.getBean(SysDeptService.class);
+        this.roleService = SpringUtil.getBean(RoleService.class);
+        this.userRoleService = SpringUtil.getBean(UserRoleService.class);
+        this.deptService = SpringUtil.getBean(DeptService.class);
         this.userConverter = SpringUtil.getBean(UserConverter.class);
     }
 
@@ -83,7 +83,7 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
         if (StrUtil.isBlank(username)) {
             validationMsg.append("用户名为空；");
         } else {
-            long count = userService.count(new LambdaQueryWrapper<SysUser>().eq(SysUser::getUsername, username));
+            long count = userService.count(new LambdaQueryWrapper<User>().eq(User::getUsername, username));
             if (count > 0) {
                 validationMsg.append("用户名已存在；");
             }
@@ -105,7 +105,7 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
 
         if (validationMsg.isEmpty()) {
             // 校验通过，持久化至数据库
-            SysUser entity = userConverter.toEntity(userImportDTO);
+            User entity = userConverter.toEntity(userImportDTO);
             entity.setPassword(passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));   // 默认密码
             // 性别翻译
             String genderLabel = userImportDTO.getGenderLabel();
@@ -119,19 +119,19 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
             List<Long> roleIds = null;
             if (StrUtil.isNotBlank(roleCodes)) {
                 roleIds = roleService.list(
-                                new LambdaQueryWrapper<SysRole>()
-                                        .in(SysRole::getCode, (Object) roleCodes.split(","))
-                                        .eq(SysRole::getStatus, StatusEnum.ENABLE.getValue())
-                                        .select(SysRole::getId)
+                                new LambdaQueryWrapper<Role>()
+                                        .in(Role::getCode, (Object) roleCodes.split(","))
+                                        .eq(Role::getStatus, StatusEnum.ENABLE.getValue())
+                                        .select(Role::getId)
                         ).stream()
-                        .map(SysRole::getId)
+                        .map(Role::getId)
                         .collect(Collectors.toList());
             }
             // 部门解析
             String deptCode = userImportDTO.getDeptCode();
             if (StrUtil.isNotBlank(deptCode)) {
-                SysDept dept = deptService.getOne(new LambdaQueryWrapper<SysDept>().eq(SysDept::getCode, deptCode)
-                        .select(SysDept::getId)
+                Dept dept = deptService.getOne(new LambdaQueryWrapper<Dept>().eq(Dept::getCode, deptCode)
+                        .select(Dept::getId)
                 );
                 if (dept != null) {
                     entity.setDeptId(dept.getId());
@@ -144,8 +144,8 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
                 validCount++;
                 // 保存用户角色关联
                 if (CollectionUtil.isNotEmpty(roleIds)) {
-                    List<SysUserRole> userRoles = roleIds.stream()
-                            .map(roleId -> new SysUserRole(entity.getId(), roleId))
+                    List<UserRole> userRoles = roleIds.stream()
+                            .map(roleId -> new UserRole(entity.getId(), roleId))
                             .collect(Collectors.toList());
                     userRoleService.saveBatch(userRoles);
                 }

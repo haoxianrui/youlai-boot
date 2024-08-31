@@ -4,7 +4,7 @@ import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.result.ResultCode;
 import com.youlai.boot.common.util.IPUtils;
 import com.youlai.boot.common.util.ResponseUtils;
-import com.youlai.boot.system.service.SysConfigService;
+import com.youlai.boot.system.service.ConfigService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,11 +27,11 @@ import java.util.concurrent.TimeUnit;
 public class RateLimiterFilter extends OncePerRequestFilter {
 
     private final RedisTemplate<String, Object> redisTemplate;
-    private final SysConfigService sysConfigService;
+    private final ConfigService configService;
 
-    public RateLimiterFilter(RedisTemplate<String, Object> redisTemplate, SysConfigService sysConfigService) {
+    public RateLimiterFilter(RedisTemplate<String, Object> redisTemplate, ConfigService configService) {
         this.redisTemplate = redisTemplate;
-        this.sysConfigService = sysConfigService;
+        this.configService = configService;
     }
 
     /**
@@ -48,7 +48,7 @@ public class RateLimiterFilter extends OncePerRequestFilter {
         if (count == null || count == 1) {
             redisTemplate.expire(key,1, TimeUnit.SECONDS);
         }
-        Object systemConfig = sysConfigService.getSystemConfig(RedisConstants.IP_QPS_THRESHOLD_LIMIT_KEY);
+        Object systemConfig = configService.getSystemConfig(RedisConstants.IP_QPS_THRESHOLD_LIMIT_KEY);
         long limit = 10;
         if(systemConfig != null){
             limit =  Long.parseLong(systemConfig.toString());

@@ -1,8 +1,8 @@
 package com.youlai.boot.system.converter;
 
-import com.youlai.boot.infrastructure.generator.model.entity.GenConfig;
-import com.youlai.boot.infrastructure.generator.model.entity.GenFieldConfig;
-import com.youlai.boot.infrastructure.generator.model.form.GenConfigForm;
+import com.youlai.boot.platform.generator.model.entity.GenConfig;
+import com.youlai.boot.platform.generator.model.entity.GenFieldConfig;
+import com.youlai.boot.platform.generator.model.form.GenConfigForm;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

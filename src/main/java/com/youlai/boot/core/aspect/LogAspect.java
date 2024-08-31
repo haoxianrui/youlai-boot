@@ -7,10 +7,9 @@ import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.common.util.IPUtils;
-import com.youlai.boot.system.model.entity.SysLog;
-import com.youlai.boot.common.annotation.LogAnnotation;
+import com.youlai.boot.system.model.entity.Log;
 import com.youlai.boot.core.security.util.SecurityUtils;
-import com.youlai.boot.system.service.SysLogService;
+import com.youlai.boot.system.service.LogService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,15 +31,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LogAspect {
 
-    private final SysLogService logService;
+    private final LogService logService;
     private final HttpServletRequest request;
 
-    @Pointcut("@annotation(com.youlai.boot.common.annotation.LogAnnotation)")
+    @Pointcut("@annotation(com.youlai.boot.common.annotation.Log)")
     public void logPointcut() {
     }
 
     @Around("logPointcut() && @annotation(logAnnotation)")
-    public Object logExecutionTime(ProceedingJoinPoint joinPoint, LogAnnotation logAnnotation) throws Throwable {
+    public Object logExecutionTime(ProceedingJoinPoint joinPoint, com.youlai.boot.common.annotation.Log logAnnotation) throws Throwable {
         String requestURI = request.getRequestURI();
 
         Long userId = null;
@@ -55,7 +54,7 @@ public class LogAspect {
         long executionTime = timer.interval();
 
         // 创建日志记录
-        SysLog log = new SysLog();
+        Log log = new Log();
         log.setModule(logAnnotation.module());
         log.setContent(logAnnotation.value());
         log.setRequestUri(requestURI);

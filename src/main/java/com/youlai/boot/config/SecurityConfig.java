@@ -9,7 +9,7 @@ import com.youlai.boot.core.security.exception.MyAccessDeniedHandler;
 import com.youlai.boot.core.security.exception.MyAuthenticationEntryPoint;
 import com.youlai.boot.core.security.filter.JwtValidationFilter;
 import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
-import com.youlai.boot.system.service.SysConfigService;
+import com.youlai.boot.system.service.ConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,7 +45,7 @@ public class SecurityConfig {
     private final RedisTemplate<String, Object> redisTemplate;
     private final CodeGenerator codeGenerator;
     private final SecurityProperties securityProperties;
-    private final SysConfigService sysConfigService;
+    private final ConfigService configService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -66,7 +66,7 @@ public class SecurityConfig {
 
         ;
         // 限流过滤器
-        http.addFilterBefore(new RateLimiterFilter(redisTemplate, sysConfigService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new RateLimiterFilter(redisTemplate, configService), UsernamePasswordAuthenticationFilter.class);
         // 验证码校验过滤器
         http.addFilterBefore(new CaptchaValidationFilter(redisTemplate, codeGenerator), UsernamePasswordAuthenticationFilter.class);
         // JWT 校验过滤器

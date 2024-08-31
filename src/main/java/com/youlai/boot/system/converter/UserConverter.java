@@ -1,7 +1,7 @@
 package com.youlai.boot.system.converter;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.boot.system.model.entity.SysUser;
+import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.vo.UserInfoVO;
 import com.youlai.boot.system.model.vo.UserPageVO;
 import com.youlai.boot.system.model.vo.UserProfileVO;
@@ -30,20 +30,20 @@ public interface UserConverter {
 
     Page<UserPageVO> toPageVo(Page<UserBO> bo);
 
-    UserForm toForm(SysUser entity);
+    UserForm toForm(User entity);
 
     @InheritInverseConfiguration(name = "toForm")
-    SysUser toEntity(UserForm entity);
+    User toEntity(UserForm entity);
 
     @Mappings({
             @Mapping(target = "userId", source = "id")
     })
-    UserInfoVO toUserInfoVo(SysUser entity);
+    UserInfoVO toUserInfoVo(User entity);
 
-    SysUser toEntity(UserImportDTO vo);
+    User toEntity(UserImportDTO vo);
 
 
     UserProfileVO toProfileVO(UserBO bo);
 
-    SysUser toEntity(UserProfileForm formData);
+    User toEntity(UserProfileForm formData);
 }

@@ -1,7 +1,7 @@
 package com.youlai.boot.system.converter;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.boot.system.model.entity.SysRole;
+import com.youlai.boot.system.model.entity.Role;
 import com.youlai.boot.system.model.vo.RolePageVO;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.form.RoleForm;
@@ -20,17 +20,17 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface RoleConverter {
 
-    Page<RolePageVO> toPageVo(Page<SysRole> page);
+    Page<RolePageVO> toPageVo(Page<Role> page);
 
     @Mappings({
             @Mapping(target = "value", source = "id"),
             @Mapping(target = "label", source = "name")
     })
-    Option<Long> entity2Option(SysRole role);
+    Option<Long> entity2Option(Role role);
 
-    List<Option<Long>> entities2Options(List<SysRole> roles);
+    List<Option<Long>> entities2Options(List<Role> roles);
 
-    SysRole toEntity(RoleForm roleForm);
+    Role toEntity(RoleForm roleForm);
 
-    RoleForm toForm(SysRole entity);
+    RoleForm toForm(Role entity);
 }
