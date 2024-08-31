@@ -20,6 +20,5 @@ public interface DatabaseMapper extends BaseMapper<Dept> {
 
     List<ColumnMetaData> getTableColumns(String tableName);
 
-
     TableMetaData getTableMetadata(String tableName);
 }
