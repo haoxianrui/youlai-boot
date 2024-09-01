@@ -1,7 +1,5 @@
 package com.youlai.boot.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -68,12 +66,10 @@ public class Notice extends BaseEntity {
     /**
      * 创建人ID
      */
-    @TableField(fill = FieldFill.INSERT)
     private Long createBy;
     /**
      * 更新人ID
      */
-    @TableField(fill = FieldFill.UPDATE)
     private Long updateBy;
     /**
      * 逻辑删除标识(0-未删除 1-已删除)

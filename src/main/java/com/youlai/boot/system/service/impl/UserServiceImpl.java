@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.common.enums.ContactType;
+import com.youlai.boot.common.model.Option;
 import com.youlai.boot.platform.mail.service.MailService;
 import com.youlai.boot.platform.sms.service.SmsService;
 import com.youlai.boot.system.model.entity.User;
@@ -39,6 +40,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -418,5 +420,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .eq(User::getId, userId)
                 .set(User::getEmail, email)
         );
+    }
+
+    /**
+     * 获取用户选项列表
+     *
+     * @return {@link List<Option<String>>} 用户选项列表
+     */
+    @Override
+    public List<Option<String>> listUserOptions() {
+        List<User> list = this.list();
+        if (CollectionUtil.isNotEmpty(list)) {
+            return list.stream().map(user -> new Option<>(user.getId().toString(), user.getNickname())).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 }

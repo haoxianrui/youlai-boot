@@ -1,24 +1,20 @@
-package com.youlai.boot.system.model.vo;
+package com.youlai.boot.system.model.bo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 通知公告视图对象
+ * 通知公告业务对象
  *
- * @author youlaitech
- * @since 2024-08-27 10:31
+ * @author Theo
+ * @since 2024-09-01 10:31
+ * @version 1.0.0
  */
-@Getter
-@Setter
-@Schema( description = "通知公告视图对象")
-public class NoticeVO implements Serializable {
+@Data
+public class NoticeBO {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -28,7 +24,7 @@ public class NoticeVO implements Serializable {
     private String title;
 
     @Schema(description = "通知类型")
-    private String noticeTypeLabel;
+    private Integer noticeType;
 
     @Schema(description = "发布人")
     private String releaseBy;
@@ -43,10 +39,8 @@ public class NoticeVO implements Serializable {
     private Integer releaseStatus;
 
     @Schema(description = "发布时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime releaseTime;
 
     @Schema(description = "撤回时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime recallTime;
 }

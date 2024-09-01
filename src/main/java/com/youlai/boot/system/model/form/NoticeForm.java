@@ -50,6 +50,6 @@ public class NoticeForm implements Serializable {
     private Integer tarType;
 
     @Schema(description = "接收人ID集合")
-    private List<String> userIds;
+    private List<String> tarIds;
 
 }

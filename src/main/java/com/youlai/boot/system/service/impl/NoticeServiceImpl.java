@@ -12,6 +12,7 @@ import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.platform.websocket.service.WebsocketService;
 import com.youlai.boot.system.converter.NoticeConverter;
 import com.youlai.boot.system.mapper.NoticeMapper;
+import com.youlai.boot.system.model.bo.NoticeBO;
 import com.youlai.boot.system.model.entity.Notice;
 import com.youlai.boot.system.model.entity.NoticeStatus;
 import com.youlai.boot.system.model.entity.User;
@@ -68,10 +69,11 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
      */
     @Override
     public IPage<NoticeVO> getNoticePage(NoticeQuery queryParams) {
-        return this.baseMapper.getNoticePage(
+        Page<NoticeBO> noticePage = this.baseMapper.getNoticePage(
                 new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),
                 queryParams
         );
+        return noticeConverter.toPageVo(noticePage);
     }
 
     /**
@@ -95,6 +97,8 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
     @Override
     public boolean saveNotice(NoticeForm formData) {
         Notice entity = noticeConverter.toEntity(formData);
+        entity.setReleaseStatus(0);
+        entity.setCreateBy(SecurityUtils.getUserId());
         if (entity.getTarType() == 1) {
             Assert.notBlank(entity.getTarIds(), "指定用户不能为空");
         }
@@ -111,6 +115,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
     @Override
     public boolean updateNotice(Long id, NoticeForm formData) {
         Notice entity = noticeConverter.toEntity(formData);
+        entity.setUpdateBy(SecurityUtils.getUserId());
         if (entity.getTarType() == 1) {
             Assert.notBlank(entity.getTarIds(), "指定用户不能为空");
         }
@@ -150,8 +155,9 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
     public boolean releaseNotice(Long id) {
         Notice notice = this.getById(id);
         Assert.notNull(notice, "通知公告不存在");
-        Assert.isTrue(notice.getReleaseStatus() == 0, "通知公告已发布");
+        Assert.isTrue(notice.getReleaseStatus() != 1, "通知公告已发布");
         notice.setReleaseStatus(1);
+        notice.setReleaseBy(SecurityUtils.getUserId());
         notice.setReleaseTime(LocalDateTime.now());
         this.updateById(notice);
         //发布通知公告的同时，需要将通知公告发送给目标用户
