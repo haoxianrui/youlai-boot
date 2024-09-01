@@ -112,12 +112,8 @@ public class GeneratorServiceImpl implements GeneratorService {
             String entityName = StrUtil.toCamelCase(StrUtil.removePrefix(tableName, tableName.split("_")[0]));
             genConfig.setEntityName(entityName);
 
-            String packageName = YouLaiApplication.class.getPackageName();
-            genConfig.setPackageName(StrUtil.subBefore(packageName, ".", true));
-            genConfig.setModuleName(StrUtil.subAfter(packageName, ".", true));
-
+            genConfig.setPackageName(YouLaiApplication.class.getPackageName());
             genConfig.setAuthor(generatorProperties.getDefaultConfig().getAuthor());
-
         }
 
         // 根据表的列 + 已经存在的字段生成配置 得到 组合后的字段生成配置
