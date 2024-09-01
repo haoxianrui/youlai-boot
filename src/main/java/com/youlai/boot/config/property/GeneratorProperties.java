@@ -57,8 +57,14 @@ public class GeneratorProperties {
     @Data
     public static class TemplateConfig {
 
+        /**
+         * 模板路径 (e.g. /templates/generator/controller.java.vm)
+         */
         private String templatePath;
 
+        /**
+         * 子包名 (e.g. controller/service/mapper/model)
+         */
         private String subpackageName;
 
         /**
@@ -74,7 +80,15 @@ public class GeneratorProperties {
     @Data
     public static class DefaultConfig {
 
+        /**
+         * 作者 (e.g. Ray)
+         */
         private String author;
+
+        /**
+         * 默认模块名(e.g. system)
+         */
+        private String moduleName;
 
     }
 

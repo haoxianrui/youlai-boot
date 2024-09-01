@@ -15,6 +15,7 @@ generator:
   # 默认配置
   defaultConfig:
     author: youlaitech
+    moduleName: system
   # 排除数据表
   excludeTables:
     - gen_config

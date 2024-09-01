@@ -42,7 +42,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.zip.ZipOutputStream;
 
-
 /**
  * 数据库服务实现类
  *
@@ -113,6 +112,7 @@ public class GeneratorServiceImpl implements GeneratorService {
             genConfig.setEntityName(entityName);
 
             genConfig.setPackageName(YouLaiApplication.class.getPackageName());
+            genConfig.setModuleName(generatorProperties.getDefaultConfig().getModuleName()); // 默认模块名
             genConfig.setAuthor(generatorProperties.getDefaultConfig().getAuthor());
         }
 
@@ -225,7 +225,6 @@ public class GeneratorServiceImpl implements GeneratorService {
      * 删除代码生成配置
      *
      * @param tableName 表名
-     * @return
      */
     @Override
     public void deleteGenConfig(String tableName) {
@@ -257,14 +256,18 @@ public class GeneratorServiceImpl implements GeneratorService {
         GenConfig genConfig = genConfigService.getOne(new LambdaQueryWrapper<GenConfig>()
                 .eq(GenConfig::getTableName, tableName)
         );
-        Assert.isTrue(genConfig != null, "未找到表生成配置");
+        if (genConfig == null) {
+            throw new BusinessException("未找到表生成配置");
+        }
 
         List<GenFieldConfig> fieldConfigs = genFieldConfigService.list(new LambdaQueryWrapper<GenFieldConfig>()
                 .eq(GenFieldConfig::getConfigId, genConfig.getId())
                 .orderByAsc(GenFieldConfig::getFieldSort)
 
         );
-        Assert.isTrue(CollectionUtil.isNotEmpty(fieldConfigs), "未找到字段生成配置");
+        if (CollectionUtil.isEmpty(fieldConfigs)) {
+            throw new BusinessException("未找到字段生成配置");
+        }
 
         // 遍历模板配置
         Map<String, GeneratorProperties.TemplateConfig> templateConfigs = generatorProperties.getTemplateConfigs();
@@ -286,21 +289,20 @@ public class GeneratorServiceImpl implements GeneratorService {
             previewVO.setFileName(fileName);
 
             /* 2. 生成文件路径 */
-            // com.youlai
+            // 包名：com.youlai.boot
             String packageName = genConfig.getPackageName();
-            // system
+            // 模块名：system
             String moduleName = genConfig.getModuleName();
-            // controller
+            // 子包名：controller
             String subpackageName = templateConfig.getSubpackageName();
-            // 文件路径  src/main/java/com/youlai/system/controller
+            // 组合成文件路径：src/main/java/com/youlai/boot/system/controller
             String filePath = getFilePath(templateName, moduleName, packageName, subpackageName, entityName);
             previewVO.setPath(filePath);
 
             /* 3. 生成文件内容 */
-
+            // 将模板文件中的变量替换为具体的值 生成代码内容
             String content = getCodeContent(templateConfig, genConfig, fieldConfigs);
             previewVO.setContent(content);
-
 
             list.add(previewVO);
         }
@@ -396,7 +398,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         bindMap.put("tableName", genConfig.getTableName());
         bindMap.put("author", genConfig.getAuthor());
         bindMap.put("lowerFirstEntityName", StrUtil.lowerFirst(entityName)); // UserTest → userTest
-        bindMap.put("kebabCaseEntityName",  StrUtil.toSymbolCase(entityName,'-')); // UserTest → user-test
+        bindMap.put("kebabCaseEntityName", StrUtil.toSymbolCase(entityName, '-')); // UserTest → user-test
         bindMap.put("businessName", genConfig.getBusinessName());
         bindMap.put("fieldConfigs", fieldConfigs);
 
