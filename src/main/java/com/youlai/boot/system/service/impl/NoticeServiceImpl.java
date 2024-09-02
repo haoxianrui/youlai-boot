@@ -2,17 +2,20 @@ package com.youlai.boot.system.service.impl;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.gson.*;
 import com.youlai.boot.common.constant.SymbolConstant;
+import com.youlai.boot.common.enums.MessageTypeEnum;
+import com.youlai.boot.common.util.CommonUtil;
 import com.youlai.boot.core.security.util.SecurityUtils;
-import com.youlai.boot.platform.websocket.service.WebsocketService;
 import com.youlai.boot.system.converter.NoticeConverter;
+import com.youlai.boot.system.handler.MessageHandler;
 import com.youlai.boot.system.mapper.NoticeMapper;
 import com.youlai.boot.system.model.bo.NoticeBO;
+import com.youlai.boot.system.model.dto.MessageDTO;
 import com.youlai.boot.system.model.entity.Notice;
 import com.youlai.boot.system.model.entity.NoticeStatus;
 import com.youlai.boot.system.model.entity.User;
@@ -30,6 +33,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 通知公告服务实现类
@@ -43,23 +47,11 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
 
     private final NoticeConverter noticeConverter;
 
-    private final WebsocketService websocketService;
+    private final MessageHandler messageHandler;
 
     private final NoticeStatusService noticeStatusService;
 
     private final UserService userService;
-
-    private final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (localDateTime, type, jsonSerializationContext) ->
-                    new JsonPrimitive(localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-            .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (jsonElement, type, jsonDeserializationContext) ->
-                    LocalDateTime.parse(jsonElement.getAsString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-            .create();
-
-    private void sendWebSocketMsg(Notice notice) {
-        String jsonNotice = gson.toJson(noticeConverter.toVO(notice));
-        websocketService.sendStringToFrontend(SecurityUtils.getUsername(), jsonNotice);
-    }
 
     /**
      * 获取通知公告分页列表
@@ -181,8 +173,35 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
             noticeStatusService.saveBatch(needSaveList);
         }
         //最后，给当前在线的用户发送websocket消息
-        //TODO: 通知公告的websocket消息发送
+        List<String> usernameList = null;
+        if(notice.getTarType() == 1){
+            List<Long> collect = needSaveList.stream().map(NoticeStatus::getUserId).collect(Collectors.toList());
+            List<User> userList = userService.list(new LambdaQueryWrapper<User>().in(User::getId, collect).select(User::getUsername));
+            usernameList = userList.stream().map(User::getUsername).collect(Collectors.toList());
+        }
+        MessageDTO message = new MessageDTO();
+        message.setMessageType(MessageTypeEnum.WEBSOCKET);
+        message.setReceiver(usernameList);
+        message.setContent(getNoticeContent(notice));
+        message.setSender(SecurityUtils.getUsername());
+        messageHandler.sendMessage(message);
         return this.updateById(notice);
+    }
+
+    /**
+     * 自定义组合公告内容
+     *
+     * @param notice 通知公告
+     * @return 自定义组合通知公告内容
+     */
+    private String getNoticeContent(Notice notice) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.set("id", notice.getId());
+        jsonObject.set("title", notice.getTitle());
+        jsonObject.set("messageType", notice.getNoticeType());
+        jsonObject.set("releaseTime", notice.getReleaseTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        jsonObject.set("type", "release");
+        return jsonObject.toString();
     }
 
     /**

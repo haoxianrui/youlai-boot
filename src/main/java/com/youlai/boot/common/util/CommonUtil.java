@@ -60,4 +60,8 @@ public class CommonUtil {
         return List.of(str.split(separator));
     }
 
+
+    public static String delHtmlTags(String htmlStr) {
+        return htmlStr.replaceAll("<[^>]+>", "");
+    }
 }
