@@ -1,4 +1,4 @@
-package com.youlai.boot.system.converter;
+package com.youlai.boot.platform.generator.converter;
 
 import com.youlai.boot.platform.generator.model.entity.GenConfig;
 import com.youlai.boot.platform.generator.model.entity.GenFieldConfig;

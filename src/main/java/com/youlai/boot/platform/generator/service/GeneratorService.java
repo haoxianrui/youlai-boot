@@ -2,9 +2,9 @@ package com.youlai.boot.platform.generator.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.boot.platform.generator.model.form.GenConfigForm;
-import com.youlai.boot.system.model.query.TablePageQuery;
-import com.youlai.boot.system.model.vo.GeneratorPreviewVO;
-import com.youlai.boot.system.model.vo.TablePageVO;
+import com.youlai.boot.platform.generator.model.query.TablePageQuery;
+import com.youlai.boot.platform.generator.model.vo.GeneratorPreviewVO;
+import com.youlai.boot.platform.generator.model.vo.TablePageVO;
 
 import java.util.List;
 
