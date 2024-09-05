@@ -7,6 +7,7 @@ import com.youlai.boot.system.model.form.NoticeForm;
 import com.youlai.boot.system.model.query.NoticeQuery;
 import com.youlai.boot.system.model.vo.NoticeVO;
 import com.youlai.boot.system.service.NoticeService;
+import com.youlai.boot.system.service.NoticeStatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +30,8 @@ import org.springframework.web.bind.annotation.*;
 public class NoticeController  {
 
     private final NoticeService noticeService;
+
+    private final NoticeStatusService noticeStatusService;
 
     @Operation(summary = "通知公告分页列表")
     @GetMapping("/page")
@@ -91,5 +94,11 @@ public class NoticeController  {
     ) {
         boolean result = noticeService.deleteNotices(ids);
         return Result.judge(result);
+    }
+
+    @Operation(summary = "获取我的通知公告")
+    @GetMapping("/notice/{count}")
+    public Result<?> listNotices(@PathVariable Integer count) {
+        return Result.success(noticeStatusService.listNotices(count));
     }
 }
