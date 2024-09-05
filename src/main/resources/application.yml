@@ -1,8 +1,4 @@
-server:
-  port: 8989
 spring:
-  main:
-    allow-circular-references: true
   application:
     name: youlai-boot
   profiles:
@@ -19,6 +15,7 @@ generator:
   # 默认配置
   defaultConfig:
     author: youlaitech
+    moduleName: system
   # 排除数据表
   excludeTables:
     - gen_config

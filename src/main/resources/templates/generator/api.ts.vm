@@ -65,7 +65,7 @@ export default ${entityName}API;
 /** ${businessName}分页查询参数 */
 export interface ${entityName}PageQuery extends PageQuery {
     #foreach($fieldConfig in $fieldConfigs)
-        #if($fieldConfig.isShowInList)
+        #if($fieldConfig.isShowInQuery)
             #if("$!fieldConfig.fieldComment" != "")
     /** ${fieldConfig.fieldComment} */
             #end

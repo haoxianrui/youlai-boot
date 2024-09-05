@@ -1,4 +1,4 @@
-package com.youlai.boot.system.model.bo;
+package com.youlai.boot.platform.generator.model.bo;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.youlai.boot.system.model.query;
+package com.youlai.boot.platform.generator.model.query;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.youlai.boot.common.base.BasePageQuery;

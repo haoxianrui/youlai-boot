@@ -1,4 +1,4 @@
-package com.youlai.boot.system.model.vo;
+package com.youlai.boot.platform.generator.model.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

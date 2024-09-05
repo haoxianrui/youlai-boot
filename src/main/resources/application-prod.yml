@@ -1,3 +1,6 @@
+server:
+  port: 8989
+
 spring:
   jackson:
     ## 默认序列化时间格式
