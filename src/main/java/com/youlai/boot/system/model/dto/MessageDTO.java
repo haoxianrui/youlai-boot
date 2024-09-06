@@ -1,6 +1,6 @@
 package com.youlai.boot.system.model.dto;
 
-import com.youlai.boot.common.enums.MessageTypeEnum;
+import com.youlai.boot.common.enums.NoticeWayEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -25,6 +25,6 @@ public class MessageDTO {
     @Schema(description = "接收者")
     private List<String> receiver;
 
-    @Schema(description = "消息类型")
-    private MessageTypeEnum messageType;
+    @Schema(description = "通知方式")
+    private NoticeWayEnum noticeWay;
 }

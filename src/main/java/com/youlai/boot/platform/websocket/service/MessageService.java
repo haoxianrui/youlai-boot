@@ -1,6 +1,6 @@
 package com.youlai.boot.platform.websocket.service;
 
-import com.youlai.boot.common.enums.MessageTypeEnum;
+import com.youlai.boot.common.enums.NoticeWayEnum;
 import com.youlai.boot.system.model.dto.MessageDTO;
 
 /**
@@ -18,7 +18,7 @@ public interface MessageService {
      * @param messageType 消息类型
      * @return 是否支持
      */
-    boolean check(MessageTypeEnum messageType);
+    boolean check(NoticeWayEnum messageType);
 
     /**
      * 发送消息

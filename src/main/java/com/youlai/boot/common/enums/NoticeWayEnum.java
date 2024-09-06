@@ -5,28 +5,23 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 通知类型枚举
- * 0-系统消息
- *
- * @since 2024-9-1 17:33:06
+ * 通知方式枚举
  * @author Theo
+ * @since 2024-9-2 14:32:58
  */
 @Getter
 @RequiredArgsConstructor
-public enum NoticeTypeEnum implements IBaseEnum<Integer> {
-
+public enum NoticeWayEnum implements IBaseEnum<Integer> {
     /**
-     * 通知类型
+     * 通知方式
      */
-    SYSTEM_MESSAGE(0, "系统消息");
+    WEBSOCKET("webSocket", "发送websocket消息");
 
-    @Getter
-    private Integer value;
+    private String value;
 
-    @Getter
     private String label;
 
-    NoticeTypeEnum(Integer value, String label) {
+    NoticeWayEnum(String value, String label) {
         this.value = value;
         this.label = label;
     }

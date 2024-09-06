@@ -1,16 +1,13 @@
 package com.youlai.boot.platform.websocket.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.youlai.boot.common.enums.MessageTypeEnum;
+import com.youlai.boot.common.enums.NoticeWayEnum;
+import com.youlai.boot.common.enums.NoticeTypeEnum;
 import com.youlai.boot.platform.websocket.service.MessageService;
 import com.youlai.boot.system.event.UserConnectionEvent;
 import com.youlai.boot.system.model.dto.ChatMessage;
 import com.youlai.boot.system.model.dto.MessageDTO;
-import com.youlai.boot.system.model.entity.User;
-import com.youlai.boot.system.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.security.SecurityUtil;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -61,6 +58,7 @@ public class WebsocketServiceImpl implements MessageService {
      */
     @Scheduled(fixedRate = 5000)
     public void sendOnlineUserCount() {
+        log.info("Send online user count: {}", onlineUsers.size());
         messagingTemplate.convertAndSend("/topic/onlineUserCount", onlineUsers.size());
     }
 
@@ -68,12 +66,12 @@ public class WebsocketServiceImpl implements MessageService {
     /**
      * 策略模式检查
      *
-     * @param messageType 消息类型
-     * @return boolean
+     * @param noticeWayEnum 通知方式
+     * @return boolean 是否支持
      */
     @Override
-    public boolean check(MessageTypeEnum messageType) {
-        return messageType.equals(MessageTypeEnum.WEBSOCKET);
+    public boolean check(NoticeWayEnum noticeWayEnum) {
+        return noticeWayEnum.equals(NoticeWayEnum.WEBSOCKET);
     }
 
     /**
@@ -91,7 +89,7 @@ public class WebsocketServiceImpl implements MessageService {
             users = message.getReceiver().stream().filter(onlineUsers::contains).collect(Collectors.toList());
         }
         //获取当前用户
-        ChatMessage chatMessage = new ChatMessage(message.getSender(), message.getContent());
+        ChatMessage chatMessage = new ChatMessage(message.getSender(), message.getContent(), NoticeTypeEnum.SYSTEM_MESSAGE);
         users.forEach(receiver -> {
             messagingTemplate.convertAndSendToUser(receiver, "/queue/message", chatMessage);
         });

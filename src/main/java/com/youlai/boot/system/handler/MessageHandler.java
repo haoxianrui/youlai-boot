@@ -22,12 +22,12 @@ public class MessageHandler {
 
     /**
      * 发送消息
-     *
+     * 如果后面有多种消息发送方式，可以设置MessageDTO中的noticeWay，调用不同的消息发送方式，实现消息多种发送方式
      * @param messageDTO 消息载体
      */
     public void sendMessage(MessageDTO messageDTO) {
         messageServices.forEach(messageService -> {
-            if (messageService.check(messageDTO.getMessageType())) {
+            if (messageService.check(messageDTO.getNoticeWay())) {
                 messageService.sendMessage(messageDTO);
             }
         });

@@ -8,8 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.boot.common.constant.SymbolConstant;
-import com.youlai.boot.common.enums.MessageTypeEnum;
-import com.youlai.boot.common.util.CommonUtil;
+import com.youlai.boot.common.enums.NoticeWayEnum;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.system.converter.NoticeConverter;
 import com.youlai.boot.system.handler.MessageHandler;
@@ -180,7 +179,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
             usernameList = userList.stream().map(User::getUsername).collect(Collectors.toList());
         }
         MessageDTO message = new MessageDTO();
-        message.setMessageType(MessageTypeEnum.WEBSOCKET);
+        message.setNoticeWay(NoticeWayEnum.WEBSOCKET);
         message.setReceiver(usernameList);
         message.setContent(getNoticeContent(notice));
         message.setSender(SecurityUtils.getUsername());
