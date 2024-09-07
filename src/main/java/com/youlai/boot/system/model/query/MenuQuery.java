@@ -9,7 +9,7 @@ import lombok.Data;
  * @author haoxr
  * @since 2022/10/28
  */
-@Schema(description ="部门分页查询对象")
+@Schema(description ="菜单查询对象")
 @Data
 public class MenuQuery {
 

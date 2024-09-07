@@ -150,9 +150,9 @@ springdoc:
       paths-to-match: "/**"
       packages-to-scan:
         - com.youlai.boot.system.controller
-        - com.youlai.boot.platform.auth.controller
-        - com.youlai.boot.platform.file.controller
-        - com.youlai.boot.platform.generator.controller
+        - com.youlai.boot.module.auth.controller
+        - com.youlai.boot.module.file.controller
+        - com.youlai.boot.module.generator.controller
   default-flat-param-object: true
 
 # knife4j 接口文档配置

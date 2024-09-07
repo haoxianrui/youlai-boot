@@ -1,7 +1,7 @@
 package com.youlai.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.boot.platform.generator.model.entity.GenConfig;
+import com.youlai.boot.module.codegen.model.entity.GenConfig;
 import com.youlai.boot.system.model.form.MenuForm;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.entity.Menu;
@@ -67,10 +67,10 @@ public interface MenuService extends IService<Menu> {
     boolean deleteMenu(Long id);
 
     /**
-     * 为代码生成添加菜单
+     * 代码生成时添加菜单
      *
      * @param parentMenuId 父菜单ID
      * @param genConfig   实体名
      */
-    void saveMenu(Long parentMenuId, GenConfig genConfig);
+    void addMenuForCodegen(Long parentMenuId, GenConfig genConfig);
 }

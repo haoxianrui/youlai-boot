@@ -36,7 +36,7 @@ public class CaptchaConfig {
         } else if ("random".equalsIgnoreCase(codeType)) {
             return new RandomGenerator(codeLength);
         } else {
-            throw new IllegalArgumentException("Invalid captcha generator type: " + codeType);
+            throw new IllegalArgumentException("Invalid captcha codegen type: " + codeType);
         }
     }
 

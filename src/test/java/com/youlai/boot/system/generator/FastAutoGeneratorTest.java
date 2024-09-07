@@ -48,12 +48,12 @@ public class FastAutoGeneratorTest {
                 // 注入配置(设置扩展类的模板路径和包路径)
                 .injectionConfig(consumer -> {
                     List<CustomFile> customFiles = new ArrayList<>();
-                    customFiles.add(new CustomFile.Builder().fileName("VO.java").templatePath("/templates/generator/vo.java.vm").packageName("model.vo").build());
-                    customFiles.add(new CustomFile.Builder().fileName("BO.java").templatePath("/templates/generator/bo.java.vm").packageName("model.bo").build());
-                    customFiles.add(new CustomFile.Builder().fileName("PageQuery.java").templatePath("/templates/generator/query.java.vm").packageName("model.query").build());
-                    customFiles.add(new CustomFile.Builder().fileName("PageVO.java").templatePath("/templates/pageVO.java.vm").packageName("model.vo").build());
-                    customFiles.add(new CustomFile.Builder().fileName("Form.java").templatePath("/templates/generator/form.java.vm").packageName("model.form").build());
-                    customFiles.add(new CustomFile.Builder().fileName("Converter.java").templatePath("/templates/generator/converter.java.vm").packageName("converter").build());
+                    customFiles.add(new CustomFile.Builder().fileName("VO.java").templatePath("/templates/codegen/vo.java.vm").packageName("model.vo").build());
+                    customFiles.add(new CustomFile.Builder().fileName("BO.java").templatePath("/templates/codegen/bo.java.vm").packageName("model.bo").build());
+                    customFiles.add(new CustomFile.Builder().fileName("PageQuery.java").templatePath("/templates/codegen/query.java.vm").packageName("model.query").build());
+                    customFiles.add(new CustomFile.Builder().fileName("PageVO.java").templatePath("/templates/codegen/pageVO.java.vm").packageName("model.vo").build());
+                    customFiles.add(new CustomFile.Builder().fileName("Form.java").templatePath("/templates/codegen/form.java.vm").packageName("model.form").build());
+                    customFiles.add(new CustomFile.Builder().fileName("Converter.java").templatePath("/templates/codegen/converter.java.vm").packageName("converter").build());
                     consumer.customFile(customFiles);
                     consumer.beforeOutputFile((tableInfo, objectMap) -> {
                         // 为每个表生成首字母小写的实体名
