@@ -11,14 +11,16 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum NoticeWayEnum implements IBaseEnum<Integer> {
+public enum NoticeWayEnum implements IBaseEnum<String> {
     /**
      * 通知方式
      */
     WEBSOCKET("webSocket", "发送websocket消息");
 
+    @Getter
     private String value;
 
+    @Getter
     private String label;
 
     NoticeWayEnum(String value, String label) {

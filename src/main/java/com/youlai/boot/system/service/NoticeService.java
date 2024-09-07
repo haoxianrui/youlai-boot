@@ -6,6 +6,7 @@ import com.youlai.boot.system.model.entity.Notice;
 import com.youlai.boot.system.model.form.NoticeForm;
 import com.youlai.boot.system.model.query.NoticeQuery;
 import com.youlai.boot.system.model.vo.NoticeVO;
+import com.youlai.boot.system.model.vo.NoticeDetailVO;
 
 /**
  * 通知公告服务类
@@ -70,4 +71,19 @@ public interface NoticeService extends IService<Notice> {
      * @return 是否撤回成功
      */
     boolean recallNotice(Long id);
+
+    /**
+     * 阅读通知公告
+     *
+     * @param id 通知公告ID
+     * @return 通知公告对象
+     */
+    NoticeDetailVO readNotice(Long id);
+
+    /**
+     * 获取阅读时通知公告详情
+     * @param id 通知公告ID
+     * @return 通知公告详情
+     */
+    NoticeDetailVO getReadNoticeDetail(Long id);
 }

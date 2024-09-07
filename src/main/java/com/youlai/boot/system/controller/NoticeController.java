@@ -58,6 +58,12 @@ public class NoticeController  {
         NoticeForm formData = noticeService.getNoticeFormData(id);
         return Result.success(formData);
     }
+    @Operation(summary = "管理页面查看通知公告")
+    @GetMapping("/detail/{id}")
+    public Result<?> getReadNoticeDetail(
+            @Parameter(description = "通知公告ID")@PathVariable Long id) {
+        return Result.success(noticeService.getReadNoticeDetail(id));
+    }
 
     @Operation(summary = "修改通知公告")
     @PutMapping(value = "/{id}")
@@ -96,9 +102,22 @@ public class NoticeController  {
         return Result.judge(result);
     }
 
-    @Operation(summary = "获取我的通知公告")
-    @GetMapping("/notice/{count}")
-    public Result<?> listNotices(@PathVariable Integer count) {
-        return Result.success(noticeStatusService.listNotices(count));
+    @Operation(summary = "获取未读的通知公告")
+    @GetMapping("/unread")
+    public Result<?> listUnreadNotices() {
+        return Result.success(noticeStatusService.listUnreadNotices());
+    }
+
+    @Operation(summary = "阅读通知公告")
+    @PatchMapping("/read/{id}")
+    public Result<?> readNotice(@PathVariable Long id) {
+        return Result.success(noticeService.readNotice(id));
+    }
+
+    @Operation(summary = "全部已读")
+    @PatchMapping("/readAll")
+    public Result<?> readAll() {
+        noticeStatusService.readAll();
+        return Result.success();
     }
 }

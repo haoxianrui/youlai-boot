@@ -14,9 +14,12 @@ import lombok.Data;
 public class NoticeStatusVO {
 
     @Schema(description = "公告ID")
-    private Long noticeId;
+    private Long id;
+
+    @Schema(description = "公告标题")
+    private String title;
 
     @Schema(description = "是否已读")
-    private Boolean read;
+    private Integer readStatus;
 
 }

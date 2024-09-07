@@ -6,6 +6,7 @@ import com.youlai.boot.system.model.bo.NoticeBO;
 import com.youlai.boot.system.model.entity.Notice;
 import com.youlai.boot.system.model.query.NoticeQuery;
 import com.youlai.boot.system.model.vo.NoticeVO;
+import com.youlai.boot.system.model.vo.NoticeDetailVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +28,10 @@ public interface NoticeMapper extends BaseMapper<Notice> {
      */
     Page<NoticeBO> getNoticePage(Page<NoticeVO> page, @Param("queryParams") NoticeQuery queryParams);
 
+    /**
+     * 获取阅读时通知公告详情
+     * @param id 通知公告ID
+     * @return 通知公告详情
+     */
+    NoticeDetailVO getReadNoticeVO(@Param("id") Long id);
 }

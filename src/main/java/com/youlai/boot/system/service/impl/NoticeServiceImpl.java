@@ -21,6 +21,7 @@ import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.form.NoticeForm;
 import com.youlai.boot.system.model.query.NoticeQuery;
 import com.youlai.boot.system.model.vo.NoticeVO;
+import com.youlai.boot.system.model.vo.NoticeDetailVO;
 import com.youlai.boot.system.service.NoticeService;
 import com.youlai.boot.system.service.NoticeStatusService;
 import com.youlai.boot.system.service.UserService;
@@ -224,5 +225,42 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
         noticeStatusService.remove(new LambdaQueryWrapper<NoticeStatus>().eq(NoticeStatus::getNoticeId, id));
         return true;
     }
+
+    /**
+     * 阅读通知公告
+     * @param id 通知公告ID
+     * @return 通知公告表单对象
+     */
+    @Override
+    public NoticeDetailVO readNotice(Long id) {
+        NoticeDetailVO noticeDetailVO = this.getReadNoticeDetail(id);
+        Assert.isTrue(noticeDetailVO != null && noticeDetailVO.getReleaseStatus() == 1, "公告不存在或未发布");
+        //获取当前登录用户
+        Long userId = SecurityUtils.getUserId();
+        LambdaQueryWrapper<NoticeStatus> queryWrapper = new LambdaQueryWrapper<NoticeStatus>()
+                .eq(NoticeStatus::getUserId, userId)
+                .eq(NoticeStatus::getNoticeId, id)
+                .eq(NoticeStatus::getReadStatus, 0);
+        NoticeStatus noticeStatus = noticeStatusService.getOne(queryWrapper);
+        if (noticeStatus != null) {
+            noticeStatus.setReadStatus(1);
+            noticeStatusService.updateById(noticeStatus);
+        }
+        return noticeDetailVO;
+    }
+
+    /**
+     * 获取阅读时通知公告详情
+     * @param id 通知公告ID
+     * @return
+     */
+    @Override
+    public NoticeDetailVO getReadNoticeDetail(Long id) {
+        Assert.notNull(id, "公告ID不能为空");
+        NoticeDetailVO noticeDetailVO = this.baseMapper.getReadNoticeVO(id);
+        Assert.isTrue(noticeDetailVO != null, "公告不存在");
+        return noticeDetailVO;
+    }
+
 
 }

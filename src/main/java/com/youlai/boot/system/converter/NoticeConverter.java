@@ -33,7 +33,6 @@ public interface NoticeConverter{
     Page<NoticeVO> toPageVo(Page<NoticeBO> noticePage);
 
     @Mappings({
-            @Mapping(target = "noticeTypeLabel", expression = "java(com.youlai.boot.common.base.IBaseEnum.getLabelByValue(bo.getNoticeType(), com.youlai.boot.common.enums.NoticeWayEnum.class))")
     })
     NoticeVO toPageVo(NoticeBO bo);
 

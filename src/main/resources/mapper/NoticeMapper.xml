@@ -41,4 +41,25 @@
              DESC
     </select>
 
+    <select id="getReadNoticeVO" resultType="com.youlai.boot.system.model.vo.NoticeDetailVO">
+        SELECT
+            sn.id,
+            sn.title,
+            sn.content,
+            sn.notice_type,
+            su.nickname AS release_by,
+            sn.priority,
+            sn.release_status,
+            sn.release_time
+        FROM
+            sys_notice sn
+                LEFT JOIN
+            sys_user su ON su.id = sn.release_by
+        where
+            sn.is_deleted = 0
+            AND sn.id = #{id}
+            AND sn.release_status = 1
+
+    </select>
+
 </mapper>
