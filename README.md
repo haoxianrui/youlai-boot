@@ -3,7 +3,7 @@
    <img alt="logo" width="100" height="100" src="https://foruda.gitee.com/images/1724259461244885014/4de96569_716974.png">
    <h2>youlai-boot</h2>
    <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
-   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.3.0-green.svg"/>
+   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.3.2-green.svg"/>
    <a href="https://gitee.com/youlaiorg/youlai-boot" target="_blank">
      <img alt="有来技术" src="https://gitee.com/youlaiorg/youlai-boot/badge/star.svg"/>
    </a>     
@@ -65,7 +65,7 @@ youlai-boot
 │   │   ├── WebMvcConfig                # WebMvc 配置
 │   │   ├── WebSocketConfig             # WebSocket 自动装配配置
 │   │   └── XxlJobConfig                # XXL-JOB 自动装配配置
-│   ├── core                            # 核心功能模块
+│   ├── core                            # 核心功能
 │   │   ├── aspect                      # 切面
 │   │   │   ├── LogAspect               # 日志切面
 │   │   │   └── RepeatSubmitAspect      # 防重提交切面
@@ -76,12 +76,12 @@ youlai-boot
 │   │   │   ├── MyDataPermissionHandler # 数据权限处理器
 │   │   │   └── MyMetaObjectHandler     # 元对象字段填充处理器
 │   │   └── security                    # Security 安全中心
-│   ├── platform                        # 平台基础设施模块
-│   │   ├── auth                        # 授权
-│   │   ├── file                        # 文件处理
-│   │   ├── generator                   # 代码生成器
-│   │   ├── mail                        # 邮件处理
-│   │   └── sms                         # 短信处理
+│   ├── module                          # 公共模块
+│   │   ├── auth                        # 认证模块
+│   │   ├── file                        # 文件模块
+│   │   ├── generator                   # 代码生成模块
+│   │   ├── mail                        # 邮件模块
+│   │   └── sms                         # 短信模块
 │   ├── system                          # 系统模块
 │   │   ├── controller                  # 控制层
 │   │   ├── converter                   # MapStruct 转换器
