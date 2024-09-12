@@ -12,8 +12,6 @@ import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.common.enums.ContactType;
 import com.youlai.boot.common.model.Option;
-import com.youlai.boot.platform.mail.service.MailService;
-import com.youlai.boot.platform.sms.service.SmsService;
 import com.youlai.boot.module.mail.service.MailService;
 import com.youlai.boot.module.sms.service.SmsService;
 import com.youlai.boot.system.model.entity.User;

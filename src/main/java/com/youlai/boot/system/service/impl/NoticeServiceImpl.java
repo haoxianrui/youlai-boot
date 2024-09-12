@@ -20,6 +20,7 @@ import com.youlai.boot.system.model.entity.NoticeStatus;
 import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.form.NoticeForm;
 import com.youlai.boot.system.model.query.NoticeQuery;
+import com.youlai.boot.system.model.vo.NoticeStatusVO;
 import com.youlai.boot.system.model.vo.NoticeVO;
 import com.youlai.boot.system.model.vo.NoticeDetailVO;
 import com.youlai.boot.system.service.NoticeService;
@@ -262,5 +263,16 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
         return noticeDetailVO;
     }
 
+    /**
+     * 获取当前登录用户的通知公告列表
+     * @param queryParams 查询参数
+     * @return 通知公告分页列表
+     */
+    @Override
+    public IPage<NoticeVO> getMyNoticePage(NoticeQuery queryParams) {
+        Long userId = SecurityUtils.getUserId();
+        queryParams.setUserId(userId);
+        return noticeStatusService.getMyNoticePage(new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),queryParams);
+    }
 
 }

@@ -1,8 +1,12 @@
 package com.youlai.boot.system.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.youlai.boot.system.model.entity.NoticeStatus;
+import com.youlai.boot.system.model.query.NoticeQuery;
 import com.youlai.boot.system.model.vo.NoticeStatusVO;
+import com.youlai.boot.system.model.vo.NoticeVO;
 
 import java.util.List;
 
@@ -25,4 +29,12 @@ public interface NoticeStatusService extends IService<NoticeStatus> {
      * @return 是否成功
      */
     boolean readAll();
+
+    /**
+     * 分页获取我的通知公告
+     * @param page 分页对象
+     * @param queryParams 查询参数
+     * @return 通知公告分页列表
+     */
+    IPage<NoticeVO> getMyNoticePage(Page<NoticeVO> page, NoticeQuery queryParams);
 }

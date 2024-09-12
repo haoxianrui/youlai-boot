@@ -120,4 +120,11 @@ public class NoticeController  {
         noticeStatusService.readAll();
         return Result.success();
     }
+
+    @Operation(summary = "获取我的通知公告")
+    @GetMapping("/my/page")
+    public PageResult<NoticeVO> getMyNoticePage(NoticeQuery queryParams) {
+        IPage<NoticeVO> result = noticeService.getMyNoticePage(queryParams);
+        return PageResult.success(result);
+    }
 }

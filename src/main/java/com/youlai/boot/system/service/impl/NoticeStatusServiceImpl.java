@@ -1,11 +1,15 @@
 package com.youlai.boot.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.system.mapper.NoticeStatusMapper;
 import com.youlai.boot.system.model.entity.NoticeStatus;
+import com.youlai.boot.system.model.query.NoticeQuery;
 import com.youlai.boot.system.model.vo.NoticeStatusVO;
+import com.youlai.boot.system.model.vo.NoticeVO;
 import com.youlai.boot.system.service.NoticeStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,6 +50,17 @@ public class NoticeStatusServiceImpl extends ServiceImpl<NoticeStatusMapper, Not
         updateWrapper.eq(NoticeStatus::getUserId, userId);
         updateWrapper.set(NoticeStatus::getReadStatus, 1);
         return this.update(updateWrapper);
+    }
+
+    /**
+     * 分页获取我的通知公告
+     * @param page 分页对象
+     * @param queryParams 查询参数
+     * @return 通知公告分页列表
+     */
+    @Override
+    public IPage<NoticeVO> getMyNoticePage(Page<NoticeVO> page, NoticeQuery queryParams) {
+        return this.getBaseMapper().getMyNoticePage(new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),queryParams);
     }
 
 

@@ -1,8 +1,12 @@
 package com.youlai.boot.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.boot.system.model.entity.NoticeStatus;
+import com.youlai.boot.system.model.query.NoticeQuery;
 import com.youlai.boot.system.model.vo.NoticeStatusVO;
+import com.youlai.boot.system.model.vo.NoticeVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,4 +27,12 @@ public interface NoticeStatusMapper extends BaseMapper<NoticeStatus> {
      * @return 公告列表
      */
     List<NoticeStatusVO> listUnreadNotices(@Param("userId")Long userId);
+
+    /**
+     * 分页获取我的通知公告
+     * @param page 分页对象
+     * @param queryParams 查询参数
+     * @return 通知公告分页列表
+     */
+    IPage<NoticeVO> getMyNoticePage(Page<NoticeVO> page, @Param("queryParams") NoticeQuery queryParams);
 }

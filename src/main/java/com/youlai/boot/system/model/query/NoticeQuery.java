@@ -28,4 +28,7 @@ public class NoticeQuery extends BasePageQuery {
 
     @Schema(description = "发布时间")
     private List<String> releaseTime;
+
+    @Schema(description = "查询人ID")
+    private Long userId;
 }

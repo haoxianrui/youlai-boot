@@ -20,4 +20,26 @@
             sn.release_time DESC
     </select>
 
+    <select id="getMyNoticePage" resultType="com.youlai.boot.system.model.vo.NoticeVO">
+        SELECT
+            sn.id,
+            sn.title,
+            sn.release_by,
+            sn.priority,
+            sn.release_time,
+            sns.read_status
+        FROM
+            sys_notice sn
+        LEFT JOIN
+            sys_notice_status sns
+        ON
+            sn.id = sns.notice_id
+        <where>
+            <if test="queryParams.userId != null">
+                sns.user_id = #{queryParams.userId}
+            </if>
+        </where>
+        ORDER BY
+            sn.release_time DESC
+    </select>
 </mapper>
