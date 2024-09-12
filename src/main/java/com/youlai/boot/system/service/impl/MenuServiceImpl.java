@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.youlai.boot.system.converter.MenuConverter;
 import com.youlai.boot.system.mapper.MenuMapper;
 import com.youlai.boot.system.model.bo.RouteBO;
-import com.youlai.boot.platform.generator.model.entity.GenConfig;
+import com.youlai.boot.module.codegen.model.entity.GenConfig;
 import com.youlai.boot.system.model.entity.Menu;
 import com.youlai.boot.system.model.form.MenuForm;
 import com.youlai.boot.system.model.query.MenuQuery;
@@ -362,13 +362,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     /**
-     * 为代码生成添加菜单
+     * 代码生成时添加菜单
      *
      * @param parentMenuId 父菜单ID
      * @param genConfig    实体名称
      */
     @Override
-    public void saveMenu(Long parentMenuId, GenConfig genConfig) {
+    public void addMenuForCodegen(Long parentMenuId, GenConfig genConfig) {
         Menu parentMenu = this.getById(parentMenuId);
         Assert.notNull(parentMenu, "上级菜单不存在");
 
@@ -388,7 +388,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         if (maxSortMenu != null) {
             sort = maxSortMenu.getSort() + 1;
         }
-
 
         Menu menu = new Menu();
         menu.setParentId(parentMenuId);

@@ -5,7 +5,7 @@ spring:
     active: dev
 
 # 代码生成器配置
-generator:
+codegen:
   # 下载代码文件名称
   downloadFileName: youlai-admin-code.zip
   # 后端项目名称
@@ -23,43 +23,43 @@ generator:
   ## 模板配置
   templateConfigs:
     API:
-      templatePath: generator/api.ts.vm
+      templatePath: codegen/api.ts.vm
       subpackageName: api
       extension: .ts
     VIEW:
-      templatePath: generator/index.vue.vm
+      templatePath: codegen/index.vue.vm
       subpackageName: views
       extension: .vue
     Controller:
-      templatePath: generator/controller.java.vm
+      templatePath: codegen/controller.java.vm
       subpackageName: controller
     Service:
-      templatePath: generator/service.java.vm
+      templatePath: codegen/service.java.vm
       subpackageName: service
     ServiceImpl:
-      templatePath: generator/serviceImpl.java.vm
+      templatePath: codegen/serviceImpl.java.vm
       subpackageName: service.impl
     Mapper:
-      templatePath: generator/mapper.java.vm
+      templatePath: codegen/mapper.java.vm
       subpackageName: mapper
     MapperXml:
-      templatePath: generator/mapper.xml.vm
+      templatePath: codegen/mapper.xml.vm
       subpackageName: mapper
       extension: .xml
     Converter:
-      templatePath: generator/converter.java.vm
+      templatePath: codegen/converter.java.vm
       subpackageName: converter
     Query:
-      templatePath: generator/query.java.vm
+      templatePath: codegen/query.java.vm
       subpackageName: model.query
     Form:
-      templatePath: generator/form.java.vm
+      templatePath: codegen/form.java.vm
       subpackageName: model.form
     VO:
-      templatePath: generator/vo.java.vm
+      templatePath: codegen/vo.java.vm
       subpackageName: model.vo
     Entity:
-      templatePath: generator/entity.java.vm
+      templatePath: codegen/entity.java.vm
       subpackageName: model.entity
 
 

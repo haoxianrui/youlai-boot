@@ -14,6 +14,8 @@ import com.youlai.boot.common.enums.ContactType;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.platform.mail.service.MailService;
 import com.youlai.boot.platform.sms.service.SmsService;
+import com.youlai.boot.module.mail.service.MailService;
+import com.youlai.boot.module.sms.service.SmsService;
 import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.form.*;
 import com.youlai.boot.config.property.AliyunSmsProperties;
