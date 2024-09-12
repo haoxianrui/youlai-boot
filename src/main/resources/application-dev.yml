@@ -20,7 +20,6 @@ spring:
       port: 6379
       # 如果Redis 服务未设置密码，需要将password删掉或注释，而不是设置为空字符串
       password: 123456
-
       timeout: 10s
       lettuce:
         pool:
@@ -152,7 +151,7 @@ springdoc:
         - com.youlai.boot.system.controller
         - com.youlai.boot.module.auth.controller
         - com.youlai.boot.module.file.controller
-        - com.youlai.boot.module.generator.controller
+        - com.youlai.boot.module.codegen.controller
   default-flat-param-object: true
 
 # knife4j 接口文档配置
