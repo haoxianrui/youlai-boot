@@ -396,7 +396,7 @@ INSERT INTO `sys_user_role` VALUES (3, 3);
 
 
 -- ----------------------------
--- Table structure for sys_user_role
+-- Table structure for sys_log
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log` (
