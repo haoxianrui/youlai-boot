@@ -268,7 +268,30 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 roleMenuService.refreshRolePermsCache();
             }
         }
+        // 修改菜单如果有子菜单，则更新子菜单的树路径
+        updateChildrenTreePath(entity.getId(), treePath);
         return result;
+    }
+
+    /**
+     * 更新子菜单树路径
+     * @param id 当前菜单ID
+     * @param treePath 当前菜单树路径
+     */
+    private void updateChildrenTreePath(Long id, String treePath) {
+        List<Menu> children = this.list(new LambdaQueryWrapper<Menu>().eq(Menu::getParentId, id));
+        if (CollectionUtil.isNotEmpty(children)) {
+            // 子菜单的树路径等于父菜单的树路径加上父菜单ID
+            String childTreePath = treePath + "," + id;
+            this.update(new LambdaUpdateWrapper<Menu>()
+                    .eq(Menu::getParentId, id)
+                    .set(Menu::getTreePath, childTreePath)
+            );
+            for (Menu child : children) {
+                // 递归更新子菜单
+                updateChildrenTreePath(child.getId(), childTreePath);
+            }
+        }
     }
 
     /**
