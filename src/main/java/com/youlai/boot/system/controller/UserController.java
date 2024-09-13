@@ -99,7 +99,7 @@ public class UserController {
     @Operation(summary = "删除用户")
     @DeleteMapping("/{ids}")
     @PreAuthorize("@ss.hasPerm('sys:user:delete')")
-    public Result<?> deleteUsers(
+    public Result<Void> deleteUsers(
             @Parameter(description = "用户ID，多个以英文逗号(,)分割") @PathVariable String ids
     ) {
         boolean result = userService.deleteUsers(ids);
@@ -108,7 +108,7 @@ public class UserController {
 
     @Operation(summary = "修改用户状态")
     @PatchMapping(value = "/{userId}/status")
-    public Result<?> updateUserStatus(
+    public Result<Void> updateUserStatus(
             @Parameter(description = "用户ID") @PathVariable Long userId,
             @Parameter(description = "用户状态(1:启用;0:禁用)") @RequestParam Integer status
     ) {
@@ -144,7 +144,7 @@ public class UserController {
 
     @Operation(summary = "导入用户")
     @PostMapping("/import")
-    public Result<?> importUsers(MultipartFile file) throws IOException {
+    public Result<String> importUsers(MultipartFile file) throws IOException {
         UserImportListener listener = new UserImportListener();
         String msg = ExcelUtils.importExcel(file.getInputStream(), UserImportDTO.class, listener);
         return Result.success(msg);

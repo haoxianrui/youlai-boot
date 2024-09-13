@@ -1,6 +1,6 @@
 package ${packageName}.${moduleName}.${subpackageName};
 
-import com.youlai.boot.common.base.BasePageQuery;
+import ${packageName}.common.base.BasePageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,8 +22,6 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class ${entityName}Query extends BasePageQuery {
-
-    private static final long serialVersionUID = 1L;
 
 #if($fieldConfigs)
     #foreach($fieldConfig in ${fieldConfigs})
