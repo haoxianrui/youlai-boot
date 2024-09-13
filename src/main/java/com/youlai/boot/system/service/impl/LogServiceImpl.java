@@ -36,8 +36,8 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log>
      * @return
      */
     @Override
-    public Page<LogPageVO> listPagedLogs(LogPageQuery queryParams) {
-        return this.baseMapper.listPagedLogs(new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),
+    public Page<LogPageVO> getLogPage(LogPageQuery queryParams) {
+        return this.baseMapper.getLogPage(new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),
                 queryParams);
     }
 

@@ -49,9 +49,10 @@ public class WebsocketController {
      */
     @MessageMapping("/sendToUser/{username}")
     public void sendToUser(Principal principal, @DestinationVariable String username, String message) {
-
-        String sender = principal.getName(); // 发送人
-        String receiver = username; // 接收人
+        // 发送人
+        String sender = principal.getName();
+        // 接收人
+        String receiver = username;
 
         log.info("发送人:{}; 接收人:{}", sender, receiver);
         // 发送消息给指定用户，拼接后路径 /user/{receiver}/queue/greeting

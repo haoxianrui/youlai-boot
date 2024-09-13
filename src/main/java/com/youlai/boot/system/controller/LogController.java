@@ -34,10 +34,10 @@ public class LogController {
 
     @Operation(summary = "日志分页列表")
     @GetMapping("/page")
-    public PageResult<LogPageVO> listPagedLogs(
+    public PageResult<LogPageVO> getLogPage(
              LogPageQuery queryParams
     ) {
-        Page<LogPageVO> result = logService.listPagedLogs(queryParams);
+        Page<LogPageVO> result = logService.getLogPage(queryParams);
         return PageResult.success(result);
     }
 

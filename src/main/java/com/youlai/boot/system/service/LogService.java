@@ -25,7 +25,7 @@ public interface LogService extends IService<Log> {
      * @param queryParams 查询参数
      * @return
      */
-    Page<LogPageVO> listPagedLogs(LogPageQuery queryParams);
+    Page<LogPageVO> getLogPage(LogPageQuery queryParams);
 
 
     /**

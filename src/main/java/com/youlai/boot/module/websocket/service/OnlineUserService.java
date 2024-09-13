@@ -1,7 +1,6 @@
-package com.youlai.boot.module.websocket.service.impl;
+package com.youlai.boot.module.websocket.service;
 
 import com.youlai.boot.system.event.UserConnectionEvent;
-import com.youlai.boot.module.websocket.service.WebsocketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -12,24 +11,20 @@ import org.springframework.stereotype.Service;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 在线用户服务
+ *
+ * @author Ray
+ * @since 2.3.0
+ */
 @Service
-@Slf4j
 @RequiredArgsConstructor
-public class WebsocketServiceImpl implements WebsocketService {
+@Slf4j
+public class OnlineUserService {
 
     private final SimpMessagingTemplate messagingTemplate;
 
     private final Set<String> onlineUsers = ConcurrentHashMap.newKeySet();
-
-    @Override
-    public void addUser(String username) {
-        onlineUsers.add(username);
-    }
-
-    @Override
-    public void removeUser(String username) {
-        onlineUsers.remove(username);
-    }
 
     @EventListener
     public void handleUserConnectionEvent(UserConnectionEvent event) {
