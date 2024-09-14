@@ -1,4 +1,4 @@
-package com.youlai.boot.platform.websocket.service;
+package com.youlai.boot.module.websocket.service;
 
 import com.youlai.boot.common.enums.NoticeWayEnum;
 import com.youlai.boot.system.model.dto.MessageDTO;

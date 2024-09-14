@@ -2,7 +2,7 @@ package com.youlai.boot.module.websocket.service.impl;
 
 import com.youlai.boot.common.enums.NoticeWayEnum;
 import com.youlai.boot.common.enums.NoticeTypeEnum;
-import com.youlai.boot.platform.websocket.service.MessageService;
+import com.youlai.boot.module.websocket.service.MessageService;
 import com.youlai.boot.system.event.UserConnectionEvent;
 import com.youlai.boot.system.model.dto.ChatMessage;
 import com.youlai.boot.system.model.dto.MessageDTO;
@@ -58,7 +58,6 @@ public class WebsocketServiceImpl implements MessageService {
      */
     @Scheduled(fixedRate = 5000)
     public void sendOnlineUserCount() {
-        log.info("Send online user count: {}", onlineUsers.size());
         messagingTemplate.convertAndSend("/topic/onlineUserCount", onlineUsers.size());
     }
 

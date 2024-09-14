@@ -85,7 +85,8 @@ CREATE TABLE `sys_dict`  (
 -- ----------------------------
 -- Records of sys_dict
 -- ----------------------------
-INSERT INTO `sys_dict` VALUES (1, '性别', 'gender', 1, NULL, '2019-12-06 19:03:32', '2024-06-22 21:14:47', 0);
+INSERT INTO `sys_dict` VALUES (1,'性别','gender',1,NULL,'2019-12-06 19:03:32','2024-06-22 21:14:47',0);
+INSERT INTO `sys_dict` VALUES (2,'通知类型','notice_type',1,NULL,'2024-09-01 17:23:48','2024-09-01 17:23:54',0);
 
 -- ----------------------------
 -- Table structure for sys_dict_item
@@ -110,6 +111,8 @@ CREATE TABLE `sys_dict_item`  (
 INSERT INTO `sys_dict_item` VALUES (1, 1, '男', '1', 1, 1, NULL, '2019-05-05 13:07:52', '2022-06-12 23:20:39');
 INSERT INTO `sys_dict_item` VALUES (2, 1, '女', '2', 1, 2, NULL, '2019-04-19 11:33:00', '2019-07-02 14:23:05');
 INSERT INTO `sys_dict_item` VALUES (3, 1, '保密', '0', 1, 3, NULL, '2020-10-17 08:09:31', '2020-10-17 08:09:31');
+INSERT INTO `sys_dict_item` VALUES (4, 2,'系统通知','1',1, 1, NULL,'2020-10-17 08:09:31', '2020-10-17 08:09:31');
+INSERT INTO `sys_dict_item` VALUES (5, 2,'通知消息','2',1, 2, NULL,'2020-10-17 08:09:31', '2020-10-17 08:09:31');
 
 -- ----------------------------
 -- Table structure for sys_log
@@ -478,5 +481,33 @@ CREATE TABLE `gen_field_config` (
                                     KEY `config_id` (`config_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='代码生成字段配置表';
 
+CREATE TABLE `sys_notice` (
+                              `id` BIGINT NOT NULL AUTO_INCREMENT,
+                              `title` VARCHAR(50) DEFAULT NULL COMMENT '通知标题',
+                              `content` TEXT COMMENT '通知内容',
+                              `notice_type` INT NOT NULL COMMENT '通知类型',
+                              `release_by` BIGINT DEFAULT NULL COMMENT '发布人',
+                              `priority` TINYINT NOT NULL COMMENT '优先级(0-低 1-中 2-高)',
+                              `tar_type` TINYINT NOT NULL COMMENT '目标类型(0-全体 1-指定)',
+                              `tar_ids` TEXT COMMENT '目标人id',
+                              `release_status` TINYINT NOT NULL COMMENT '发布状态(0-未发布 1已发布 2已撤回)',
+                              `release_time` DATETIME DEFAULT NULL COMMENT '发布时间',
+                              `recall_time` DATETIME DEFAULT NULL COMMENT '撤回时间',
+                              `create_by` BIGINT NOT NULL COMMENT '创建人ID',
+                              `create_time` DATETIME NOT NULL COMMENT '创建时间',
+                              `update_by` BIGINT DEFAULT NULL COMMENT '更新人ID',
+                              `update_time` DATETIME DEFAULT NULL COMMENT '更新时间',
+                              `is_deleted` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '逻辑删除标识(0-未删除 1-已删除)',
+                              PRIMARY KEY (`id`) USING BTREE
+) ENGINE=INNODB COMMENT='通知公告';
+
+CREATE TABLE `sys_notice_status` (
+                                     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                     `notice_id` BIGINT NOT NULL COMMENT '公共通知id',
+                                     `user_id` INT NOT NULL COMMENT '用户id',
+                                     `read_status` BIGINT DEFAULT NULL COMMENT '读取状态，0未读，1已读取',
+                                     `read_time` DATETIME DEFAULT NULL COMMENT '用户阅读时间',
+                                     PRIMARY KEY (`id`) USING BTREE
+) ENGINE=INNODB COMMENT='用户公告状态表';
 
 SET FOREIGN_KEY_CHECKS = 1;

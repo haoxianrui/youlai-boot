@@ -1,6 +1,6 @@
 package com.youlai.boot.system.handler;
 
-import com.youlai.boot.platform.websocket.service.MessageService;
+import com.youlai.boot.module.websocket.service.MessageService;
 import com.youlai.boot.system.model.dto.MessageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

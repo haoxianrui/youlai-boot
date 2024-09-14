@@ -38,6 +38,9 @@
             <if test="queryParams.userId != null">
                 sns.user_id = #{queryParams.userId}
             </if>
+            <if test="queryParams.title != null and queryParams.title != ''">
+                AND sn.title LIKE CONCAT('%',#{queryParams.title},'%')
+            </if>
         </where>
         ORDER BY
             sn.release_time DESC
