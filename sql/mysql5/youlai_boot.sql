@@ -233,6 +233,21 @@ INSERT INTO `sys_menu` VALUES (118, 0, '0', '系统工具', 2, NULL, '/codegen',
 INSERT INTO `sys_menu` VALUES (119, 118, '0,118', '代码生成', 1, 'Codegen', 'codegen', 'codegen/index', NULL, 0, 1, 1, 1, 'code', NULL, '2024-07-13 08:44:51', '2024-07-13 08:44:51', NULL);
 INSERT INTO `sys_menu` VALUES (118, 0, '0', '系统工具', 2, NULL, '/codegen', 'Layout', NULL, 0, 1, 1, 2, 'menu', NULL, '2024-07-13 08:41:07', '2024-07-13 08:41:07', NULL);
 INSERT INTO `sys_menu` VALUES (119, 118, '0,118', '代码生成', 1, 'Codegen', 'codegen', 'codegen/index', NULL, 0, 1, 1, 1, 'code', NULL, '2024-07-13 08:44:51', '2024-07-13 08:44:51', NULL);
+INSERT INTO `sys_menu` VALUES (120,1,'0,1','系统配置',1,'Config','config','system/config/index',NULL,0,1,1,7,'setting',NULL,'2024-07-30 16:29:24','2024-07-30 16:29:32',NULL);
+INSERT INTO `sys_menu` VALUES (121,120,'0,1,120','查询系统配置',4,NULL,'',NULL,'sys:config:query',0,1,1,1,'',NULL,'2024-07-30 16:29:54','2024-07-30 16:29:54',NULL);
+INSERT INTO `sys_menu` VALUES (122,120,'0,1,120','新增系统配置',4,NULL,'',NULL,'sys:config:add',0,1,1,2,'',NULL,'2024-07-30 16:30:12','2024-07-30 16:30:48',NULL);
+INSERT INTO `sys_menu` VALUES (123,120,'0,1,120','修改系统配置',4,NULL,'',NULL,'sys:config:update',0,1,1,3,'',NULL,'2024-07-30 16:30:31','2024-07-30 16:30:31',NULL);
+INSERT INTO `sys_menu` VALUES (124,120,'0,1,120','删除系统配置',4,NULL,'',NULL,'sys:config:delete',0,1,1,4,'',NULL,'2024-07-30 16:31:07','2024-07-30 16:31:07',NULL);
+INSERT INTO `sys_menu` VALUES (125,120,'0,1,120','刷新系统配置',4,NULL,'',NULL,'sys:config:refresh',0,1,1,5,'',NULL,'2024-07-30 16:31:25','2024-07-30 16:31:25',NULL);
+INSERT INTO `sys_menu` VALUES (126,1,'0,1','通知公告',1,'Notice','notice','system/notice/index',NULL,NULL,NULL,1,9,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
+INSERT INTO `sys_menu` VALUES (127,126,'0,1,132','查询',4,NULL,'',NULL,'system:notice:query',NULL,NULL,1,1,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
+INSERT INTO `sys_menu` VALUES (128,126,'0,1,133','新增',4,NULL,'',NULL,'system:notice:add',NULL,NULL,1,2,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
+INSERT INTO `sys_menu` VALUES (129,126,'0,1,134','编辑',4,NULL,'',NULL,'system:notice:edit',NULL,NULL,1,3,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
+INSERT INTO `sys_menu` VALUES (130,126,'0,1,135','删除',4,NULL,'',NULL,'system:notice:delete',NULL,NULL,1,4,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
+INSERT INTO `sys_menu` VALUES (131,0,'0','消息中心',2,NULL,'/notice','Layout',NULL,1,1,1,13,'el-icon-Message',NULL,'2024-08-31 21:16:06','2024-08-31 21:16:41',NULL);
+INSERT INTO `sys_menu` VALUES (132,131,'0,136','我的消息',1,'MyNotice','notice','notice/index',NULL,0,1,1,1,'',NULL,'2024-08-31 21:17:36','2024-09-12 11:28:42',NULL);
+INSERT INTO `sys_menu` VALUES (133,132,'0,1,131','发布',4,NULL,'',NULL,'system:notice:release',0,1,1,5,'',NULL,'2024-09-01 23:53:52','2024-09-01 23:53:52',NULL);
+INSERT INTO `sys_menu` VALUES (134,132,'0,1,131','撤回',4,NULL,'',NULL,'system:notice:recall',0,1,1,6,'',NULL,'2024-09-01 23:54:16','2024-09-01 23:54:16',NULL);
 
 -- ----------------------------
 -- Table structure for sys_message
@@ -360,6 +375,21 @@ INSERT INTO `sys_role_menu` VALUES (2, 116);
 INSERT INTO `sys_role_menu` VALUES (2, 117);
 INSERT INTO `sys_role_menu` VALUES (2, 118);
 INSERT INTO `sys_role_menu` VALUES (2, 119);
+INSERT INTO `sys_role_menu` VALUES (2, 120);
+INSERT INTO `sys_role_menu` VALUES (2, 121);
+INSERT INTO `sys_role_menu` VALUES (2, 122);
+INSERT INTO `sys_role_menu` VALUES (2, 123);
+INSERT INTO `sys_role_menu` VALUES (2, 124);
+INSERT INTO `sys_role_menu` VALUES (2, 125);
+INSERT INTO `sys_role_menu` VALUES (2, 126);
+INSERT INTO `sys_role_menu` VALUES (2, 127);
+INSERT INTO `sys_role_menu` VALUES (2, 128);
+INSERT INTO `sys_role_menu` VALUES (2, 129);
+INSERT INTO `sys_role_menu` VALUES (2, 130);
+INSERT INTO `sys_role_menu` VALUES (2, 131);
+INSERT INTO `sys_role_menu` VALUES (2, 132);
+INSERT INTO `sys_role_menu` VALUES (2, 133);
+INSERT INTO `sys_role_menu` VALUES (2, 134);
 -- ----------------------------
 -- Table structure for sys_user
 -- ----------------------------
