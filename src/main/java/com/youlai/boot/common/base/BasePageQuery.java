@@ -1,8 +1,10 @@
 package com.youlai.boot.common.base;
 
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * 基础分页请求对象
@@ -12,7 +14,11 @@ import lombok.Data;
  */
 @Data
 @Schema
-public class BasePageQuery {
+public class BasePageQuery implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
 
     @Schema(description = "页码", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     private int pageNum = 1;

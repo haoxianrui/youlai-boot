@@ -177,8 +177,6 @@
                       <el-input
                           v-model="formData.$fieldConfig.fieldName"
                           placeholder="$fieldConfig.fieldComment"
-                          clearable
-                          @keyup.enter="handleQuery()"
                       />
                     #elseif($fieldConfig.formType == "SELECT")
                         #if($fieldConfig.dictType != "")

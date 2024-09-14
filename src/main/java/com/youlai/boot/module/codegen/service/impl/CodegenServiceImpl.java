@@ -273,7 +273,8 @@ public class CodegenServiceImpl implements CodegenService {
             for (String tableName : tableNames) {
                 generateAndZipCode(tableName, zip);
             }
-
+            // 确保所有压缩数据写入输出流，避免数据残留在内存缓冲区引发的数据不完整
+            zip.finish();
             return outputStream.toByteArray();
 
         } catch (IOException e) {

@@ -28,7 +28,7 @@ public interface LogMapper extends BaseMapper<Log> {
      * @param queryParams
      * @return
      */
-    Page<LogPageVO> listPagedLogs(Page<LogPageVO> page, LogPageQuery queryParams);
+    Page<LogPageVO> getLogPage(Page<LogPageVO> page, LogPageQuery queryParams);
 
     /**
      * 统计浏览数(PV)

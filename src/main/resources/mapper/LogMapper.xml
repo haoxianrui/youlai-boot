@@ -5,7 +5,7 @@
 <mapper namespace="com.youlai.boot.system.mapper.LogMapper">
 
     <!-- 日志分页列表 -->
-    <select id="listPagedLogs" resultType="com.youlai.boot.system.model.vo.LogPageVO">
+    <select id="getLogPage" resultType="com.youlai.boot.system.model.vo.LogPageVO">
         SELECT
             t1.id,
             t1.module,

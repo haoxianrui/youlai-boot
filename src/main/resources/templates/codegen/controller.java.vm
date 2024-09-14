@@ -43,7 +43,7 @@ public class ${entityName}Controller  {
     @Operation(summary = "新增${businessName}")
     @PostMapping
     @PreAuthorize("@ss.hasPerm('${moduleName}:${lowerFirstEntityName}:add')")
-    public Result save${entityName}(@RequestBody @Valid ${entityName}Form formData ) {
+    public Result<Void> save${entityName}(@RequestBody @Valid ${entityName}Form formData ) {
         boolean result = ${lowerFirstEntityName}Service.save${entityName}(formData);
         return Result.judge(result);
     }
@@ -61,7 +61,7 @@ public class ${entityName}Controller  {
     @Operation(summary = "修改${businessName}")
     @PutMapping(value = "/{id}")
     @PreAuthorize("@ss.hasPerm('${moduleName}:${lowerFirstEntityName}:edit')")
-    public Result update${entityName}(
+    public Result<Void> update${entityName}(
             @Parameter(description = "$!{businessName}ID") @PathVariable Long id,
             @RequestBody @Validated ${entityName}Form formData
     ) {
@@ -72,7 +72,7 @@ public class ${entityName}Controller  {
     @Operation(summary = "删除${businessName}")
     @DeleteMapping("/{ids}")
     @PreAuthorize("@ss.hasPerm('${moduleName}:${lowerFirstEntityName}:delete')")
-    public Result delete${entityName}s(
+    public Result<Void> delete${entityName}s(
         @Parameter(description = "$!{businessName}ID，多个以英文逗号(,)分割") @PathVariable String ids
     ) {
         boolean result = ${lowerFirstEntityName}Service.delete${entityName}s(ids);
