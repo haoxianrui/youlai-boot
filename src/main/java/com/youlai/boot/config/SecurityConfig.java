@@ -68,7 +68,7 @@ public class SecurityConfig {
         // 限流过滤器
         http.addFilterBefore(new RateLimiterFilter(redisTemplate, configService), UsernamePasswordAuthenticationFilter.class);
         // 验证码校验过滤器
-        http.addFilterBefore(new CaptchaValidationFilter(redisTemplate, codeGenerator), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CaptchaValidationFilter(redisTemplate, codeGenerator,configService), UsernamePasswordAuthenticationFilter.class);
         // JWT 校验过滤器
         http.addFilterBefore(new JwtValidationFilter(redisTemplate,securityProperties.getJwt().getKey()), UsernamePasswordAuthenticationFilter.class);
 

@@ -1,11 +1,13 @@
 package com.youlai.boot.module.auth.controller;
 
+import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.result.Result;
 import com.youlai.boot.module.auth.service.AuthService;
 import com.youlai.boot.system.model.dto.CaptchaResult;
 import com.youlai.boot.system.model.dto.LoginResult;
 import com.youlai.boot.common.annotation.Log;
+import com.youlai.boot.system.service.ConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final ConfigService configService;
 
     @Operation(summary = "登录")
     @PostMapping("/login")
@@ -54,4 +57,9 @@ public class AuthController {
         return Result.success(captcha);
     }
 
+    @Operation(summary = "获取是否关闭验证码")
+    @GetMapping("/captcha/unable")
+    public Result<Boolean> isCaptchaEnable() {
+        return Result.success(configService.getBooleanConfig(RedisConstants.CLOSE_CAPTCHA_KEY));
+    }
 }

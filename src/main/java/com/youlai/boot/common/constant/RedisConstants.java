@@ -29,6 +29,11 @@ public interface RedisConstants {
     String IP_QPS_THRESHOLD_LIMIT_KEY = "IP_QPS_THRESHOLD_LIMIT";
 
     /**
+     * 关闭验证码
+     */
+    String CLOSE_CAPTCHA_KEY = "CLOSE_CAPTCHA";
+
+    /**
      * 手机验证码缓存前缀
      */
 

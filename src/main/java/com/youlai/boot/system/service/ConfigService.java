@@ -65,4 +65,10 @@ public interface ConfigService extends IService<Config> {
      */
     Object getSystemConfig(String key);
 
+    /**
+     * 获取系统配置
+     * @param key 配置键
+     * @return 配置值
+     */
+    boolean getBooleanConfig(String key);
 }
