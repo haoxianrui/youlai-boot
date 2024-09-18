@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final ConfigService configService;
 
     @Operation(summary = "登录")
     @PostMapping("/login")
@@ -55,11 +54,5 @@ public class AuthController {
     public Result<CaptchaResult> getCaptcha() {
         CaptchaResult captcha = authService.getCaptcha();
         return Result.success(captcha);
-    }
-
-    @Operation(summary = "获取是否关闭验证码")
-    @GetMapping("/captcha/unable")
-    public Result<Boolean> isCaptchaEnable() {
-        return Result.success(configService.getBooleanConfig(RedisConstants.CLOSE_CAPTCHA_KEY));
     }
 }

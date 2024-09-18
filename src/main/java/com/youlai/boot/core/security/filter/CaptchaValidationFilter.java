@@ -36,12 +36,9 @@ public class CaptchaValidationFilter extends OncePerRequestFilter {
 
     private final CodeGenerator codeGenerator;
 
-    private final ConfigService configService;
-
-    public CaptchaValidationFilter(RedisTemplate<String, Object> redisTemplate, CodeGenerator codeGenerator, ConfigService configService) {
+    public CaptchaValidationFilter(RedisTemplate<String, Object> redisTemplate, CodeGenerator codeGenerator) {
         this.redisTemplate = redisTemplate;
         this.codeGenerator = codeGenerator;
-        this.configService = configService;
     }
 
 
@@ -49,11 +46,6 @@ public class CaptchaValidationFilter extends OncePerRequestFilter {
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         // 检验登录接口的验证码
         if (LOGIN_PATH_REQUEST_MATCHER.matches(request)) {
-            // 关闭验证码校验
-            if (configService.getBooleanConfig(RedisConstants.CLOSE_CAPTCHA_KEY)) {
-                chain.doFilter(request, response);
-                return;
-            }
             // 请求中的验证码
             String captchaCode = request.getParameter(CAPTCHA_CODE_PARAM_NAME);
             // TODO 兼容没有验证码的版本(线上请移除这个判断)

@@ -159,15 +159,4 @@ public class ConfigServiceImpl extends ServiceImpl<ConfigMapper, Config> impleme
         return null;
     }
 
-    /**
-     * 获取系统配置
-     * @param key 配置键
-     * @return 配置值
-     */
-    @Override
-    public boolean getBooleanConfig(String key) {
-        Object systemConfig = getSystemConfig(key);
-        return systemConfig != null && Boolean.parseBoolean(systemConfig.toString());
-    }
-
 }
