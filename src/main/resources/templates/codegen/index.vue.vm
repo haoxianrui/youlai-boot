@@ -100,7 +100,7 @@
         <el-button
             v-hasPerm="['${moduleName}:${lowerFirstEntityName}:delete']"
             type="danger"
-            :disabled="ids.length === 0"
+            :disabled="removeIds.length === 0"
             @click="handleDelete()"
         ><i-ep-delete />
           删除
@@ -255,7 +255,7 @@
   const dataFormRef = ref(ElForm);
 
   const loading = ref(false);
-  const ids = ref<number[]>([]);
+  const removeIds = ref<number[]>([]);
   const total = ref(0);
 
   const queryParams = reactive<${entityName}PageQuery>({
@@ -308,7 +308,7 @@
 
   /** 行复选框选中记录选中ID集合 */
   function handleSelectionChange(selection: any) {
-    ids.value = selection.map((item: any) => item.id);
+    removeIds.value = selection.map((item: any) => item.id);
   }
 
   /** 打开$!{businessName}弹窗 */
@@ -361,7 +361,7 @@
 
   /** 删除$!{businessName} */
   function handleDelete(id?: number) {
-    const ids = [id || ids.value].join(",");
+    const ids = [id || removeIds.value].join(",");
     if (!ids) {
       ElMessage.warning("请勾选删除项");
       return;
