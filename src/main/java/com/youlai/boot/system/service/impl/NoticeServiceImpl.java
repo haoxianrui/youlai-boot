@@ -269,7 +269,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
      * @return 通知公告分页列表
      */
     @Override
-    public IPage<NoticeVO> getMyNoticePage(NoticeQuery queryParams) {
+    public IPage<NoticeStatusVO> getMyNoticePage(NoticeQuery queryParams) {
         Long userId = SecurityUtils.getUserId();
         queryParams.setUserId(userId);
         return noticeStatusService.getMyNoticePage(new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),queryParams);

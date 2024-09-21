@@ -34,7 +34,7 @@ public interface NoticeStatusService extends IService<NoticeStatus> {
      * 分页获取我的通知公告
      * @param page 分页对象
      * @param queryParams 查询参数
-     * @return 通知公告分页列表
+     * @return 我的通知公告分页列表
      */
-    IPage<NoticeVO> getMyNoticePage(Page<NoticeVO> page, NoticeQuery queryParams);
+    IPage<NoticeStatusVO> getMyNoticePage(Page<NoticeVO> page, NoticeQuery queryParams);
 }

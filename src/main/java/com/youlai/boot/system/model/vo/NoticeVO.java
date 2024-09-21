@@ -29,7 +29,7 @@ public class NoticeVO implements Serializable {
     private String title;
 
     @Schema(description = "通知类型")
-    private String noticeTypeLabel;
+    private String noticeType;
 
     @Schema(description = "发布人")
     private String releaseBy;

@@ -59,7 +59,7 @@ public class NoticeStatusServiceImpl extends ServiceImpl<NoticeStatusMapper, Not
      * @return 通知公告分页列表
      */
     @Override
-    public IPage<NoticeVO> getMyNoticePage(Page<NoticeVO> page, NoticeQuery queryParams) {
+    public IPage<NoticeStatusVO> getMyNoticePage(Page<NoticeVO> page, NoticeQuery queryParams) {
         return this.getBaseMapper().getMyNoticePage(new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),queryParams);
     }
 

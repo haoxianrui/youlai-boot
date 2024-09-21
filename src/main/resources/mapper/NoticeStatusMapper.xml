@@ -20,10 +20,11 @@
             sn.release_time DESC
     </select>
 
-    <select id="getMyNoticePage" resultType="com.youlai.boot.system.model.vo.NoticeVO">
+    <select id="getMyNoticePage" resultType="com.youlai.boot.system.model.vo.NoticeStatusVO">
         SELECT
             sn.id,
             sn.title,
+            sn.notice_type,
             sn.release_by,
             sn.priority,
             sn.release_time,

@@ -5,6 +5,7 @@ import com.youlai.boot.common.result.PageResult;
 import com.youlai.boot.common.result.Result;
 import com.youlai.boot.system.model.form.NoticeForm;
 import com.youlai.boot.system.model.query.NoticeQuery;
+import com.youlai.boot.system.model.vo.NoticeStatusVO;
 import com.youlai.boot.system.model.vo.NoticeVO;
 import com.youlai.boot.system.service.NoticeService;
 import com.youlai.boot.system.service.NoticeStatusService;
@@ -123,8 +124,8 @@ public class NoticeController  {
 
     @Operation(summary = "获取我的通知公告")
     @GetMapping("/my/page")
-    public PageResult<NoticeVO> getMyNoticePage(NoticeQuery queryParams) {
-        IPage<NoticeVO> result = noticeService.getMyNoticePage(queryParams);
+    public PageResult<NoticeStatusVO> getMyNoticePage(NoticeQuery queryParams) {
+        IPage<NoticeStatusVO> result = noticeService.getMyNoticePage(queryParams);
         return PageResult.success(result);
     }
 }

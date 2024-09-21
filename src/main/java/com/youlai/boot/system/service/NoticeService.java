@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.youlai.boot.system.model.entity.Notice;
 import com.youlai.boot.system.model.form.NoticeForm;
 import com.youlai.boot.system.model.query.NoticeQuery;
+import com.youlai.boot.system.model.vo.NoticeStatusVO;
 import com.youlai.boot.system.model.vo.NoticeVO;
 import com.youlai.boot.system.model.vo.NoticeDetailVO;
 
@@ -92,5 +93,5 @@ public interface NoticeService extends IService<Notice> {
      * @param queryParams 查询参数
      * @return 通知公告分页列表
      */
-    IPage<NoticeVO> getMyNoticePage(NoticeQuery queryParams);
+    IPage<NoticeStatusVO> getMyNoticePage(NoticeQuery queryParams);
 }

@@ -34,5 +34,5 @@ public interface NoticeStatusMapper extends BaseMapper<NoticeStatus> {
      * @param queryParams 查询参数
      * @return 通知公告分页列表
      */
-    IPage<NoticeVO> getMyNoticePage(Page<NoticeVO> page, @Param("queryParams") NoticeQuery queryParams);
+    IPage<NoticeStatusVO> getMyNoticePage(Page<NoticeVO> page, @Param("queryParams") NoticeQuery queryParams);
 }
