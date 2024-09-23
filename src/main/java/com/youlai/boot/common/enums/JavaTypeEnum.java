@@ -23,7 +23,7 @@ public enum JavaTypeEnum {
     TINYINT("tinyint", "Integer", "number"),
     SMALLINT("smallint", "Integer", "number"),
     MEDIUMINT("mediumint", "Integer", "number"),
-    BIGINT("bigint", "Long", "bigint"),
+    BIGINT("bigint", "Long", "number"),
     FLOAT("float", "Float", "number"),
     DOUBLE("double", "Double", "number"),
     DECIMAL("decimal", "BigDecimal", "number"),

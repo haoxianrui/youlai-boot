@@ -14,9 +14,9 @@
                       />
                     #elseif($fieldConfig.formType == "SELECT")
                         #if($fieldConfig.dictType != "")
-                          <dictionary v-model="formData.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
+                          <dictionary v-model="queryParams.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
                         #else
-                          <el-select v-model="formData.$fieldConfig.fieldName" placeholder="请选择$fieldConfig.fieldComment">
+                          <el-select v-model="queryParams.$fieldConfig.fieldName" placeholder="请选择$fieldConfig.fieldComment">
                             <el-option :key="1" :value="1" label="选项一"/>
                             <el-option :key="2" :value="2" label="选项二"/>
                           </el-select>
