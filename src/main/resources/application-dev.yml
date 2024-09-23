@@ -95,7 +95,7 @@ security:
 # 文件存储配置
 oss:
   # OSS 类型 (目前支持aliyun、minio)
-  type: aliyun
+  type: minio
   # MinIO 对象存储服务
   minio:
     # 服务Endpoint
