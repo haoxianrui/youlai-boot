@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youlai.boot.system.mapper.NoticeMapper">
+
+    <!-- 获取通知公告分页列表 -->
+    <select id="getNoticePage" resultType="com.youlai.boot.system.model.bo.NoticeBO">
+        SELECT
+                sn.id,
+                sn.title,
+                sn.notice_type,
+                su.nickname AS release_by,
+                sn.priority,
+                sn.tar_type,
+                sn.release_status,
+                sn.release_time,
+                sn.recall_time
+        FROM
+            sys_notice sn
+        LEFT JOIN
+            sys_user su ON su.id = sn.release_by
+        where
+            sn.is_deleted = 0
+            <if test="queryParams.title != null and queryParams.title != ''">
+                AND sn.title LIKE CONCAT('%',#{queryParams.title},'%')
+            </if>
+            <if test="queryParams.releaseStatus != null">
+                AND sn.release_status = #{queryParams.releaseStatus}
+            </if>
+            <if test="queryParams.releaseTime != null">
+                <if test="queryParams.releaseTime[0] != null and queryParams.releaseTime[0] != ''">
+                    <bind name="startDate" value="queryParams.releaseTime[0].length() == 10 ? queryParams.releaseTime[0] + ' 00:00:00' : queryParams.releaseTime[0]"/>
+                    AND sn.release_time &gt;= #{startDate}
+                </if>
+                <if test="queryParams.releaseTime[1] != null and queryParams.releaseTime[1] != ''">
+                    <bind name="endDate" value="queryParams.releaseTime[1].length() == 10 ? queryParams.releaseTime[1] + ' 23:59:59' : queryParams.releaseTime[1]"/>
+                    AND sn.release_time &lt;= #{endDate}
+                </if>
+            </if>
+        ORDER BY
+            id
+             DESC
+    </select>
+
+    <select id="getReadNoticeVO" resultType="com.youlai.boot.system.model.vo.NoticeDetailVO">
+        SELECT
+            sn.id,
+            sn.title,
+            sn.content,
+            sn.notice_type,
+            su.nickname AS release_by,
+            sn.priority,
+            sn.release_status,
+            sn.release_time
+        FROM
+            sys_notice sn
+                LEFT JOIN
+            sys_user su ON su.id = sn.release_by
+        where
+            sn.is_deleted = 0
+            AND sn.id = #{id}
+    </select>
+
+</mapper>

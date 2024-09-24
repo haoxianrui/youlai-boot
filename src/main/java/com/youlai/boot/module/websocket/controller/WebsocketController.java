@@ -1,5 +1,6 @@
 package com.youlai.boot.module.websocket.controller;
 
+import com.youlai.boot.common.enums.NoticeTypeEnum;
 import com.youlai.boot.system.model.dto.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ import java.security.Principal;
 public class WebsocketController {
 
     private final SimpMessagingTemplate messagingTemplate;
+
 
 
     /**
@@ -56,7 +58,7 @@ public class WebsocketController {
 
         log.info("发送人:{}; 接收人:{}", sender, receiver);
         // 发送消息给指定用户，拼接后路径 /user/{receiver}/queue/greeting
-        messagingTemplate.convertAndSendToUser(receiver, "/queue/greeting", new ChatMessage(sender, message));
+        messagingTemplate.convertAndSendToUser(receiver, "/queue/greeting", new ChatMessage(sender, message, NoticeTypeEnum.SYSTEM_MESSAGE));
     }
 
 }

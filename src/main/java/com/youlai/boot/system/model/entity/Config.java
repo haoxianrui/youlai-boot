@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import com.youlai.boot.common.base.BaseEntity;
 import lombok.Data;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.EqualsAndHashCode;
 
 /**
  * 系统配置 实体
@@ -11,9 +12,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @author Theo
  * @since 2024-07-29 11:17:26
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(description = "系统配置")
 @TableName("sys_config")
-@Data
 public class Config extends BaseEntity {
 
     @Schema(description = "配置名称")

@@ -4,35 +4,35 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.youlai.boot.system.model.entity.User;
-import com.youlai.boot.system.model.form.*;
+import com.youlai.boot.common.annotation.Log;
+import com.youlai.boot.common.annotation.RepeatSubmit;
+import com.youlai.boot.common.enums.ContactType;
+import com.youlai.boot.common.enums.LogModuleEnum;
+import com.youlai.boot.common.model.Option;
 import com.youlai.boot.common.result.PageResult;
 import com.youlai.boot.common.result.Result;
-import com.youlai.boot.common.enums.ContactType;
-import com.youlai.boot.system.model.vo.UserProfileVO;
-import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.common.util.ExcelUtils;
-import com.youlai.boot.common.enums.LogModuleEnum;
-import com.youlai.boot.system.model.dto.UserImportDTO;
-import com.youlai.boot.common.annotation.RepeatSubmit;
+import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.system.listener.UserImportListener;
-import com.youlai.boot.system.model.query.UserPageQuery;
 import com.youlai.boot.system.model.dto.UserExportDTO;
+import com.youlai.boot.system.model.dto.UserImportDTO;
+import com.youlai.boot.system.model.entity.User;
+import com.youlai.boot.system.model.form.*;
+import com.youlai.boot.system.model.query.UserPageQuery;
 import com.youlai.boot.system.model.vo.UserInfoVO;
 import com.youlai.boot.system.model.vo.UserPageVO;
-import com.youlai.boot.common.annotation.Log;
+import com.youlai.boot.system.model.vo.UserProfileVO;
 import com.youlai.boot.system.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -228,6 +228,10 @@ public class UserController {
     }
 
 
-
-
+    @Operation(summary = "用户下拉选项")
+    @GetMapping("/options")
+    public Result<List<Option<String>>> listUserOptions() {
+        List<Option<String>> list = userService.listUserOptions();
+        return Result.success(list);
+    }
 }

@@ -3,6 +3,7 @@ package com.youlai.boot.system.model.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.youlai.boot.common.base.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 字典实体
@@ -10,8 +11,9 @@ import lombok.Data;
  * @author haoxr
  * @since 2022/12/17
  */
-@TableName("sys_dict")
 @Data
+@TableName("sys_dict")
+@EqualsAndHashCode(callSuper = true)
 public class Dict extends BaseEntity {
 
     /**

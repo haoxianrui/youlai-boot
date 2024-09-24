@@ -3,6 +3,7 @@ package com.youlai.boot.system.model.query;
 import com.youlai.boot.common.base.BasePageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -12,8 +13,9 @@ import java.util.List;
  * @author haoxr
  * @since 2022/1/14
  */
-@Schema(description ="用户分页查询对象")
 @Data
+@EqualsAndHashCode(callSuper = true)
+@Schema(description ="用户分页查询对象")
 public class UserPageQuery extends BasePageQuery {
 
     @Schema(description="关键字(用户名/昵称/手机号)")

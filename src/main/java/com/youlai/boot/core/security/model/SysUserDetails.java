@@ -51,7 +51,7 @@ public class SysUserDetails implements UserDetails {
                     .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) // 标识角色
                     .collect(Collectors.toSet());
         } else {
-            authorities = Collections.EMPTY_SET;
+            authorities = Collections.emptySet();
         }
         this.authorities = authorities;
         this.username = user.getUsername();
@@ -76,21 +76,6 @@ public class SysUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return this.username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
     }
 
     @Override

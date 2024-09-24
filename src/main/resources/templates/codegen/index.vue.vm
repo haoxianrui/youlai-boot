@@ -122,7 +122,8 @@
                     key="$fieldConfig.fieldName"
                     label="$fieldConfig.fieldComment"
                     prop="$fieldConfig.fieldName"
-                    min-width="100"
+                    min-width="150"
+                    align="center"
                 />
               #end
           #end

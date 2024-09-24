@@ -4,6 +4,7 @@ package com.youlai.boot.system.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.youlai.boot.common.enums.ContactType;
+import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.dto.UserAuthInfo;
 import com.youlai.boot.system.model.dto.UserExportDTO;
 import com.youlai.boot.system.model.entity.User;
@@ -147,7 +148,14 @@ public interface UserService extends IService<User> {
      * 修改当前用户邮箱
      *
      * @param data 表单数据
-     * @return
+     * @return {@link Boolean} 是否绑定成功
      */
     boolean bindEmail(EmailChangeForm data);
+
+    /**
+     * 获取用户选项列表
+     *
+     * @return {@link List<Option<String>>} 用户选项列表
+     */
+    List<Option<String>> listUserOptions();
 }

@@ -14,6 +14,7 @@ import com.youlai.boot.system.service.DictService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -73,7 +74,7 @@ public class DictController {
     @PostMapping
     @PreAuthorize("@ss.hasPerm('sys:dict:add')")
     @RepeatSubmit
-    public Result<?> saveDict(@RequestBody DictForm formData) {
+    public Result<?> saveDict(@Valid @RequestBody DictForm formData) {
         boolean result = dictService.saveDict(formData);
         return Result.judge(result);
     }
