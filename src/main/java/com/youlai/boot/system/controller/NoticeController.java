@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.*;
 public class NoticeController  {
 
     private final NoticeService noticeService;
-
     private final NoticeStatusService noticeStatusService;
 
     @Operation(summary = "通知公告分页列表")

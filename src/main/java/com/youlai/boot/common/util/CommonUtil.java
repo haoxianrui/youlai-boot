@@ -26,6 +26,9 @@ public class CommonUtil {
      * @return 字符串
      */
     public static String listToStr(List<String> list, String separator) {
+        if(list == null || list.isEmpty()){
+            return "";
+        }
         return list.stream().collect(Collectors.joining(separator));
     }
 
