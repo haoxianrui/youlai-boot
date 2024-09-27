@@ -2,11 +2,11 @@ package com.youlai.boot.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.youlai.boot.common.base.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.time.LocalDateTime;
 /**
  * 通知公告实体对象
@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @TableName("sys_notice")
 public class Notice extends BaseEntity {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -32,41 +33,48 @@ public class Notice extends BaseEntity {
     /**
      * 通知类型
      */
-    private Integer noticeType;
+    private Integer type;
+
     /**
      * 发布人
      */
-    private Long releaseBy;
+    private Long publisherBy;
+
     /**
-     * 优先级(0-低 1-中 2-高)
+     * 通知等级（L: 低, M: 中, H: 高）
      */
-    private Integer priority;
+    private String level;
+
     /**
-     * 目标类型(0-全体 1-指定)
+     * 目标类型（1: 全体, 2: 指定）
      */
-    private Integer tarType;
+    private Integer targetType;
+
     /**
-     * 目标ID
+     * 目标用户ID集合
      */
-    private String tarIds;
+    private String targetUserIds;
+
     /**
-     * 发布状态(0-未发布 1已发布 2已撤回)
+     * 发布状态（0: 未发布, 1: 已发布, -1: 已撤回）
      */
-    private Integer releaseStatus;
+    private Integer publishStatus;
+
     /**
      * 发布时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime releaseTime;
+    private LocalDateTime publishTime;
+
     /**
      * 撤回时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime recallTime;
+    private LocalDateTime revokeTime;
+
     /**
      * 创建人ID
      */
     private Long createBy;
+
     /**
      * 更新人ID
      */

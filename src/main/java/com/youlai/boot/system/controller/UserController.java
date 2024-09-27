@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.youlai.boot.common.annotation.Log;
 import com.youlai.boot.common.annotation.RepeatSubmit;
-import com.youlai.boot.common.enums.ContactType;
+import com.youlai.boot.system.enums.ContactType;
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.common.result.PageResult;

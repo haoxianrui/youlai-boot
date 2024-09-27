@@ -1,10 +1,9 @@
 package com.youlai.boot.system.model.dto;
 
-import com.youlai.boot.common.enums.NoticeWayEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * 消息载体
@@ -23,8 +22,8 @@ public class MessageDTO {
     private String sender;
 
     @Schema(description = "接收者")
-    private List<String> receiver;
+    private Set<String> receivers;
 
-    @Schema(description = "通知方式")
-    private NoticeWayEnum noticeWay;
+
+
 }

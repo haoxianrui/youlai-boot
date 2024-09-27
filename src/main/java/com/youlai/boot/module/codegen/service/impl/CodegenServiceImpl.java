@@ -10,12 +10,11 @@ import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.boot.common.enums.JavaTypeEnum;
+import com.youlai.boot.module.codegen.enums.JavaTypeEnum;
 import com.youlai.boot.config.property.CodegenProperties;
 import com.youlai.boot.module.codegen.service.GenConfigService;
 import com.youlai.boot.module.codegen.service.GenFieldConfigService;
 import com.youlai.boot.module.codegen.service.CodegenService;
-import com.youlai.boot.module.codegen.converter.CodegenConverter;
 import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.module.codegen.mapper.DatabaseMapper;
 import com.youlai.boot.module.codegen.model.entity.GenConfig;
@@ -23,10 +22,8 @@ import com.youlai.boot.module.codegen.model.entity.GenFieldConfig;
 import com.youlai.boot.module.codegen.model.query.TablePageQuery;
 import com.youlai.boot.module.codegen.model.vo.CodegenPreviewVO;
 import com.youlai.boot.module.codegen.model.vo.TablePageVO;
-import com.youlai.boot.system.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -224,7 +221,7 @@ public class CodegenServiceImpl implements CodegenService {
         bindMap.put("tableName", genConfig.getTableName());
         bindMap.put("author", genConfig.getAuthor());
         bindMap.put("lowerFirstEntityName", StrUtil.lowerFirst(entityName)); // UserTest → userTest
-        bindMap.put("kebabCaseEntityName", StrUtil.toSymbolCase(entityName, '-')); // UserTest → user-test
+        bindMap.put("kebabCaseEntityName", StrUtil.toSymbolCase(entityName, '-')); // UserTest → user-websocket
         bindMap.put("businessName", genConfig.getBusinessName());
         bindMap.put("fieldConfigs", fieldConfigs);
 

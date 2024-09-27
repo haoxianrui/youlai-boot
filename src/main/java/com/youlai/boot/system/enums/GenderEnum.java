@@ -1,4 +1,4 @@
-package com.youlai.boot.common.enums;
+package com.youlai.boot.system.enums;
 
 import com.youlai.boot.common.base.IBaseEnum;
 import io.swagger.v3.oas.annotations.media.Schema;

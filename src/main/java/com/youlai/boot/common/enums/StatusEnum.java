@@ -9,16 +9,16 @@ import lombok.Getter;
  * @author haoxr
  * @since 2022/10/14
  */
+@Getter
 public enum StatusEnum implements IBaseEnum<Integer> {
 
     ENABLE(1, "启用"),
     DISABLE (0, "禁用");
 
-    @Getter
-    private Integer value;
+    private final Integer value;
 
-    @Getter
-    private String label;
+
+    private final String label;
 
     StatusEnum(Integer value, String label) {
         this.value = value;

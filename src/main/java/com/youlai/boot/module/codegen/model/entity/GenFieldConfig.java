@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.youlai.boot.common.base.BaseEntity;
-import com.youlai.boot.common.enums.FormTypeEnum;
-import com.youlai.boot.common.enums.QueryTypeEnum;
+import com.youlai.boot.module.codegen.enums.FormTypeEnum;
+import com.youlai.boot.module.codegen.enums.QueryTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
 

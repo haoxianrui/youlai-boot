@@ -3,9 +3,9 @@ package com.youlai.boot.system.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.boot.system.model.entity.NoticeStatus;
-import com.youlai.boot.system.model.query.NoticeQuery;
-import com.youlai.boot.system.model.vo.NoticeStatusVO;
+import com.youlai.boot.system.model.entity.UserNotice;
+import com.youlai.boot.system.model.query.NoticePageQuery;
+import com.youlai.boot.system.model.vo.UserNoticePageVO;
 import com.youlai.boot.system.model.vo.NoticeVO;
 
 import java.util.List;
@@ -16,16 +16,17 @@ import java.util.List;
  * @author youlaitech
  * @since 2024-08-28 16:56
  */
-public interface NoticeStatusService extends IService<NoticeStatus> {
+public interface UserNoticeService extends IService<UserNotice> {
 
     /**
      * 获取未读的通知公告
      * @return 公告列表
      */
-    List<NoticeStatusVO> listUnreadNotices();
+    List<UserNoticePageVO> listUnreadNotices();
 
     /**
      * 全部标记为已读
+     *
      * @return 是否成功
      */
     boolean readAll();
@@ -36,5 +37,5 @@ public interface NoticeStatusService extends IService<NoticeStatus> {
      * @param queryParams 查询参数
      * @return 我的通知公告分页列表
      */
-    IPage<NoticeStatusVO> getMyNoticePage(Page<NoticeVO> page, NoticeQuery queryParams);
+    IPage<UserNoticePageVO> getMyNoticePage(Page<NoticeVO> page, NoticePageQuery queryParams);
 }

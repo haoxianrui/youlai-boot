@@ -5,59 +5,56 @@
     <!-- 获取通知公告分页列表 -->
     <select id="getNoticePage" resultType="com.youlai.boot.system.model.bo.NoticeBO">
         SELECT
-                sn.id,
-                sn.title,
-                sn.notice_type,
-                su.nickname AS release_by,
-                sn.priority,
-                sn.tar_type,
-                sn.release_status,
-                sn.release_time,
-                sn.recall_time
+                t1.id,
+                t1.title,
+                t1.notice_type,
+                t2.nickname AS release_by,
+                t1.priority,
+                t1.tar_type,
+                t1.release_status,
+                t1.release_time,
+                t1.recall_time
         FROM
-            sys_notice sn
-        LEFT JOIN
-            sys_user su ON su.id = sn.release_by
+            sys_notice t1
+                LEFT JOIN sys_user t2 ON t2.id = t1.release_by
         where
-            sn.is_deleted = 0
+            t1.is_deleted = 0
             <if test="queryParams.title != null and queryParams.title != ''">
-                AND sn.title LIKE CONCAT('%',#{queryParams.title},'%')
+                AND t1.title LIKE CONCAT('%',#{queryParams.title},'%')
             </if>
             <if test="queryParams.releaseStatus != null">
-                AND sn.release_status = #{queryParams.releaseStatus}
+                AND t1.release_status = #{queryParams.releaseStatus}
             </if>
             <if test="queryParams.releaseTime != null">
                 <if test="queryParams.releaseTime[0] != null and queryParams.releaseTime[0] != ''">
                     <bind name="startDate" value="queryParams.releaseTime[0].length() == 10 ? queryParams.releaseTime[0] + ' 00:00:00' : queryParams.releaseTime[0]"/>
-                    AND sn.release_time &gt;= #{startDate}
+                    AND t1.release_time &gt;= #{startDate}
                 </if>
                 <if test="queryParams.releaseTime[1] != null and queryParams.releaseTime[1] != ''">
                     <bind name="endDate" value="queryParams.releaseTime[1].length() == 10 ? queryParams.releaseTime[1] + ' 23:59:59' : queryParams.releaseTime[1]"/>
-                    AND sn.release_time &lt;= #{endDate}
+                    AND t1.release_time &lt;= #{endDate}
                 </if>
             </if>
         ORDER BY
-            id
-             DESC
+            t1.create_time DESC
     </select>
 
-    <select id="getReadNoticeVO" resultType="com.youlai.boot.system.model.vo.NoticeDetailVO">
+    <!-- 获取通知公告详情 -->
+    <select id="getNoticeDetail" resultType="com.youlai.boot.system.model.bo.NoticeBO">
         SELECT
-            sn.id,
-            sn.title,
-            sn.content,
-            sn.notice_type,
-            su.nickname AS release_by,
-            sn.priority,
-            sn.release_status,
-            sn.release_time
+            t1.id,
+            t1.title,
+            t1.content,
+            t1.type,
+            t2.nickname AS release_by,
+            t1.level,
+            t1.release_status,
+            t1.release_time
         FROM
-            sys_notice sn
-                LEFT JOIN
-            sys_user su ON su.id = sn.release_by
-        where
-            sn.is_deleted = 0
-            AND sn.id = #{id}
+            sys_notice t1
+                LEFT JOIN sys_user t2 ON t2.id = t1.release_by
+        WHERE
+            t1.id = #{id} AND t1.is_deleted = 0
     </select>
 
 </mapper>

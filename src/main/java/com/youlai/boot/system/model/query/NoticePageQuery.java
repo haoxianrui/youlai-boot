@@ -16,9 +16,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Schema(description ="通知公告查询对象")
-public class NoticeQuery extends BasePageQuery {
-
-    private static final long serialVersionUID = 1L;
+public class NoticePageQuery extends BasePageQuery {
 
     @Schema(description = "通知标题")
     private String title;

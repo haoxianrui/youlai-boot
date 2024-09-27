@@ -20,7 +20,7 @@ import com.youlai.boot.system.model.query.MenuQuery;
 import com.youlai.boot.system.model.vo.MenuVO;
 import com.youlai.boot.system.model.vo.RouteVO;
 import com.youlai.boot.common.constant.SystemConstants;
-import com.youlai.boot.common.enums.MenuTypeEnum;
+import com.youlai.boot.system.enums.MenuTypeEnum;
 import com.youlai.boot.common.enums.StatusEnum;
 import com.youlai.boot.common.model.KeyValue;
 import com.youlai.boot.common.model.Option;

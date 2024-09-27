@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youlai.boot.system.mapper.UserNoticeMapper">
+
+    <!-- 获取用户未读通知列表 -->
+    <select id="listUnreadNotices" resultType="com.youlai.boot.system.model.vo.UserNoticePageVO">
+        SELECT
+           t1.id,
+           t1.title,
+           t2.is_read
+        FROM
+            sys_user_notice t1
+                INNER JOIN sys_notice t2 ON t2.id = t1.notice_id AND t2.publish_status = 1
+        WHERE
+            user_id = #{userId} AND t1.is_read = 0
+        ORDER BY
+            t2.publish_time DESC
+    </select>
+
+    <!-- 获取我的通知分页列表 -->
+    <select id="getMyNoticePage" resultType="com.youlai.boot.system.model.vo.UserNoticePageVO">
+        SELECT
+            t1.id,
+            t1.title,
+            t4.name typeLabel,
+            t3.nickname publisherName,
+            t5.name levelLabel,
+            t1.publish_time,
+            t2.read_status
+        FROM
+            sys_user_notice t1
+                INNER JOIN sys_notice ON t2.notice_id = t1.id AND t2.publish_status = 1
+                LEFT JOIN sys_user t3 ON t2.publisher_id = t3.id
+                LEFT JOIN sys_dict_item t4 ON t2.type = t4.value AND t4.dict_code = 'notice_type'
+                LEFT JOIN sys_dict_item t5 ON t2.level = t5.value AND t4.dict_code = 'notice_level'
+        WHERE
+            t1.user_id = #{queryParams.userId}
+        <if test="queryParams.title != null and queryParams.title != ''">
+            AND t2.title LIKE CONCAT('%',#{queryParams.title},'%')
+        </if>
+        ORDER BY
+            t2.release_time DESC
+    </select>
+</mapper>

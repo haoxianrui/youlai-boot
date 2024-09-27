@@ -138,10 +138,10 @@ public class MinioFileService implements FileService {
         try {
             String fileName;
             if (StrUtil.isNotBlank(customDomain)) {
-                // https://oss.youlai.tech/default/20221120/test.jpg → 20221120/test.jpg
+                // https://oss.youlai.tech/default/20221120/test.jpg → 20221120/websocket.jpg
                 fileName = filePath.substring(customDomain.length() + 1 + bucketName.length() + 1); // 两个/占了2个字符长度
             } else {
-                // http://localhost:9000/default/20221120/test.jpg → 20221120/test.jpg
+                // http://localhost:9000/default/20221120/test.jpg → 20221120/websocket.jpg
                 fileName = filePath.substring(endpoint.length() + 1 + bucketName.length() + 1);
             }
             RemoveObjectArgs removeObjectArgs = RemoveObjectArgs.builder()

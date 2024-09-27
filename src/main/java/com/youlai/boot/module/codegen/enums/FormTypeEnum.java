@@ -1,4 +1,4 @@
-package com.youlai.boot.common.enums;
+package com.youlai.boot.module.codegen.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonCreator;

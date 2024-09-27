@@ -25,18 +25,18 @@ public class NoticeDetailVO {
     private String content;
 
     @Schema(description = "通知类型")
-    private String noticeType;
+    private Integer type;
 
     @Schema(description = "发布人")
-    private String releaseBy;
+    private String publisherName;
 
-    @Schema(description = "优先级(0-低 1-中 2-高)")
-    private Integer priority;
+    @Schema(description = "优先级(L-低 M-中 H-高)")
+    private String level;
 
     @Schema(description = "发布状态(0-未发布 1已发布 2已撤回) 冗余字段，方便判断是否已经发布")
-    private Integer releaseStatus;
+    private Integer publishStatus;
 
     @Schema(description = "发布时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime releaseTime;
+    private LocalDateTime publishTime;
 }

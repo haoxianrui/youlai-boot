@@ -39,17 +39,16 @@ public class NoticeForm implements Serializable {
     private String content;
 
     @Schema(description = "通知类型")
-    private Integer noticeType;
+    private Integer type;
 
-    @Schema(description = "优先级(0-低 1-中 2-高)")
-    @Range(min = 0, max = 2, message = "优先级取值范围[0,2]")
-    private Integer priority;
+    @Schema(description = "优先级(L-低 M-中 H-高)")
+    private String level;
 
-    @Schema(description = "目标类型(0-全体 1-指定)")
-    @Range(min = 0, max = 1, message = "目标类型取值范围[0,1]")
-    private Integer tarType;
+    @Schema(description = "目标类型(1-全体 2-指定)")
+    @Range(min = 1, max = 2, message = "目标类型取值范围[1,2]")
+    private Integer targetType;
 
     @Schema(description = "接收人ID集合")
-    private List<String> tarIds;
+    private List<String> targetUserIds;
 
 }

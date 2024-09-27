@@ -56,6 +56,7 @@ spring:
     from: youlaitech@163.com
 
 mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
   global-config:
     db-config:
       # 主键ID类型
@@ -71,6 +72,7 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 
 
 # 安全配置
