@@ -1,6 +1,7 @@
 package com.youlai.boot.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -123,7 +124,11 @@ public class ConfigServiceImpl extends ServiceImpl<ConfigMapper, Config> impleme
     @Override
     public boolean delete(Long id) {
         if (id != null) {
-            return super.remove(new LambdaQueryWrapper<Config>().eq(Config::getId,id));
+            return super.update(new LambdaUpdateWrapper<Config>()
+                    .eq(Config::getId,id)
+                    .set(Config::getIsDeleted, 1)
+                    .set(Config::getUpdateBy, SecurityUtils.getUserId())
+            );
         }
         return false;
     }

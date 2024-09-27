@@ -254,11 +254,15 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         } else {
             entity.setParams(null);
         }
-        if (menuType != MenuTypeEnum.BUTTON) {
+        // 新增类型为菜单时候 路由名称唯一
+        if (MenuTypeEnum.MENU.equals(menuType)) {
             Assert.isFalse(this.exists(new LambdaQueryWrapper<Menu>()
                     .eq(Menu::getRouteName, entity.getRouteName())
                     .ne(menuForm.getId() != null, Menu::getId, menuForm.getId())
             ), "路由名称已存在");
+        }else{
+            // 其他类型时 给路由名称赋值为空
+            entity.setRouteName(null);
         }
 
         boolean result = this.saveOrUpdate(entity);
