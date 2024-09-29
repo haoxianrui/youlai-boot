@@ -7,14 +7,14 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 用户公告状态VO
+ * 用户公告VO
  *
  * @author Theo
  * @since 2024-08-28 16:56
  */
 @Data
-@Schema(description = "用户公告状态VO")
-public class NoticeStatusVO {
+@Schema(description = "用户公告VO")
+public class UserNoticePageVO {
 
     @Schema(description = "通知ID")
     private Long id;
@@ -23,19 +23,19 @@ public class NoticeStatusVO {
     private String title;
 
     @Schema(description = "通知类型")
-    private String noticeType;
+    private String typeLabel;
 
-    @Schema(description = "发布人")
-    private String releaseBy;
+    @Schema(description = "发布人姓名")
+    private String publisherName;
 
-    @Schema(description = "优先级(0-低 1-中 2-高)")
-    private Integer priority;
+    @Schema(description = "通知级别")
+    private String levelLabel;
 
     @Schema(description = "发布时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime releaseTime;
+    private LocalDateTime publishTime;
 
     @Schema(description = "是否已读")
-    private Integer readStatus;
+    private Integer isRead;
 
 }

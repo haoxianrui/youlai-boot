@@ -1,45 +1,48 @@
 package com.youlai.boot.system.service.impl;
 
-import cn.hutool.core.lang.Assert;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.boot.common.constant.SymbolConstant;
-import com.youlai.boot.common.enums.NoticeWayEnum;
+import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.core.security.util.SecurityUtils;
+import com.youlai.boot.module.websocket.service.OnlineUserService;
 import com.youlai.boot.system.converter.NoticeConverter;
-import com.youlai.boot.system.handler.MessageHandler;
+import com.youlai.boot.system.enums.NoticePublishStatusEnum;
+import com.youlai.boot.system.enums.NoticeTargetTypeEnum;
 import com.youlai.boot.system.mapper.NoticeMapper;
 import com.youlai.boot.system.model.bo.NoticeBO;
-import com.youlai.boot.system.model.dto.MessageDTO;
+import com.youlai.boot.system.model.dto.NoticeDTO;
 import com.youlai.boot.system.model.entity.Notice;
-import com.youlai.boot.system.model.entity.NoticeStatus;
+import com.youlai.boot.system.model.entity.UserNotice;
 import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.form.NoticeForm;
-import com.youlai.boot.system.model.query.NoticeQuery;
-import com.youlai.boot.system.model.vo.NoticeStatusVO;
-import com.youlai.boot.system.model.vo.NoticeVO;
+import com.youlai.boot.system.model.query.NoticePageQuery;
+import com.youlai.boot.system.model.vo.NoticePageVO;
+import com.youlai.boot.system.model.vo.UserNoticePageVO;
 import com.youlai.boot.system.model.vo.NoticeDetailVO;
 import com.youlai.boot.system.service.NoticeService;
-import com.youlai.boot.system.service.NoticeStatusService;
+import com.youlai.boot.system.service.UserNoticeService;
 import com.youlai.boot.system.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * 通知公告服务实现类
  *
- * @author youlaitech
+ * @author Theo
  * @since 2024-08-27 10:31
  */
 @Service
@@ -48,20 +51,21 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
 
     private final NoticeConverter noticeConverter;
 
-    private final MessageHandler messageHandler;
-
-    private final NoticeStatusService noticeStatusService;
+    private final UserNoticeService userNoticeService;
 
     private final UserService userService;
+
+    private final SimpMessagingTemplate messagingTemplate;
+    private final OnlineUserService onlineUserService;
 
     /**
      * 获取通知公告分页列表
      *
      * @param queryParams 查询参数
-     * @return  {@link IPage<NoticeVO>} 通知公告分页列表
+     * @return {@link IPage< NoticePageVO >} 通知公告分页列表
      */
     @Override
-    public IPage<NoticeVO> getNoticePage(NoticeQuery queryParams) {
+    public IPage<NoticePageVO> getNoticePage(NoticePageQuery queryParams) {
         Page<NoticeBO> noticePage = this.baseMapper.getNoticePage(
                 new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),
                 queryParams
@@ -89,12 +93,15 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
      */
     @Override
     public boolean saveNotice(NoticeForm formData) {
-        Notice entity = noticeConverter.toEntity(formData);
-        entity.setReleaseStatus(0);
-        entity.setCreateBy(SecurityUtils.getUserId());
-        if (entity.getTarType() == 1) {
-            Assert.notBlank(entity.getTarIds(), "指定用户不能为空");
+
+        if (NoticeTargetTypeEnum.SPECIFIED.getValue().equals(formData.getTargetType())) {
+            List<String> targetUserIdList = formData.getTargetUserIds();
+            if (CollectionUtil.isEmpty(targetUserIdList)) {
+                throw new BusinessException("推送指定用户不能为空");
+            }
         }
+        Notice entity = noticeConverter.toEntity(formData);
+        entity.setCreateBy(SecurityUtils.getUserId());
         return this.save(entity);
     }
 
@@ -107,11 +114,14 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
      */
     @Override
     public boolean updateNotice(Long id, NoticeForm formData) {
-        Notice entity = noticeConverter.toEntity(formData);
-        entity.setUpdateBy(SecurityUtils.getUserId());
-        if (entity.getTarType() == 1) {
-            Assert.notBlank(entity.getTarIds(), "指定用户不能为空");
+        if (NoticeTargetTypeEnum.SPECIFIED.getValue().equals(formData.getTargetType())) {
+            List<String> targetUserIdList = formData.getTargetUserIds();
+            if (CollectionUtil.isEmpty(targetUserIdList)) {
+                throw new BusinessException("推送指定用户不能为空");
+            }
         }
+
+        Notice entity = noticeConverter.toEntity(formData);
         return this.updateById(entity);
     }
 
@@ -122,87 +132,97 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
      * @return {@link Boolean} 是否删除成功
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public boolean deleteNotices(String ids) {
-        Assert.isTrue(StrUtil.isNotBlank(ids), "删除的通知公告数据为空");
-        // 逻辑删除
-        List<Long> idList = Arrays.stream(ids.split(SymbolConstant.COMMA))
-                .map(Long::parseLong)
-                .toList();
-        boolean b = this.removeByIds(idList);
-        if (b) {
-            //删除通知公告的同时，需要删除通知公告对应的用户通知状态
-            noticeStatusService.remove(new LambdaQueryWrapper<NoticeStatus>().in(NoticeStatus::getNoticeId, idList));
+        if (StrUtil.isBlank(ids)) {
+            throw new BusinessException("删除的通知公告数据为空");
         }
 
-        return true;
+        // 逻辑删除
+        List<Long> idList = Arrays.stream(ids.split(","))
+                .map(Long::parseLong)
+                .toList();
+        boolean isRemoved = this.removeByIds(idList);
+        if (isRemoved) {
+            // 删除通知公告的同时，需要删除通知公告对应的用户通知状态
+            userNoticeService.remove(new LambdaQueryWrapper<UserNotice>().in(UserNotice::getNoticeId, idList));
+        }
+        return isRemoved;
     }
 
     /**
      * 发布通知公告
+     *
      * @param id 通知公告ID
      * @return 是否发布成功
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean releaseNotice(Long id) {
+    @Transactional
+    public boolean publishNotice(Long id) {
         Notice notice = this.getById(id);
-        Assert.notNull(notice, "通知公告不存在");
-        Assert.isTrue(notice.getReleaseStatus() != 1, "通知公告已发布");
-        notice.setReleaseStatus(1);
-        notice.setReleaseBy(SecurityUtils.getUserId());
-        notice.setReleaseTime(LocalDateTime.now());
-        this.updateById(notice);
-        //发布通知公告的同时，需要将通知公告发送给目标用户
-        //先删除掉该通知公告之前对应的用户信息
-        noticeStatusService.remove(new LambdaQueryWrapper<NoticeStatus>().eq(NoticeStatus::getNoticeId, id));
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        if (notice.getTarType() == 1) {
-            Assert.notBlank(notice.getTarIds(), "指定用户不能为空");
-            queryWrapper.in(User::getId, Arrays.asList(notice.getTarIds().split(SymbolConstant.COMMA)));
+        if (notice == null) {
+            throw new BusinessException("通知公告不存在");
         }
-        //查询出目标用户，增加用户通知状态
-        List<User> list = userService.list(queryWrapper);
-        List<NoticeStatus> needSaveList = list.stream().map(user -> {
-            NoticeStatus noticeStatus = new NoticeStatus();
-            noticeStatus.setNoticeId(id);
-            noticeStatus.setUserId(user.getId());
-            noticeStatus.setReadStatus(0);
-            return noticeStatus;
-        }).toList();
-        if(needSaveList.size() > 0){
-            noticeStatusService.saveBatch(needSaveList);
-        }
-        //最后，给当前在线的用户发送websocket消息
-        List<String> usernameList = null;
-        if(notice.getTarType() == 1){
-            List<Long> collect = needSaveList.stream().map(NoticeStatus::getUserId).collect(Collectors.toList());
-            List<User> userList = userService.list(new LambdaQueryWrapper<User>().in(User::getId, collect).select(User::getUsername));
-            usernameList = userList.stream().map(User::getUsername).collect(Collectors.toList());
-        }
-        MessageDTO message = new MessageDTO();
-        message.setNoticeWay(NoticeWayEnum.WEBSOCKET);
-        message.setReceiver(usernameList);
-        message.setContent(getNoticeContent(notice));
-        message.setSender(SecurityUtils.getUsername());
-        messageHandler.sendMessage(message);
-        return this.updateById(notice);
-    }
 
-    /**
-     * 自定义组合公告内容
-     *
-     * @param notice 通知公告
-     * @return 自定义组合通知公告内容
-     */
-    private String getNoticeContent(Notice notice) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.set("id", notice.getId());
-        jsonObject.set("title", notice.getTitle());
-        jsonObject.set("messageType", notice.getNoticeType());
-        jsonObject.set("releaseTime", notice.getReleaseTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        jsonObject.set("type", "release");
-        return jsonObject.toString();
+        if (NoticePublishStatusEnum.PUBLISHED.getValue().equals(notice.getPublishStatus())) {
+            throw new BusinessException("通知公告已发布");
+        }
+
+        Integer targetType = notice.getTargetType();
+        String targetUserIds = notice.getTargetUserIds();
+        if (NoticeTargetTypeEnum.SPECIFIED.getValue().equals(targetType)
+                && StrUtil.isBlank(targetUserIds)) {
+            throw new BusinessException("推送指定用户不能为空");
+        }
+
+        notice.setPublishStatus(NoticePublishStatusEnum.PUBLISHED.getValue());
+        notice.setPublisherId(SecurityUtils.getUserId());
+        notice.setPublishTime(LocalDateTime.now());
+        boolean publishResult = this.updateById(notice);
+
+        if (publishResult) {
+            // 发布通知公告的同时，删除该通告之前的用户通知数据，因为可能是重新发布
+            userNoticeService.remove(
+                    new LambdaQueryWrapper<UserNotice>().eq(UserNotice::getNoticeId, id)
+            );
+
+            // 添加新的用户通知数据
+            List<String> targetUserIdList = Arrays.asList(targetUserIds.split(","));
+            List<User> targetUserList = userService.list(
+                    new LambdaQueryWrapper<User>()
+                            // 如果是指定用户，则筛选出指定用户
+                            .in(NoticeTargetTypeEnum.SPECIFIED.getValue().equals(targetType), User::getId, targetUserIdList)
+            );
+
+
+            List<UserNotice> userNoticeList = targetUserList.stream().map(user -> {
+                UserNotice userNotice = new UserNotice();
+                userNotice.setNoticeId(id);
+                userNotice.setUserId(user.getId());
+                userNotice.setIsRead(0);
+                return userNotice;
+            }).toList();
+
+            if (CollectionUtil.isNotEmpty(userNoticeList)) {
+                userNoticeService.saveBatch(userNoticeList);
+            }
+
+            Set<String> receivers = targetUserList.stream().map(User::getUsername).collect(Collectors.toSet());
+
+            Set<String> allOnlineUsers = onlineUserService.getAllOnlineUsers();
+
+            // 找出在线用户的通知接收者
+            Set<String> onlineReceivers = new HashSet<>(CollectionUtil.intersection(receivers, allOnlineUsers));
+
+
+            NoticeDTO noticeDTO = new NoticeDTO();
+            noticeDTO.setId(id);
+            noticeDTO.setTitle(notice.getTitle());
+            noticeDTO.setType(notice.getType());
+
+            onlineReceivers.forEach(receiver -> messagingTemplate.convertAndSendToUser(receiver, "/queue/message", noticeDTO));
+        }
+        return publishResult;
     }
 
     /**
@@ -212,67 +232,65 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
      * @return 是否撤回成功
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean recallNotice(Long id) {
+    @Transactional
+    public boolean revokeNotice(Long id) {
         Notice notice = this.getById(id);
-        Assert.notNull(notice, "通知公告不存在");
-        Assert.isTrue(notice.getReleaseStatus() == 1, "通知公告未发布");
-        notice.setReleaseStatus(2);
-        notice.setRecallTime(LocalDateTime.now());
-        if (!this.updateById(notice)) {
-            return false;
+        if (notice == null) {
+            throw new BusinessException("通知公告不存在");
         }
-        //先删除掉该通知公告之前对应的用户信息
-        noticeStatusService.remove(new LambdaQueryWrapper<NoticeStatus>().eq(NoticeStatus::getNoticeId, id));
-        return true;
+
+        if (!NoticePublishStatusEnum.PUBLISHED.getValue().equals(notice.getPublishStatus())) {
+            throw new BusinessException("通知公告未发布或已撤回");
+        }
+
+        notice.setPublishStatus(NoticePublishStatusEnum.REVOKED.getValue());
+        notice.setRevokeTime(LocalDateTime.now());
+        notice.setUpdateBy(SecurityUtils.getUserId());
+
+        boolean revokeResult = this.updateById(notice);
+
+        if (revokeResult) {
+            // 撤回通知公告的同时，需要删除通知公告对应的用户通知状态
+            userNoticeService.remove(new LambdaQueryWrapper<UserNotice>()
+                    .eq(UserNotice::getNoticeId, id)
+            );
+        }
+        return revokeResult;
     }
 
     /**
-     * 阅读通知公告
-     * @param id 通知公告ID
-     * @return 通知公告表单对象
-     */
-    @Override
-    public NoticeDetailVO readNotice(Long id) {
-        NoticeDetailVO noticeDetailVO = this.getReadNoticeDetail(id);
-        Assert.isTrue(noticeDetailVO != null && noticeDetailVO.getReleaseStatus() == 1, "公告不存在或未发布");
-        //获取当前登录用户
-        Long userId = SecurityUtils.getUserId();
-        LambdaQueryWrapper<NoticeStatus> queryWrapper = new LambdaQueryWrapper<NoticeStatus>()
-                .eq(NoticeStatus::getUserId, userId)
-                .eq(NoticeStatus::getNoticeId, id)
-                .eq(NoticeStatus::getReadStatus, 0);
-        NoticeStatus noticeStatus = noticeStatusService.getOne(queryWrapper);
-        if (noticeStatus != null) {
-            noticeStatus.setReadStatus(1);
-            noticeStatusService.updateById(noticeStatus);
-        }
-        return noticeDetailVO;
-    }
-
-    /**
-     * 获取阅读时通知公告详情
+     * 阅读获取通知公告详情
+     *
      * @param id 通知公告ID
      * @return
      */
     @Override
-    public NoticeDetailVO getReadNoticeDetail(Long id) {
-        Assert.notNull(id, "公告ID不能为空");
-        NoticeDetailVO noticeDetailVO = this.baseMapper.getReadNoticeVO(id);
-        Assert.isTrue(noticeDetailVO != null, "公告不存在");
-        return noticeDetailVO;
+    public NoticeDetailVO getNoticeDetail(Long id) {
+        NoticeBO noticeBO = this.baseMapper.getNoticeDetail(id);
+        // 更新用户通知公告的阅读状态
+        Long userId = SecurityUtils.getUserId();
+        userNoticeService.update(new LambdaUpdateWrapper<UserNotice>()
+                .eq(UserNotice::getNoticeId, id)
+                .eq(UserNotice::getUserId, userId)
+                .eq(UserNotice::getIsRead, 0)
+                .set(UserNotice::getIsRead, 1)
+        );
+        return noticeConverter.toDetailVO(noticeBO);
     }
 
     /**
      * 获取当前登录用户的通知公告列表
+     *
      * @param queryParams 查询参数
      * @return 通知公告分页列表
      */
     @Override
-    public IPage<NoticeStatusVO> getMyNoticePage(NoticeQuery queryParams) {
-        Long userId = SecurityUtils.getUserId();
-        queryParams.setUserId(userId);
-        return noticeStatusService.getMyNoticePage(new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),queryParams);
+    public IPage<UserNoticePageVO> getMyNoticePage(NoticePageQuery queryParams) {
+        queryParams.setUserId(SecurityUtils.getUserId());
+        return userNoticeService.getMyNoticePage(
+                new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),
+                queryParams
+        );
     }
 
 }

@@ -229,14 +229,14 @@ INSERT INTO `sys_menu` VALUES (123,120,'0,1,120','修改系统配置',4,NULL,'',
 INSERT INTO `sys_menu` VALUES (124,120,'0,1,120','删除系统配置',4,NULL,'',NULL,'sys:config:delete',0,1,1,4,'',NULL,'2024-07-30 16:31:07','2024-07-30 16:31:07',NULL);
 INSERT INTO `sys_menu` VALUES (125,120,'0,1,120','刷新系统配置',4,NULL,'',NULL,'sys:config:refresh',0,1,1,5,'',NULL,'2024-07-30 16:31:25','2024-07-30 16:31:25',NULL);
 INSERT INTO `sys_menu` VALUES (126,1,'0,1','通知公告',1,'Notice','notice','system/notice/index',NULL,NULL,NULL,1,9,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
-INSERT INTO `sys_menu` VALUES (127,126,'0,1,132','查询',4,NULL,'',NULL,'system:notice:query',NULL,NULL,1,1,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
-INSERT INTO `sys_menu` VALUES (128,126,'0,1,133','新增',4,NULL,'',NULL,'system:notice:add',NULL,NULL,1,2,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
-INSERT INTO `sys_menu` VALUES (129,126,'0,1,134','编辑',4,NULL,'',NULL,'system:notice:edit',NULL,NULL,1,3,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
-INSERT INTO `sys_menu` VALUES (130,126,'0,1,135','删除',4,NULL,'',NULL,'system:notice:delete',NULL,NULL,1,4,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
+INSERT INTO `sys_menu` VALUES (127,126,'0,1,132','查询',4,NULL,'',NULL,'sys:notice:query',NULL,NULL,1,1,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
+INSERT INTO `sys_menu` VALUES (128,126,'0,1,133','新增',4,NULL,'',NULL,'sys:notice:add',NULL,NULL,1,2,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
+INSERT INTO `sys_menu` VALUES (129,126,'0,1,134','编辑',4,NULL,'',NULL,'sys:notice:edit',NULL,NULL,1,3,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
+INSERT INTO `sys_menu` VALUES (130,126,'0,1,135','删除',4,NULL,'',NULL,'sys:notice:delete',NULL,NULL,1,4,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
 INSERT INTO `sys_menu` VALUES (131,0,'0','消息中心',2,NULL,'/notice','Layout',NULL,1,1,1,13,'el-icon-Message',NULL,'2024-08-31 21:16:06','2024-08-31 21:16:41',NULL);
 INSERT INTO `sys_menu` VALUES (132,131,'0,136','我的消息',1,'MyNotice','notice','notice/index',NULL,0,1,1,1,'',NULL,'2024-08-31 21:17:36','2024-09-12 11:28:42',NULL);
-INSERT INTO `sys_menu` VALUES (133,132,'0,1,131','发布',4,NULL,'',NULL,'system:notice:release',0,1,1,5,'',NULL,'2024-09-01 23:53:52','2024-09-01 23:53:52',NULL);
-INSERT INTO `sys_menu` VALUES (134,132,'0,1,131','撤回',4,NULL,'',NULL,'system:notice:recall',0,1,1,6,'',NULL,'2024-09-01 23:54:16','2024-09-01 23:54:16',NULL);
+INSERT INTO `sys_menu` VALUES (133,132,'0,1,131','发布',4,NULL,'',NULL,'sys:notice:publish',0,1,1,5,'',NULL,'2024-09-01 23:53:52','2024-09-01 23:53:52',NULL);
+INSERT INTO `sys_menu` VALUES (134,132,'0,1,131','撤回',4,NULL,'',NULL,'sys:notice:revoke',0,1,1,6,'',NULL,'2024-09-01 23:54:16','2024-09-01 23:54:16',NULL);
 
 -- ----------------------------
 -- Table structure for sys_message
@@ -408,7 +408,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 INSERT INTO `sys_user` VALUES (1, 'root', '有来技术', 0, '$2a$10$xVWsNOhHrCxh5UbpCE7/HuJ.PAOKcYAqRxD2CO2nVnJS.IAXkr5aq', NULL, 'https://oss.youlai.tech/youlai-boot/2023/05/16/811270ef31f548af9cffc026dfc3777b.gif', '17621590365', 1, 'youlaitech@163.com', NULL, NULL, NULL, NULL, 0);
 INSERT INTO `sys_user` VALUES (2, 'admin', '系统管理员', 1, '$2a$10$xVWsNOhHrCxh5UbpCE7/HuJ.PAOKcYAqRxD2CO2nVnJS.IAXkr5aq', 1, 'https://oss.youlai.tech/youlai-boot/2023/05/16/811270ef31f548af9cffc026dfc3777b.gif', '17621210366', 1, '', '2019-10-10 13:41:22', NULL, '2022-07-31 12:39:30', NULL, 0);
-INSERT INTO `sys_user` VALUES (3, 'test', '测试小用户', 1, '$2a$10$xVWsNOhHrCxh5UbpCE7/HuJ.PAOKcYAqRxD2CO2nVnJS.IAXkr5aq', 3, 'https://oss.youlai.tech/youlai-boot/2023/05/16/811270ef31f548af9cffc026dfc3777b.gif', '17621210366', 1, 'youlaitech@163.com', '2021-06-05 01:31:29', NULL, '2021-06-05 01:31:29', NULL, 0);
+INSERT INTO `sys_user` VALUES (3, 'websocket', '测试小用户', 1, '$2a$10$xVWsNOhHrCxh5UbpCE7/HuJ.PAOKcYAqRxD2CO2nVnJS.IAXkr5aq', 3, 'https://oss.youlai.tech/youlai-boot/2023/05/16/811270ef31f548af9cffc026dfc3777b.gif', '17621210366', 1, 'youlaitech@163.com', '2021-06-05 01:31:29', NULL, '2021-06-05 01:31:29', NULL, 0);
 
 -- ----------------------------
 -- Table structure for sys_user_role

@@ -8,13 +8,13 @@ import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.context.AnalysisContext;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.youlai.boot.common.base.BaseAnalysisEventListener;
+import com.youlai.boot.system.enums.GenderEnum;
 import com.youlai.boot.system.model.entity.Dept;
 import com.youlai.boot.system.model.entity.Role;
 import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.entity.UserRole;
 import com.youlai.boot.common.base.IBaseEnum;
 import com.youlai.boot.common.constant.SystemConstants;
-import com.youlai.boot.common.enums.GenderEnum;
 import com.youlai.boot.common.enums.StatusEnum;
 import com.youlai.boot.system.converter.UserConverter;
 import com.youlai.boot.system.model.dto.UserImportDTO;
@@ -107,13 +107,12 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
             // 校验通过，持久化至数据库
             User entity = userConverter.toEntity(userImportDTO);
             entity.setPassword(passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));   // 默认密码
-            // 性别翻译
+            // 性别逆向解析
             String genderLabel = userImportDTO.getGenderLabel();
             if (StrUtil.isNotBlank(genderLabel)) {
                 Integer genderValue = (Integer) IBaseEnum.getValueByLabel(genderLabel, GenderEnum.class);
                 entity.setGender(genderValue);
             }
-
             // 角色解析
             String roleCodes = userImportDTO.getRoleCodes();
             List<Long> roleIds = null;
@@ -155,7 +154,7 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
             }
         } else {
             invalidCount++;
-            msg.append("第").append(validCount + invalidCount).append("行数据校验失败：").append(validationMsg + "<br/>");
+            msg.append("第").append(validCount + invalidCount).append("行数据校验失败：").append(validationMsg).append("<br/>");
         }
     }
 
@@ -166,7 +165,6 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
     @Override
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
         log.info("所有数据解析完成！");
-
     }
 
 

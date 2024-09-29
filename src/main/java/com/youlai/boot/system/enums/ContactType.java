@@ -1,4 +1,4 @@
-package com.youlai.boot.common.enums;
+package com.youlai.boot.system.enums;
 
 /**
  * 联系方式类型

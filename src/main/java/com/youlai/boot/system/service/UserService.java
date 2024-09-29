@@ -3,7 +3,7 @@ package com.youlai.boot.system.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.boot.common.enums.ContactType;
+import com.youlai.boot.system.enums.ContactType;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.dto.UserAuthInfo;
 import com.youlai.boot.system.model.dto.UserExportDTO;

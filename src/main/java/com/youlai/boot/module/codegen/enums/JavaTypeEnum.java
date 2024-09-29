@@ -1,4 +1,4 @@
-package com.youlai.boot.common.enums;
+package com.youlai.boot.module.codegen.enums;
 
 import lombok.Getter;
 

@@ -1,6 +1,5 @@
 package com.youlai.boot.system.model.dto;
 
-import com.youlai.boot.common.enums.NoticeTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,10 +21,5 @@ public class ChatMessage {
      * 消息内容
      */
     private String content;
-
-    /**
-     * 消息类型
-     */
-    private NoticeTypeEnum noticeType;
 
 }

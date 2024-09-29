@@ -16,19 +16,21 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Schema(description ="通知公告查询对象")
-public class NoticeQuery extends BasePageQuery {
-
-    private static final long serialVersionUID = 1L;
+public class NoticePageQuery extends BasePageQuery {
 
     @Schema(description = "通知标题")
     private String title;
 
-    @Schema(description = "发布状态(0-未发布 1已发布 2已撤回)")
-    private Integer releaseStatus;
+    @Schema(description = "发布状态(0-未发布 1已发布 -1已撤回)")
+    private Integer publishStatus;
 
-    @Schema(description = "发布时间")
-    private List<String> releaseTime;
+    @Schema(description = "发布时间(起止)")
+    private List<String> publishTime;
 
     @Schema(description = "查询人ID")
     private Long userId;
+
+    @Schema(description = "是否已读（0-未读 1-已读）")
+    private Integer isRead;
+
 }

@@ -1,6 +1,6 @@
 package com.youlai.boot.system.model.bo;
 
-import com.youlai.boot.common.enums.MenuTypeEnum;
+import com.youlai.boot.system.enums.MenuTypeEnum;
 import lombok.Data;
 
 /**

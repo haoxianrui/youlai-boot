@@ -9,7 +9,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
 import com.youlai.boot.common.constant.SecurityConstants;
-import com.youlai.boot.common.enums.CaptchaTypeEnum;
+import com.youlai.boot.module.auth.enums.CaptchaTypeEnum;
 import com.youlai.boot.module.auth.service.AuthService;
 import com.youlai.boot.system.model.dto.CaptchaResult;
 import com.youlai.boot.system.model.dto.LoginResult;

@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SystemConstants;
-import com.youlai.boot.common.enums.ContactType;
+import com.youlai.boot.system.enums.ContactType;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.module.mail.service.MailService;
 import com.youlai.boot.module.sms.service.SmsService;

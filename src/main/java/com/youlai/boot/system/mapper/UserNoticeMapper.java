@@ -3,10 +3,11 @@ package com.youlai.boot.system.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.boot.system.model.entity.NoticeStatus;
-import com.youlai.boot.system.model.query.NoticeQuery;
-import com.youlai.boot.system.model.vo.NoticeStatusVO;
-import com.youlai.boot.system.model.vo.NoticeVO;
+import com.youlai.boot.system.model.entity.UserNotice;
+import com.youlai.boot.system.model.query.NoticePageQuery;
+import com.youlai.boot.system.model.vo.NoticePageVO;
+import com.youlai.boot.system.model.vo.UserNoticePageVO;
+import com.youlai.boot.system.model.vo.UserUnreadNoticeVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,14 +20,14 @@ import java.util.List;
  * @since 2024-08-28 16:56
  */
 @Mapper
-public interface NoticeStatusMapper extends BaseMapper<NoticeStatus> {
+public interface UserNoticeMapper extends BaseMapper<UserNotice> {
 
     /**
      * 获取未读的通知公告
      * @param userId 用户ID
      * @return 公告列表
      */
-    List<NoticeStatusVO> listUnreadNotices(@Param("userId")Long userId);
+    List<UserUnreadNoticeVO> listUnreadNotices(Long userId);
 
     /**
      * 分页获取我的通知公告
@@ -34,5 +35,5 @@ public interface NoticeStatusMapper extends BaseMapper<NoticeStatus> {
      * @param queryParams 查询参数
      * @return 通知公告分页列表
      */
-    IPage<NoticeStatusVO> getMyNoticePage(Page<NoticeVO> page, @Param("queryParams") NoticeQuery queryParams);
+    IPage<UserNoticePageVO> getMyNoticePage(Page<NoticePageVO> page, @Param("queryParams") NoticePageQuery queryParams);
 }

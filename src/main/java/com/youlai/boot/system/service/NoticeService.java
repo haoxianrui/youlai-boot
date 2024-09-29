@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.youlai.boot.system.model.entity.Notice;
 import com.youlai.boot.system.model.form.NoticeForm;
-import com.youlai.boot.system.model.query.NoticeQuery;
-import com.youlai.boot.system.model.vo.NoticeStatusVO;
-import com.youlai.boot.system.model.vo.NoticeVO;
+import com.youlai.boot.system.model.query.NoticePageQuery;
+import com.youlai.boot.system.model.vo.NoticePageVO;
+import com.youlai.boot.system.model.vo.UserNoticePageVO;
 import com.youlai.boot.system.model.vo.NoticeDetailVO;
 
 /**
@@ -18,11 +18,11 @@ import com.youlai.boot.system.model.vo.NoticeDetailVO;
 public interface NoticeService extends IService<Notice> {
 
     /**
-     *通知公告分页列表
+     * 通知公告分页列表
      *
      * @return 通知公告分页列表
      */
-    IPage<NoticeVO> getNoticePage(NoticeQuery queryParams);
+    IPage<NoticePageVO> getNoticePage(NoticePageQuery queryParams);
 
     /**
      * 获取通知公告表单数据
@@ -30,7 +30,7 @@ public interface NoticeService extends IService<Notice> {
      * @param id 通知公告ID
      * @return 通知公告表单对象
      */
-     NoticeForm getNoticeFormData(Long id);
+    NoticeForm getNoticeFormData(Long id);
 
     /**
      * 新增通知公告
@@ -43,7 +43,7 @@ public interface NoticeService extends IService<Notice> {
     /**
      * 修改通知公告
      *
-     * @param id   通知公告ID
+     * @param id       通知公告ID
      * @param formData 通知公告表单对象
      * @return 是否修改成功
      */
@@ -63,7 +63,7 @@ public interface NoticeService extends IService<Notice> {
      * @param id 通知公告ID
      * @return 是否发布成功
      */
-    boolean releaseNotice(Long id);
+    boolean publishNotice(Long id);
 
     /**
      * 撤回通知公告
@@ -71,27 +71,21 @@ public interface NoticeService extends IService<Notice> {
      * @param id 通知公告ID
      * @return 是否撤回成功
      */
-    boolean recallNotice(Long id);
+    boolean revokeNotice(Long id);
 
     /**
-     * 阅读通知公告
+     * 阅读获取通知公告详情
      *
-     * @param id 通知公告ID
-     * @return 通知公告对象
-     */
-    NoticeDetailVO readNotice(Long id);
-
-    /**
-     * 获取阅读时通知公告详情
      * @param id 通知公告ID
      * @return 通知公告详情
      */
-    NoticeDetailVO getReadNoticeDetail(Long id);
+    NoticeDetailVO getNoticeDetail(Long id);
 
     /**
      * 获取我的通知公告分页列表
+     *
      * @param queryParams 查询参数
      * @return 通知公告分页列表
      */
-    IPage<NoticeStatusVO> getMyNoticePage(NoticeQuery queryParams);
+    IPage<UserNoticePageVO> getMyNoticePage(NoticePageQuery queryParams);
 }
