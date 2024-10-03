@@ -40,6 +40,7 @@ spring:
       # 缓存null值，防止缓存穿透
       cache-null-values: true
 mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
   global-config:
     db-config:
       # 主键ID类型

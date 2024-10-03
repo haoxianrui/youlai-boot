@@ -10,13 +10,13 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://www.youlai.tech:3306/youlai_boot?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true&allowMultiQueries=true
-    username: youlai
+    url: jdbc:mysql://localhost:3306/youlai_boot?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true&allowMultiQueries=true
+    username: root
     password: 123456
   data:
     redis:
       database: 0
-      host: www.youlai.tech
+      host: localhost
       port: 6379
       # 如果Redis 服务未设置密码，需要将password删掉或注释，而不是设置为空字符串
       password: 123456
@@ -56,6 +56,7 @@ spring:
     from: youlaitech@163.com
 
 mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
   global-config:
     db-config:
       # 主键ID类型
@@ -71,6 +72,7 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 
 
 # 安全配置
