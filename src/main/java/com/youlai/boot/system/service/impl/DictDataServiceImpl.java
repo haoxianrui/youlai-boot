@@ -8,6 +8,7 @@ import com.youlai.boot.system.converter.DictDataConverter;
 import com.youlai.boot.system.mapper.DictDataMapper;
 import com.youlai.boot.system.model.entity.DictData;
 import com.youlai.boot.system.model.form.DictDataForm;
+import com.youlai.boot.system.model.query.DictDataPageQuery;
 import com.youlai.boot.system.model.query.DictPageQuery;
 import com.youlai.boot.system.model.vo.DictDataPageVO;
 import com.youlai.boot.system.service.DictDataService;
@@ -36,7 +37,7 @@ public class DictDataServiceImpl extends ServiceImpl<DictDataMapper, DictData> i
      * @return
      */
     @Override
-    public Page<DictDataPageVO> getDictDataPage(DictPageQuery queryParams) {
+    public Page<DictDataPageVO> getDictDataPage(DictDataPageQuery queryParams) {
         int pageNum = queryParams.getPageNum();
         int pageSize = queryParams.getPageSize();
         Page<DictDataPageVO> page = new Page<>(pageNum, pageSize);

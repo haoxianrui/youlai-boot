@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 数据字典业务实现类
@@ -65,10 +64,10 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         Dict entity = dictConverter.toEntity(dictForm);
 
         // 校验 code 是否唯一
-        String dictCode = entity.getCode();
+        String dictCode = entity.getDictCode();
 
         long count = this.count(new LambdaQueryWrapper<Dict>()
-                .eq(Dict::getCode, dictCode)
+                .eq(Dict::getDictCode, dictCode)
         );
         Assert.isTrue(count == 0, "字典编码已存在");
 
@@ -103,9 +102,9 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         Dict entity = dictConverter.toEntity(dictForm);
 
         // 校验 code 是否唯一
-        String dictCode = entity.getCode();
+        String dictCode = entity.getDictCode();
         long count = this.count(new LambdaQueryWrapper<Dict>()
-                .eq(Dict::getCode, dictCode)
+                .eq(Dict::getDictCode, dictCode)
                 .ne(Dict::getId, id)
         );
         if(count>0){
@@ -137,7 +136,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
                 if (removeResult) {
                     dictDataService.remove(
                             new LambdaQueryWrapper<DictData>()
-                                    .eq(DictData::getDictCode, dict.getCode())
+                                    .eq(DictData::getDictCode, dict.getDictCode())
                     );
                 }
 
@@ -154,7 +153,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     public List<Option<Long>> listDictItemsByCode(String code) {
         // 根据字典编码获取字典ID
         Dict dict = this.getOne(new LambdaQueryWrapper<Dict>()
-                .eq(Dict::getCode, code)
+                .eq(Dict::getDictCode, code)
                 .select(Dict::getId)
                 .last("limit 1")
         );
@@ -166,7 +165,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         // 获取字典项
         List<DictData> dictData = dictDataService.list(
                 new LambdaQueryWrapper<DictData>()
-                        .eq(DictData::getDictCode, dict.getCode())
+                        .eq(DictData::getDictCode, dict.getDictCode())
         );
 
         // 转换为 Option
@@ -180,9 +179,9 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     public List<Option<String>> getDictList() {
         return this.list(new LambdaQueryWrapper<Dict>()
                         .eq(Dict::getStatus, 1)
-                        .select(Dict::getName, Dict::getCode)
+                        .select(Dict::getName, Dict::getDictCode)
                 ).stream()
-                .map(dict -> new Option<>(dict.getCode(), dict.getName()))
+                .map(dict -> new Option<>(dict.getDictCode(), dict.getName()))
                 .toList();
     }
 }

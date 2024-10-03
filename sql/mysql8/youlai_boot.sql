@@ -93,10 +93,10 @@ INSERT INTO `sys_dict` VALUES (3, '通知级别', 'notice_level', 1, NULL, now()
 
 
 -- ----------------------------
--- Table structure for sys_dict_item
+-- Table structure for sys_dict_data
 -- ----------------------------
-DROP TABLE IF EXISTS `sys_dict_item`;
-CREATE TABLE `sys_dict_item` (
+DROP TABLE IF EXISTS `sys_dict_data`;
+CREATE TABLE `sys_dict_data` (
                                  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
                                  `dict_code` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字典编码',
                                  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '字典项名称',
@@ -110,20 +110,20 @@ CREATE TABLE `sys_dict_item` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='字典数据表';
 
 -- ----------------------------
--- Records of sys_dict_item
+-- Records of sys_dict_data
 -- ----------------------------
-INSERT INTO `sys_dict_item` VALUES (1, 'gender', '男', '1', 1, 1, NULL, now(), now());
-INSERT INTO `sys_dict_item` VALUES (2, 'gender',  '女', '2', 1, 2, NULL, now(), now());
-INSERT INTO `sys_dict_item` VALUES (3,  'gender', '保密', '0', 1, 3, NULL, now(), now());
-INSERT INTO `sys_dict_item` VALUES (4,  'notice_type', '系统升级', '1', 1, 1, '', now(), now());
-INSERT INTO `sys_dict_item` VALUES (5,  'notice_type', '系统维护', '2', 1, 2, '', now(), now());
-INSERT INTO `sys_dict_item` VALUES (6,  'notice_type', '安全警告', '3', 1, 3, '', now(), now());
-INSERT INTO `sys_dict_item` VALUES (7,  'notice_type', '假期通知', '4', 1, 4, '', now(), now());
-INSERT INTO `sys_dict_item` VALUES (8,  'notice_type', '公司新闻', '5', 1, 5, '', now(), now());
-INSERT INTO `sys_dict_item` VALUES (9,  'notice_type', '其他', '99', 1, 99, '', now(), now());
-INSERT INTO `sys_dict_item` VALUES (10,  'notice_level', 'L', '低', 1, 1, '', now(), now());
-INSERT INTO `sys_dict_item` VALUES (11,  'notice_level', 'M', '中', 1, 2, '', now(), now());
-INSERT INTO `sys_dict_item` VALUES (12,  'notice_level', 'H', '高', 1, 3, '', now(), now());
+INSERT INTO `sys_dict_data` VALUES (1, 'gender', '男', '1', 1, 1, NULL, now(), now());
+INSERT INTO `sys_dict_data` VALUES (2, 'gender',  '女', '2', 1, 2, NULL, now(), now());
+INSERT INTO `sys_dict_data` VALUES (3,  'gender', '保密', '0', 1, 3, NULL, now(), now());
+INSERT INTO `sys_dict_data` VALUES (4,  'notice_type', '系统升级', '1', 1, 1, '', now(), now());
+INSERT INTO `sys_dict_data` VALUES (5,  'notice_type', '系统维护', '2', 1, 2, '', now(), now());
+INSERT INTO `sys_dict_data` VALUES (6,  'notice_type', '安全警告', '3', 1, 3, '', now(), now());
+INSERT INTO `sys_dict_data` VALUES (7,  'notice_type', '假期通知', '4', 1, 4, '', now(), now());
+INSERT INTO `sys_dict_data` VALUES (8,  'notice_type', '公司新闻', '5', 1, 5, '', now(), now());
+INSERT INTO `sys_dict_data` VALUES (9,  'notice_type', '其他', '99', 1, 99, '', now(), now());
+INSERT INTO `sys_dict_data` VALUES (10,  'notice_level', 'L', '低', 1, 1, '', now(), now());
+INSERT INTO `sys_dict_data` VALUES (11,  'notice_level', 'M', '中', 1, 2, '', now(), now());
+INSERT INTO `sys_dict_data` VALUES (12,  'notice_level', 'H', '高', 1, 3, '', now(), now());
 
 -- ----------------------------
 -- Table structure for sys_log

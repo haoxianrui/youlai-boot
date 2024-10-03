@@ -23,7 +23,7 @@ public class DictPageVO {
     private Long id;
 
     @Schema(description = "字典名称")
-    private String dictName;
+    private String name;
 
     @Schema(description = "字典编码")
     private String dictCode;

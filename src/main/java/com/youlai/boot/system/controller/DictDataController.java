@@ -8,7 +8,7 @@ import com.youlai.boot.common.model.Option;
 import com.youlai.boot.common.result.PageResult;
 import com.youlai.boot.common.result.Result;
 import com.youlai.boot.system.model.form.DictDataForm;
-import com.youlai.boot.system.model.query.DictPageQuery;
+import com.youlai.boot.system.model.query.DictDataPageQuery;
 import com.youlai.boot.system.model.vo.DictDataPageVO;
 import com.youlai.boot.system.service.DictDataService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,7 +39,7 @@ public class DictDataController {
     @GetMapping("/page")
     @Log( value = "字典数据分页列表",module = LogModuleEnum.DICT)
     public PageResult<DictDataPageVO> getDictDataPage(
-            DictPageQuery queryParams
+            DictDataPageQuery queryParams
     ) {
         Page<DictDataPageVO> result = dictDataService.getDictDataPage(queryParams);
         return PageResult.success(result);
@@ -86,10 +86,10 @@ public class DictDataController {
 
     @Operation(summary = "字典数据列表")
     @GetMapping("/{dictCode}/options")
-    public Result<List<Option>> getDictDataList(
+    public Result<List<Option<String>>> getDictDataList(
             @Parameter(description = "字典编码") @PathVariable String dictCode
     ) {
-        List<Option> options = dictDataService.getDictDataList(dictCode);
+        List<Option<String>> options = dictDataService.getDictDataList(dictCode);
         return Result.success(options);
     }
 

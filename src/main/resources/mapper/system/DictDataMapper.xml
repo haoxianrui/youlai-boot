@@ -4,30 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.youlai.boot.system.mapper.DictDataMapper">
 
-    <!-- 根据字典编码获取字典列表 -->
-    <select id="getDictItemsByCode" resultType="com.youlai.boot.system.model.vo.DictPageVO$DictItem">
-        SELECT
-            id,
-            `name`,
-            value,
-            sort,
-            status
-        FROM
-            sys_dict_item
-        <where>
-            dict_code = #{dictCode}
-        </where>
-        ORDER BY
-            sort ASC
-    </select>
-
     <!-- 获取字典数据分页列表 -->
     <select id="getDictDataPage" resultType="com.youlai.boot.system.model.vo.DictDataPageVO">
         SELECT
             id,
             dict_code,
-            value,
             label,
+            value,
             sort,
             status
         FROM
@@ -44,9 +27,20 @@
                 AND dict_code = #{queryParams.dictCode}
             </if>
         </where>
+    </select>
 
-
-
+    <!-- 根据字典编码获取字典数据列表 -->
+    <select id="listDictDataByDictCode" resultType="com.youlai.boot.common.model.Option">
+        SELECT
+            value,
+            label
+        FROM
+        sys_dict_data
+        <where>
+            dict_code = #{dictCode}
+        </where>
+        ORDER BY
+        sort ASC
     </select>
 
 </mapper>

@@ -23,11 +23,11 @@ public class DictDataPageVO {
     @Schema(description = "字典编码")
     private String dictCode;
 
-    @Schema(description = "字典数据值")
-    private String value;
-
-    @Schema(description = "字典数据标签")
+    @Schema(description = "字典标签")
     private String label;
+
+    @Schema(description = "字典值")
+    private String value;
 
     @Schema(description = "排序")
     private Integer sort;

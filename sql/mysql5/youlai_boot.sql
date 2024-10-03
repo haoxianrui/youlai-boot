@@ -89,10 +89,10 @@ INSERT INTO `sys_dict` VALUES (1,'性别','gender',1,NULL,'2019-12-06 19:03:32',
 INSERT INTO `sys_dict` VALUES (2,'通知类型','notice_type',1,NULL,'2024-09-01 17:23:48','2024-09-01 17:23:54',0);
 
 -- ----------------------------
--- Table structure for sys_dict_item
+-- Table structure for sys_dict_data
 -- ----------------------------
-DROP TABLE IF EXISTS `sys_dict_item`;
-CREATE TABLE `sys_dict_item`  (
+DROP TABLE IF EXISTS `sys_dict_data`;
+CREATE TABLE `sys_dict_data`  (
                                   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
                                   `dict_id` bigint NULL DEFAULT NULL COMMENT '字典ID',
                                   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '字典项名称',
@@ -106,13 +106,13 @@ CREATE TABLE `sys_dict_item`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 70 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '字典数据表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of sys_dict_item
+-- Records of sys_dict_data
 -- ----------------------------
-INSERT INTO `sys_dict_item` VALUES (1, 1, '男', '1', 1, 1, NULL, '2019-05-05 13:07:52', '2022-06-12 23:20:39');
-INSERT INTO `sys_dict_item` VALUES (2, 1, '女', '2', 1, 2, NULL, '2019-04-19 11:33:00', '2019-07-02 14:23:05');
-INSERT INTO `sys_dict_item` VALUES (3, 1, '保密', '0', 1, 3, NULL, '2020-10-17 08:09:31', '2020-10-17 08:09:31');
-INSERT INTO `sys_dict_item` VALUES (4, 2,'系统通知','1',1, 1, NULL,'2020-10-17 08:09:31', '2020-10-17 08:09:31');
-INSERT INTO `sys_dict_item` VALUES (5, 2,'通知消息','2',1, 2, NULL,'2020-10-17 08:09:31', '2020-10-17 08:09:31');
+INSERT INTO `sys_dict_data` VALUES (1, 1, '男', '1', 1, 1, NULL, '2019-05-05 13:07:52', '2022-06-12 23:20:39');
+INSERT INTO `sys_dict_data` VALUES (2, 1, '女', '2', 1, 2, NULL, '2019-04-19 11:33:00', '2019-07-02 14:23:05');
+INSERT INTO `sys_dict_data` VALUES (3, 1, '保密', '0', 1, 3, NULL, '2020-10-17 08:09:31', '2020-10-17 08:09:31');
+INSERT INTO `sys_dict_data` VALUES (4, 2,'系统通知','1',1, 1, NULL,'2020-10-17 08:09:31', '2020-10-17 08:09:31');
+INSERT INTO `sys_dict_data` VALUES (5, 2,'通知消息','2',1, 2, NULL,'2020-10-17 08:09:31', '2020-10-17 08:09:31');
 
 -- ----------------------------
 -- Table structure for sys_log

@@ -3,20 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.youlai.boot.system.mapper.DictMapper">
-
-    <!-- 字典映射 -->
-    <resultMap id="DictMap" type="com.youlai.boot.system.model.vo.DictPageVO">
-        <collection property="dictData"
-                    column="{dictCode=code}"
-                    select="com.youlai.boot.system.mapper.DictDataMapper.getDictItemsByCode">
-        </collection>
-    </resultMap>
     <!-- 字典分页列表 -->
-    <select id="getDictPage" resultMap="DictMap">
+    <select id="getDictPage" resultType="com.youlai.boot.system.model.vo.DictPageVO">
         SELECT
             t1.id,
             t1.name,
-            t1.code,
+            t1.dict_code,
             t1.status
         FROM
             sys_dict t1
@@ -25,7 +17,8 @@
             <if test='queryParams.keywords!=null and queryParams.keywords.trim() neq ""'>
                 AND (
                     t1.name LIKE CONCAT('%',#{queryParams.keywords},'%')
-                    OR t1.code LIKE CONCAT('%',#{queryParams.keywords},'%')
+                    OR
+                    t1.dict_code LIKE CONCAT('%',#{queryParams.keywords},'%')
                 )
             </if>
         </where>

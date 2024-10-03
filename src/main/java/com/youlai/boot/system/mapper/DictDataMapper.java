@@ -2,7 +2,9 @@ package com.youlai.boot.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.entity.DictData;
+import com.youlai.boot.system.model.query.DictDataPageQuery;
 import com.youlai.boot.system.model.query.DictPageQuery;
 import com.youlai.boot.system.model.vo.DictDataPageVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,7 +18,15 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface DictDataMapper extends BaseMapper<DictData> {
 
-    Page<DictDataPageVO> getDictDataPage(Page<DictDataPageVO> page, DictPageQuery queryParams);
+    /**
+     * 字典数据分页列表
+     */
+    Page<DictDataPageVO> getDictDataPage(Page<DictDataPageVO> page, DictDataPageQuery queryParams);
+
+    /**
+     * 根据字典编码获取字典数据列表
+     */
+    Option listDictDataByDictCode(String dictCode);
 }
 
 

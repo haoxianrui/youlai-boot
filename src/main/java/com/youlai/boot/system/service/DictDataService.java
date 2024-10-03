@@ -6,6 +6,7 @@ import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.entity.DictData;
 import com.youlai.boot.system.model.form.DictDataForm;
 import com.youlai.boot.system.model.form.DictForm;
+import com.youlai.boot.system.model.query.DictDataPageQuery;
 import com.youlai.boot.system.model.query.DictPageQuery;
 import com.youlai.boot.system.model.vo.DictDataPageVO;
 
@@ -25,7 +26,7 @@ public interface DictDataService extends IService<DictData> {
      * @param queryParams
      * @return
      */
-    Page<DictDataPageVO> getDictDataPage(DictPageQuery queryParams);
+    Page<DictDataPageVO> getDictDataPage(DictDataPageQuery queryParams);
 
     /**
      * 获取字典数据表单

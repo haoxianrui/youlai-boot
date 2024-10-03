@@ -19,7 +19,7 @@ public class Dict extends BaseEntity {
     /**
      * 字典编码
      */
-    private String code;
+    private String dictCode;
 
     /**
      * 字典名称
