@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.youlai.boot.common.constant.SymbolConstant;
 import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.module.websocket.service.OnlineUserService;
@@ -139,7 +140,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
         }
 
         // 逻辑删除
-        List<Long> idList = Arrays.stream(ids.split(","))
+        List<Long> idList = Arrays.stream(ids.split(SymbolConstant.COMMA))
                 .map(Long::parseLong)
                 .toList();
         boolean isRemoved = this.removeByIds(idList);

@@ -18,26 +18,39 @@ import lombok.EqualsAndHashCode;
 @TableName("sys_config")
 public class Config extends BaseEntity {
 
-    @Schema(description = "配置名称")
+    /**
+     * 配置名称
+     */
     private String configName;
 
-    @Schema(description = "配置键")
+    /**
+     * 配置键
+     */
     private String configKey;
 
-    @Schema(description = "配置值")
+    /**
+     * 配置值
+     */
     private String configValue;
 
-    @Schema(description = "描述、备注")
+    /**
+     * 描述、备注
+     */
     private String remark;
 
-    @Schema(description = "创建人ID")
-    @TableField(fill = FieldFill.INSERT)
+    /**
+     * 创建人ID
+     */
     private Long createBy;
 
-    @Schema(description = "更新人ID")
-    @TableField(fill = FieldFill.UPDATE)
+    /**
+     * 更新人ID
+     */
     private Long updateBy;
 
+    /**
+     * 逻辑删除标识(0-未删除 1-已删除)
+     */
     @TableLogic(value = "0", delval = "1")
     private Integer isDeleted;
 

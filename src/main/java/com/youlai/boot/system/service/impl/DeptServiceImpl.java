@@ -4,7 +4,9 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.system.converter.DeptConverter;
 import com.youlai.boot.system.mapper.DeptMapper;
 import com.youlai.boot.system.model.entity.Dept;
@@ -148,6 +150,7 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
         String treePath = generateDeptTreePath(formData.getParentId());
         entity.setTreePath(treePath);
 
+        entity.setCreateBy(SecurityUtils.getUserId());
         // 保存部门并返回部门ID
         boolean result = this.save(entity);
         Assert.isTrue(result, "部门保存失败");
@@ -236,10 +239,13 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
         if (StrUtil.isNotBlank(ids)) {
             String[] menuIds = ids.split(SymbolConstant.COMMA);
             for (String deptId : menuIds) {
-                this.remove(new LambdaQueryWrapper<Dept>()
+                this.update(new LambdaUpdateWrapper<Dept>()
                         .eq(Dept::getId, deptId)
                         .or()
-                        .apply("CONCAT (',',tree_path,',') LIKE CONCAT('%,',{0},',%')", deptId));
+                        .apply("CONCAT (',',tree_path,',') LIKE CONCAT('%,',{0},',%')", deptId)
+                        .set(Dept::getIsDeleted, 1)
+                        .set(Dept::getUpdateBy, SecurityUtils.getUserId())
+                );
             }
         }
         return true;
