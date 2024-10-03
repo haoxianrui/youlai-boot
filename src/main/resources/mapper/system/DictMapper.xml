@@ -6,9 +6,9 @@
 
     <!-- 字典映射 -->
     <resultMap id="DictMap" type="com.youlai.boot.system.model.vo.DictPageVO">
-        <collection property="dictItems"
-                    column="{dictId=id}"
-                    select="com.youlai.boot.system.mapper.DictItemMapper.listDictItemsByDictId">
+        <collection property="dictData"
+                    column="{dictCode=code}"
+                    select="com.youlai.boot.system.mapper.DictDataMapper.getDictItemsByCode">
         </collection>
     </resultMap>
     <!-- 字典分页列表 -->

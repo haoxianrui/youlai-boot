@@ -7,7 +7,6 @@ import com.youlai.boot.system.model.entity.UserNotice;
 import com.youlai.boot.system.model.query.NoticePageQuery;
 import com.youlai.boot.system.model.vo.UserNoticePageVO;
 import com.youlai.boot.system.model.vo.NoticePageVO;
-import com.youlai.boot.system.model.vo.UserUnreadNoticeVO;
 
 import java.util.List;
 
@@ -18,12 +17,6 @@ import java.util.List;
  * @since 2024-08-28 16:56
  */
 public interface UserNoticeService extends IService<UserNotice> {
-
-    /**
-     * 获取未读的通知公告
-     * @return 公告列表
-     */
-    List<UserUnreadNoticeVO> listUnreadNotices();
 
     /**
      * 全部标记为已读

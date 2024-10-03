@@ -18,7 +18,8 @@ use youlai_boot;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
-
+  -- 开启事务
+START TRANSACTION;
 
 -- ----------------------------
 -- Table structure for sys_config
@@ -57,7 +58,7 @@ CREATE TABLE `sys_dept`  (
                              `is_deleted` tinyint NOT NULL DEFAULT 0 COMMENT '逻辑删除标识(1-已删除 0-未删除)',
                              PRIMARY KEY (`id`) USING BTREE,
                              UNIQUE INDEX `uk_code`(`code` ASC) USING BTREE COMMENT '部门编号唯一索引'
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '部门表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '部门表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dept
@@ -81,39 +82,48 @@ CREATE TABLE `sys_dict`  (
                              `is_deleted` tinyint NULL DEFAULT 0 COMMENT '是否删除(1-删除，0-未删除)',
                              PRIMARY KEY (`id`) USING BTREE,
                              UNIQUE INDEX `uk_code`(`code` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 89 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典类型表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典类型表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dict
 -- ----------------------------
-INSERT INTO `sys_dict` VALUES (1, '性别', 'gender', 1, NULL, '2019-12-06 19:03:32', '2024-06-22 21:14:47', 0);
-INSERT INTO `sys_dict` VALUES (2,'通知类型','notice_type',1,NULL,'2024-09-01 17:23:48','2024-09-01 17:23:54',0);
+INSERT INTO `sys_dict` VALUES (1, '性别', 'gender', 1, NULL, now(), now(), 0);
+INSERT INTO `sys_dict` VALUES (2,'通知类型','notice_type',1,NULL,now(),now(),0);
+INSERT INTO `sys_dict` VALUES (3, '通知级别', 'notice_level', 1, NULL, now(), now(), 0);
+
 
 -- ----------------------------
 -- Table structure for sys_dict_item
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_dict_item`;
-CREATE TABLE `sys_dict_item`  (
-                                  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-                                  `dict_id` bigint NULL DEFAULT NULL COMMENT '字典ID',
-                                  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '字典项名称',
-                                  `value` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '字典项值',
-                                  `status` tinyint NULL DEFAULT 0 COMMENT '状态（1-正常，0-禁用）',
-                                  `sort` int NULL DEFAULT 0 COMMENT '排序',
-                                  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '备注',
-                                  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-                                  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-                                  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 70 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典数据表' ROW_FORMAT = DYNAMIC;
+CREATE TABLE `sys_dict_item` (
+                                 `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+                                 `dict_code` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字典编码',
+                                 `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '字典项名称',
+                                 `value` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '字典项值',
+                                 `status` tinyint DEFAULT '0' COMMENT '状态（1-正常，0-禁用）',
+                                 `sort` int DEFAULT '0' COMMENT '排序',
+                                 `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '备注',
+                                 `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+                                 `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+                                 PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='字典数据表';
 
 -- ----------------------------
 -- Records of sys_dict_item
 -- ----------------------------
-INSERT INTO `sys_dict_item` VALUES (1, 1, '男', '1', 1, 1, NULL, '2019-05-05 13:07:52', '2022-06-12 23:20:39');
-INSERT INTO `sys_dict_item` VALUES (2, 1, '女', '2', 1, 2, NULL, '2019-04-19 11:33:00', '2019-07-02 14:23:05');
-INSERT INTO `sys_dict_item` VALUES (3, 1, '保密', '0', 1, 3, NULL, '2020-10-17 08:09:31', '2020-10-17 08:09:31');
-INSERT INTO `sys_dict_item` VALUES (4, 2,'系统通知','1',1, 1, NULL,'2020-10-17 08:09:31', '2020-10-17 08:09:31');
-INSERT INTO `sys_dict_item` VALUES (5, 2,'通知消息','2',1, 2, NULL,'2020-10-17 08:09:31', '2020-10-17 08:09:31');
+INSERT INTO `sys_dict_item` VALUES (1, 'gender', '男', '1', 1, 1, NULL, now(), now());
+INSERT INTO `sys_dict_item` VALUES (2, 'gender',  '女', '2', 1, 2, NULL, now(), now());
+INSERT INTO `sys_dict_item` VALUES (3,  'gender', '保密', '0', 1, 3, NULL, now(), now());
+INSERT INTO `sys_dict_item` VALUES (4,  'notice_type', '系统升级', '1', 1, 1, '', now(), now());
+INSERT INTO `sys_dict_item` VALUES (5,  'notice_type', '系统维护', '2', 1, 2, '', now(), now());
+INSERT INTO `sys_dict_item` VALUES (6,  'notice_type', '安全警告', '3', 1, 3, '', now(), now());
+INSERT INTO `sys_dict_item` VALUES (7,  'notice_type', '假期通知', '4', 1, 4, '', now(), now());
+INSERT INTO `sys_dict_item` VALUES (8,  'notice_type', '公司新闻', '5', 1, 5, '', now(), now());
+INSERT INTO `sys_dict_item` VALUES (9,  'notice_type', '其他', '99', 1, 99, '', now(), now());
+INSERT INTO `sys_dict_item` VALUES (10,  'notice_level', 'L', '低', 1, 1, '', now(), now());
+INSERT INTO `sys_dict_item` VALUES (11,  'notice_level', 'M', '中', 1, 2, '', now(), now());
+INSERT INTO `sys_dict_item` VALUES (12,  'notice_level', 'H', '高', 1, 3, '', now(), now());
 
 -- ----------------------------
 -- Table structure for sys_log
@@ -161,7 +171,7 @@ CREATE TABLE `sys_menu`  (
                              `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                              `params` json NULL COMMENT '路由参数',
                              PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 117 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单管理' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -228,14 +238,12 @@ INSERT INTO `sys_menu` VALUES (123,120,'0,1,120','修改系统配置',4,NULL,'',
 INSERT INTO `sys_menu` VALUES (124,120,'0,1,120','删除系统配置',4,NULL,'',NULL,'sys:config:delete',0,1,1,4,'',NULL,'2024-07-30 16:31:07','2024-07-30 16:31:07',NULL);
 INSERT INTO `sys_menu` VALUES (125,120,'0,1,120','刷新系统配置',4,NULL,'',NULL,'sys:config:refresh',0,1,1,5,'',NULL,'2024-07-30 16:31:25','2024-07-30 16:31:25',NULL);
 INSERT INTO `sys_menu` VALUES (126,1,'0,1','通知公告',1,'Notice','notice','system/notice/index',NULL,NULL,NULL,1,9,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
-INSERT INTO `sys_menu` VALUES (127,126,'0,1,132','查询',4,NULL,'',NULL,'sys:notice:query',NULL,NULL,1,1,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
-INSERT INTO `sys_menu` VALUES (128,126,'0,1,133','新增',4,NULL,'',NULL,'sys:notice:add',NULL,NULL,1,2,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
-INSERT INTO `sys_menu` VALUES (129,126,'0,1,134','编辑',4,NULL,'',NULL,'sys:notice:edit',NULL,NULL,1,3,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
-INSERT INTO `sys_menu` VALUES (130,126,'0,1,135','删除',4,NULL,'',NULL,'sys:notice:delete',NULL,NULL,1,4,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
-INSERT INTO `sys_menu` VALUES (131,0,'0','消息中心',2,NULL,'/notice','Layout',NULL,1,1,1,13,'el-icon-Message',NULL,'2024-08-31 21:16:06','2024-08-31 21:16:41',NULL);
-INSERT INTO `sys_menu` VALUES (132,131,'0,136','我的消息',1,'MyNotice','notice','notice/index',NULL,0,1,1,1,'',NULL,'2024-08-31 21:17:36','2024-09-12 11:28:42',NULL);
-INSERT INTO `sys_menu` VALUES (133,132,'0,1,131','发布',4,NULL,'',NULL,'sys:notice:publish',0,1,1,5,'',NULL,'2024-09-01 23:53:52','2024-09-01 23:53:52',NULL);
-INSERT INTO `sys_menu` VALUES (134,132,'0,1,131','撤回',4,NULL,'',NULL,'sys:notice:revoke',0,1,1,6,'',NULL,'2024-09-01 23:54:16','2024-09-01 23:54:16',NULL);
+INSERT INTO `sys_menu` VALUES (127,126,'0,1,126','查询',4,NULL,'',NULL,'sys:notice:query',NULL,NULL,1,1,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
+INSERT INTO `sys_menu` VALUES (128,126,'0,1,126','新增',4,NULL,'',NULL,'sys:notice:add',NULL,NULL,1,2,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
+INSERT INTO `sys_menu` VALUES (129,126,'0,1,126','编辑',4,NULL,'',NULL,'sys:notice:edit',NULL,NULL,1,3,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
+INSERT INTO `sys_menu` VALUES (130,126,'0,1,126','删除',4,NULL,'',NULL,'sys:notice:delete',NULL,NULL,1,4,'',NULL,'2024-08-24 13:39:03','2024-08-24 13:39:03',NULL);
+INSERT INTO `sys_menu` VALUES (133,126,'0,1,126','发布',4,NULL,'',NULL,'sys:notice:publish',0,1,1,5,'',NULL,'2024-09-01 23:53:52','2024-09-01 23:53:52',NULL);
+INSERT INTO `sys_menu` VALUES (134,126,'0,1,126','撤回',4,NULL,'',NULL,'sys:notice:revoke',0,1,1,6,'',NULL,'2024-09-01 23:54:16','2024-09-01 23:54:16',NULL);
 
 -- ----------------------------
 -- Table structure for sys_message
@@ -274,7 +282,7 @@ CREATE TABLE `sys_role`  (
                              PRIMARY KEY (`id`) USING BTREE,
                              UNIQUE INDEX `uk_name`(`name` ASC) USING BTREE COMMENT '角色名称唯一索引',
                              UNIQUE INDEX `uk_code`(`code` ASC) USING BTREE COMMENT '角色编码唯一索引'
-) ENGINE = InnoDB AUTO_INCREMENT = 128 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_role
@@ -400,14 +408,14 @@ CREATE TABLE `sys_user`  (
                              `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '逻辑删除标识(0-未删除 1-已删除)',
                              PRIMARY KEY (`id`) USING BTREE,
                              UNIQUE INDEX `login_name`(`username` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 288 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户信息表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'root', '有来技术', 0, '$2a$10$xVWsNOhHrCxh5UbpCE7/HuJ.PAOKcYAqRxD2CO2nVnJS.IAXkr5aq', NULL, 'https://oss.youlai.tech/youlai-boot/2023/05/16/811270ef31f548af9cffc026dfc3777b.gif', '17621590365', 1, 'youlaitech@163.com', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_user` VALUES (2, 'admin', '系统管理员', 1, '$2a$10$xVWsNOhHrCxh5UbpCE7/HuJ.PAOKcYAqRxD2CO2nVnJS.IAXkr5aq', 1, 'https://oss.youlai.tech/youlai-boot/2023/05/16/811270ef31f548af9cffc026dfc3777b.gif', '17621210366', 1, '', '2019-10-10 13:41:22', NULL, '2022-07-31 12:39:30', NULL, 0);
-INSERT INTO `sys_user` VALUES (3, 'websocket', '测试小用户', 1, '$2a$10$xVWsNOhHrCxh5UbpCE7/HuJ.PAOKcYAqRxD2CO2nVnJS.IAXkr5aq', 3, 'https://oss.youlai.tech/youlai-boot/2023/05/16/811270ef31f548af9cffc026dfc3777b.gif', '17621210366', 1, 'youlaitech@163.com', '2021-06-05 01:31:29', NULL, '2021-06-05 01:31:29', NULL, 0);
+INSERT INTO `sys_user` VALUES (1, 'root', '有来技术', 0, '$2a$10$xVWsNOhHrCxh5UbpCE7/HuJ.PAOKcYAqRxD2CO2nVnJS.IAXkr5aq', NULL, 'https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif', '18866668888', 1, 'youlaitech@163.com', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_user` VALUES (2, 'admin', '系统管理员', 1, '$2a$10$xVWsNOhHrCxh5UbpCE7/HuJ.PAOKcYAqRxD2CO2nVnJS.IAXkr5aq', 1, 'https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif', '18866668887', 1, '', '2019-10-10 13:41:22', NULL, '2022-07-31 12:39:30', NULL, 0);
+INSERT INTO `sys_user` VALUES (3, 'websocket', '测试小用户', 1, '$2a$10$xVWsNOhHrCxh5UbpCE7/HuJ.PAOKcYAqRxD2CO2nVnJS.IAXkr5aq', 3, 'https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif', '18866668886', 1, 'youlaitech@163.com', '2021-06-05 01:31:29', NULL, '2021-06-05 01:31:29', NULL, 0);
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -499,33 +507,39 @@ CREATE TABLE `gen_field_config` (
                                     KEY `config_id` (`config_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='代码生成字段配置表';
 
-CREATE TABLE `sys_notice` (
-                              `id` BIGINT NOT NULL AUTO_INCREMENT,
-                              `title` VARCHAR(50) DEFAULT NULL COMMENT '通知标题',
-                              `content` TEXT COMMENT '通知内容',
-                              `notice_type` INT NOT NULL COMMENT '通知类型',
-                              `release_by` BIGINT DEFAULT NULL COMMENT '发布人',
-                              `priority` TINYINT NOT NULL COMMENT '优先级(0-低 1-中 2-高)',
-                              `tar_type` TINYINT NOT NULL COMMENT '目标类型(0-全体 1-指定)',
-                              `tar_ids` TEXT COMMENT '目标人id',
-                              `release_status` TINYINT NOT NULL COMMENT '发布状态(0-未发布 1已发布 2已撤回)',
-                              `release_time` DATETIME DEFAULT NULL COMMENT '发布时间',
-                              `recall_time` DATETIME DEFAULT NULL COMMENT '撤回时间',
-                              `create_by` BIGINT NOT NULL COMMENT '创建人ID',
-                              `create_time` DATETIME NOT NULL COMMENT '创建时间',
-                              `update_by` BIGINT DEFAULT NULL COMMENT '更新人ID',
-                              `update_time` DATETIME DEFAULT NULL COMMENT '更新时间',
-                              `is_deleted` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '逻辑删除标识(0-未删除 1-已删除)',
-                              PRIMARY KEY (`id`) USING BTREE
-) ENGINE=INNODB COMMENT='通知公告';
+CREATE TABLE `sys_user_notice` (
+                                   `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                   `notice_id` bigint NOT NULL COMMENT '公共通知id',
+                                   `user_id` bigint NOT NULL COMMENT '用户id',
+                                   `is_read` bigint NOT NULL DEFAULT '0' COMMENT '读取状态（0未读；1已读）',
+                                   `read_time` datetime DEFAULT NULL COMMENT '阅读时间',
+                                   `create_time` datetime NOT NULL COMMENT '创建时间',
+                                   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+                                   `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '逻辑删除(1-已删除；0-未删除)',
+                                   PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户通知公告表';
 
-CREATE TABLE `sys_notice_status` (
-                                     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'id',
-                                     `notice_id` BIGINT NOT NULL COMMENT '公共通知id',
-                                     `user_id` INT NOT NULL COMMENT '用户id',
-                                     `read_status` BIGINT DEFAULT NULL COMMENT '读取状态，0未读，1已读取',
-                                     `read_time` DATETIME DEFAULT NULL COMMENT '用户阅读时间',
-                                     PRIMARY KEY (`id`) USING BTREE
-) ENGINE=INNODB COMMENT='用户公告状态表';
+CREATE TABLE `sys_notice` (
+                              `id` bigint NOT NULL AUTO_INCREMENT,
+                              `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '通知标题',
+                              `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '通知内容',
+                              `type` tinyint NOT NULL COMMENT '通知类型（字典code：notice_type）',
+                              `level` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '通知等级（字典code：notice_level）',
+                              `target_type` tinyint NOT NULL COMMENT '目标类型（1: 全体, 2: 指定）',
+                              `target_user_ids` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '目标人ID集合（多个使用英文逗号,分割）',
+                              `publisher_id` bigint DEFAULT NULL COMMENT '发布人ID',
+                              `publish_status` tinyint NOT NULL DEFAULT '0' COMMENT '发布状态（0: 未发布, 1: 已发布, -1: 已撤回）',
+                              `publish_time` datetime DEFAULT NULL COMMENT '发布时间',
+                              `revoke_time` datetime DEFAULT NULL COMMENT '撤回时间',
+                              `create_by` bigint NOT NULL COMMENT '创建人ID',
+                              `create_time` datetime NOT NULL COMMENT '创建时间',
+                              `update_by` bigint DEFAULT NULL COMMENT '更新人ID',
+                              `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+                              `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除（0: 未删除, 1: 已删除）',
+                              PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='通知公告表';
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+ -- 提交事务
+COMMIT;

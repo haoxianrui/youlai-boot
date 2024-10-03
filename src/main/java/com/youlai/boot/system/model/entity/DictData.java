@@ -6,17 +6,18 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.youlai.boot.common.base.BaseEntity;
 import lombok.Data;
 
 /**
- * 字典项实体
+ * 字典数据表
  *
  * @author haoxr
  * @since 2022/12/17
  */
-@TableName("sys_dict_item")
+@TableName("sys_dict_data")
 @Data
-public class DictItem implements Serializable {
+public class DictData extends BaseEntity {
     /**
      * 主键
      */
@@ -24,14 +25,14 @@ public class DictItem implements Serializable {
     private Long id;
 
     /**
-     * 字典类ID
+     * 字典编码
      */
-    private Long dictId;
+    private String dictCode;
 
     /**
      * 字典项名称
      */
-    private String name;
+    private String label;
 
     /**
      * 字典项值

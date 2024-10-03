@@ -6,16 +6,17 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.system.converter.DictConverter;
-import com.youlai.boot.system.converter.DictItemConverter;
+import com.youlai.boot.system.converter.DictDataConverter;
 import com.youlai.boot.system.mapper.DictMapper;
 import com.youlai.boot.system.model.entity.Dict;
-import com.youlai.boot.system.model.entity.DictItem;
+import com.youlai.boot.system.model.entity.DictData;
 import com.youlai.boot.system.model.form.DictForm;
 import com.youlai.boot.system.model.query.DictPageQuery;
 import com.youlai.boot.system.model.vo.DictPageVO;
 import com.youlai.boot.common.model.Option;
-import com.youlai.boot.system.service.DictItemService;
+import com.youlai.boot.system.service.DictDataService;
 import com.youlai.boot.system.service.DictService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,9 +35,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements DictService {
 
-    private final DictItemService dictItemService;
+    private final DictDataService dictDataService;
     private final DictConverter dictConverter;
-    private final DictItemConverter dictItemConverter;
+    private final DictDataConverter dictDataConverter;
 
     /**
      * 字典分页列表
@@ -64,20 +65,14 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         Dict entity = dictConverter.toEntity(dictForm);
 
         // 校验 code 是否唯一
+        String dictCode = entity.getCode();
+
         long count = this.count(new LambdaQueryWrapper<Dict>()
-                .eq(Dict::getCode, entity.getCode())
+                .eq(Dict::getCode, dictCode)
         );
         Assert.isTrue(count == 0, "字典编码已存在");
 
-        boolean result = this.save(entity);
-        // 保存字典项
-        if (result) {
-            List<DictForm.DictItem> dictFormDictItems = dictForm.getDictItems();
-            List<DictItem> dictItems = dictItemConverter.toEntity(dictFormDictItems);
-            dictItems.forEach(dictItem -> dictItem.setDictId(entity.getId()));
-            dictItemService.saveBatch(dictItems);
-        }
-        return result;
+        return this.save(entity);
     }
 
 
@@ -90,17 +85,10 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     public DictForm getDictForm(Long id) {
         // 获取字典
         Dict entity = this.getById(id);
-        Assert.isTrue(entity != null, "字典不存在");
-        DictForm dictForm = dictConverter.toForm(entity);
-
-        // 获取字典项集合
-        List<DictItem> dictItems = dictItemService.list(new LambdaQueryWrapper<DictItem>()
-                .eq(DictItem::getDictId, id)
-        );
-        // 转换数据项
-        List<DictForm.DictItem> dictItemList = dictItemConverter.toDictItem(dictItems);
-        dictForm.setDictItems(dictItemList);
-        return dictForm;
+        if(entity==null){
+            throw new BusinessException("字典不存在");
+        }
+        return dictConverter.toForm(entity);
     }
 
     /**
@@ -115,57 +103,16 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         Dict entity = dictConverter.toEntity(dictForm);
 
         // 校验 code 是否唯一
+        String dictCode = entity.getCode();
         long count = this.count(new LambdaQueryWrapper<Dict>()
-                .eq(Dict::getCode, entity.getCode())
+                .eq(Dict::getCode, dictCode)
                 .ne(Dict::getId, id)
         );
-        Assert.isTrue(count == 0, "字典编码已存在");
-
-        boolean result = this.updateById(entity);
-
-        if (result) {
-            // 更新字典项
-            List<DictForm.DictItem> dictFormDictItems = dictForm.getDictItems();
-            List<DictItem> dictItems = dictItemConverter.toEntity(dictFormDictItems);
-
-            // 获取当前数据库中的字典项
-            List<DictItem> currentDictItemEntities = dictItemService.list(new LambdaQueryWrapper<DictItem>()
-                    .eq(DictItem::getDictId, id)
-            );
-
-            // 获取当前数据库中存在的字典项ID集合
-            Set<Long> currentDictItemIds = currentDictItemEntities.stream()
-                    .map(DictItem::getId)
-                    .collect(Collectors.toSet());
-
-            // 获取新提交的字典项ID集合
-            Set<Long> newAttrIds = dictItems.stream()
-                    .map(DictItem::getId)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toSet());
-
-            // 需要删除的字典项ID集合（存在于数据库但不在新提交的字典项中）
-            Set<Long> idsToDelete = new HashSet<>(currentDictItemIds);
-            idsToDelete.removeAll(newAttrIds);
-
-            // 删除不在新提交字典项中的旧字典项
-            if (!idsToDelete.isEmpty()) {
-                dictItemService.removeByIds(idsToDelete);
-            }
-
-            // 更新或新增字典项
-            for (DictItem dictItem : dictItems) {
-                if (dictItem.getId() != null && currentDictItemIds.contains(dictItem.getId())) {
-                    // 更新现有字典项
-                    dictItemService.updateById(dictItem);
-                } else {
-                    // 新增字典项
-                    dictItem.setDictId(id);
-                    dictItemService.save(dictItem);
-                }
-            }
+        if(count>0){
+            throw new BusinessException("字典编码已存在");
         }
-        return result;
+
+        return this.updateById(entity);
     }
 
     /**
@@ -183,13 +130,17 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
                 .toList();
 
         for (String id : idList) {
-            boolean result = this.removeById(id);
-            if (result) {
+            Dict dict = this.getById(id);
+            if (dict != null) {
+                boolean removeResult = this.removeById(id);
                 // 删除字典下的字典项
-                dictItemService.remove(
-                        new LambdaQueryWrapper<DictItem>()
-                                .eq(DictItem::getDictId, id)
-                );
+                if (removeResult) {
+                    dictDataService.remove(
+                            new LambdaQueryWrapper<DictData>()
+                                    .eq(DictData::getDictCode, dict.getCode())
+                    );
+                }
+
             }
         }
     }
@@ -213,13 +164,13 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         }
 
         // 获取字典项
-        List<DictItem> dictItems = dictItemService.list(
-                new LambdaQueryWrapper<DictItem>()
-                        .eq(DictItem::getDictId, dict.getId())
+        List<DictData> dictData = dictDataService.list(
+                new LambdaQueryWrapper<DictData>()
+                        .eq(DictData::getDictCode, dict.getCode())
         );
 
         // 转换为 Option
-        return dictItemConverter.toOption(dictItems);
+        return dictDataConverter.toOption(dictData);
     }
 
     /**

@@ -52,15 +52,6 @@ public class DictController {
         return Result.success(list);
     }
 
-    @Operation(summary = "字典数据项列表")
-    @GetMapping("/{code}/options")
-    public Result<List<Option<Long>>> getDictOptions(
-            @Parameter(description = "字典编码") @PathVariable String code
-    ) {
-        List<Option<Long>> options = dictService.listDictItemsByCode(code);
-        return Result.success(options);
-    }
-
     @Operation(summary = "字典表单")
     @GetMapping("/{id}/form")
     public Result<DictForm> getDictForm(
@@ -99,6 +90,11 @@ public class DictController {
         dictService.deleteDictByIds(ids);
         return Result.success();
     }
+
+
+
+
+
 
 
 }

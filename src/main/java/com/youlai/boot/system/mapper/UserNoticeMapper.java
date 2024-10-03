@@ -7,7 +7,6 @@ import com.youlai.boot.system.model.entity.UserNotice;
 import com.youlai.boot.system.model.query.NoticePageQuery;
 import com.youlai.boot.system.model.vo.NoticePageVO;
 import com.youlai.boot.system.model.vo.UserNoticePageVO;
-import com.youlai.boot.system.model.vo.UserUnreadNoticeVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,14 +20,6 @@ import java.util.List;
  */
 @Mapper
 public interface UserNoticeMapper extends BaseMapper<UserNotice> {
-
-    /**
-     * 获取未读的通知公告
-     * @param userId 用户ID
-     * @return 公告列表
-     */
-    List<UserUnreadNoticeVO> listUnreadNotices(Long userId);
-
     /**
      * 分页获取我的通知公告
      * @param page 分页对象

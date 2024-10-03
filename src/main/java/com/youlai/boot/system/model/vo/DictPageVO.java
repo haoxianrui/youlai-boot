@@ -23,37 +23,12 @@ public class DictPageVO {
     private Long id;
 
     @Schema(description = "字典名称")
-    private String name;
+    private String dictName;
 
     @Schema(description = "字典编码")
-    private String code;
+    private String dictCode;
 
     @Schema(description = "字典状态（1-启用，0-禁用）")
     private Integer status;
-
-    @Schema(description = "字典项列表")
-    private List<DictItem> dictItems;
-
-    @Schema(description = "字典")
-    @Getter
-    @Setter
-    public static class DictItem {
-
-        @Schema(description = "字典项ID")
-        private Long id;
-
-        @Schema(description = "字典项名称")
-        private String name;
-
-        @Schema(description = "字典项值")
-        private String value;
-
-        @Schema(description = "排序")
-        private Integer sort;
-
-        @Schema(description = "状态（1-启用，0-禁用）")
-        private Integer status;
-
-    }
 
 }

@@ -22,6 +22,9 @@ public class UserNoticePageVO {
     @Schema(description = "通知标题")
     private String title;
 
+    @Schema(description = "通知等级")
+    private String level;
+
     @Schema(description = "通知类型")
     private String typeLabel;
 
@@ -32,7 +35,7 @@ public class UserNoticePageVO {
     private String levelLabel;
 
     @Schema(description = "发布时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime publishTime;
 
     @Schema(description = "是否已读")

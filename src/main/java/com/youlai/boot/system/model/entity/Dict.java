@@ -17,17 +17,18 @@ import lombok.EqualsAndHashCode;
 public class Dict extends BaseEntity {
 
     /**
-     * 类型名称
-     */
-    private String name;
-
-    /**
-     * 类型编码
+     * 字典编码
      */
     private String code;
 
     /**
-     * 状态(0:正常;1:禁用)
+     * 字典名称
+     */
+    private String name;
+
+
+    /**
+     * 状态（1：启用, 0：停用）
      */
     private Integer status;
 

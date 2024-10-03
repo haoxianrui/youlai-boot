@@ -8,7 +8,6 @@ import com.youlai.boot.system.model.query.NoticePageQuery;
 import com.youlai.boot.system.model.vo.NoticeDetailVO;
 import com.youlai.boot.system.model.vo.NoticePageVO;
 import com.youlai.boot.system.model.vo.UserNoticePageVO;
-import com.youlai.boot.system.model.vo.UserUnreadNoticeVO;
 import com.youlai.boot.system.service.NoticeService;
 import com.youlai.boot.system.service.UserNoticeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +19,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 /**
  * 通知公告前端控制层
@@ -112,13 +110,6 @@ public class NoticeController {
     ) {
         boolean result = noticeService.deleteNotices(ids);
         return Result.judge(result);
-    }
-
-    @Operation(summary = "获取未读的通知公告")
-    @GetMapping("/unread")
-    public Result<List<UserUnreadNoticeVO>> listUnreadNotices() {
-        List<UserUnreadNoticeVO> list = userNoticeService.listUnreadNotices();
-        return Result.success(list);
     }
 
     @Operation(summary = "全部已读")

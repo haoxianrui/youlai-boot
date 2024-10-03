@@ -10,7 +10,6 @@ import com.youlai.boot.system.model.entity.UserNotice;
 import com.youlai.boot.system.model.query.NoticePageQuery;
 import com.youlai.boot.system.model.vo.NoticePageVO;
 import com.youlai.boot.system.model.vo.UserNoticePageVO;
-import com.youlai.boot.system.model.vo.UserUnreadNoticeVO;
 import com.youlai.boot.system.service.UserNoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,18 +27,6 @@ import java.util.List;
 public class UserNoticeServiceImpl extends ServiceImpl<UserNoticeMapper, UserNotice> implements UserNoticeService {
 
     private final UserNoticeMapper userNoticeMapper;
-
-    /**
-     * 获取未读的通知公告
-     *
-     * @return 公告列表
-     */
-    @Override
-    public List<UserUnreadNoticeVO> listUnreadNotices() {
-        //获取当前登录用户
-        Long userId = SecurityUtils.getUserId();
-        return userNoticeMapper.listUnreadNotices(userId);
-    }
 
     /**
      * 全部标记为已读
