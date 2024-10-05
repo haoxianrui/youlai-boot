@@ -103,7 +103,7 @@ public class DictDataServiceImpl extends ServiceImpl<DictDataMapper, DictData> i
         return this.list(new LambdaQueryWrapper<DictData>()
                         .eq(DictData::getDictCode, dictCode)
                         .eq(DictData::getStatus, 1)
-                ).stream().map(item -> new Option<>(item.getValue(), item.getLabel()))
+                ).stream().map(item -> new Option<>(item.getValue(), item.getLabel(),item.getTagType()))
                 .toList();
     }
 }

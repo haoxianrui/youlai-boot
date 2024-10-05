@@ -53,4 +53,9 @@ public class DictData extends BaseEntity {
      * 备注
      */
     private String remark;
+
+    /**
+     * 标签类型
+     */
+    private String tagType;
 }

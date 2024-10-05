@@ -33,7 +33,7 @@ public class NoticePageVO implements Serializable {
     private Integer publishStatus;
 
     @Schema(description = "通知类型")
-    private String typeLabel;
+    private Integer type;
 
     @Schema(description = "发布人姓名")
     private String publisherName;

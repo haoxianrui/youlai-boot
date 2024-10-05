@@ -34,4 +34,7 @@ public class DictDataForm {
     @Schema(description = "状态（1-启用，0-禁用）")
     private Integer status;
 
+    @Schema(description = "字典类型")
+    private String tagType;
+
 }

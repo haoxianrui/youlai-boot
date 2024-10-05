@@ -29,11 +29,22 @@ public class Option<T> {
         this.children= children;
     }
 
+    public Option(T value, String label, String tag) {
+        this.value = value;
+        this.label = label;
+        this.tag= tag;
+    }
+
+
     @Schema(description="选项的值")
     private T value;
 
     @Schema(description="选项的标签")
     private String label;
+
+    @Schema(description = "标签类型")
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    private String tag;
 
     @Schema(description="子选项列表")
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)

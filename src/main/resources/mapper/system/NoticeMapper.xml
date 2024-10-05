@@ -14,14 +14,10 @@
                 t1.publish_status,
                 t1.publish_time,
                 t1.revoke_time,
-                t3.name typeLabel,
-                t4.name levelLabel,
                 t1.create_time
         FROM
             sys_notice t1
                 LEFT JOIN sys_user t2 ON t2.id = t1.publisher_id
-                LEFT JOIN sys_dict_data t3 ON t1.type = t3.value AND t3.dict_code = 'notice_type'
-                LEFT JOIN sys_dict_data t4 ON t1.level = t4.value AND t4.dict_code = 'notice_level'
         WHERE
             t1.is_deleted = 0
             <if test="queryParams.title != null and queryParams.title != ''">

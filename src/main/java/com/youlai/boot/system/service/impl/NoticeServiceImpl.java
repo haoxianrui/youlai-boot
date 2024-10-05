@@ -188,13 +188,20 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
             );
 
             // 添加新的用户通知数据
-            List<String> targetUserIdList = Arrays.asList(targetUserIds.split(","));
+            List<String> targetUserIdList = null;
+            if (NoticeTargetTypeEnum.SPECIFIED.getValue().equals(targetType)) {
+                targetUserIdList = Arrays.asList(targetUserIds.split(","));
+            }
+
             List<User> targetUserList = userService.list(
                     new LambdaQueryWrapper<User>()
                             // 如果是指定用户，则筛选出指定用户
-                            .in(NoticeTargetTypeEnum.SPECIFIED.getValue().equals(targetType), User::getId, targetUserIdList)
+                            .in(
+                                    NoticeTargetTypeEnum.SPECIFIED.getValue().equals(targetType),
+                                    User::getId,
+                                    targetUserIdList
+                            )
             );
-
 
             List<UserNotice> userNoticeList = targetUserList.stream().map(user -> {
                 UserNotice userNotice = new UserNotice();
