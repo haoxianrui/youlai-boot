@@ -70,14 +70,16 @@ public class JwtUtils {
                 .collect(Collectors.toSet());
         payload.put(JwtClaimConstants.AUTHORITIES, roles);
 
-
         Date now = new Date();
-        Date expiration = DateUtil.offsetSecond(now, ttl);
         payload.put(JWTPayload.ISSUED_AT, now);
-        payload.put(JWTPayload.EXPIRES_AT, expiration);
+
+        // 设置过期时间 -1 表示永不过期
+        if (ttl != -1) {
+            Date expiration = DateUtil.offsetSecond(now, ttl);
+            payload.put(JWTPayload.EXPIRES_AT, expiration);
+        }
         payload.put(JWTPayload.SUBJECT, authentication.getName());
         payload.put(JWTPayload.JWT_ID, IdUtil.simpleUUID());
-
         return JWTUtil.createToken(payload, key);
     }
 
