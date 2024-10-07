@@ -7,6 +7,7 @@
         SELECT
             t2.id,
             t2.title,
+            t2.type,
             t3.nickname publisherName,
             t2.publish_time,
             t1.is_read,
@@ -21,6 +22,7 @@
             AND t2.title LIKE CONCAT('%',#{queryParams.title},'%')
         </if>
         ORDER BY
-            t2.publish_time DESC
+            t2.publish_time DESC,
+            t2.create_time DESC
     </select>
 </mapper>

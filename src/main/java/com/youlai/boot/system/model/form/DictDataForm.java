@@ -22,6 +22,9 @@ public class DictDataForm {
     @Schema(description = "字典ID")
     private Long id;
 
+    @Schema(description = "字典编码")
+    private String dictCode;
+
     @Schema(description = "字典值")
     private String value;
 

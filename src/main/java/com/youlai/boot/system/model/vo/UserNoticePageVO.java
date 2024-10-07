@@ -22,17 +22,14 @@ public class UserNoticePageVO {
     @Schema(description = "通知标题")
     private String title;
 
+    @Schema(description = "通知类型")
+    private Integer type;
+
     @Schema(description = "通知等级")
     private String level;
 
-    @Schema(description = "通知类型")
-    private String typeLabel;
-
     @Schema(description = "发布人姓名")
     private String publisherName;
-
-    @Schema(description = "通知级别")
-    private String levelLabel;
 
     @Schema(description = "发布时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")

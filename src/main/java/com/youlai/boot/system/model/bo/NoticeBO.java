@@ -49,11 +49,6 @@ public class NoticeBO {
     private String level;
 
     /**
-     * 通知等级标签
-     */
-    private String levelLabel;
-
-    /**
      * 目标类型(1: 全体 2: 指定)
      */
     private Integer targetType;

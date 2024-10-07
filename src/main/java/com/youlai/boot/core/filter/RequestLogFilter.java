@@ -1,5 +1,6 @@
 package com.youlai.boot.core.filter;
 
+import com.youlai.boot.common.util.IPUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +25,8 @@ public class RequestLogFilter extends CommonsRequestLoggingFilter {
     @Override
     protected void beforeRequest(HttpServletRequest request, String message) {
         String requestURI = request.getRequestURI();
-        log.info("request uri: {}", requestURI);
+        String ip = IPUtils.getIpAddr(request);
+        log.info("request,ip:{}, uri: {}", ip, requestURI);
         super.beforeRequest(request, message);
     }
 

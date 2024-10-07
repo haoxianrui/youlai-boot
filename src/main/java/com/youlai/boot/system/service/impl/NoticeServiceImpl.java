@@ -222,11 +222,11 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
             // 找出在线用户的通知接收者
             Set<String> onlineReceivers = new HashSet<>(CollectionUtil.intersection(receivers, allOnlineUsers));
 
-
             NoticeDTO noticeDTO = new NoticeDTO();
             noticeDTO.setId(id);
             noticeDTO.setTitle(notice.getTitle());
             noticeDTO.setType(notice.getType());
+            noticeDTO.setPublishTime(notice.getPublishTime());
 
             onlineReceivers.forEach(receiver -> messagingTemplate.convertAndSendToUser(receiver, "/queue/message", noticeDTO));
         }

@@ -41,9 +41,6 @@ public class NoticePageVO implements Serializable {
     @Schema(description = "通知等级")
     private String level;
 
-    @Schema(description = "通知等级")
-    private String levelLabel;
-
     @Schema(description = "发布时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime publishTime;
