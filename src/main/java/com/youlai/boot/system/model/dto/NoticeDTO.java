@@ -1,10 +1,10 @@
 package com.youlai.boot.system.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 /**
  * 通知传送对象
@@ -25,6 +25,7 @@ public class NoticeDTO {
     private String title;
 
     @Schema(description = "通知时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime publishTime;
 
 
