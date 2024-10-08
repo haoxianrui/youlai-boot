@@ -37,6 +37,7 @@
                 </if>
             </if>
         ORDER BY
+            t1.publish_time DESC,
             t1.create_time DESC
     </select>
 
