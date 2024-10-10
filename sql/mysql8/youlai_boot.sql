@@ -242,9 +242,9 @@
     INSERT INTO `sys_menu` VALUES (133,126,'0,1,126','发布',4,NULL,'',NULL,'sys:notice:publish',0,1,1,5,'',NULL,now(),now(),NULL);
     INSERT INTO `sys_menu` VALUES (134,126,'0,1,126','撤回',4,NULL,'',NULL,'sys:notice:revoke',0,1,1,6,'',NULL,now(),now(),NULL);
     INSERT INTO `sys_menu` VALUES (135, 1, '0,1', '字典数据', 1, 'DictData', 'dict-data', 'system/dict/data', NULL, 0, 1, 0, 6, '', NULL, now(), now(), NULL);
-    INSERT INTO `sys_menu` VALUES (136, 135, '0,1,135', '字典数据新增', 4, NULL, '', NULL, 'sys:dict:add', NULL, NULL, 1, 4, '', NULL, now(), now(), NULL);
-    INSERT INTO `sys_menu` VALUES (137, 135, '0,1,135', '字典数据编辑', 4, NULL, '', NULL, 'sys:dict:edit', NULL, NULL, 1, 5, '', NULL, now(), now(), NULL);
-    INSERT INTO `sys_menu` VALUES (138, 135, '0,1,135', '字典数据删除', 4, NULL, '', NULL, 'sys:dict:delete', NULL, NULL, 1, 6, '', NULL, now(), now(), NULL);
+    INSERT INTO `sys_menu` VALUES (136, 135, '0,1,135', '字典数据新增', 4, NULL, '', NULL, 'sys:dict-data:add', NULL, NULL, 1, 4, '', NULL, now(), now(), NULL);
+    INSERT INTO `sys_menu` VALUES (137, 135, '0,1,135', '字典数据编辑', 4, NULL, '', NULL, 'sys:dict-data:edit', NULL, NULL, 1, 5, '', NULL, now(), now(), NULL);
+    INSERT INTO `sys_menu` VALUES (138, 135, '0,1,135', '字典数据删除', 4, NULL, '', NULL, 'sys:dict-data:delete', NULL, NULL, 1, 6, '', NULL, now(), now(), NULL);
 
     -- ----------------------------
     -- Table structure for sys_message

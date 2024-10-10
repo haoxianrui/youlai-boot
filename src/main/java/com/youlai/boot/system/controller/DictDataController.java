@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 字典控制层
+ * 字典数据控制层
  *
  * @author Ray
  * @since 2.9.0
  */
-@Tag(name = "07.字典数据接口")
+@Tag(name = "08.字典数据接口")
 @RestController
 @RequestMapping("/api/v1/dict-data")
 @RequiredArgsConstructor
@@ -56,7 +56,7 @@ public class DictDataController {
 
     @Operation(summary = "新增字典数据")
     @PostMapping
-    @PreAuthorize("@ss.hasPerm('sys:dict:add')")
+    @PreAuthorize("@ss.hasPerm('sys:dict-data:add')")
     @RepeatSubmit
     public Result<Void> saveDictData(@Valid @RequestBody DictDataForm formData) {
         boolean result = dictDataService.saveDictData(formData);
@@ -65,7 +65,7 @@ public class DictDataController {
 
     @Operation(summary = "修改字典数据")
     @PutMapping("/{id}")
-    @PreAuthorize("@ss.hasPerm('sys:dict:edit')")
+    @PreAuthorize("@ss.hasPerm('sys:dict-data:edit')")
     public Result<?> updateDictData(
             @PathVariable Long id,
             @RequestBody DictDataForm formData
@@ -76,7 +76,7 @@ public class DictDataController {
 
     @Operation(summary = "删除字典数据")
     @DeleteMapping("/{ids}")
-    @PreAuthorize("@ss.hasPerm('sys:dict:delete')")
+    @PreAuthorize("@ss.hasPerm('sys:dict-data:delete')")
     public Result<Void> deleteDictionaries(
             @Parameter(description = "字典ID，多个以英文逗号(,)拼接") @PathVariable String ids
     ) {
