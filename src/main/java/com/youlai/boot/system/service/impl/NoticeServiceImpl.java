@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.boot.common.constant.SymbolConstant;
 import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.core.security.util.SecurityUtils;
-import com.youlai.boot.module.websocket.service.OnlineUserService;
+import com.youlai.boot.shared.websocket.service.OnlineUserService;
 import com.youlai.boot.system.converter.NoticeConverter;
 import com.youlai.boot.system.enums.NoticePublishStatusEnum;
 import com.youlai.boot.system.enums.NoticeTargetTypeEnum;

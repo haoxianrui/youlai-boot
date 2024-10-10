@@ -24,7 +24,7 @@ import java.util.List;
  * @author Ray
  * @since 2.10.0
  */
-@Tag(name = "08.日志接口")
+@Tag(name = "09.日志接口")
 @RestController
 @RequestMapping("/api/v1/logs")
 @RequiredArgsConstructor

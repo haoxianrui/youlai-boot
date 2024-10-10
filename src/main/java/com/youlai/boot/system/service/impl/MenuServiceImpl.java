@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.youlai.boot.system.converter.MenuConverter;
 import com.youlai.boot.system.mapper.MenuMapper;
 import com.youlai.boot.system.model.bo.RouteBO;
-import com.youlai.boot.module.codegen.model.entity.GenConfig;
+import com.youlai.boot.shared.codegen.model.entity.GenConfig;
 import com.youlai.boot.system.model.entity.Menu;
 import com.youlai.boot.system.model.form.MenuForm;
 import com.youlai.boot.system.model.query.MenuQuery;
