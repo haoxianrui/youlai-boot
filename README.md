@@ -3,7 +3,7 @@
    <img alt="logo" width="100" height="100" src="https://foruda.gitee.com/images/1724259461244885014/4de96569_716974.png">
    <h2>youlai-boot</h2>
    <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
-   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.3.2-green.svg"/>
+   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.3.4-green.svg"/>
    <a href="https://gitee.com/youlaiorg/youlai-boot" target="_blank">
      <img alt="有来技术" src="https://gitee.com/youlaiorg/youlai-boot/badge/star.svg"/>
    </a>     
@@ -56,6 +56,12 @@ youlai-boot
 │   │   ├── result                      # 结果封装
 │   │   └── util                        # 工具类
 │   ├── config                          # 自动装配配置
+│   │   ├── property                    # 配置属性
+│   │   │   ├── AliyunSmsProperties     # 阿里云短信配置属性
+│   │   │   ├── CaptchaProperties       # 验证码配置属性
+│   │   │   ├── CodegenProperties       # 文件配置属性
+│   │   │   ├── MailProperties          # 邮件配置属性
+│   │   │   ├── SecurityProperties      # 安全配置属性
 │   │   ├── CorsConfig                  # 跨域共享配置
 │   │   ├── MybatisConfig               # Mybatis 自动装配配置
 │   │   ├── RedisCacheConfig            # Redis 缓存自动装配配置
@@ -76,12 +82,17 @@ youlai-boot
 │   │   │   ├── MyDataPermissionHandler # 数据权限处理器
 │   │   │   └── MyMetaObjectHandler     # 元对象字段填充处理器
 │   │   └── security                    # Security 安全中心
-│   ├── module                          # 公共模块
+│   ├── modules                         # 业务模块
+│   │   ├── member                      # 会员模块【业务模块演示】
+│   │   ├── order                       # 订单模块【业务模块演示】
+│   │   ├── product                     # 商品模块【业务模块演示】
+│   ├── shared                          # 共享模块
 │   │   ├── auth                        # 认证模块
 │   │   ├── file                        # 文件模块
-│   │   ├── generator                   # 代码生成模块
+│   │   ├── codegen                     # 代码生成模块
 │   │   ├── mail                        # 邮件模块
-│   │   └── sms                         # 短信模块
+│   │   ├── sms                         # 短信模块
+│   │   └── websocket                   # WebSocket 模块
 │   ├── system                          # 系统模块
 │   │   ├── controller                  # 控制层
 │   │   ├── converter                   # MapStruct 转换器
