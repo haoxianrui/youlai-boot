@@ -14,12 +14,15 @@ import org.hibernate.validator.HibernateValidator;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,25 +35,27 @@ import java.util.List;
 @Slf4j
 public class WebMvcConfig implements WebMvcConfigurer {
 
+    /**
+     * 配置消息转换器
+     *
+     * @param converters 消息转换器列表
+     */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = jackson2HttpMessageConverter.getObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-
         objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
         objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
 
-        // 后台Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
+        // 处理 Long 和 BigInteger 类型，避免前端精度丢失问题
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
         simpleModule.addSerializer(BigInteger.class, ToStringSerializer.instance);
         objectMapper.registerModule(simpleModule);
 
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
-
-        // 把 Jackson 的转换器放到最前面，确保优先使用
-        converters.add(0, jackson2HttpMessageConverter);
+        converters.add(1, jackson2HttpMessageConverter);
     }
 
     /**
