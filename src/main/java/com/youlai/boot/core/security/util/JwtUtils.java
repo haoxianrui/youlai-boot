@@ -3,12 +3,16 @@ package com.youlai.boot.core.security.util;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
 import com.youlai.boot.common.constant.JwtClaimConstants;
+import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.core.security.model.SysUserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,6 +20,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +31,14 @@ import java.util.stream.Collectors;
  */
 @Component
 public class JwtUtils {
+
+    private static StringRedisTemplate redisTemplate;
+
+    @Autowired
+    public JwtUtils(StringRedisTemplate redisTemplate) {
+        JwtUtils.redisTemplate = redisTemplate;
+    }
+
 
     /**
      * JWT 加解密使用的密钥
@@ -104,6 +117,32 @@ public class JwtUtils {
                 .collect(Collectors.toSet());
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
+    }
+
+    /**
+     * 将 Token 加入黑名单
+     */
+    public static void addTokenToBlacklist(String token) {
+        if (StrUtil.isNotBlank(token) && token.startsWith(SecurityConstants.JWT_TOKEN_PREFIX)) {
+            token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
+            JSONObject payloads = JWTUtil.parseToken(token).getPayloads();
+            String jti = payloads.getStr(JWTPayload.JWT_ID);
+            Long expiration = payloads.getLong(JWTPayload.EXPIRES_AT);
+
+            if (expiration != null) {
+                long currentTimeSeconds = System.currentTimeMillis() / 1000;
+                if (expiration < currentTimeSeconds) {
+                    // Token已过期，直接返回
+                    return;
+                }
+                // 计算Token剩余时间，将其加入黑名单
+                long ttl = expiration - currentTimeSeconds;
+                redisTemplate.opsForValue().set(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti, null, ttl, TimeUnit.SECONDS);
+            } else {
+                // 永不过期的Token永久加入黑名单
+                redisTemplate.opsForValue().set(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti, null);
+            }
+        }
     }
 
 

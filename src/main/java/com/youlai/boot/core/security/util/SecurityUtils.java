@@ -4,9 +4,13 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.core.security.model.SysUserDetails;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -104,6 +108,26 @@ public class SecurityUtils {
     public static boolean isRoot() {
         Set<String> roles = getRoles();
         return roles.contains(SystemConstants.ROOT_ROLE_CODE);
+    }
+
+    /**
+     * 获取请求中的 Token
+     *
+     * @return Token 字符串
+     */
+    public static String getTokenFromRequest() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        return request.getHeader(HttpHeaders.AUTHORIZATION);
+    }
+
+    /**
+     * 将 Token 加入黑名单并清空 Spring Security 上下文
+     *
+     * @param token 要失效的 Token
+     */
+    public static void invalidateToken(String token) {
+        JwtUtils.addTokenToBlacklist(token);
+        SecurityContextHolder.clearContext();
     }
 
 }
