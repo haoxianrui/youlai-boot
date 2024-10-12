@@ -5,7 +5,7 @@
 <mapper namespace="com.youlai.boot.system.mapper.UserMapper">
 
     <!-- 用户分页列表 -->
-    <select id="listPagedUsers" resultType="com.youlai.boot.system.model.bo.UserBO">
+    <select id="getUserPage" resultType="com.youlai.boot.system.model.bo.UserBO">
         SELECT
             u.id,
             u.username,

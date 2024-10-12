@@ -59,10 +59,10 @@ public class UserController {
     @Operation(summary = "用户分页列表")
     @GetMapping("/page")
     @Log(value = "用户分页列表", module = LogModuleEnum.USER)
-    public PageResult<UserPageVO> listPagedUsers(
+    public PageResult<UserPageVO> getUserPage(
             UserPageQuery queryParams
     ) {
-        IPage<UserPageVO> result = userService.listPagedUsers(queryParams);
+        IPage<UserPageVO> result = userService.getUserPage(queryParams);
         return PageResult.success(result);
     }
 
@@ -89,9 +89,9 @@ public class UserController {
     @Operation(summary = "修改用户")
     @PutMapping(value = "/{userId}")
     @PreAuthorize("@ss.hasPerm('sys:user:edit')")
-    public Result<?> updateUser(
+    public Result<Void> updateUser(
             @Parameter(description = "用户ID") @PathVariable Long userId,
-            @RequestBody @Validated UserForm userForm) {
+            @RequestBody @Valid UserForm userForm) {
         boolean result = userService.updateUser(userId, userForm);
         return Result.judge(result);
     }

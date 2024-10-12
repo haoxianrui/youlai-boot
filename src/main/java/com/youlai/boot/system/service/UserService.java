@@ -29,7 +29,7 @@ public interface UserService extends IService<User> {
      *
      * @return
      */
-    IPage<UserPageVO> listPagedUsers(UserPageQuery queryParams);
+    IPage<UserPageVO> getUserPage(UserPageQuery queryParams);
 
 
     /**

@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SystemConstants;
+import com.youlai.boot.core.security.util.JwtUtils;
 import com.youlai.boot.system.enums.ContactType;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.shared.mail.service.MailService;
@@ -33,11 +34,16 @@ import com.youlai.boot.system.service.RoleMenuService;
 import com.youlai.boot.system.service.RoleService;
 import com.youlai.boot.system.service.UserRoleService;
 import com.youlai.boot.system.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -83,14 +89,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return {@link IPage<UserPageVO>} 用户分页列表
      */
     @Override
-    public IPage<UserPageVO> listPagedUsers(UserPageQuery queryParams) {
+    public IPage<UserPageVO> getUserPage(UserPageQuery queryParams) {
 
         // 参数构建
         int pageNum = queryParams.getPageNum();
         int pageSize = queryParams.getPageSize();
         Page<UserBO> page = new Page<>(pageNum, pageSize);
         // 查询数据
-        Page<UserBO> userPage = this.baseMapper.listPagedUsers(page, queryParams);
+        Page<UserBO> userPage = this.baseMapper.getUserPage(page, queryParams);
 
         // 实体转换
         return userConverter.toPageVo(userPage);
@@ -311,10 +317,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         String newPassword = data.getNewPassword();
-        return this.update(new LambdaUpdateWrapper<User>()
+        boolean result= this.update(new LambdaUpdateWrapper<User>()
                 .eq(User::getId, userId)
                 .set(User::getPassword, passwordEncoder.encode(newPassword))
         );
+        if(result){
+            String token = SecurityUtils.getTokenFromRequest();
+            if (StrUtil.isNotBlank(token)) {
+                SecurityUtils.invalidateToken(token);
+            }
+        }
+
+        return result;
     }
 
     /**

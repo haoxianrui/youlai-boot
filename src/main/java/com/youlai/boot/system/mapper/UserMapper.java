@@ -30,7 +30,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     @DataPermission(deptAlias = "u")
-    Page<UserBO> listPagedUsers(Page<UserBO> page, UserPageQuery queryParams);
+    Page<UserBO> getUserPage(Page<UserBO> page, UserPageQuery queryParams);
 
     /**
      * 获取用户表单详情
