@@ -17,7 +17,7 @@ import java.util.*;
  * @see <a href="https://baomidou.com/pages/981406">代码生成器配置新</a>
  * @since 2024/4/9
  */
-public class SystemGenerator {
+public class SystemCodeGenerator {
 
     private static final DataSourceConfig.Builder DATA_SOURCE_CONFIG = new DataSourceConfig
             .Builder("jdbc:mysql://localhost:3306/youlai_boot?serverTimezone=Asia/Shanghai", "root", "123456");
