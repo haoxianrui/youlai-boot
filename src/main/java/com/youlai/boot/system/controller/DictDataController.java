@@ -27,7 +27,7 @@ import java.util.List;
  * @author Ray
  * @since 2.9.0
  */
-@Tag(name = "08.字典数据接口")
+@Tag(name = "07.字典数据接口")
 @RestController
 @RequestMapping("/api/v1/dict-data")
 @RequiredArgsConstructor

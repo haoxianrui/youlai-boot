@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author Ray
  * @since 2022/10/16
  */
-@Tag(name = "07.文件接口")
+@Tag(name = "08.文件接口")
 @RestController
 @RequestMapping("/api/v1/files")
 @RequiredArgsConstructor
