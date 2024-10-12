@@ -15,7 +15,6 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -35,8 +34,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(new StringHttpMessageConverter());
-
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = jackson2HttpMessageConverter.getObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -51,17 +48,27 @@ public class WebMvcConfig implements WebMvcConfigurer {
         objectMapper.registerModule(simpleModule);
 
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
-        converters.add(jackson2HttpMessageConverter);
+
+        // 把 Jackson 的转换器放到最前面，确保优先使用
+        converters.add(0, jackson2HttpMessageConverter);
     }
 
+    /**
+     * 配置校验器
+     *
+     * @param autowireCapableBeanFactory 用于注入 SpringConstraintValidatorFactory
+     * @return Validator 实例
+     */
     @Bean
     public Validator validator(final AutowireCapableBeanFactory autowireCapableBeanFactory) {
-        ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
+        try (ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
                 .configure()
-                .failFast(true) // failFast=true 不校验所有参数，只要出现校验失败情况直接返回，不再进行后续参数校验
+                .failFast(true) // failFast=true 时，遇到第一个校验失败则立即返回，false 表示校验所有参数
                 .constraintValidatorFactory(new SpringConstraintValidatorFactory(autowireCapableBeanFactory))
-                .buildValidatorFactory();
+                .buildValidatorFactory()) {
 
-        return validatorFactory.getValidator();
+            // 使用 try-with-resources 确保 ValidatorFactory 被正确关闭
+            return validatorFactory.getValidator();
+        }
     }
 }
