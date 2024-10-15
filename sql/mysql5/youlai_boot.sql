@@ -468,7 +468,7 @@ CREATE TABLE `sys_log` (
 -- ----------------------------
 DROP TABLE IF EXISTS `gen_config`;
 CREATE TABLE `gen_config` (
-                              `id` bigint NOT NULL AUTO_INCREMENT,
+                              `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
                               `table_name` varchar(100)  NOT NULL COMMENT '表名',
                               `module_name` varchar(100)  DEFAULT NULL COMMENT '模块名',
                               `package_name` varchar(255)  NOT NULL COMMENT '包名',
@@ -488,7 +488,7 @@ CREATE TABLE `gen_config` (
 -- ----------------------------
 DROP TABLE IF EXISTS `gen_field_config`;
 CREATE TABLE `gen_field_config` (
-                                    `id` bigint NOT NULL AUTO_INCREMENT,
+                                    `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
                                     `config_id` bigint NOT NULL COMMENT '关联的配置ID',
                                     `column_name` varchar(100)  DEFAULT NULL,
                                     `column_type` varchar(50)  DEFAULT NULL,
@@ -511,10 +511,12 @@ CREATE TABLE `gen_field_config` (
                                     KEY `config_id` (`config_id`)
 ) ENGINE=InnoDB  COMMENT='代码生成字段配置表';
 
-DROP TABLE IF EXISTS `gen_field_config`;
-
+-- ----------------------------
+-- Table structure for sys_user_notice
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user_notice`;
 CREATE TABLE `sys_user_notice` (
-                                   `id` bigint NOT NULL AUTO_INCREMENT,
+                                   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
                                    `notice_id` bigint NOT NULL COMMENT '公共通知id',
                                    `user_id` bigint NOT NULL COMMENT '用户id',
                                    `is_read` bigint NOT NULL DEFAULT 0 COMMENT '读取状态（0未读；1已读）',
@@ -525,8 +527,12 @@ CREATE TABLE `sys_user_notice` (
                                    PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB  COMMENT='用户通知公告表';
 
+-- ----------------------------
+-- Table structure for sys_notice
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_notice`;
 CREATE TABLE `sys_notice` (
-                              `id` bigint NOT NULL AUTO_INCREMENT,
+                              `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
                               `title` varchar(50)  DEFAULT NULL COMMENT '通知标题',
                               `content` text  COMMENT '通知内容',
                               `type` tinyint NOT NULL COMMENT '通知类型（字典code：notice_type）',
