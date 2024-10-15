@@ -25,7 +25,7 @@ public class ColumnMetaData {
         /**
          * 字段长度
          */
-        private Integer characterMaximumLength;
+        private Long characterMaximumLength;
 
         /**
          * 是否主键(1-是 0-否)

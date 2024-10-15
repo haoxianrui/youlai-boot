@@ -40,7 +40,7 @@ public class GenFieldConfig extends BaseEntity {
     /**
      * 字段长度
      */
-    private Integer maxLength;
+    private Long maxLength;
 
     /**
      * 字段名称
