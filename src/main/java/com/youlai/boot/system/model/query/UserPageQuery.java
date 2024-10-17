@@ -27,7 +27,7 @@ public class UserPageQuery extends BasePageQuery {
     @Schema(description="部门ID")
     private Long deptId;
 
-    @Schema(description = "角色ID")
+    @Schema(description="角色ID")
     private List<Long> roleIds;
 
     @Schema(description="创建时间范围")
