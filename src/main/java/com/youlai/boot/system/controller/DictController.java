@@ -10,6 +10,7 @@ import com.youlai.boot.system.model.vo.DictPageVO;
 import com.youlai.boot.common.annotation.RepeatSubmit;
 import com.youlai.boot.system.model.form.DictForm;
 import com.youlai.boot.common.annotation.Log;
+import com.youlai.boot.system.model.vo.DictVO;
 import com.youlai.boot.system.service.DictService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,8 +48,8 @@ public class DictController {
 
     @Operation(summary = "字典列表")
     @GetMapping("/list")
-    public Result<List<Option<String>>> getDictList() {
-        List<Option<String>> list = dictService.getDictList();
+    public Result<List<DictVO>> getAllDictWithData() {
+        List<DictVO> list = dictService.getAllDictWithData();
         return Result.success(list);
     }
 

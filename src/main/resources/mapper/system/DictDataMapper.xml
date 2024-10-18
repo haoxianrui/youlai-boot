@@ -35,12 +35,26 @@
             value,
             label
         FROM
-        sys_dict_data
+            sys_dict_data
         <where>
             dict_code = #{dictCode}
         </where>
         ORDER BY
-        sort ASC
+            sort ASC
+    </select>
+
+    <!-- 根据字典编码获取字典数据列表 -->
+    <select id="getDictDataList" resultType="com.youlai.boot.system.model.vo.DictVO$DictData">
+        SELECT
+            value,
+            label,
+            tag_type
+        FROM
+            sys_dict_data
+        WHERE
+            status = 1 AND dict_code = #{dictCode}
+        ORDER BY
+            sort ASC
     </select>
 
 </mapper>

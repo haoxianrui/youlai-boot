@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.entity.DictData;
 import com.youlai.boot.system.model.query.DictDataPageQuery;
-import com.youlai.boot.system.model.query.DictPageQuery;
 import com.youlai.boot.system.model.vo.DictDataPageVO;
 import org.apache.ibatis.annotations.Mapper;
 

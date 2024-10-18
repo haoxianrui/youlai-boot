@@ -7,11 +7,12 @@ import com.youlai.boot.system.model.entity.Dict;
 import com.youlai.boot.system.model.form.DictForm;
 import com.youlai.boot.system.model.query.DictPageQuery;
 import com.youlai.boot.system.model.vo.DictPageVO;
+import com.youlai.boot.system.model.vo.DictVO;
 
 import java.util.List;
 
 /**
- * 数据字典业务接口
+ * 字典业务接口
  *
  * @author haoxr
  * @since 2022/10/12
@@ -48,7 +49,7 @@ public interface DictService extends IService<Dict> {
     /**
      * 修改字典
      *
-     * @param id
+     * @param id     字典ID
      * @param dictForm 字典表单
      * @return
      */
@@ -64,18 +65,9 @@ public interface DictService extends IService<Dict> {
 
 
     /**
-     * 获取字典的数据项
-     *
-     * @param code 字典编码
-     * @return
-     */
-    List<Option<Long>> listDictItemsByCode(String code);
-
-
-    /**
      * 获取字典列表
      *
      * @return
      */
-    List<Option<String>> getDictList();
+    List<DictVO> getAllDictWithData();
 }
