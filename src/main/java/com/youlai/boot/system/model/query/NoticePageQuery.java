@@ -14,7 +14,7 @@ import java.util.List;
  * @since 2024-08-27 10:31
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Schema(description ="通知公告查询对象")
 public class NoticePageQuery extends BasePageQuery {
 
