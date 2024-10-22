@@ -421,7 +421,6 @@ INSERT INTO `sys_user_role` VALUES (1, 1);
 INSERT INTO `sys_user_role` VALUES (2, 2);
 INSERT INTO `sys_user_role` VALUES (3, 3);
 
-
 -- ----------------------------
 -- Table structure for sys_log
 -- ----------------------------
@@ -443,7 +442,6 @@ CREATE TABLE `sys_log` (
                            `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '逻辑删除标识(1-已删除 0-未删除)',
                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB  ROW_FORMAT=DYNAMIC COMMENT='系统日志表';
-
 
 -- ----------------------------
 -- Table structure for gen_config
