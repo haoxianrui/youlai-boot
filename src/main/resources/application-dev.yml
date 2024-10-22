@@ -61,8 +61,8 @@ mybatis-plus:
     db-config:
       # 主键ID类型
       id-type: none
-      # 逻辑删除字段名称
-      logic-delete-field: is_deleted
+      # 逻辑删除全局属性名(驼峰和下划线都支持)
+      logic-delete-field: isDeleted
       # 逻辑删除-删除值
       logic-delete-value: 1
       # 逻辑删除-未删除值
