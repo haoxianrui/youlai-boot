@@ -79,9 +79,9 @@ public class Notice extends BaseEntity {
      * 更新人ID
      */
     private Long updateBy;
+
     /**
      * 逻辑删除标识(0-未删除 1-已删除)
      */
-    @TableLogic(value = "0", delval = "1")
     private Integer isDeleted;
 }

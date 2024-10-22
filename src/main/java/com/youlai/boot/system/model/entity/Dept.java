@@ -58,9 +58,8 @@ public class Dept extends BaseEntity {
     private Long updateBy;
 
     /**
-     * 逻辑删除标识(0-未删除 1-已删除)
+     * 是否删除(0-否 1-是)
      */
-    @TableLogic(value = "0", delval = "1")
     private Integer isDeleted;
 
 }

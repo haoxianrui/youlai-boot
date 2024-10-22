@@ -67,4 +67,9 @@ public class User extends BaseEntity {
      * 更新人 ID
      */
     private Long updateBy;
+
+    /**
+     * 是否删除(0-否 1-是)
+     */
+    private Integer isDeleted;
 }
