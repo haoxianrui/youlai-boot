@@ -132,7 +132,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
                 genFieldConfigs.add(fieldConfig);
             }
         }
-        //对genFieldConfigs按照fieldSort排序
+        // 对 genFieldConfigs 按照 fieldSort 排序
         genFieldConfigs = genFieldConfigs.stream().sorted(Comparator.comparing(GenFieldConfig::getFieldSort)).toList();
         GenConfigForm genConfigForm = codegenConverter.toGenConfigForm(genConfig, genFieldConfigs);
 
