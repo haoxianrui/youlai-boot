@@ -210,23 +210,6 @@
     INSERT INTO `sys_menu` VALUES (137, 135, '0,1,135', '字典数据编辑', 4, NULL, '', NULL, 'sys:dict-data:edit', NULL, NULL, 1, 5, '', NULL, now(), now(), NULL);
     INSERT INTO `sys_menu` VALUES (138, 135, '0,1,135', '字典数据删除', 4, NULL, '', NULL, 'sys:dict-data:delete', NULL, NULL, 1, 6, '', NULL, now(), now(), NULL);
 
-    -- ----------------------------
-    -- Table structure for sys_message
-    -- ----------------------------
-    DROP TABLE IF EXISTS `sys_message`;
-    CREATE TABLE `sys_message`  (
-                                    `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-                                    `create_by` bigint NULL DEFAULT NULL COMMENT '创建人ID',
-                                    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-                                    `update_by` bigint NULL DEFAULT NULL COMMENT '修改人ID',
-                                    `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-                                    `is_deleted` tinyint NOT NULL DEFAULT 0 COMMENT '逻辑删除标识(1-已删除 0-未删除)',
-                                    PRIMARY KEY (`id`) USING BTREE
-    ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统消息' ROW_FORMAT = DYNAMIC;
-
-    -- ----------------------------
-    -- Records of sys_message
-    -- ----------------------------
 
     -- ----------------------------
     -- Table structure for sys_role
