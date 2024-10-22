@@ -169,6 +169,7 @@ public class CodegenServiceImpl implements CodegenService {
             path = (codegenProperties.getBackendAppName()
                     + File.separator
                     + "src" + File.separator + "main" + File.separator + "resources"
+                    + File.separator + moduleName
                     + File.separator + subPackageName
             );
         } else if ("API".equals(templateName)) {
@@ -241,8 +242,6 @@ public class CodegenServiceImpl implements CodegenService {
                 hasRequiredField = true;
             }
             fieldConfig.setTsType(JavaTypeEnum.getTsTypeByJavaType(fieldConfig.getFieldType()));
-
-
         }
 
         bindMap.put("hasLocalDateTime", hasLocalDateTime);
