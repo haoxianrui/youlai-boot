@@ -173,11 +173,14 @@ public class CodegenServiceImpl implements CodegenService {
                     + File.separator + subPackageName
             );
         } else if ("API".equals(templateName)) {
+            // path = "src/api/system";
             path = (codegenProperties.getFrontendAppName()
-                    + File.separator
-                    + "src" + File.separator + subPackageName
+                    + File.separator + "src"
+                    + File.separator + subPackageName
+                    + File.separator + moduleName
             );
         } else if ("VIEW".equals(templateName)) {
+            // path = "src/views/system/user";
             path = (codegenProperties.getFrontendAppName()
                     + File.separator + "src"
                     + File.separator + subPackageName
