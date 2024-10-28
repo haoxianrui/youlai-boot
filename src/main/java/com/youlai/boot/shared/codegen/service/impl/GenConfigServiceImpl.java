@@ -80,7 +80,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
 
             String tableComment = tableMetadata.getTableComment();
             if (StrUtil.isNotBlank(tableComment)) {
-                genConfig.setBusinessName(tableComment.replace("表", ""));
+                genConfig.setBusinessName(tableComment.replace("表", "").trim());
             }
             // 实体类名 = 表名去掉前缀后转驼峰，前缀默认为下划线分割的第一个元素
             String entityName = StrUtil.toCamelCase(StrUtil.removePrefix(tableName, tableName.split("_")[0]));
