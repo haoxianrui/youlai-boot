@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 /**
- * $!{businessName}前端控制层
+ * $!{businessName.trim()}前端控制层
  *
  * @author ${author}
  * @since ${date}
  */
-@Tag(name = "${businessName}接口")
+@Tag(name = "${businessName.trim()}接口")
 @RestController
 @RequestMapping("/api/v1/${lowerFirstEntityName}s")
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public class ${entityName}Controller  {
 
     private final ${entityName}Service ${lowerFirstEntityName}Service;
 
-    @Operation(summary = "$!{businessName}分页列表")
+    @Operation(summary = "$!{businessName.trim()}分页列表")
     @GetMapping("/page")
     @PreAuthorize("@ss.hasPerm('${moduleName}:${lowerFirstEntityName}:query')")
     public PageResult<${entityName}VO> get${entityName}Page(${entityName}Query queryParams ) {
@@ -40,7 +40,7 @@ public class ${entityName}Controller  {
         return PageResult.success(result);
     }
 
-    @Operation(summary = "新增${businessName}")
+    @Operation(summary = "新增${businessName.trim()}")
     @PostMapping
     @PreAuthorize("@ss.hasPerm('${moduleName}:${lowerFirstEntityName}:add')")
     public Result<Void> save${entityName}(@RequestBody @Valid ${entityName}Form formData ) {
@@ -48,32 +48,32 @@ public class ${entityName}Controller  {
         return Result.judge(result);
     }
 
-    @Operation(summary = "获取${businessName}表单数据")
+    @Operation(summary = "获取${businessName.trim()}表单数据")
     @GetMapping("/{id}/form")
     @PreAuthorize("@ss.hasPerm('${moduleName}:${lowerFirstEntityName}:edit')")
     public Result<${entityName}Form> get${entityName}Form(
-        @Parameter(description = "$!{businessName}ID") @PathVariable Long id
+        @Parameter(description = "$!{businessName.trim()}ID") @PathVariable Long id
     ) {
         ${entityName}Form formData = ${lowerFirstEntityName}Service.get${entityName}FormData(id);
         return Result.success(formData);
     }
 
-    @Operation(summary = "修改${businessName}")
+    @Operation(summary = "修改${businessName.trim()}")
     @PutMapping(value = "/{id}")
     @PreAuthorize("@ss.hasPerm('${moduleName}:${lowerFirstEntityName}:edit')")
     public Result<Void> update${entityName}(
-            @Parameter(description = "$!{businessName}ID") @PathVariable Long id,
+            @Parameter(description = "$!{businessName.trim()}ID") @PathVariable Long id,
             @RequestBody @Validated ${entityName}Form formData
     ) {
         boolean result = ${lowerFirstEntityName}Service.update${entityName}(id, formData);
         return Result.judge(result);
     }
 
-    @Operation(summary = "删除${businessName}")
+    @Operation(summary = "删除${businessName.trim()}")
     @DeleteMapping("/{ids}")
     @PreAuthorize("@ss.hasPerm('${moduleName}:${lowerFirstEntityName}:delete')")
     public Result<Void> delete${entityName}s(
-        @Parameter(description = "$!{businessName}ID，多个以英文逗号(,)分割") @PathVariable String ids
+        @Parameter(description = "$!{businessName.trim()}ID，多个以英文逗号(,)分割") @PathVariable String ids
     ) {
         boolean result = ${lowerFirstEntityName}Service.delete${entityName}s(ids);
         return Result.judge(result);

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="${packageName}.${moduleName}.mapper.${entityName}Mapper">
 
-    <!-- 获取${businessName}分页列表 -->
+    <!-- 获取${businessName.trim()}分页列表 -->
     <select id="get${entityName}Page" resultType="${packageName}.${moduleName}.model.vo.${entityName}VO">
         SELECT
         #if($fieldConfigs)

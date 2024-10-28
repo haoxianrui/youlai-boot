@@ -12,14 +12,14 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.youlai.boot.common.base.BaseEntity;
 
 /**
- * $!{businessName}实体对象
+ * $!{businessName.trim()}实体对象
  *
  * @author ${author}
  * @since ${date}
  */
 @Getter
 @Setter
-@TableName("${tableName}")
+@TableName("${tableName.trim()}")
 public class ${entityName} extends BaseEntity {
 
     private static final long serialVersionUID = 1L;

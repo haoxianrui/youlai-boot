@@ -169,7 +169,7 @@
       />
     </el-card>
 
-    <!-- $!{businessName}表单弹窗 -->
+    <!-- $!{businessName.trim()}表单弹窗 -->
     <el-dialog
         v-model="dialog.visible"
         :title="dialog.title"
@@ -270,7 +270,7 @@
     pageSize: 10,
   });
 
-  // $!{businessName}表格数据
+  // $!{businessName.trim()}表格数据
   const pageData = ref<${entityName}PageVO[]>([]);
 
   // 弹窗
@@ -279,10 +279,10 @@
     visible: false,
   });
 
-  // $!{businessName}表单数据
+  // $!{businessName.trim()}表单数据
   const formData = reactive<${entityName}Form>({});
 
-  // $!{businessName}表单校验规则
+  // $!{businessName.trim()}表单校验规则
   const rules = reactive({
       #if($fieldConfigs)
           #foreach($fieldConfig in ${fieldConfigs})
@@ -293,7 +293,7 @@
       #end
   });
 
-  /** 查询$!{businessName} */
+  /** 查询$!{businessName.trim()} */
   function handleQuery() {
     loading.value = true;
           ${entityName}API.getPage(queryParams)
@@ -306,7 +306,7 @@
         });
   }
 
-  /** 重置$!{businessName}查询 */
+  /** 重置$!{businessName.trim()}查询 */
   function handleResetQuery() {
     queryFormRef.value!.resetFields();
     queryParams.pageNum = 1;
@@ -318,20 +318,20 @@
     removeIds.value = selection.map((item: any) => item.id);
   }
 
-  /** 打开$!{businessName}弹窗 */
+  /** 打开$!{businessName.trim()}弹窗 */
   function handleOpenDialog(id?: number) {
     dialog.visible = true;
     if (id) {
-      dialog.title = "修改$!{businessName}";
+      dialog.title = "修改$!{businessName.trim()}";
             ${entityName}API.getFormData(id).then((data) => {
         Object.assign(formData, data);
       });
     } else {
-      dialog.title = "新增$!{businessName}";
+      dialog.title = "新增$!{businessName.trim()}";
     }
   }
 
-  /** 提交$!{businessName}表单 */
+  /** 提交$!{businessName.trim()}表单 */
   function handleSubmit() {
     dataFormRef.value.validate((valid: any) => {
       if (valid) {
@@ -358,7 +358,7 @@
     });
   }
 
-  /** 关闭$!{businessName}弹窗 */
+  /** 关闭$!{businessName.trim()}弹窗 */
   function handleCloseDialog() {
     dialog.visible = false;
     dataFormRef.value.resetFields();
@@ -366,7 +366,7 @@
     formData.id = undefined;
   }
 
-  /** 删除$!{businessName} */
+  /** 删除$!{businessName.trim()} */
   function handleDelete(id?: number) {
     const ids = [id || removeIds.value].join(",");
     if (!ids) {

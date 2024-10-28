@@ -14,14 +14,14 @@ import java.math.BigDecimal;
 #end
 
 /**
- * $!{businessName}视图对象
+ * $!{businessName.trim()}视图对象
  *
  * @author ${author}
  * @since ${date}
  */
 @Getter
 @Setter
-@Schema( description = "$!{businessName}视图对象")
+@Schema( description = "$!{businessName.trim()}视图对象")
 public class ${entityName}VO implements Serializable {
 
     @Serial
