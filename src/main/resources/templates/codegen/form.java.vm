@@ -16,14 +16,14 @@ import jakarta.validation.constraints.*;
 #end
 
 /**
- * $!{businessName.trim()}表单对象
+ * $!{businessName}表单对象
  *
  * @author ${author}
  * @since ${date}
  */
 @Getter
 @Setter
-@Schema(description = "$!{businessName.trim()}表单对象")
+@Schema(description = "$!{businessName}表单对象")
 public class ${entityName}Form implements Serializable {
 
     @Serial

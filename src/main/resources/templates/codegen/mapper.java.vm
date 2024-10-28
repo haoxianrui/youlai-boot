@@ -8,7 +8,7 @@ import ${packageName}.${moduleName}.model.vo.${entityName}VO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * $!{businessName.trim()}Mapper接口
+ * $!{businessName}Mapper接口
  *
  * @author ${author}
  * @since ${date}
@@ -17,7 +17,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ${entityName}Mapper extends BaseMapper<${entityName}> {
 
     /**
-     * 获取${businessName.trim()}分页数据
+     * 获取${businessName}分页数据
      *
      * @param page 分页对象
      * @param queryParams 查询参数

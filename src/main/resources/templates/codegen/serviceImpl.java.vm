@@ -21,7 +21,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * $!{businessName.trim()}服务实现类
+ * $!{businessName}服务实现类
  *
  * @author ${author}
  * @since ${date}
@@ -33,10 +33,10 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
     private final ${entityName}Converter ${lowerFirstEntityName}Converter;
 
     /**
-    * 获取${businessName.trim()}分页列表
+    * 获取${businessName}分页列表
     *
     * @param queryParams 查询参数
-    * @return {@link IPage<${entityName}VO>} $!{businessName.trim()}分页列表
+    * @return {@link IPage<${entityName}VO>} $!{businessName}分页列表
     */
     @Override
     public IPage<${entityName}VO> get${entityName}Page(${entityName}Query queryParams) {
@@ -48,9 +48,9 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
     }
     
     /**
-     * 获取${businessName.trim()}表单数据
+     * 获取${businessName}表单数据
      *
-     * @param id $!{businessName.trim()}ID
+     * @param id $!{businessName}ID
      * @return
      */
     @Override
@@ -60,9 +60,9 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
     }
     
     /**
-     * 新增${businessName.trim()}
+     * 新增${businessName}
      *
-     * @param formData $!{businessName.trim()}表单对象
+     * @param formData $!{businessName}表单对象
      * @return
      */
     @Override
@@ -72,10 +72,10 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
     }
     
     /**
-     * 更新${businessName.trim()}
+     * 更新${businessName}
      *
-     * @param id   $!{businessName.trim()}ID
-     * @param formData $!{businessName.trim()}表单对象
+     * @param id   $!{businessName}ID
+     * @param formData $!{businessName}表单对象
      * @return
      */
     @Override
@@ -85,14 +85,14 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
     }
     
     /**
-     * 删除${businessName.trim()}
+     * 删除${businessName}
      *
-     * @param ids $!{businessName.trim()}ID，多个以英文逗号(,)分割
+     * @param ids $!{businessName}ID，多个以英文逗号(,)分割
      * @return
      */
     @Override
     public boolean delete${entityName}s(String ids) {
-        Assert.isTrue(StrUtil.isNotBlank(ids), "删除的${businessName.trim()}数据为空");
+        Assert.isTrue(StrUtil.isNotBlank(ids), "删除的${businessName}数据为空");
         // 逻辑删除
         List<Long> idList = Arrays.stream(ids.split(","))
                 .map(Long::parseLong)

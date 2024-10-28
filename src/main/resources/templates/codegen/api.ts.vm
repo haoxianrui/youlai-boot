@@ -3,7 +3,7 @@ import request from "@/utils/request";
 const ${entityName.toUpperCase()}_BASE_URL = "/api/v1/${lowerFirstEntityName}s";
 
 const ${entityName}API = {
-    /** 获取${businessName.trim()}分页数据 */
+    /** 获取${businessName}分页数据 */
     getPage(queryParams?: ${entityName}PageQuery) {
         return request<any, PageResult<${entityName}PageVO[]>>({
             url: `${${entityName.toUpperCase()}_BASE_URL}/page`,
@@ -12,7 +12,7 @@ const ${entityName}API = {
         });
     },
     /**
-     * 获取${businessName.trim()}表单数据
+     * 获取${businessName}表单数据
      *
      * @param id ${entityName}ID
      * @returns ${entityName}表单数据
@@ -24,7 +24,7 @@ const ${entityName}API = {
         });
     },
 
-    /** 添加${businessName.trim()}*/
+    /** 添加${businessName}*/
     add(data: ${entityName}Form) {
         return request({
             url: `${${entityName.toUpperCase()}_BASE_URL}`,
@@ -34,7 +34,7 @@ const ${entityName}API = {
     },
 
     /**
-     * 更新${businessName.trim()}
+     * 更新${businessName}
      *
      * @param id ${entityName}ID
      * @param data ${entityName}表单数据
@@ -48,9 +48,9 @@ const ${entityName}API = {
     },
 
     /**
-     * 批量删除${businessName.trim()}，多个以英文逗号(,)分割
+     * 批量删除${businessName}，多个以英文逗号(,)分割
      *
-     * @param ids ${businessName.trim()}ID字符串，多个以英文逗号(,)分割
+     * @param ids ${businessName}ID字符串，多个以英文逗号(,)分割
      */
      deleteByIds(ids: string) {
         return request({
@@ -62,7 +62,7 @@ const ${entityName}API = {
 
 export default ${entityName}API;
 
-/** ${businessName.trim()}分页查询参数 */
+/** ${businessName}分页查询参数 */
 export interface ${entityName}PageQuery extends PageQuery {
     #foreach($fieldConfig in $fieldConfigs)
         #if($fieldConfig.isShowInQuery)
@@ -82,7 +82,7 @@ export interface ${entityName}PageQuery extends PageQuery {
     #end
 }
 
-/** ${businessName.trim()}表单对象 */
+/** ${businessName}表单对象 */
 export interface ${entityName}Form {
     #foreach($fieldConfig in $fieldConfigs)
         #if($fieldConfig.isShowInForm)
@@ -94,7 +94,7 @@ export interface ${entityName}Form {
     #end
 }
 
-/** ${businessName.trim()}分页对象 */
+/** ${businessName}分页对象 */
 export interface ${entityName}PageVO {
     #foreach($fieldConfig in $fieldConfigs)
         #if($fieldConfig.isShowInList)
