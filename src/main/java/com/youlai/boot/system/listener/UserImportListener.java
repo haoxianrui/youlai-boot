@@ -8,20 +8,14 @@ import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.context.AnalysisContext;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.youlai.boot.common.base.BaseAnalysisEventListener;
-import com.youlai.boot.system.enums.GenderEnum;
-import com.youlai.boot.system.model.entity.Dept;
-import com.youlai.boot.system.model.entity.Role;
-import com.youlai.boot.system.model.entity.User;
-import com.youlai.boot.system.model.entity.UserRole;
+import com.youlai.boot.system.enums.DictCodeEnum;
+import com.youlai.boot.system.model.entity.*;
 import com.youlai.boot.common.base.IBaseEnum;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.common.enums.StatusEnum;
 import com.youlai.boot.system.converter.UserConverter;
 import com.youlai.boot.system.model.dto.UserImportDTO;
-import com.youlai.boot.system.service.DeptService;
-import com.youlai.boot.system.service.RoleService;
-import com.youlai.boot.system.service.UserRoleService;
-import com.youlai.boot.system.service.UserService;
+import com.youlai.boot.system.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -55,6 +49,7 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
     private final RoleService roleService;
     private final UserRoleService userRoleService;
     private final DeptService deptService;
+    private final DictDataService dictDataService;
 
     public UserImportListener() {
         this.userService = SpringUtil.getBean(UserService.class);
@@ -62,6 +57,7 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
         this.roleService = SpringUtil.getBean(RoleService.class);
         this.userRoleService = SpringUtil.getBean(UserRoleService.class);
         this.deptService = SpringUtil.getBean(DeptService.class);
+        this.dictDataService = SpringUtil.getBean(DictDataService.class);
         this.userConverter = SpringUtil.getBean(UserConverter.class);
     }
 
@@ -107,11 +103,18 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
             // 校验通过，持久化至数据库
             User entity = userConverter.toEntity(userImportDTO);
             entity.setPassword(passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));   // 默认密码
-            // 性别逆向解析
+            // 性别逆向翻译 根据字典标签得到字典值
             String genderLabel = userImportDTO.getGenderLabel();
             if (StrUtil.isNotBlank(genderLabel)) {
-                Integer genderValue = (Integer) IBaseEnum.getValueByLabel(genderLabel, GenderEnum.class);
-                entity.setGender(genderValue);
+                DictData dictData = dictDataService.getOne(new LambdaQueryWrapper<DictData>()
+                        .eq(DictData::getDictCode, DictCodeEnum.GENDER.getValue())
+                        .eq(DictData::getLabel, genderLabel)
+                        .last("limit 1")
+                );
+                if (dictData != null) {
+                    Integer genderValue = Integer.parseInt(dictData.getValue());
+                    entity.setGender(genderValue);
+                }
             }
             // 角色解析
             String roleCodes = userImportDTO.getRoleCodes();

@@ -23,9 +23,6 @@ import org.mapstruct.Mappings;
 @Mapper(componentModel = "spring")
 public interface UserConverter {
 
-    @Mappings({
-            @Mapping(target = "genderLabel", expression = "java(com.youlai.boot.common.base.IBaseEnum.getLabelByValue(bo.getGender(), com.youlai.boot.system.enums.GenderEnum.class))")
-    })
     UserPageVO toPageVo(UserBO bo);
 
     Page<UserPageVO> toPageVo(Page<UserBO> bo);
