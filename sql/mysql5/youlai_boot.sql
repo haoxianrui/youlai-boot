@@ -29,7 +29,7 @@ CREATE TABLE `sys_config` (
                               `config_name` varchar(50) NOT NULL COMMENT '配置名称',
                               `config_key` varchar(50) NOT NULL COMMENT '配置key',
                               `config_value` varchar(100) NOT NULL COMMENT '配置值',
-                              `remark` varchar(200) DEFAULT NULL COMMENT '描述、备注',
+                              `remark` varchar(255) DEFAULT NULL COMMENT '备注',
                               `create_time` datetime NOT NULL COMMENT '创建时间',
                               `create_by` bigint NOT NULL COMMENT '创建人ID',
                               `update_time` datetime DEFAULT NULL COMMENT '更新时间',
@@ -37,6 +37,8 @@ CREATE TABLE `sys_config` (
                               `is_deleted` tinyint(1) NOT NULL COMMENT '逻辑删除标识(0-未删除 1-已删除)',
                               PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='系统配置';
+
+INSERT INTO `sys_config` VALUES (1, '系统限流QPS', 'IP_QPS_THRESHOLD_LIMIT', '10', '单个IP请求的最大每秒查询数（QPS）阈值Key', now(), 1, NULL, NULL, 0);
 
 -- ----------------------------
 -- Table structure for sys_dept
