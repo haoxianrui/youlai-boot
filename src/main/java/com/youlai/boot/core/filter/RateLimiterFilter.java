@@ -61,7 +61,7 @@ public class RateLimiterFilter extends OncePerRequestFilter {
 
     /**
      * IP限流过滤器
-     * 默认情况下：限制同一个IP在一分钟内只能访问10次，可以通过修改系统配置进行调整
+     * 默认情况下：限制同一个IP在一秒内只能访问10次，可以通过修改系统配置进行调整
      *
      * @param request 请求体
      * @param response 响应体
