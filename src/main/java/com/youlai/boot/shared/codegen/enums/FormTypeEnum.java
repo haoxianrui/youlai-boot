@@ -73,8 +73,8 @@ public enum FormTypeEnum implements IBaseEnum<Integer> {
 
 
     @JsonCreator
-    public static QueryTypeEnum fromValue(Integer value) {
-        for (QueryTypeEnum type : QueryTypeEnum.values()) {
+    public static FormTypeEnum fromValue(Integer value) {
+        for (FormTypeEnum type : FormTypeEnum.values()) {
             if (type.getValue().equals(value)) {
                 return type;
             }

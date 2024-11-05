@@ -8,7 +8,7 @@ import lombok.Getter;
  * 通告发布状态枚举
  *
  * @author haoxr
- * @since 2022/10/14
+ * @since 2024/10/14
  */
 @Getter
 @Schema(enumAsRef = true)

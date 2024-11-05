@@ -14,7 +14,7 @@
                       />
                     #elseif($fieldConfig.formType == "SELECT")
                         #if($fieldConfig.dictType != "")
-                          <dictionary v-model="queryParams.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
+                          <dict v-model="queryParams.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
                         #else
                           <el-select v-model="queryParams.$fieldConfig.fieldName" placeholder="请选择$fieldConfig.fieldComment">
                             <el-option :key="1" :value="1" label="选项一"/>
@@ -187,7 +187,7 @@
                       />
                     #elseif($fieldConfig.formType == "SELECT")
                         #if($fieldConfig.dictType != "")
-                          <dictionary v-model="formData.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
+                          <dict v-model="formData.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
                         #else
                           <el-select v-model="formData.$fieldConfig.fieldName" placeholder="请选择$fieldConfig.fieldComment">
                             <el-option :value="0" label="选项一"/>
@@ -256,7 +256,7 @@
     inheritAttrs: false,
   });
 
-  import ${entityName}API, { ${entityName}PageVO, ${entityName}Form, ${entityName}PageQuery } from "@/api/${kebabCaseEntityName}";
+  import ${entityName}API, { ${entityName}PageVO, ${entityName}Form, ${entityName}PageQuery } from "@/api/${moduleName}/${kebabCaseEntityName}";
 
   const queryFormRef = ref(ElForm);
   const dataFormRef = ref(ElForm);

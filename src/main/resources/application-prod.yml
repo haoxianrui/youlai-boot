@@ -46,7 +46,7 @@ mybatis-plus:
       # 主键ID类型
       id-type: none
       # 逻辑删除字段名称
-      logic-delete-field: is_deleted
+      logic-delete-field: isDeleted
       # 逻辑删除-删除值
       logic-delete-value: 1
       # 逻辑删除-未删除值

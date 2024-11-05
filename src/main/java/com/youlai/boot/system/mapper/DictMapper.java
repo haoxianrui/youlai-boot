@@ -2,10 +2,14 @@ package com.youlai.boot.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.entity.Dict;
 import com.youlai.boot.system.model.query.DictPageQuery;
 import com.youlai.boot.system.model.vo.DictPageVO;
+import com.youlai.boot.system.model.vo.DictVO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * 字典 访问层
@@ -24,6 +28,13 @@ public interface DictMapper extends BaseMapper<Dict> {
      * @return
      */
     Page<DictPageVO> getDictPage(Page<DictPageVO> page, DictPageQuery queryParams);
+
+    /**
+     * 获取所有字典和字典数据
+     *
+     * @return
+     */
+    List<DictVO> getAllDictWithData();
 }
 
 

@@ -246,24 +246,6 @@ INSERT INTO `sys_menu` VALUES (137, 135, '0,1,135', '字典数据编辑', 4, NUL
 INSERT INTO `sys_menu` VALUES (138, 135, '0,1,135', '字典数据删除', 4, NULL, '', NULL, 'sys:dict-data:delete', NULL, NULL, 1, 6, '', NULL, now(), now(), NULL);
 
 -- ----------------------------
--- Table structure for sys_message
--- ----------------------------
-DROP TABLE IF EXISTS `sys_message`;
-CREATE TABLE `sys_message`  (
-                                `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-                                `create_by` bigint NULL DEFAULT NULL COMMENT '创建人ID',
-                                `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-                                `update_by` bigint NULL DEFAULT NULL COMMENT '修改人ID',
-                                `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-                                `is_deleted` tinyint NOT NULL DEFAULT 0 COMMENT '逻辑删除标识(1-已删除 0-未删除)',
-                                PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统消息' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of sys_message
--- ----------------------------
-
--- ----------------------------
 -- Table structure for sys_role
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role`;
@@ -439,14 +421,13 @@ INSERT INTO `sys_user_role` VALUES (1, 1);
 INSERT INTO `sys_user_role` VALUES (2, 2);
 INSERT INTO `sys_user_role` VALUES (3, 3);
 
-
 -- ----------------------------
 -- Table structure for sys_log
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log` (
                            `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-                           `module` enum('LOGIN','USER','ROLE','DEPT','MENU','DICT','OTHER')  NOT NULL COMMENT '日志模块',
+                           `module`  varchar(50)  CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '日志模块',
                            `content` varchar(255)  NOT NULL COMMENT '日志内容',
                            `request_uri` varchar(255) COLLATE utf8_general_ci DEFAULT NULL COMMENT '请求路径',
                            `ip` varchar(45)  DEFAULT NULL COMMENT 'IP地址',
@@ -461,7 +442,6 @@ CREATE TABLE `sys_log` (
                            `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '逻辑删除标识(1-已删除 0-未删除)',
                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB  ROW_FORMAT=DYNAMIC COMMENT='系统日志表';
-
 
 -- ----------------------------
 -- Table structure for gen_config

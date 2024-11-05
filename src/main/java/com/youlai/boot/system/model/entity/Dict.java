@@ -11,9 +11,9 @@ import lombok.EqualsAndHashCode;
  * @author haoxr
  * @since 2022/12/17
  */
-@Data
+@EqualsAndHashCode(callSuper = false)
 @TableName("sys_dict")
-@EqualsAndHashCode(callSuper = true)
+@Data
 public class Dict extends BaseEntity {
 
     /**
@@ -36,5 +36,10 @@ public class Dict extends BaseEntity {
      * 备注
      */
     private String remark;
+
+    /**
+     * 逻辑删除标识(0-未删除 1-已删除)
+     */
+    private Integer isDeleted;
 
 }

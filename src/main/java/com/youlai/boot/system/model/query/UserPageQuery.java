@@ -14,7 +14,7 @@ import java.util.List;
  * @since 2022/1/14
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Schema(description ="用户分页查询对象")
 public class UserPageQuery extends BasePageQuery {
 

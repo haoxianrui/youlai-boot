@@ -3,18 +3,18 @@ package com.youlai.boot.system.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 
-import java.io.Serializable;
-
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.youlai.boot.common.base.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 字典数据表
+ * 字典数据实体对象
  *
  * @author haoxr
  * @since 2022/12/17
  */
+@EqualsAndHashCode(callSuper = false)
 @TableName("sys_dict_data")
 @Data
 public class DictData extends BaseEntity {
