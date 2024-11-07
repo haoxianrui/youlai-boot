@@ -65,7 +65,7 @@
                                 `update_by` bigint DEFAULT NULL COMMENT '修改人ID',
                                 `is_deleted` tinyint DEFAULT '0' COMMENT '是否删除(1-删除，0-未删除)',
                                 PRIMARY KEY (`id`) USING BTREE,
-                                KEY `idx_dictcode` (`dict_code`)
+                                KEY `idx_dict_code` (`dict_code`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='字典表';
     -- ----------------------------
     -- Records of sys_dict
