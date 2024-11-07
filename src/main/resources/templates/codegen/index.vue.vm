@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="search-container">
+    <div class="search-bar">
       <el-form ref="queryFormRef" :model="queryParams" :inline="true">
           #foreach($fieldConfig in $fieldConfigs)
               #if($fieldConfig.isShowInQuery == 1)
@@ -93,8 +93,8 @@
       </el-form>
     </div>
 
-    <el-card shadow="never" class="table-container">
-      <template #header>
+    <el-card shadow="never">
+      <div class="mb-10px">
         <el-button
             v-hasPerm="['${moduleName}:${lowerFirstEntityName}:add']"
             type="success"
@@ -112,7 +112,7 @@
           <template #icon><Delete /></template>
           删除
         </el-button>
-      </template>
+      </div>
 
       <el-table
           ref="dataTableRef"
