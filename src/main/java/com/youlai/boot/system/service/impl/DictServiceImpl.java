@@ -67,9 +67,8 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         // 校验 code 是否唯一
         String dictCode = entity.getDictCode();
 
-        long count = this.count(new LambdaQueryWrapper<Dict>()
-                .eq(Dict::getDictCode, dictCode)
-        );
+        long count = this.baseMapper.getDictCodeCount(dictCode);
+
         Assert.isTrue(count == 0, "字典编码已存在");
 
         return this.save(entity);
