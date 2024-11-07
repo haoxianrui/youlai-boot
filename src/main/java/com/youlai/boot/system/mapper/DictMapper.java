@@ -36,14 +36,6 @@ public interface DictMapper extends BaseMapper<Dict> {
      */
     List<DictVO> getAllDictWithData();
 
-    /**
-     * 获取指定字典编码对应的的数量
-     *
-     * @param dictCode 字典编码
-     * @return
-     */
-    long getDictCodeCount(String dictCode);
-
 }
 
 

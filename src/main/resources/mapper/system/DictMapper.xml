@@ -47,14 +47,4 @@
         ORDER BY
             t1.create_time DESC
     </select>
-
-    <!-- 获取指定字典编码对应的的数量 -->
-    <select id="getDictCodeCount" resultType="java.lang.Long">
-        SELECT
-            COUNT(*) AS total
-        FROM
-            sys_dict
-        WHERE
-            dict_code = #{dictCode}
-    </select>
 </mapper>
