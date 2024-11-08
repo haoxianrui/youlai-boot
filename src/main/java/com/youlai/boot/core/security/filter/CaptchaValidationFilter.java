@@ -2,17 +2,15 @@ package com.youlai.boot.core.security.filter;
 
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.util.StrUtil;
-import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SecurityConstants;
-import com.youlai.boot.common.constant.SymbolConstant;
 import com.youlai.boot.common.result.ResultCode;
 import com.youlai.boot.common.util.ResponseUtils;
-import com.youlai.boot.system.service.ConfigService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -27,7 +25,7 @@ import java.io.IOException;
  */
 public class CaptchaValidationFilter extends OncePerRequestFilter {
 
-    private static final AntPathRequestMatcher LOGIN_PATH_REQUEST_MATCHER = new AntPathRequestMatcher(SecurityConstants.LOGIN_PATH, "POST");
+    private static final AntPathRequestMatcher LOGIN_PATH_REQUEST_MATCHER = new AntPathRequestMatcher(SecurityConstants.LOGIN_PATH, HttpMethod.POST.name());
 
     public static final String CAPTCHA_CODE_PARAM_NAME = "captchaCode";
     public static final String CAPTCHA_KEY_PARAM_NAME = "captchaKey";

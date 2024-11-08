@@ -85,7 +85,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     public DictForm getDictForm(Long id) {
         // 获取字典
         Dict entity = this.getById(id);
-        if(entity==null){
+        if (entity == null) {
             throw new BusinessException("字典不存在");
         }
         return dictConverter.toForm(entity);
@@ -108,7 +108,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
                 .eq(Dict::getDictCode, dictCode)
                 .ne(Dict::getId, id)
         );
-        if(count>0){
+        if (count > 0) {
             throw new BusinessException("字典编码已存在");
         }
 
@@ -122,14 +122,8 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
      */
     @Override
     @Transactional
-    public void deleteDictByIds(String ids) {
-
-        Assert.isTrue(StrUtil.isNotBlank(ids), "请选择需要删除的字典");
-
-        List<String> idList = Arrays.stream(ids.split(","))
-                .toList();
-
-        for (String id : idList) {
+    public void deleteDictByIds(List<String> ids) {
+        for (String id : ids) {
             Dict dict = this.getById(id);
             if (dict != null) {
                 boolean removeResult = this.removeById(id);
@@ -145,13 +139,13 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         }
     }
 
-    /**
-     * 获取所有字典和字典数据
-     */
-    @Override
-    public List<DictVO>  getAllDictWithData() {
-        return this.baseMapper.getAllDictWithData();
-    }
+        /**
+         * 获取字典列表（包含字典数据）
+         */
+        @Override
+        public List<DictVO> getAllDictWithData() {
+            return this.baseMapper.getAllDictWithData();
+        }
 }
 
 

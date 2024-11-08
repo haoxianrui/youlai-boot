@@ -13,7 +13,6 @@ import com.youlai.boot.system.model.entity.Dept;
 import com.youlai.boot.system.model.form.DeptForm;
 import com.youlai.boot.system.model.query.DeptQuery;
 import com.youlai.boot.system.model.vo.DeptVO;
-import com.youlai.boot.common.constant.SymbolConstant;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.common.enums.StatusEnum;
 import com.youlai.boot.common.model.Option;
@@ -237,7 +236,7 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
     public boolean deleteByIds(String ids) {
         // 删除部门及子部门
         if (StrUtil.isNotBlank(ids)) {
-            String[] menuIds = ids.split(SymbolConstant.COMMA);
+            String[] menuIds = ids.split(",");
             for (String deptId : menuIds) {
                 this.update(new LambdaUpdateWrapper<Dept>()
                         .eq(Dept::getId, deptId)
@@ -265,7 +264,7 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
         } else {
             Dept parent = this.getById(parentId);
             if (parent != null) {
-                treePath = parent.getTreePath() + SymbolConstant.COMMA + parent.getId();
+                treePath = parent.getTreePath() + "," + parent.getId();
             }
         }
         return treePath;

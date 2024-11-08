@@ -25,14 +25,14 @@ public interface DictMapper extends BaseMapper<Dict> {
      *
      * @param page 分页参数
      * @param queryParams 查询参数
-     * @return
+     * @return 字典分页列表
      */
     Page<DictPageVO> getDictPage(Page<DictPageVO> page, DictPageQuery queryParams);
 
     /**
-     * 获取所有字典和字典数据
+     * 获取字典列表（包含字典数据）
      *
-     * @return
+     * @return 字典列表
      */
     List<DictVO> getAllDictWithData();
 }

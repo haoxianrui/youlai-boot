@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -88,14 +89,8 @@ public class DictController {
     public Result<?> deleteDictionaries(
             @Parameter(description = "字典ID，多个以英文逗号(,)拼接") @PathVariable String ids
     ) {
-        dictService.deleteDictByIds(ids);
+        dictService.deleteDictByIds(Arrays.stream(ids.split(",")).toList());
         return Result.success();
     }
-
-
-
-
-
-
 
 }

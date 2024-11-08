@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @Schema(enumAsRef = true)
-public enum NoticeTargetTypeEnum implements IBaseEnum<Integer> {
+public enum NoticeTargetEnum implements IBaseEnum<Integer> {
 
     ALL(1, "全体"),
     SPECIFIED(2, "指定");
@@ -22,7 +22,7 @@ public enum NoticeTargetTypeEnum implements IBaseEnum<Integer> {
 
     private final String label;
 
-    NoticeTargetTypeEnum(Integer value, String label) {
+    NoticeTargetEnum(Integer value, String label) {
         this.value = value;
         this.label = label;
     }

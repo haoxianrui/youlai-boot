@@ -23,51 +23,47 @@ public interface DictService extends IService<Dict> {
      * 字典分页列表
      *
      * @param queryParams 分页查询对象
-     * @return
+     * @return 字典分页列表
      */
     Page<DictPageVO> getDictPage(DictPageQuery queryParams);
-
 
     /**
      * 获取字典表单详情
      *
      * @param id 字典ID
-     * @return
+     * @return 字典表单
      */
     DictForm getDictForm(Long id);
-
 
     /**
      * 新增字典
      *
      * @param dictForm 字典表单
-     * @return
+     * @return 是否成功
      */
     boolean saveDict(DictForm dictForm);
-
 
     /**
      * 修改字典
      *
      * @param id     字典ID
      * @param dictForm 字典表单
-     * @return
+     * @return 是否成功
      */
     boolean updateDict(Long id, DictForm dictForm);
 
     /**
      * 删除字典
      *
-     * @param idsStr 字典ID，多个以英文逗号(,)分割
-     * @return
+     * @param ids 字典ID集合
      */
-    void deleteDictByIds(String idsStr);
+    void deleteDictByIds(List<String> ids);
 
 
     /**
-     * 获取字典列表
+     *  获取字典列表（包含字典数据）
      *
-     * @return
+     * @return 字典列表
      */
     List<DictVO> getAllDictWithData();
 }
