@@ -29,7 +29,7 @@ public class UserPageVO {
     private String mobile;
 
     @Schema(description="性别")
-    private String genderLabel;
+    private Integer gender;
 
     @Schema(description="用户头像地址")
     private String avatar;

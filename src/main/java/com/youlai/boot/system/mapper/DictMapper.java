@@ -35,6 +35,7 @@ public interface DictMapper extends BaseMapper<Dict> {
      * @return 字典列表
      */
     List<DictVO> getAllDictWithData();
+
 }
 
 

@@ -53,6 +53,12 @@
                     AND u.create_time &lt;= #{endDate}
                 </if>
             </if>
+            <if test="queryParams.roleIds != null and queryParams.roleIds.size() > 0">
+                AND sur.role_id IN
+                <foreach item="roleId" collection="queryParams.roleIds" open="(" separator="," close=")">
+                    #{roleId}
+                </foreach>
+            </if>
         </where>
         GROUP BY
             u.id

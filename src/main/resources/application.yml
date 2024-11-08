@@ -3,6 +3,8 @@ spring:
     name: youlai-boot
   profiles:
     active: dev
+project:
+  version: @project.version@
 
 # 代码生成器配置
 codegen:
