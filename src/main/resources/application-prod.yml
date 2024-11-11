@@ -15,7 +15,7 @@ spring:
     password: 123456
   data:
     redis:
-      database: 1
+      database: 11
       host: www.youlai.tech
       port: 6379
       password: 123456
@@ -40,12 +40,13 @@ spring:
       # 缓存null值，防止缓存穿透
       cache-null-values: true
 mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
   global-config:
     db-config:
       # 主键ID类型
       id-type: none
       # 逻辑删除字段名称
-      logic-delete-field: deleted
+      logic-delete-field: isDeleted
       # 逻辑删除-删除值
       logic-delete-value: 1
       # 逻辑删除-未删除值
@@ -56,14 +57,15 @@ mybatis-plus:
     # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-
 # 安全配置
 security:
+  # JWT 配置
   jwt:
     # JWT 秘钥
     key: SecretKey012345678901234567890123456789012345678901234567890123456789
     # JWT 有效期(单位：秒)
     ttl: 7200
+  # 白名单列表
   ignore-urls:
     - /v3/api-docs/**
     - /doc.html
@@ -74,7 +76,6 @@ security:
     - /swagger-ui.html
     - /api/v1/auth/captcha
     - /ws/**
-    - /ws-app/**
 
 # 文件存储配置
 oss:
@@ -129,9 +130,13 @@ springdoc:
   api-docs:
     path: /v3/api-docs
   group-configs:
-    - group: 'default'
-      paths-to-match: '/**'
-      packages-to-scan: com.youlai.system.controller
+    - group: '系统管理'
+      paths-to-match: "/**"
+      packages-to-scan:
+        - com.youlai.boot.system.controller
+        - com.youlai.boot.shared.auth.controller
+        - com.youlai.boot.shared.file.controller
+        - com.youlai.boot.shared.codegen.controller
   default-flat-param-object: true
 
 # knife4j 接口文档配置
@@ -139,7 +144,7 @@ knife4j:
   # 是否开启 Knife4j 增强功能
   enable: true  # 设置为 true 表示开启增强功能
   # 生产环境配置
-  production: true  # 设置为 true 表示在生产环境中不显示文档，为 false 表示显示文档（通常在开发环境中使用）
+  production: false # 设置为 true 表示在生产环境中不显示文档，为 false 表示显示文档（通常在开发环境中使用）
   setting:
     language: zh_cn
 

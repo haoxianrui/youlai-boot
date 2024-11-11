@@ -1,9 +1,9 @@
 
 <div align="center">
-   <img alt="logo" width="100" height="80" src="https://foruda.gitee.com/images/1723523431330022522/d29e7354_716974.png">
+   <img alt="logo" width="100" height="100" src="https://foruda.gitee.com/images/1724259461244885014/4de96569_716974.png">
    <h2>youlai-boot</h2>
    <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
-   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.3.0-green.svg"/>
+   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.3.4-green.svg"/>
    <a href="https://gitee.com/youlaiorg/youlai-boot" target="_blank">
      <img alt="有来技术" src="https://gitee.com/youlaiorg/youlai-boot/badge/star.svg"/>
    </a>     
@@ -43,47 +43,73 @@
 ```
 youlai-boot
 ├── sql                                 # SQL脚本
-    ├── mysql5                          # MySQL5 脚本
-    ├── mysql8                          # MySQL8 脚本
+│   ├── mysql5                          # MySQL5 脚本
+│   └── mysql8                          # MySQL8 脚本
 ├── src                                 # 源码目录
-    ├── common                          # 公共模块
-    ├── config                          # 自动装配配置
-        ├── CorsConfig                  # 跨域共享配置
-        ├── MybatisConfig               # Mybatis 自动装配配置
-        ├── RedisCacheConfig            # Redis 缓存自动装配配置
-        ├── RedisConfig                 # Redis 自动装配配置
-        ├── SecurityConfig              # Spring Security 自动装配配置
-        ├── SwaggerConfig               # API 接口文档配置
-        ├── WebMvcConfig                # WebMvc 配置
-        ├── WebSocketConfig             # WebSocket 自动装配配置
-        ├── XxlJobConfig                # XXL-JOB 自动装配配置
-    ├── controller                      # 控制层
-    ├── converter                       # MapStruct 转换器
-    ├── filter                          # 过滤器
-        ├── RequestLogFilter            # 请求日志过滤器
-        ├── VerifyCodeFilter            # 验证码过滤器
-    ├── model                           # 模型层
-        ├── bo                          # 业务对象
-        ├── dto                         # 数据传输对象
-        ├── entity                      # 实体对象
-        ├── form                        # 表单对象
-        ├── query                       # 查询参数对象
-        ├── vo                          # 视图对象
-    ├── mapper                          # 数据库访问层
-    ├── plugin                          # 插件(可选)
-        ├── captcha                     # 验证码插件，用于生成验证码
-        ├── dupsubmit                   # 防重提交插件，用于防止表单重复提交
-        ├── mybatis                     # Mybatis 插件，数据权限、字段填充
-        ├── easyexcel                   # EasyExcel 插件，Excel 文件的读写
-        ├── xxljob                      # XXL-JOB 插件，分布式任务调度和执行
-    ├── security                        # Spring Security 安全配置和扩展
-        ├── util                        # 工具类
-            ├── JwtUtils                # JWT 工具类，用于生成和解析 JWT
-            ├── SecurityUtils           # Spring Security 工具类，用于获取当前登录用户
-    ├── service                         # 业务逻辑层
-
-    
-└── end       
+│   ├── common                          # 公共模块
+│   │   ├── annotation                  # 注解定义
+│   │   ├── base                        # 基础类
+│   │   ├── constant                    # 常量
+│   │   ├── enums                       # 枚举类型
+│   │   ├── exception                   # 异常处理
+│   │   ├── model                       # 数据模型
+│   │   ├── result                      # 结果封装
+│   │   └── util                        # 工具类
+│   ├── config                          # 自动装配配置
+│   │   ├── property                    # 配置属性
+│   │   │   ├── AliyunSmsProperties     # 阿里云短信配置属性
+│   │   │   ├── CaptchaProperties       # 验证码配置属性
+│   │   │   ├── CodegenProperties       # 文件配置属性
+│   │   │   ├── MailProperties          # 邮件配置属性
+│   │   │   ├── SecurityProperties      # 安全配置属性
+│   │   ├── CorsConfig                  # 跨域共享配置
+│   │   ├── MybatisConfig               # Mybatis 自动装配配置
+│   │   ├── RedisCacheConfig            # Redis 缓存自动装配配置
+│   │   ├── RedisConfig                 # Redis 自动装配配置
+│   │   ├── SecurityConfig              # Spring Security 自动装配配置
+│   │   ├── SwaggerConfig               # API 接口文档配置
+│   │   ├── WebMvcConfig                # WebMvc 配置
+│   │   ├── WebSocketConfig             # WebSocket 自动装配配置
+│   │   └── XxlJobConfig                # XXL-JOB 自动装配配置
+│   ├── core                            # 核心功能
+│   │   ├── aspect                      # 切面
+│   │   │   ├── LogAspect               # 日志切面
+│   │   │   └── RepeatSubmitAspect      # 防重提交切面
+│   │   ├── filter                      # 过滤器
+│   │   │   ├── RateLimiterFilter       # 限流过滤器
+│   │   │   └── RequestLogFilter        # 请求日志过滤器
+│   │   ├── handler                     # 处理器
+│   │   │   ├── MyDataPermissionHandler # 数据权限处理器
+│   │   │   └── MyMetaObjectHandler     # 元对象字段填充处理器
+│   │   └── security                    # Security 安全中心
+│   ├── modules                         # 业务模块
+│   │   ├── member                      # 会员模块【业务模块演示】
+│   │   ├── order                       # 订单模块【业务模块演示】
+│   │   ├── product                     # 商品模块【业务模块演示】
+│   ├── shared                          # 共享模块
+│   │   ├── auth                        # 认证模块
+│   │   ├── file                        # 文件模块
+│   │   ├── codegen                     # 代码生成模块
+│   │   ├── mail                        # 邮件模块
+│   │   ├── sms                         # 短信模块
+│   │   └── websocket                   # WebSocket 模块
+│   ├── system                          # 系统模块
+│   │   ├── controller                  # 控制层
+│   │   ├── converter                   # MapStruct 转换器
+│   │   ├── event                       # 事件处理
+│   │   ├── handler                     # 处理器
+│   │   ├── listener                    # 监听器
+│   │   ├── model                       # 模型层
+│   │   │   ├── bo                      # 业务对象
+│   │   │   ├── dto                     # 数据传输对象
+│   │   │   ├── entity                  # 实体对象
+│   │   │   ├── form                    # 表单对象
+│   │   │   ├── query                   # 查询参数对象
+│   │   │   └── vo                      # 视图对象
+│   │   ├── mapper                      # 数据库访问层
+│   │   └── service                     # 业务逻辑层
+│   └── YouLaiApplication               # 启动类
+└── end                             
 ```
 
 ## 🌺 前端工程
@@ -111,7 +137,7 @@ youlai-boot
 
 3. **启动项目**
 
-    执行 [SystemApplication.java](src/main/java/com/youlai/system/SystemApplication.java) 的 main 方法完成后端项目启动；
+    执行 [SystemApplication.java](src/main/java/com/youlai/boot/YouLaiApplication.java) 的 main 方法完成后端项目启动；
 
     访问接口文档地址 [http://localhost:8989/doc.html](http://localhost:8989/doc.html) 验证项目启动是否成功。
 

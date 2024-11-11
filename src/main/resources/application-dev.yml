@@ -20,7 +20,6 @@ spring:
       port: 6379
       # 如果Redis 服务未设置密码，需要将password删掉或注释，而不是设置为空字符串
       password: 123456
-
       timeout: 10s
       lettuce:
         pool:
@@ -57,12 +56,13 @@ spring:
     from: youlaitech@163.com
 
 mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
   global-config:
     db-config:
       # 主键ID类型
       id-type: none
-      # 逻辑删除字段名称
-      logic-delete-field: deleted
+      # 逻辑删除全局属性名(驼峰和下划线都支持)
+      logic-delete-field: isDeleted
       # 逻辑删除-删除值
       logic-delete-value: 1
       # 逻辑删除-未删除值
@@ -74,6 +74,7 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 
+
 # 安全配置
 security:
   jwt:
@@ -81,6 +82,7 @@ security:
     key: SecretKey012345678901234567890123456789012345678901234567890123456789
     # JWT 有效期(单位：秒)
     ttl: 7200
+  # 白名单列表
   ignore-urls:
     - /v3/api-docs/**
     - /doc.html
@@ -91,12 +93,11 @@ security:
     - /swagger-ui.html
     - /api/v1/auth/captcha
     - /ws/**
-    - /ws-app/**
 
 # 文件存储配置
 oss:
   # OSS 类型 (目前支持aliyun、minio)
-  type: aliyun
+  type: minio
   # MinIO 对象存储服务
   minio:
     # 服务Endpoint
@@ -146,9 +147,13 @@ springdoc:
   api-docs:
     path: /v3/api-docs
   group-configs:
-    - group: 'default'
-      paths-to-match: '/**'
-      packages-to-scan: com.youlai.system.controller
+    - group: '系统管理'
+      paths-to-match: "/**"
+      packages-to-scan:
+        - com.youlai.boot.system.controller
+        - com.youlai.boot.shared.auth.controller
+        - com.youlai.boot.shared.file.controller
+        - com.youlai.boot.shared.codegen.controller
   default-flat-param-object: true
 
 # knife4j 接口文档配置
