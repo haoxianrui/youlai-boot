@@ -1,4 +1,4 @@
-package com.youlai.boot.system.model.dto;
+package com.youlai.boot.shared.websocket.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

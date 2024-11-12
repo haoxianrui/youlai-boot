@@ -1,6 +1,6 @@
 package com.youlai.boot.shared.file.service;
 
-import com.youlai.boot.system.model.dto.FileInfo;
+import com.youlai.boot.shared.file.model.FileInfo;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

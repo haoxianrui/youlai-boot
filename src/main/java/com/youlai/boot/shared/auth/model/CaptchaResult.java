@@ -1,4 +1,4 @@
-package com.youlai.boot.system.model.dto;
+package com.youlai.boot.shared.auth.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

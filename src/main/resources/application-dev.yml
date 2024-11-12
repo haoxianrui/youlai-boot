@@ -80,8 +80,10 @@ security:
   jwt:
     # JWT 秘钥
     key: SecretKey012345678901234567890123456789012345678901234567890123456789
-    # JWT 有效期(单位：秒)
-    ttl: 7200
+    # 访问令牌 有效期(单位：秒)，默认 1 小时
+    access-token-expiration: 3600
+    # 刷新令牌有效期(单位：秒)，默认 7 天
+    refresh-token-expiration: 604800
   # 白名单列表
   ignore-urls:
     - /v3/api-docs/**

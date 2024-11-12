@@ -6,6 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.List;
 
 /**
+ * 安全配置属性
+ *
  * @author haoxr
  * @since 2024/4/18
  */
@@ -36,9 +38,14 @@ public class SecurityProperties {
         private String key;
 
         /**
-         * JWT 过期时间
+         * 访问令牌有效期(单位：秒)
          */
-        private Long ttl;
+        private Integer accessTokenExpiration;
+
+        /**
+         * 刷新令牌有效期(单位：秒)
+         */
+        private Integer refreshTokenExpiration;
 
     }
 }

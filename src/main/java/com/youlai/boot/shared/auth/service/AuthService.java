@@ -1,7 +1,8 @@
 package com.youlai.boot.shared.auth.service;
 
-import com.youlai.boot.system.model.dto.CaptchaResult;
-import com.youlai.boot.system.model.dto.LoginResult;
+import com.youlai.boot.shared.auth.model.CaptchaResult;
+import com.youlai.boot.shared.auth.model.LoginResult;
+import com.youlai.boot.shared.auth.model.RefreshTokenRequest;
 
 /**
  * 认证服务接口
@@ -31,4 +32,12 @@ public interface AuthService {
      * @return 验证码
      */
     CaptchaResult getCaptcha();
+
+    /**
+     * 刷新令牌
+     *
+     * @param request 刷新令牌请求参数
+     * @return 登录结果
+     */
+    LoginResult refreshToken(RefreshTokenRequest request);
 }

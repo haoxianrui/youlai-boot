@@ -2,7 +2,7 @@ package com.youlai.boot.shared.file.controller;
 
 import com.youlai.boot.common.result.Result;
 import com.youlai.boot.shared.file.service.FileService;
-import com.youlai.boot.system.model.dto.FileInfo;
+import com.youlai.boot.shared.file.model.FileInfo;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -6,7 +6,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.shared.file.service.FileService;
-import com.youlai.boot.system.model.dto.FileInfo;
+import com.youlai.boot.shared.file.model.FileInfo;
 import io.minio.*;
 import io.minio.errors.*;
 import io.minio.http.Method;

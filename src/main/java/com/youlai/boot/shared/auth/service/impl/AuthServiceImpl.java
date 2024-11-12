@@ -5,12 +5,19 @@ import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTPayload;
+import cn.hutool.jwt.JWTUtil;
 import com.youlai.boot.common.constant.SecurityConstants;
+import com.youlai.boot.common.exception.BusinessException;
+import com.youlai.boot.common.result.ResultCode;
+import com.youlai.boot.config.property.SecurityProperties;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.shared.auth.enums.CaptchaTypeEnum;
+import com.youlai.boot.shared.auth.model.RefreshTokenRequest;
 import com.youlai.boot.shared.auth.service.AuthService;
-import com.youlai.boot.system.model.dto.CaptchaResult;
-import com.youlai.boot.system.model.dto.LoginResult;
+import com.youlai.boot.shared.auth.model.CaptchaResult;
+import com.youlai.boot.shared.auth.model.LoginResult;
 import com.youlai.boot.config.property.CaptchaProperties;
 import com.youlai.boot.core.security.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +48,7 @@ public class AuthServiceImpl implements AuthService {
     private final CodeGenerator codeGenerator;
     private final Font captchaFont;
     private final CaptchaProperties captchaProperties;
+    private final SecurityProperties securityProperties;
 
     /**
      * 登录
@@ -54,16 +62,18 @@ public class AuthServiceImpl implements AuthService {
         // 创建认证令牌对象
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username.toLowerCase().trim(), password);
-        // 执行用户认证
+        // 执行用户认证，认证成功返回的Authentication是SysUserDetailsService#loadUserByUsername获取到的的UserDetails
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         // 认证成功后生成JWT令牌
-        String accessToken = JwtUtils.createToken(authentication);
+        String accessToken = JwtUtils.createAccessToken(authentication);
+        String refreshToken = JwtUtils.createRefreshToken(authentication);
         // 将认证信息存入Security上下文，便于在AOP（如日志记录）中获取当前用户信息
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // 返回包含JWT令牌的登录结果
         return LoginResult.builder()
                 .tokenType("Bearer")
                 .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -119,6 +129,38 @@ public class AuthServiceImpl implements AuthService {
         return CaptchaResult.builder()
                 .captchaKey(captchaKey)
                 .captchaBase64(imageBase64Data)
+                .build();
+    }
+
+    /**
+     * 刷新令牌
+     *
+     * @param request 刷新令牌请求参数
+     * @return 新的访问令牌
+     */
+    @Override
+    public LoginResult refreshToken(RefreshTokenRequest request) {
+        // 验证刷新令牌
+
+        String refreshToken = request.getRefreshToken();
+
+        JWT jwt = JWTUtil.parseToken(refreshToken);
+        boolean isValidate = jwt.setKey(securityProperties.getJwt().getKey().getBytes()).validate(0);
+
+        if (!isValidate || redisTemplate.hasKey(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jwt.getPayloads().getStr(JWTPayload.JWT_ID))) {
+            throw new BusinessException(ResultCode.TOKEN_INVALID);
+        }
+
+        Authentication authentication = JwtUtils.getAuthentication(jwt.getPayloads());
+
+        // 创建新的访问令牌
+        String newAccessToken = JwtUtils.createAccessToken(authentication);
+
+        // 返回新的访问令牌
+        return LoginResult.builder()
+                .tokenType("Bearer")
+                .accessToken(newAccessToken)
+                .refreshToken(refreshToken) // 保持刷新令牌不变
                 .build();
     }
 

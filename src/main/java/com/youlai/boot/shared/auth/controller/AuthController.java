@@ -2,9 +2,10 @@ package com.youlai.boot.shared.auth.controller;
 
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.result.Result;
+import com.youlai.boot.shared.auth.model.RefreshTokenRequest;
 import com.youlai.boot.shared.auth.service.AuthService;
-import com.youlai.boot.system.model.dto.CaptchaResult;
-import com.youlai.boot.system.model.dto.LoginResult;
+import com.youlai.boot.shared.auth.model.CaptchaResult;
+import com.youlai.boot.shared.auth.model.LoginResult;
 import com.youlai.boot.common.annotation.Log;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -52,5 +53,12 @@ public class AuthController {
     public Result<CaptchaResult> getCaptcha() {
         CaptchaResult captcha = authService.getCaptcha();
         return Result.success(captcha);
+    }
+
+    @Operation(summary = "刷新token")
+    @PostMapping("/refresh-token")
+    public Result<?> refreshToken(@RequestBody RefreshTokenRequest request) {
+        LoginResult loginResult =  authService.refreshToken(request);
+        return Result.success(loginResult);
     }
 }

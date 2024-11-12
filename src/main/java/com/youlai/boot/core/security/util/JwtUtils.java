@@ -47,9 +47,14 @@ public class JwtUtils {
 
 
     /**
-     * JWT Token 的有效时间(单位:秒)
+     * 访问令牌过期时间，单位：秒
      */
-    private static int ttl;
+    private static int accessTokenExpiration;
+
+    /**
+     * 刷新令牌过期时间，单位：秒
+     */
+    private static int refreshTokenExpiration;
 
 
     @Value("${security.jwt.key}")
@@ -57,10 +62,30 @@ public class JwtUtils {
         JwtUtils.key = key.getBytes();
     }
 
-    @Value("${security.jwt.ttl}")
-    public void setTtl(Integer ttl) {
-        JwtUtils.ttl = ttl;
+    @Value("${security.jwt.access-token-expiration}")
+    public void setAccessTokenExpiration(Integer accessTokenExpiration) {
+        JwtUtils.accessTokenExpiration = accessTokenExpiration;
     }
+
+    @Value("${security.jwt.refresh-token-expiration}")
+    public void setRefreshTokenExpiration(Integer refreshTokenExpiration) {
+        JwtUtils.refreshTokenExpiration = refreshTokenExpiration;
+    }
+
+    /**
+     * 生成访问令牌（JWT Token）
+     *
+     * @param authentication 用户认证信息
+     * @return Token 字符串
+     */
+    public static String createAccessToken(Authentication authentication) {
+        return createToken(authentication, accessTokenExpiration);
+    }
+
+    public static String createRefreshToken(Authentication authentication) {
+        return createToken(authentication, refreshTokenExpiration);
+    }
+
 
     /**
      * 生成 JWT Token
@@ -68,7 +93,7 @@ public class JwtUtils {
      * @param authentication 用户认证信息
      * @return Token 字符串
      */
-    public static String createToken(Authentication authentication) {
+    public static String createToken(Authentication authentication, int expiration) {
 
         SysUserDetails userDetails = (SysUserDetails) authentication.getPrincipal();
 
@@ -78,7 +103,7 @@ public class JwtUtils {
         payload.put(JwtClaimConstants.DATA_SCOPE, userDetails.getDataScope()); // 数据权限范围
 
         // claims 中添加角色信息
-        Set<String> roles = userDetails.getAuthorities().stream()
+        Set<String> roles = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
         payload.put(JwtClaimConstants.AUTHORITIES, roles);
@@ -87,9 +112,9 @@ public class JwtUtils {
         payload.put(JWTPayload.ISSUED_AT, now);
 
         // 设置过期时间 -1 表示永不过期
-        if (ttl != -1) {
-            Date expiration = DateUtil.offsetSecond(now, ttl);
-            payload.put(JWTPayload.EXPIRES_AT, expiration);
+        if (expiration != -1) {
+            Date expiresAt = DateUtil.offsetSecond(now, expiration);
+            payload.put(JWTPayload.EXPIRES_AT, expiresAt);
         }
         payload.put(JWTPayload.SUBJECT, authentication.getName());
         payload.put(JWTPayload.JWT_ID, IdUtil.simpleUUID());

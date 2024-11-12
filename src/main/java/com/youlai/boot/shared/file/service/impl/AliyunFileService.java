@@ -9,7 +9,7 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.youlai.boot.shared.file.service.FileService;
-import com.youlai.boot.system.model.dto.FileInfo;
+import com.youlai.boot.shared.file.model.FileInfo;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

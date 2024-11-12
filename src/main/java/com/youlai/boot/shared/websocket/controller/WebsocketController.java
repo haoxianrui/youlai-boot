@@ -1,6 +1,6 @@
 package com.youlai.boot.shared.websocket.controller;
 
-import com.youlai.boot.system.model.dto.ChatMessage;
+import com.youlai.boot.shared.websocket.model.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
