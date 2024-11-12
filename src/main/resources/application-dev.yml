@@ -73,8 +73,6 @@ mybatis-plus:
     # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-
-
 # 安全配置
 security:
   jwt:
@@ -94,6 +92,7 @@ security:
     - /swagger-ui/**
     - /swagger-ui.html
     - /api/v1/auth/captcha
+    - /api/v1/auth/refresh-token
     - /ws/**
 
 # 文件存储配置

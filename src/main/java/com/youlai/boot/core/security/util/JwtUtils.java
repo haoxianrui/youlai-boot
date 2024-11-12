@@ -32,13 +32,6 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtils {
 
-    private static StringRedisTemplate redisTemplate;
-
-    @Autowired
-    public JwtUtils(StringRedisTemplate redisTemplate) {
-        JwtUtils.redisTemplate = redisTemplate;
-    }
-
 
     /**
      * JWT 加解密使用的密钥
@@ -56,22 +49,22 @@ public class JwtUtils {
      */
     private static int refreshTokenExpiration;
 
+    private static StringRedisTemplate redisTemplate;
 
-    @Value("${security.jwt.key}")
-    public void setKey(String key) {
+
+
+    @Autowired
+    public JwtUtils(
+            @Value("${security.jwt.key}") String key,
+            @Value("${security.jwt.access-token-expiration}") int accessTokenExpiration,
+            @Value("${security.jwt.refresh-token-expiration}") int refreshTokenExpiration,
+            StringRedisTemplate redisTemplate
+    ) {
         JwtUtils.key = key.getBytes();
-    }
-
-    @Value("${security.jwt.access-token-expiration}")
-    public void setAccessTokenExpiration(Integer accessTokenExpiration) {
         JwtUtils.accessTokenExpiration = accessTokenExpiration;
-    }
-
-    @Value("${security.jwt.refresh-token-expiration}")
-    public void setRefreshTokenExpiration(Integer refreshTokenExpiration) {
         JwtUtils.refreshTokenExpiration = refreshTokenExpiration;
+        JwtUtils.redisTemplate = redisTemplate;
     }
-
     /**
      * 生成访问令牌（JWT Token）
      *
@@ -85,7 +78,6 @@ public class JwtUtils {
     public static String createRefreshToken(Authentication authentication) {
         return createToken(authentication, refreshTokenExpiration);
     }
-
 
     /**
      * 生成 JWT Token
