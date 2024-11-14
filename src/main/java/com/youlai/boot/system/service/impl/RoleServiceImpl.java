@@ -61,11 +61,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 new LambdaQueryWrapper<Role>()
                         .and(StrUtil.isNotBlank(keywords),
                                 wrapper ->
-                                        wrapper.like(StrUtil.isNotBlank(keywords), Role::getName, keywords)
+                                        wrapper.like(Role::getName, keywords)
                                                 .or()
-                                                .like(StrUtil.isNotBlank(keywords), Role::getCode, keywords)
+                                                .like(Role::getCode, keywords)
                         )
                         .ne(!SecurityUtils.isRoot(), Role::getCode, SystemConstants.ROOT_ROLE_CODE) // 非超级管理员不显示超级管理员角色
+                        .orderByDesc(Role::getCreateTime).orderByDesc(Role::getUpdateTime)
         );
 
         // 实体转换
