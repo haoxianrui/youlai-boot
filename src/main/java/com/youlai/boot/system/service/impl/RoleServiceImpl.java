@@ -66,6 +66,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                                                 .like(StrUtil.isNotBlank(keywords), Role::getCode, keywords)
                         )
                         .ne(!SecurityUtils.isRoot(), Role::getCode, SystemConstants.ROOT_ROLE_CODE) // 非超级管理员不显示超级管理员角色
+                        .orderByDesc(Role::getId)
         );
 
         // 实体转换
