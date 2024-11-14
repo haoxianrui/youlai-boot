@@ -60,7 +60,7 @@ public class PermissionService {
                 );
 
         if (!hasPermission) {
-            log.error("用户无操作权限");
+            log.error("用户无操作权限：{}",requiredPerm);
         }
         return hasPermission;
     }

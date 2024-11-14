@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.core.security.util.JwtUtils;
+import com.youlai.boot.shared.auth.service.AuthService;
 import com.youlai.boot.system.enums.ContactType;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.shared.mail.service.MailService;
@@ -317,17 +318,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         String newPassword = data.getNewPassword();
-        boolean result= this.update(new LambdaUpdateWrapper<User>()
+        boolean result = this.update(new LambdaUpdateWrapper<User>()
                 .eq(User::getId, userId)
                 .set(User::getPassword, passwordEncoder.encode(newPassword))
         );
-        if(result){
-            String token = SecurityUtils.getTokenFromRequest();
-            if (StrUtil.isNotBlank(token)) {
-                SecurityUtils.invalidateToken(token);
-            }
-        }
-
         return result;
     }
 
@@ -376,7 +370,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 throw new BusinessException("不支持的联系方式类型");
         }
         // 存入 redis 用于校验, 5分钟有效
-        redisTemplate.opsForValue().set(verificationCodePrefix + contact, code, 5, TimeUnit.MINUTES );
+        redisTemplate.opsForValue().set(verificationCodePrefix + contact, code, 5, TimeUnit.MINUTES);
         return true;
     }
 

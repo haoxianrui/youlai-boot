@@ -120,14 +120,5 @@ public class SecurityUtils {
         return request.getHeader(HttpHeaders.AUTHORIZATION);
     }
 
-    /**
-     * 将 Token 加入黑名单并清空 Spring Security 上下文
-     *
-     * @param token 要失效的 Token
-     */
-    public static void invalidateToken(String token) {
-        JwtUtils.addTokenToBlacklist(token);
-        SecurityContextHolder.clearContext();
-    }
 
 }

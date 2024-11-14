@@ -19,6 +19,6 @@ public class LoginResult {
     private String refreshToken;
 
     @Schema(description = "过期时间(单位：毫秒)")
-    private Long expires;
+    private Integer expiresIn;
 
 }

@@ -5,6 +5,7 @@ import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
@@ -26,6 +27,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -65,8 +67,11 @@ public class AuthServiceImpl implements AuthService {
         // 执行用户认证，认证成功返回的Authentication是SysUserDetailsService#loadUserByUsername获取到的的UserDetails
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         // 认证成功后生成JWT令牌
-        String accessToken = JwtUtils.createAccessToken(authentication);
-        String refreshToken = JwtUtils.createRefreshToken(authentication);
+        Integer accessTokenExpiration = securityProperties.getJwt().getAccessTokenExpiration();
+        Integer refreshTokenExpiration = securityProperties.getJwt().getRefreshTokenExpiration();
+        byte[] key = securityProperties.getJwt().getKey().getBytes();
+        String accessToken = JwtUtils.createToken(authentication, accessTokenExpiration, key);
+        String refreshToken = JwtUtils.createToken(authentication, refreshTokenExpiration, key);
         // 将认证信息存入Security上下文，便于在AOP（如日志记录）中获取当前用户信息
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // 返回包含JWT令牌的登录结果
@@ -74,6 +79,7 @@ public class AuthServiceImpl implements AuthService {
                 .tokenType("Bearer")
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .expiresIn(accessTokenExpiration)
                 .build();
     }
 
@@ -83,8 +89,26 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void logout() {
         String token = SecurityUtils.getTokenFromRequest();
-        if (StrUtil.isNotBlank(token)) {
-            SecurityUtils.invalidateToken(token);
+        if (StrUtil.isNotBlank(token) && token.startsWith(SecurityConstants.JWT_TOKEN_PREFIX)) {
+            token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
+            JSONObject payloads = JWTUtil.parseToken(token).getPayloads();
+            String jti = payloads.getStr(JWTPayload.JWT_ID);
+            Long expiration = payloads.getLong(JWTPayload.EXPIRES_AT);
+
+            if (expiration != null) {
+                long currentTimeSeconds = System.currentTimeMillis() / 1000;
+                if (expiration < currentTimeSeconds) {
+                    // Token已过期，直接返回
+                    return;
+                }
+                // 计算Token剩余时间，将其加入黑名单
+                long ttl = expiration - currentTimeSeconds;
+                redisTemplate.opsForValue().set(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti, null, ttl, TimeUnit.SECONDS);
+            } else {
+                // 永不过期的Token永久加入黑名单
+                redisTemplate.opsForValue().set(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti, null);
+            }
+            SecurityContextHolder.clearContext();
         }
     }
 
@@ -148,19 +172,22 @@ public class AuthServiceImpl implements AuthService {
         boolean isValidate = jwt.setKey(securityProperties.getJwt().getKey().getBytes()).validate(0);
 
         if (!isValidate || redisTemplate.hasKey(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jwt.getPayloads().getStr(JWTPayload.JWT_ID))) {
-            throw new BusinessException(ResultCode.TOKEN_INVALID);
+            throw new BusinessException(ResultCode.REFRESH_TOKEN_INVALID);
         }
 
         Authentication authentication = JwtUtils.getAuthentication(jwt.getPayloads());
 
         // 创建新的访问令牌
-        String newAccessToken = JwtUtils.createAccessToken(authentication);
+        Integer accessTokenExpiration = securityProperties.getJwt().getAccessTokenExpiration();
+        byte[] key = securityProperties.getJwt().getKey().getBytes();
+        String newAccessToken = JwtUtils.createToken(authentication, accessTokenExpiration, key);
 
         // 返回新的访问令牌
         return LoginResult.builder()
                 .tokenType("Bearer")
                 .accessToken(newAccessToken)
-                .refreshToken(refreshToken) // 保持刷新令牌不变
+                .refreshToken(refreshToken)
+                .expiresIn(securityProperties.getJwt().getAccessTokenExpiration())
                 .build();
     }
 

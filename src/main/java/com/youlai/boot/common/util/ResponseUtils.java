@@ -30,7 +30,7 @@ public class ResponseUtils {
     public static void writeErrMsg(HttpServletResponse response, ResultCode resultCode) {
         // 根据不同的结果码设置HTTP状态
         int status = switch (resultCode) {
-            case ACCESS_UNAUTHORIZED, TOKEN_INVALID -> HttpStatus.UNAUTHORIZED.value();
+            case ACCESS_UNAUTHORIZED, TOKEN_INVALID,REFRESH_TOKEN_INVALID -> HttpStatus.UNAUTHORIZED.value();
             case TOKEN_ACCESS_FORBIDDEN -> HttpStatus.FORBIDDEN.value();
             default -> HttpStatus.BAD_REQUEST.value();
         };

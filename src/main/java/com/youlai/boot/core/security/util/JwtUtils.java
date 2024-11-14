@@ -29,63 +29,17 @@ import java.util.stream.Collectors;
  * @author Ray Hao
  * @since 2.6.0
  */
-@Component
 public class JwtUtils {
-
-
-    /**
-     * JWT 加解密使用的密钥
-     */
-    private static byte[] key;
-
-
-    /**
-     * 访问令牌过期时间，单位：秒
-     */
-    private static int accessTokenExpiration;
-
-    /**
-     * 刷新令牌过期时间，单位：秒
-     */
-    private static int refreshTokenExpiration;
-
-    private static StringRedisTemplate redisTemplate;
-
-
-
-    @Autowired
-    public JwtUtils(
-            @Value("${security.jwt.key}") String key,
-            @Value("${security.jwt.access-token-expiration}") int accessTokenExpiration,
-            @Value("${security.jwt.refresh-token-expiration}") int refreshTokenExpiration,
-            StringRedisTemplate redisTemplate
-    ) {
-        JwtUtils.key = key.getBytes();
-        JwtUtils.accessTokenExpiration = accessTokenExpiration;
-        JwtUtils.refreshTokenExpiration = refreshTokenExpiration;
-        JwtUtils.redisTemplate = redisTemplate;
-    }
-    /**
-     * 生成访问令牌（JWT Token）
-     *
-     * @param authentication 用户认证信息
-     * @return Token 字符串
-     */
-    public static String createAccessToken(Authentication authentication) {
-        return createToken(authentication, accessTokenExpiration);
-    }
-
-    public static String createRefreshToken(Authentication authentication) {
-        return createToken(authentication, refreshTokenExpiration);
-    }
 
     /**
      * 生成 JWT Token
      *
      * @param authentication 用户认证信息
+     * @param expiration 有效期(秒)
+     * @param key  HS256(HmacSHA256)密钥
      * @return Token 字符串
      */
-    public static String createToken(Authentication authentication, int expiration) {
+    public static String createToken(Authentication authentication, int expiration,byte[] key) {
 
         SysUserDetails userDetails = (SysUserDetails) authentication.getPrincipal();
 
@@ -134,32 +88,6 @@ public class JwtUtils {
                 .collect(Collectors.toSet());
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
-    }
-
-    /**
-     * 将 Token 加入黑名单
-     */
-    public static void addTokenToBlacklist(String token) {
-        if (StrUtil.isNotBlank(token) && token.startsWith(SecurityConstants.JWT_TOKEN_PREFIX)) {
-            token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
-            JSONObject payloads = JWTUtil.parseToken(token).getPayloads();
-            String jti = payloads.getStr(JWTPayload.JWT_ID);
-            Long expiration = payloads.getLong(JWTPayload.EXPIRES_AT);
-
-            if (expiration != null) {
-                long currentTimeSeconds = System.currentTimeMillis() / 1000;
-                if (expiration < currentTimeSeconds) {
-                    // Token已过期，直接返回
-                    return;
-                }
-                // 计算Token剩余时间，将其加入黑名单
-                long ttl = expiration - currentTimeSeconds;
-                redisTemplate.opsForValue().set(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti, null, ttl, TimeUnit.SECONDS);
-            } else {
-                // 永不过期的Token永久加入黑名单
-                redisTemplate.opsForValue().set(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti, null);
-            }
-        }
     }
 
 
