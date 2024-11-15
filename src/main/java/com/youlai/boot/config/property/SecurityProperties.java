@@ -25,6 +25,10 @@ public class SecurityProperties {
      */
     private JwtProperty jwt;
 
+    /**
+     * 令牌类型 jwt / redis-token
+     */
+    private String tokenType;
 
     /**
      * JWT 配置

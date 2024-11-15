@@ -4,8 +4,8 @@ import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.result.Result;
 import com.youlai.boot.shared.auth.model.RefreshTokenRequest;
 import com.youlai.boot.shared.auth.service.AuthService;
-import com.youlai.boot.shared.auth.model.CaptchaResult;
-import com.youlai.boot.shared.auth.model.LoginResult;
+import com.youlai.boot.shared.auth.model.CaptchaResponse;
+import com.youlai.boot.shared.auth.model.AuthTokenResponse;
 import com.youlai.boot.common.annotation.Log;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,12 +32,12 @@ public class AuthController {
     @Operation(summary = "登录")
     @PostMapping("/login")
     @Log(value = "登录", module = LogModuleEnum.LOGIN)
-    public Result<LoginResult> login(
+    public Result<AuthTokenResponse> login(
             @Parameter(description = "用户名", example = "admin") @RequestParam String username,
             @Parameter(description = "密码", example = "123456") @RequestParam String password
     ) {
-        LoginResult loginResult = authService.login(username, password);
-        return Result.success(loginResult);
+        AuthTokenResponse authTokenResponse = authService.login(username, password);
+        return Result.success(authTokenResponse);
     }
 
     @Operation(summary = "注销")
@@ -50,15 +50,15 @@ public class AuthController {
 
     @Operation(summary = "获取验证码")
     @GetMapping("/captcha")
-    public Result<CaptchaResult> getCaptcha() {
-        CaptchaResult captcha = authService.getCaptcha();
+    public Result<CaptchaResponse> getCaptcha() {
+        CaptchaResponse captcha = authService.getCaptcha();
         return Result.success(captcha);
     }
 
     @Operation(summary = "刷新token")
     @PostMapping("/refresh-token")
     public Result<?> refreshToken(@RequestBody RefreshTokenRequest request) {
-        LoginResult loginResult =  authService.refreshToken(request);
-        return Result.success(loginResult);
+        AuthTokenResponse authTokenResponse =  authService.refreshToken(request);
+        return Result.success(authTokenResponse);
     }
 }
