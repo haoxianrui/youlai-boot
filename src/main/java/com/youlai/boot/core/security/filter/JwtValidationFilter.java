@@ -1,19 +1,14 @@
 package com.youlai.boot.core.security.filter;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.jwt.JWT;
-import cn.hutool.jwt.JWTPayload;
-import cn.hutool.jwt.JWTUtil;
 import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.common.result.ResultCode;
-import com.youlai.boot.core.security.util.JwtUtils;
 import com.youlai.boot.common.util.ResponseUtils;
+import com.youlai.boot.shared.auth.service.impl.JwtTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,13 +24,11 @@ import java.io.IOException;
  */
 public class JwtValidationFilter extends OncePerRequestFilter {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final JwtTokenService jwtTokenService;
 
-    private final byte[] secretKey;
 
-    public JwtValidationFilter(RedisTemplate<String, Object> redisTemplate, String secretKey) {
-        this.redisTemplate = redisTemplate;
-        this.secretKey = secretKey.getBytes();
+    public JwtValidationFilter(JwtTokenService jwtTokenService) {
+        this.jwtTokenService = jwtTokenService;
     }
 
 
@@ -52,24 +45,14 @@ public class JwtValidationFilter extends OncePerRequestFilter {
             if (StrUtil.isNotBlank(token) && token.startsWith(SecurityConstants.JWT_TOKEN_PREFIX)) {
                 // 去除 Bearer 前缀
                 token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
-                // 解析 Token
-                JWT jwt = JWTUtil.parseToken(token);
-                // 检查 Token 是否有效(验签 + 是否过期)
-                boolean isValidate = jwt.setKey(secretKey).validate(0);
+                // 校验 JWT Token ，包括验签和是否过期
+                boolean isValidate = jwtTokenService.validateToken(token);
                 if (!isValidate) {
                     ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
                     return;
                 }
-                // 检查 Token 是否已被加入黑名单(注销)
-                JSONObject payloads = jwt.getPayloads();
-                String jti = payloads.getStr(JWTPayload.JWT_ID);
-                boolean isTokenBlacklisted = Boolean.TRUE.equals(redisTemplate.hasKey(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti));
-                if (isTokenBlacklisted) {
-                    ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
-                    return;
-                }
-                // Token 有效将其解析为 Authentication 对象，并设置到 Spring Security 上下文中
-                Authentication authentication = JwtUtils.getAuthentication(payloads);
+                // 将 Token 解析为 Authentication 对象，并设置到 Spring Security 上下文中
+                Authentication authentication = jwtTokenService.parseToken(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {

@@ -1,10 +1,8 @@
 package com.youlai.boot.shared.auth.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * 验证码响应对象
@@ -13,11 +11,9 @@ import lombok.NoArgsConstructor;
  * @since 2023/03/24
  */
 @Schema(description = "验证码响应对象")
-@Builder
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class CaptchaResult {
+@Builder
+public class CaptchaResponse {
 
     @Schema(description = "验证码ID")
     private String captchaKey;

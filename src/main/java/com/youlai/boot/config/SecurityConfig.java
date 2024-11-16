@@ -9,6 +9,7 @@ import com.youlai.boot.core.security.exception.MyAccessDeniedHandler;
 import com.youlai.boot.core.security.exception.MyAuthenticationEntryPoint;
 import com.youlai.boot.core.security.filter.JwtValidationFilter;
 import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
+import com.youlai.boot.shared.auth.service.impl.JwtTokenService;
 import com.youlai.boot.system.service.ConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -46,6 +47,7 @@ public class SecurityConfig {
     private final CodeGenerator codeGenerator;
     private final SecurityProperties securityProperties;
     private final ConfigService configService;
+    private final JwtTokenService jwtTokenService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -70,7 +72,7 @@ public class SecurityConfig {
         // 验证码校验过滤器
         http.addFilterBefore(new CaptchaValidationFilter(redisTemplate, codeGenerator), UsernamePasswordAuthenticationFilter.class);
         // JWT 校验过滤器
-        http.addFilterBefore(new JwtValidationFilter(redisTemplate,securityProperties.getJwt().getKey()), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtValidationFilter(jwtTokenService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

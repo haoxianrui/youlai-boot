@@ -10,8 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SystemConstants;
-import com.youlai.boot.core.security.util.JwtUtils;
-import com.youlai.boot.shared.auth.service.AuthService;
+import com.youlai.boot.shared.auth.service.TokenService;
 import com.youlai.boot.system.enums.ContactType;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.shared.mail.service.MailService;
@@ -35,16 +34,11 @@ import com.youlai.boot.system.service.RoleMenuService;
 import com.youlai.boot.system.service.RoleService;
 import com.youlai.boot.system.service.UserRoleService;
 import com.youlai.boot.system.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -82,6 +76,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final AliyunSmsProperties aliyunSmsProperties;
 
     private final StringRedisTemplate redisTemplate;
+
+    private final TokenService tokenService;
 
     /**
      * 获取用户分页列表
@@ -322,6 +318,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .eq(User::getId, userId)
                 .set(User::getPassword, passwordEncoder.encode(newPassword))
         );
+
+        if(result){
+            // 加入黑名单，重新登录
+            String accessToken = SecurityUtils.getTokenFromRequest();
+            tokenService.blacklistToken(accessToken);
+        }
         return result;
     }
 
