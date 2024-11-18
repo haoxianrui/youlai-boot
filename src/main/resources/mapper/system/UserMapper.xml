@@ -62,6 +62,16 @@
         </where>
         GROUP BY
             u.id
+        <choose>
+            <!-- 如果排序参数都传入 -->
+            <when test="queryParams.field != null and queryParams.field != '' and queryParams.direction != null">
+                ORDER BY u.${queryParams.field} ${queryParams.direction}
+            </when>
+            <!-- 默认排序 -->
+            <otherwise>
+                ORDER BY u.update_time DESC, u.create_time DESC
+            </otherwise>
+        </choose>
     </select>
 
     <!-- 用户表单信息映射 -->

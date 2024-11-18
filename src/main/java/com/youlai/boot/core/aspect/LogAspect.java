@@ -34,12 +34,12 @@ public class LogAspect {
     private final LogService logService;
     private final HttpServletRequest request;
 
-    @Pointcut("@annotation(com.youlai.boot.common.annotation.Log)")
+    @Pointcut("@annotation(com.youlai.boot.core.annotation.Log)")
     public void logPointcut() {
     }
 
     @Around("logPointcut() && @annotation(logAnnotation)")
-    public Object logExecutionTime(ProceedingJoinPoint joinPoint, com.youlai.boot.common.annotation.Log logAnnotation) throws Throwable {
+    public Object logExecutionTime(ProceedingJoinPoint joinPoint, com.youlai.boot.core.annotation.Log logAnnotation) throws Throwable {
         String requestURI = request.getRequestURI();
 
         Long userId = null;

@@ -4,8 +4,8 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.youlai.boot.common.annotation.Log;
-import com.youlai.boot.common.annotation.RepeatSubmit;
+import com.youlai.boot.core.annotation.Log;
+import com.youlai.boot.core.annotation.RepeatSubmit;
 import com.youlai.boot.system.enums.ContactType;
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.model.Option;
@@ -60,7 +60,7 @@ public class UserController {
     @GetMapping("/page")
     @Log(value = "用户分页列表", module = LogModuleEnum.USER)
     public PageResult<UserPageVO> getUserPage(
-            UserPageQuery queryParams
+            @Valid UserPageQuery queryParams
     ) {
         IPage<UserPageVO> result = userService.getUserPage(queryParams);
         return PageResult.success(result);

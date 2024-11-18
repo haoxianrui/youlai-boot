@@ -10,7 +10,7 @@ import com.youlai.boot.shared.codegen.model.form.GenConfigForm;
 import com.youlai.boot.shared.codegen.model.query.TablePageQuery;
 import com.youlai.boot.shared.codegen.model.vo.CodegenPreviewVO;
 import com.youlai.boot.shared.codegen.model.vo.TablePageVO;
-import com.youlai.boot.common.annotation.Log;
+import com.youlai.boot.core.annotation.Log;
 import com.youlai.boot.shared.codegen.service.GenConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

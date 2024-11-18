@@ -1,8 +1,6 @@
 package com.youlai.boot.system.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,7 +13,6 @@ import com.youlai.boot.system.model.entity.DictData;
 import com.youlai.boot.system.model.form.DictForm;
 import com.youlai.boot.system.model.query.DictPageQuery;
 import com.youlai.boot.system.model.vo.DictPageVO;
-import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.vo.DictVO;
 import com.youlai.boot.system.service.DictDataService;
 import com.youlai.boot.system.service.DictService;
@@ -23,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * 数据字典业务实现类

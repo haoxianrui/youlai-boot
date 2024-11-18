@@ -1,8 +1,8 @@
 package com.youlai.boot.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.boot.common.annotation.Log;
-import com.youlai.boot.common.annotation.RepeatSubmit;
+import com.youlai.boot.core.annotation.Log;
+import com.youlai.boot.core.annotation.RepeatSubmit;
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.common.result.PageResult;

@@ -19,10 +19,11 @@ public class BasePageQuery implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-
     @Schema(description = "页码", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     private int pageNum = 1;
 
     @Schema(description = "每页记录数", requiredMode = Schema.RequiredMode.REQUIRED, example = "10")
     private int pageSize = 10;
+
+
 }
