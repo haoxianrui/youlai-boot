@@ -47,7 +47,7 @@ public class UserPageVO {
     private String roleNames;
 
     @Schema(description="创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm")
     private Date createTime;
 
 }

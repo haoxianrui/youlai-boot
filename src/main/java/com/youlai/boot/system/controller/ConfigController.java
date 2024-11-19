@@ -32,8 +32,8 @@ public class ConfigController {
 
     private final ConfigService configService;
 
-    @GetMapping("/page")
     @Operation(summary = "系统配置分页列表")
+    @GetMapping("/page")
     @PreAuthorize("@ss.hasPerm('sys:config:query')")
     public PageResult<ConfigVO> page(@ParameterObject ConfigPageQuery configPageQuery) {
         IPage<ConfigVO> result = configService.page(configPageQuery);
@@ -57,21 +57,21 @@ public class ConfigController {
     }
 
     @Operation(summary = "刷新系统配置缓存")
-    @PatchMapping
+    @PutMapping(value = "/refresh")
     @PreAuthorize("@ss.hasPerm('sys:config:refresh')")
     public Result<ConfigForm> refreshCache() {
         return Result.judge(configService.refreshCache());
     }
 
-    @PutMapping(value = "/{id}")
     @Operation(summary = "修改系统配置")
+    @PutMapping(value = "/{id}")
     @PreAuthorize("@ss.hasPerm('sys:config:update')")
     public Result<?> update(@Valid @PathVariable Long id, @RequestBody ConfigForm configForm) {
         return Result.judge(configService.edit(id, configForm));
     }
 
-    @DeleteMapping("/{id}")
     @Operation(summary = "删除系统配置")
+    @DeleteMapping("/{id}")
     @PreAuthorize("@ss.hasPerm('sys:config:delete')")
     public Result<?> delete(@PathVariable Long id) {
         return Result.judge(configService.delete(id));
