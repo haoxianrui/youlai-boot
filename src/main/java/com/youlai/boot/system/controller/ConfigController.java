@@ -57,7 +57,7 @@ public class ConfigController {
     }
 
     @Operation(summary = "刷新系统配置缓存")
-    @PutMapping(value = "/refresh")
+    @RequestMapping(value = "/refresh", method = {RequestMethod.PUT,RequestMethod.PATCH})
     @PreAuthorize("@ss.hasPerm('sys:config:refresh')")
     public Result<ConfigForm> refreshCache() {
         return Result.judge(configService.refreshCache());
