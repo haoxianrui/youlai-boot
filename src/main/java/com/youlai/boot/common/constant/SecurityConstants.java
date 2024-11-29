@@ -35,5 +35,8 @@ public interface SecurityConstants {
      */
     String JWT_TOKEN_PREFIX = "Bearer ";
 
-
+    /**
+     * 微信登录路径
+     */
+    String WX_LOGIN_PATH = "/api/v1/auth/wechatLogin";
 }

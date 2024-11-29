@@ -158,4 +158,11 @@ public interface UserService extends IService<User> {
      * @return {@link List<Option<String>>} 用户选项列表
      */
     List<Option<String>> listUserOptions();
+
+    /**
+     * 根据openId获取用户信息
+     * @param openId openId
+     * @return {@link User}
+     */
+    User getUserByOpenId(String openId);
 }
