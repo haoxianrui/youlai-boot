@@ -57,7 +57,7 @@ public class SecurityConfig {
                         requestMatcherRegistry
                                 .requestMatchers(
                                         SecurityConstants.LOGIN_PATH,
-                                        SecurityConstants.WX_LOGIN_PATH)
+                                        SecurityConstants.WECHAT_LOGIN_PATH)
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )

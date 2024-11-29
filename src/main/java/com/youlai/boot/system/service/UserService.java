@@ -161,6 +161,7 @@ public interface UserService extends IService<User> {
 
     /**
      * 根据openId获取用户信息
+     *
      * @param openId openId
      * @return {@link User}
      */

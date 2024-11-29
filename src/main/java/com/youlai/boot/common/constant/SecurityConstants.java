@@ -38,5 +38,5 @@ public interface SecurityConstants {
     /**
      * 微信登录路径
      */
-    String WX_LOGIN_PATH = "/api/v1/auth/wechatLogin";
+    String WECHAT_LOGIN_PATH = "/api/v1/auth/wechat-login";
 }

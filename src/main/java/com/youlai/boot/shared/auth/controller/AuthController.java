@@ -63,7 +63,7 @@ public class AuthController {
     }
 
     @Operation(summary = "微信登录")
-    @PostMapping("/wechatLogin")
+    @PostMapping("/wechat-login")
     @Log(value = "微信登录", module = LogModuleEnum.LOGIN)
     public Result<AuthTokenResponse> wechatLogin(
             @Parameter(description = "微信授权码", example = "code") @RequestParam String code

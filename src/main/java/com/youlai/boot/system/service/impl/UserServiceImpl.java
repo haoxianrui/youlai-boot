@@ -448,6 +448,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      * 根据openId获取用户信息
+     *
      * @param openId openId
      * @return {@link User}
      */

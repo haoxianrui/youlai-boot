@@ -158,6 +158,12 @@ public class AuthServiceImpl implements AuthService {
         return tokenService.refreshToken(refreshToken);
     }
 
+    /**
+     *  微信小程序登录
+     *
+     * @param code 微信登录code
+     * @return 访问令牌
+     */
     @Override
     public AuthTokenResponse wechatLogin(String code) {
         // 1. 通过code获取微信access_token
@@ -179,7 +185,6 @@ public class AuthServiceImpl implements AuthService {
 
         // 2. 根据openId查询用户信息，如果不存在则注册新用户
         User user = userService.getUserByOpenId(openId);
-
         if (Objects.isNull(user)) {
             String name = "微信用户" + IdUtil.simpleUUID();
             UserForm newUser = new UserForm();
@@ -188,11 +193,9 @@ public class AuthServiceImpl implements AuthService {
             newUser.setUsername(name);
             boolean result = userService.saveUser(newUser);
             if (!result) {
-
                 throw new BusinessException("微信用户注册失败");
             }
         }
-        user = userService.getUserByOpenId(openId);
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(user.getUsername().toLowerCase().trim(), SystemConstants.DEFAULT_PASSWORD);
         // 执行用户认证

@@ -11,8 +11,9 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * 配置微信 appId 和 appSecret
+ *
  * @author wangtao
- * @date 2024/11/26 17:28
+ * @since 2024/11/26 17:28
  */
 @Setter
 @ConfigurationProperties(prefix = "wechat.miniapp")

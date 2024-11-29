@@ -42,7 +42,8 @@ public interface AuthService {
     AuthTokenResponse refreshToken(RefreshTokenRequest request);
 
     /**
-     * 微信登录
+     * 微信小程序登录
+     *
      * @param code 微信登录code
      * @return 登录结果
      */
