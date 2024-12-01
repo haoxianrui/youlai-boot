@@ -54,7 +54,11 @@ public class SecurityConfig {
         http
 
                 .authorizeHttpRequests(requestMatcherRegistry ->
-                        requestMatcherRegistry.requestMatchers(SecurityConstants.LOGIN_PATH).permitAll()
+                        requestMatcherRegistry
+                                .requestMatchers(
+                                        SecurityConstants.LOGIN_PATH,
+                                        SecurityConstants.WECHAT_LOGIN_PATH)
+                                .permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->

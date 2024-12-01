@@ -83,6 +83,7 @@ public class ConfigServiceImpl extends ServiceImpl<ConfigMapper, Config> impleme
                 "配置键已存在");
         Config config = configConverter.toEntity(configForm);
         config.setCreateBy(SecurityUtils.getUserId());
+        config.setIsDeleted(0);
         return this.save(config);
     }
 

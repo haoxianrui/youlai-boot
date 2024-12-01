@@ -457,4 +457,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         return Collections.emptyList();
     }
+
+    /**
+     * 根据openId获取用户信息
+     *
+     * @param openId openId
+     * @return {@link User}
+     */
+    @Override
+    public User getUserByOpenId(String openId) {
+        return this.getOne(new LambdaQueryWrapper<User>().eq(User::getOpenId, openId));
+    }
 }

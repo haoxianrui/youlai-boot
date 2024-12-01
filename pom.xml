@@ -54,6 +54,9 @@
         <!-- 阿里云短信 -->
         <aliyun.java.sdk.core.version>4.6.4</aliyun.java.sdk.core.version>
         <aliyun.java.sdk.dysmsapi.version>2.2.1</aliyun.java.sdk.dysmsapi.version>
+
+        <!-- 微信 jdk -->
+        <weixin-java.version>4.5.5.B</weixin-java.version>
     </properties>
 
     <dependencies>
@@ -221,6 +224,12 @@
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
             <version>${aliyun.java.sdk.dysmsapi.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-miniapp</artifactId>
+            <version>${weixin-java.version}</version>
         </dependency>
 
     </dependencies>

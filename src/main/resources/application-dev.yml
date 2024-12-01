@@ -214,3 +214,8 @@ captcha:
     # 验证码有效期(秒)
     expire-seconds: 120
 
+# 微信小程序
+wechat:
+  miniapp:
+    appId: xxxxxx
+    appSecret: xxxxxx

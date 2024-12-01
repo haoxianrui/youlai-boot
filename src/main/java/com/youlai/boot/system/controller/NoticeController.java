@@ -83,8 +83,7 @@ public class NoticeController {
     }
 
     @Operation(summary = "发布通知公告")
-    @PatchMapping(value = "/{id}/publish")
-    @PutMapping(value = "/{id}/publish")
+    @PutMapping("/{id}/publish")
     @PreAuthorize("@ss.hasPerm('sys:notice:publish')")
     public Result<Void> publishNotice(
             @Parameter(description = "通知公告ID") @PathVariable Long id
@@ -94,8 +93,7 @@ public class NoticeController {
     }
 
     @Operation(summary = "撤回通知公告")
-    @PutMapping(value = "/{id}/revoke")
-    @PatchMapping(value = "/{id}/revoke")
+    @PutMapping("/{id}/revoke")
     @PreAuthorize("@ss.hasPerm('sys:notice:revoke')")
     public Result<Void> revokeNotice(
             @Parameter(description = "通知公告ID") @PathVariable Long id

@@ -40,4 +40,12 @@ public interface AuthService {
      * @return 登录结果
      */
     AuthTokenResponse refreshToken(RefreshTokenRequest request);
+
+    /**
+     * 微信小程序登录
+     *
+     * @param code 微信登录code
+     * @return 登录结果
+     */
+    AuthTokenResponse wechatLogin(String code);
 }

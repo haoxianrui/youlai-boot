@@ -72,4 +72,9 @@ public class User extends BaseEntity {
      * 是否删除(0-否 1-是)
      */
     private Integer isDeleted;
+
+    /**
+     * 微信openid
+     */
+    private String openId;
 }
