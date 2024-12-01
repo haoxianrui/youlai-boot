@@ -150,7 +150,7 @@ public interface UserService extends IService<User> {
      * @param data 表单数据
      * @return {@link Boolean} 是否绑定成功
      */
-    boolean bindEmail(EmailChangeForm data);
+    boolean bindEmail(EmailBindingForm data);
 
     /**
      * 获取用户选项列表

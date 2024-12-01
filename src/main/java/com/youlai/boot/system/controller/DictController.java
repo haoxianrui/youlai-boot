@@ -46,7 +46,7 @@ public class DictController {
         return PageResult.success(result);
     }
 
-    @Operation(summary = "字典列表")
+    @Operation(summary = "所有字典列表")
     @GetMapping("/list")
     public Result<List<DictVO>> getAllDictWithData() {
         List<DictVO> list = dictService.getAllDictWithData();

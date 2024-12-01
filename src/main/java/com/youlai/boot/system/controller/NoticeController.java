@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
  * @author youlaitech
  * @since 2024-08-27 10:31
  */
-@Tag(name = "通知公告接口")
+@Tag(name = "12.通知公告接口")
 @RestController
 @RequestMapping("/api/v1/notices")
 @RequiredArgsConstructor

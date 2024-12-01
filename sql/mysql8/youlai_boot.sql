@@ -27,10 +27,10 @@
     DROP TABLE IF EXISTS `sys_dept`;
     CREATE TABLE `sys_dept`  (
                                  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-                                 `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '部门名称',
-                                 `code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '部门编号',
+                                 `name` varchar(100)  NOT NULL DEFAULT '' COMMENT '部门名称',
+                                 `code` varchar(100)  NOT NULL COMMENT '部门编号',
                                  `parent_id` bigint NOT NULL DEFAULT 0 COMMENT '父节点id',
-                                 `tree_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '父节点id路径',
+                                 `tree_path` varchar(255)  NOT NULL DEFAULT '' COMMENT '父节点id路径',
                                  `sort` smallint NULL DEFAULT 0 COMMENT '显示顺序',
                                  `status` tinyint NOT NULL DEFAULT 1 COMMENT '状态(1-正常 0-禁用)',
                                  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人ID',
@@ -55,10 +55,10 @@
     DROP TABLE IF EXISTS `sys_dict`;
     CREATE TABLE `sys_dict` (
                                 `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键 ',
-                                `dict_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '类型编码',
-                                `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '类型名称',
+                                `dict_code` varchar(50)  DEFAULT '' COMMENT '类型编码',
+                                `name` varchar(50)  DEFAULT '' COMMENT '类型名称',
                                 `status` tinyint(1) DEFAULT '0' COMMENT '状态(0:正常;1:禁用)',
-                                `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注',
+                                `remark` varchar(255)  DEFAULT NULL COMMENT '备注',
                                 `create_time` datetime DEFAULT NULL COMMENT '创建时间',
                                 `create_by` bigint DEFAULT NULL COMMENT '创建人ID',
                                 `update_time` datetime DEFAULT NULL COMMENT '更新时间',
@@ -81,13 +81,13 @@
     DROP TABLE IF EXISTS `sys_dict_data`;
     CREATE TABLE `sys_dict_data` (
                                      `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-                                     `dict_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '关联字典编码，与sys_dict表中的dict_code对应',
-                                     `value` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '字典项值',
-                                     `label` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '字典项标签',
+                                     `dict_code` varchar(50)  DEFAULT NULL COMMENT '关联字典编码，与sys_dict表中的dict_code对应',
+                                     `value` varchar(50)  DEFAULT '' COMMENT '字典项值',
+                                     `label` varchar(100)  DEFAULT '' COMMENT '字典项标签',
                                      `tag_type` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '标签类型，用于前端样式展示（如success、warning等）',
                                      `status` tinyint DEFAULT '0' COMMENT '状态（1-正常，0-禁用）',
                                      `sort` int DEFAULT '0' COMMENT '排序',
-                                     `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '备注',
+                                     `remark` varchar(255)  DEFAULT '' COMMENT '备注',
                                      `create_time` datetime DEFAULT NULL COMMENT '创建时间',
                                      `create_by` bigint DEFAULT NULL COMMENT '创建人ID',
                                      `update_time` datetime DEFAULT NULL COMMENT '更新时间',
@@ -118,19 +118,19 @@
     CREATE TABLE `sys_menu`  (
                                  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
                                  `parent_id` bigint NOT NULL COMMENT '父菜单ID',
-                                 `tree_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '父节点ID路径',
-                                 `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '菜单名称',
+                                 `tree_path` varchar(255)  DEFAULT NULL COMMENT '父节点ID路径',
+                                 `name` varchar(64)  NOT NULL DEFAULT '' COMMENT '菜单名称',
                                  `type` tinyint NOT NULL COMMENT '菜单类型（1-菜单 2-目录 3-外链 4-按钮）',
-                                 `route_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '路由名称（Vue Router 中用于命名路由）',
-                                 `route_path` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '路由路径（Vue Router 中定义的 URL 路径）',
-                                 `component` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '组件路径（组件页面完整路径，相对于 src/views/，缺省后缀 .vue）',
-                                 `perm` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '【按钮】权限标识',
+                                 `route_name` varchar(255)  DEFAULT NULL COMMENT '路由名称（Vue Router 中用于命名路由）',
+                                 `route_path` varchar(128)  DEFAULT '' COMMENT '路由路径（Vue Router 中定义的 URL 路径）',
+                                 `component` varchar(128)  DEFAULT NULL COMMENT '组件路径（组件页面完整路径，相对于 src/views/，缺省后缀 .vue）',
+                                 `perm` varchar(128)  DEFAULT NULL COMMENT '【按钮】权限标识',
                                  `always_show` tinyint NULL DEFAULT 0 COMMENT '【目录】只有一个子路由是否始终显示（1-是 0-否）',
                                  `keep_alive` tinyint NULL DEFAULT 0 COMMENT '【菜单】是否开启页面缓存（1-是 0-否）',
                                  `visible` tinyint(1) NOT NULL DEFAULT 1 COMMENT '显示状态（1-显示 0-隐藏）',
                                  `sort` int NULL DEFAULT 0 COMMENT '排序',
-                                 `icon` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '菜单图标',
-                                 `redirect` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '跳转路径',
+                                 `icon` varchar(64)  DEFAULT '' COMMENT '菜单图标',
+                                 `redirect` varchar(128)  DEFAULT NULL COMMENT '跳转路径',
                                  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                                  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                                  `params` json NULL COMMENT '路由参数',
@@ -221,8 +221,8 @@
     DROP TABLE IF EXISTS `sys_role`;
     CREATE TABLE `sys_role`  (
                                  `id` bigint NOT NULL AUTO_INCREMENT,
-                                 `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '角色名称',
-                                 `code` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色编码',
+                                 `name` varchar(64)  NOT NULL DEFAULT '' COMMENT '角色名称',
+                                 `code` varchar(32)  NOT NULL COMMENT '角色编码',
                                  `sort` int NULL DEFAULT NULL COMMENT '显示顺序',
                                  `status` tinyint(1) NULL DEFAULT 1 COMMENT '角色状态(1-正常 0-停用)',
                                  `data_scope` tinyint NULL DEFAULT NULL COMMENT '数据权限(0-所有数据 1-部门及子部门数据 2-本部门数据3-本人数据)',
@@ -353,15 +353,15 @@
     DROP TABLE IF EXISTS `sys_user`;
     CREATE TABLE `sys_user`  (
                                  `id` int NOT NULL AUTO_INCREMENT,
-                                 `username` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名',
-                                 `nickname` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '昵称',
+                                 `username` varchar(64)  DEFAULT NULL COMMENT '用户名',
+                                 `nickname` varchar(64)  DEFAULT NULL COMMENT '昵称',
                                  `gender` tinyint(1) NULL DEFAULT 1 COMMENT '性别((1-男 2-女 0-保密)',
-                                 `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '密码',
+                                 `password` varchar(100)  DEFAULT NULL COMMENT '密码',
                                  `dept_id` int NULL DEFAULT NULL COMMENT '部门ID',
-                                 `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '用户头像',
-                                 `mobile` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '联系方式',
+                                 `avatar` varchar(255)  DEFAULT '' COMMENT '用户头像',
+                                 `mobile` varchar(20)  DEFAULT NULL COMMENT '联系方式',
                                  `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态((1-正常 0-禁用)',
-                                 `email` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户邮箱',
+                                 `email` varchar(128)  DEFAULT NULL COMMENT '用户邮箱',
                                  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                                  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人ID',
                                  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
@@ -376,7 +376,7 @@
     -- ----------------------------
     INSERT INTO `sys_user` VALUES (1, 'root', '有来技术', 0, '$2a$10$xVWsNOhHrCxh5UbpCE7/HuJ.PAOKcYAqRxD2CO2nVnJS.IAXkr5aq', NULL, 'https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif', '18866668888', 1, 'youlaitech@163.com', NULL, NULL, NULL, NULL, 0);
     INSERT INTO `sys_user` VALUES (2, 'admin', '系统管理员', 1, '$2a$10$xVWsNOhHrCxh5UbpCE7/HuJ.PAOKcYAqRxD2CO2nVnJS.IAXkr5aq', 1, 'https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif', '18866668887', 1, '', '2019-10-10 13:41:22', NULL, '2022-07-31 12:39:30', NULL, 0);
-    INSERT INTO `sys_user` VALUES (3, 'websocket', '测试小用户', 1, '$2a$10$xVWsNOhHrCxh5UbpCE7/HuJ.PAOKcYAqRxD2CO2nVnJS.IAXkr5aq', 3, 'https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif', '18866668886', 1, 'youlaitech@163.com', '2021-06-05 01:31:29', NULL, '2021-06-05 01:31:29', NULL, 0);
+    INSERT INTO `sys_user` VALUES (3, 'test', '测试小用户', 1, '$2a$10$xVWsNOhHrCxh5UbpCE7/HuJ.PAOKcYAqRxD2CO2nVnJS.IAXkr5aq', 3, 'https://foruda.gitee.com/images/1723603502796844527/03cdca2a_716974.gif', '18866668886', 1, 'youlaitech@163.com', '2021-06-05 01:31:29', NULL, '2021-06-05 01:31:29', NULL, 0);
 
     -- ----------------------------
     -- Table structure for sys_user_role
@@ -385,8 +385,7 @@
     CREATE TABLE `sys_user_role`  (
                                       `user_id` bigint NOT NULL COMMENT '用户ID',
                                       `role_id` bigint NOT NULL COMMENT '角色ID',
-                                      PRIMARY KEY (`user_id`, `role_id`) USING BTREE,
-                                      UNIQUE INDEX `uk_userid_roleid`(`user_id` ASC, `role_id` ASC) USING BTREE COMMENT '用户角色唯一索引'
+                                      PRIMARY KEY (`user_id`, `role_id`) USING BTREE
     ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户和角色关联表' ROW_FORMAT = DYNAMIC;
 
     -- ----------------------------
@@ -403,10 +402,10 @@
     DROP TABLE IF EXISTS `sys_log`;
     CREATE TABLE `sys_log` (
                                `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-                               `module`  varchar(50)  CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '日志模块',
-                               `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '日志内容',
+                               `module`  varchar(50)   NOT NULL COMMENT '日志模块',
+                               `content` varchar(255)  NOT NULL COMMENT '日志内容',
                                `request_uri` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '请求路径',
-                               `ip` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'IP地址',
+                               `ip` varchar(45)  DEFAULT NULL COMMENT 'IP地址',
                                `province` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '省份',
                                `city` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '城市',
                                `execution_time` bigint DEFAULT NULL COMMENT '执行时间(ms)',
@@ -426,12 +425,12 @@
     DROP TABLE IF EXISTS `gen_config`;
     CREATE TABLE `gen_config` (
                                   `id` bigint NOT NULL AUTO_INCREMENT,
-                                  `table_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '表名',
-                                  `module_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '模块名',
-                                  `package_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '包名',
-                                  `business_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '业务名',
-                                  `entity_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '实体类名',
-                                  `author` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '作者',
+                                  `table_name` varchar(100)  NOT NULL COMMENT '表名',
+                                  `module_name` varchar(100)  DEFAULT NULL COMMENT '模块名',
+                                  `package_name` varchar(255)  NOT NULL COMMENT '包名',
+                                  `business_name` varchar(100)  NOT NULL COMMENT '业务名',
+                                  `entity_name` varchar(100)  NOT NULL COMMENT '实体类名',
+                                  `author` varchar(50)  NOT NULL COMMENT '作者',
                                   `parent_menu_id` bigint DEFAULT NULL COMMENT '上级菜单ID，对应sys_menu的id ',
                                   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
                                   `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -447,13 +446,13 @@
     CREATE TABLE `gen_field_config` (
                                         `id` bigint NOT NULL AUTO_INCREMENT,
                                         `config_id` bigint NOT NULL COMMENT '关联的配置ID',
-                                        `column_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                        `column_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+                                        `column_name` varchar(100)  DEFAULT NULL,
+                                        `column_type` varchar(50)  DEFAULT NULL,
                                         `column_length` int DEFAULT NULL,
-                                        `field_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字段名称',
-                                        `field_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字段类型',
+                                        `field_name` varchar(100)  NOT NULL COMMENT '字段名称',
+                                        `field_type` varchar(100)  DEFAULT NULL COMMENT '字段类型',
                                         `field_sort` int DEFAULT NULL COMMENT '字段排序',
-                                        `field_comment` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字段描述',
+                                        `field_comment` varchar(255)  DEFAULT NULL COMMENT '字段描述',
                                         `max_length` int NULL DEFAULT NULL,
                                         `is_required` tinyint(1) DEFAULT NULL COMMENT '是否必填',
                                         `is_show_in_list` tinyint(1) DEFAULT '0' COMMENT '是否在列表显示',
@@ -461,7 +460,7 @@
                                         `is_show_in_query` tinyint(1) DEFAULT '0' COMMENT '是否在查询条件显示',
                                         `query_type` tinyint DEFAULT NULL COMMENT '查询方式',
                                         `form_type` tinyint DEFAULT NULL COMMENT '表单类型',
-                                        `dict_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字典类型',
+                                        `dict_type` varchar(50)  DEFAULT NULL COMMENT '字典类型',
                                         `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                         `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                         PRIMARY KEY (`id`),
@@ -494,12 +493,12 @@
     DROP TABLE IF EXISTS `sys_notice`;
     CREATE TABLE `sys_notice` (
                                   `id` bigint NOT NULL AUTO_INCREMENT,
-                                  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '通知标题',
-                                  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '通知内容',
+                                  `title` varchar(50)  DEFAULT NULL COMMENT '通知标题',
+                                  `content` text  COMMENT '通知内容',
                                   `type` tinyint NOT NULL COMMENT '通知类型（关联字典编码：notice_type）',
-                                  `level` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '通知等级（字典code：notice_level）',
+                                  `level` varchar(5)  NOT NULL COMMENT '通知等级（字典code：notice_level）',
                                   `target_type` tinyint NOT NULL COMMENT '目标类型（1: 全体, 2: 指定）',
-                                  `target_user_ids` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '目标人ID集合（多个使用英文逗号,分割）',
+                                  `target_user_ids` varchar(255)  DEFAULT NULL COMMENT '目标人ID集合（多个使用英文逗号,分割）',
                                   `publisher_id` bigint DEFAULT NULL COMMENT '发布人ID',
                                   `publish_status` tinyint NOT NULL DEFAULT '0' COMMENT '发布状态（0: 未发布, 1: 已发布, -1: 已撤回）',
                                   `publish_time` datetime DEFAULT NULL COMMENT '发布时间',

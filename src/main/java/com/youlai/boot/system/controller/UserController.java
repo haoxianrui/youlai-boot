@@ -91,7 +91,8 @@ public class UserController {
     @PreAuthorize("@ss.hasPerm('sys:user:edit')")
     public Result<Void> updateUser(
             @Parameter(description = "用户ID") @PathVariable Long userId,
-            @RequestBody @Valid UserForm userForm) {
+            @RequestBody @Valid UserForm userForm
+    ) {
         boolean result = userService.updateUser(userId, userForm);
         return Result.judge(result);
     }
@@ -170,7 +171,7 @@ public class UserController {
         return Result.success(userProfile);
     }
 
-    @Operation(summary = "修改个人中心用户信息")
+    @Operation(summary = "个人中心修改用户信息")
     @PutMapping("/profile")
     public Result<?> updateUserProfile(@RequestBody UserProfileForm formData) {
         boolean result = userService.updateUserProfile(formData);
@@ -208,7 +209,7 @@ public class UserController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "绑定个人中心用户手机号")
+    @Operation(summary = "个人中心绑定用户手机号")
     @PutMapping(value = "/mobile")
     public Result<?> bindMobile(
             @RequestBody @Validated MobileBindingForm data
@@ -218,15 +219,14 @@ public class UserController {
     }
 
 
-    @Operation(summary = "绑定个人中心用户邮箱")
+    @Operation(summary = "个人中心绑定用户邮箱")
     @PutMapping(value = "/email")
     public Result<?> bindEmail(
-            @RequestBody @Validated EmailChangeForm data
+            @RequestBody @Validated EmailBindingForm data
     ) {
         boolean result = userService.bindEmail(data);
         return Result.judge(result);
     }
-
 
     @Operation(summary = "用户下拉选项")
     @GetMapping("/options")

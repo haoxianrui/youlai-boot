@@ -379,56 +379,68 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 修改当前用户手机号码
      *
-     * @param data 表单数据
+     * @param form 表单数据
      * @return
      */
     @Override
-    public boolean bindMobile(MobileBindingForm data) {
-        Long userId = SecurityUtils.getUserId();
-        User user = this.getById(userId);
-        if (user == null) {
+    public boolean bindMobile(MobileBindingForm form) {
+        Long currentUserId = SecurityUtils.getUserId();
+        User currentUser = this.getById(currentUserId);
+
+        if (currentUser == null) {
             throw new BusinessException("用户不存在");
         }
+
         // 校验验证码
-        String verificationCode = data.getCode();
-        String contact = data.getMobile();
-        String verificationCodeKey = RedisConstants.MOBILE_VERIFICATION_CODE_PREFIX + contact;
-        String code = redisTemplate.opsForValue().get(verificationCodeKey);
-        if (!verificationCode.equals(code)) {
+        String inputVerificationCode = form.getCode();
+        String mobile = form.getMobile();
+
+        String redisCacheKey = RedisConstants.MOBILE_VERIFICATION_CODE_PREFIX + mobile;
+        String cachedVerificationCode = redisTemplate.opsForValue().get(redisCacheKey);
+
+        if (!inputVerificationCode.equals(cachedVerificationCode)) {
             throw new BusinessException("验证码错误");
         }
+
         // 更新手机号码
-        return this.update(new LambdaUpdateWrapper<User>()
-                .eq(User::getId, userId)
-                .set(User::getMobile, contact)
+        return this.update(
+                new LambdaUpdateWrapper<User>()
+                        .eq(User::getId, currentUserId)
+                        .set(User::getMobile, mobile)
         );
     }
 
     /**
      * 修改当前用户邮箱
      *
-     * @param data 表单数据
+     * @param form 表单数据
      * @return
      */
     @Override
-    public boolean bindEmail(EmailChangeForm data) {
-        Long userId = SecurityUtils.getUserId();
-        User user = this.getById(userId);
-        if (user == null) {
+    public boolean bindEmail(EmailBindingForm form) {
+        Long currentUserId = SecurityUtils.getUserId();
+
+        User currentUser = this.getById(currentUserId);
+        if (currentUser == null) {
             throw new BusinessException("用户不存在");
         }
+
         // 校验验证码
-        String verificationCode = data.getCode();
-        String email = data.getEmail();
-        String verificationCodeKey = RedisConstants.EMAIL_VERIFICATION_CODE_PREFIX + email;
-        String code = redisTemplate.opsForValue().get(verificationCodeKey);
-        if (!verificationCode.equals(code)) {
+        String inputVerificationCode = form.getCode();
+        String email = form.getEmail();
+
+        String redisCacheKey = RedisConstants.EMAIL_VERIFICATION_CODE_PREFIX + email;
+        String cachedVerificationCode = redisTemplate.opsForValue().get(redisCacheKey);
+
+        if (cachedVerificationCode == null || !inputVerificationCode.equals(cachedVerificationCode)) {
             throw new BusinessException("验证码错误");
         }
-        // 更新邮箱
-        return this.update(new LambdaUpdateWrapper<User>()
-                .eq(User::getId, userId)
-                .set(User::getEmail, email)
+
+        // 更新邮箱地址
+        return this.update(
+                new LambdaUpdateWrapper<User>()
+                        .eq(User::getId, currentUserId)
+                        .set(User::getEmail, email)
         );
     }
 
