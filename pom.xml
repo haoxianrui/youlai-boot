@@ -12,7 +12,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version> <!-- lookup parent from repository -->
+        <version>3.4.0</version> <!-- lookup parent from repository -->
         <relativePath/>
     </parent>
 
@@ -22,7 +22,7 @@
 
         <hutool.version>5.8.27</hutool.version>
 
-        <mysql.version>8.0.28</mysql.version>
+        <mysql-connector-j.version>9.1.0</mysql-connector-j.version>
         <druid.version>1.2.23</druid.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
 
@@ -110,9 +110,10 @@
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>${mysql-connector-j.version}</version>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
