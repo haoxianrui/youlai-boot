@@ -1,31 +1,24 @@
 package com.youlai.boot.shared.auth.service.impl;
 
-import cn.binarywang.wx.miniapp.api.WxMaService;
-import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.hutool.captcha.AbstractCaptcha;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.common.constant.SecurityConstants;
-import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.common.result.ResultCode;
+import com.youlai.boot.config.property.CaptchaProperties;
 import com.youlai.boot.core.security.extension.WeChatAuthenticationToken;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.shared.auth.enums.CaptchaTypeEnum;
+import com.youlai.boot.shared.auth.model.AuthTokenResponse;
+import com.youlai.boot.shared.auth.model.CaptchaResponse;
 import com.youlai.boot.shared.auth.model.RefreshTokenRequest;
 import com.youlai.boot.shared.auth.service.AuthService;
-import com.youlai.boot.shared.auth.model.CaptchaResponse;
-import com.youlai.boot.shared.auth.model.AuthTokenResponse;
-import com.youlai.boot.config.property.CaptchaProperties;
 import com.youlai.boot.shared.auth.service.TokenService;
-import com.youlai.boot.system.model.entity.User;
-import com.youlai.boot.system.model.form.UserForm;
-import com.youlai.boot.system.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,7 +27,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -54,8 +46,6 @@ public class AuthServiceImpl implements AuthService {
     private final Font captchaFont;
     private final CaptchaProperties captchaProperties;
     private final TokenService tokenService;
-    private final WxMaService wxMaService;
-    private final UserService userService;
 
     /**
      * 用户名密码登录
@@ -69,6 +59,7 @@ public class AuthServiceImpl implements AuthService {
         // 1. 创建用于密码认证的令牌（未认证）
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username.trim(), password);
+
         // 2. 执行认证（认证中）
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
