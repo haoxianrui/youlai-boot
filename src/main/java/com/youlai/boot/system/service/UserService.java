@@ -160,10 +160,18 @@ public interface UserService extends IService<User> {
     List<Option<String>> listUserOptions();
 
     /**
-     * 根据openId获取用户信息
+     * 根据 openid 获取用户认证信息
      *
-     * @param openId openId
-     * @return {@link User}
+     * @param username 用户名
+     * @return {@link UserAuthInfo}
      */
-    User getUserByOpenId(String openId);
+
+    UserAuthInfo getUserAuthInfoByOpenId(String username);
+
+    /**
+     * 根据微信 OpenID 注册或绑定用户
+     *
+     * @param openId 微信 OpenID
+     */
+    void registerOrBindWechatUser(String openId);
 }

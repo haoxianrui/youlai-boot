@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 /**
  * 系统用户认证 DetailsService
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2021/10/19
  */
 @Service
@@ -39,7 +39,6 @@ public class SysUserDetailsService implements UserDetailsService {
             }
             return new SysUserDetails(userAuthInfo);
         } catch (Exception e) {
-            e.printStackTrace();
             // 记录异常日志
             log.error("认证异常:{}", e.getMessage());
             // 抛出异常

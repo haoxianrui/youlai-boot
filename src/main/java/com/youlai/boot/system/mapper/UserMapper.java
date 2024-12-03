@@ -49,6 +49,14 @@ public interface UserMapper extends BaseMapper<User> {
     UserAuthInfo getUserAuthInfo(String username);
 
     /**
+     * 根据微信openid获取用户认证信息
+     *
+     * @param openid 微信openid
+     * @return
+     */
+    UserAuthInfo getUserAuthInfoByOpenId(String openid);
+
+    /**
      * 获取导出用户列表
      *
      * @param queryParams
@@ -64,4 +72,6 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     UserBO getUserProfile(Long userId);
+
+
 }

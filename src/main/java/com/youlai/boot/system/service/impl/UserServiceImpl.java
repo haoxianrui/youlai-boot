@@ -16,6 +16,7 @@ import com.youlai.boot.common.model.Option;
 import com.youlai.boot.shared.mail.service.MailService;
 import com.youlai.boot.shared.sms.service.SmsService;
 import com.youlai.boot.system.model.entity.User;
+import com.youlai.boot.system.model.entity.UserRole;
 import com.youlai.boot.system.model.form.*;
 import com.youlai.boot.config.property.AliyunSmsProperties;
 import com.youlai.boot.system.converter.UserConverter;
@@ -61,8 +62,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private final UserRoleService userRoleService;
 
-    private final UserConverter userConverter;
-
     private final RoleMenuService roleMenuService;
 
     private final RoleService roleService;
@@ -78,6 +77,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final StringRedisTemplate redisTemplate;
 
     private final TokenService tokenService;
+
+    private final UserConverter userConverter;
 
     /**
      * 获取用户分页列表
@@ -215,10 +216,62 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     /**
+     * 根据 openid 获取用户认证信息
+     *
+     * @param openid 微信
+     * @return {@link UserAuthInfo}
+     */
+    @Override
+    public UserAuthInfo getUserAuthInfoByOpenId(String openid) {
+        UserAuthInfo userAuthInfo = this.baseMapper.getUserAuthInfoByOpenId(openid);
+        if (userAuthInfo != null) {
+            Set<String> roles = userAuthInfo.getRoles();
+            if (CollectionUtil.isNotEmpty(roles)) {
+                Set<String> perms = roleMenuService.getRolePermsByRoleCodes(roles);
+                userAuthInfo.setPerms(perms);
+            }
+
+            // 获取最大范围的数据权限
+            Integer dataScope = roleService.getMaximumDataScope(roles);
+            userAuthInfo.setDataScope(dataScope);
+        }
+        return userAuthInfo;
+    }
+
+    /**
+     * 根据微信 OpenID 注册或绑定用户
+     * <p>
+     * TODO 根据手机号绑定用户
+     *
+     * @param openId 微信 OpenID
+     */
+    @Override
+    public void registerOrBindWechatUser(String openId) {
+        User user = this.getOne(
+                new LambdaQueryWrapper<User>().eq(User::getOpenid, openId)
+        );
+        if (user == null) {
+            user = new User();
+            user.setNickname("微信用户");  // 默认昵称
+            user.setUsername(openId);      // TODO 后续替换为手机号
+            user.setOpenid(openId);
+            user.setGender(0); // 保密
+            user.setUpdateBy(SecurityUtils.getUserId());
+            user.setPassword(SystemConstants.DEFAULT_PASSWORD);
+            this.save(user);
+            // 为了默认系统管理员角色，这里按需调整，实际情况绑定已存在的系统用户，另一种情况是给默认游客角色，然后由系统管理员设置用户的角色
+            UserRole userRole = new UserRole();
+            userRole.setUserId(user.getId());
+            userRole.setRoleId(1L);  // TODO 系统管理员
+            userRoleService.save(userRole);
+        }
+    }
+
+    /**
      * 获取导出用户列表
      *
      * @param queryParams 查询参数
-     * @return {@link List< UserExportDTO >} 导出用户列表
+     * @return {@link List<UserExportDTO>} 导出用户列表
      */
     @Override
     public List<UserExportDTO> listExportUsers(UserPageQuery queryParams) {
@@ -319,7 +372,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .set(User::getPassword, passwordEncoder.encode(newPassword))
         );
 
-        if(result){
+        if (result) {
             // 加入黑名单，重新登录
             String accessToken = SecurityUtils.getTokenFromRequest();
             tokenService.blacklistToken(accessToken);
@@ -458,14 +511,4 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return Collections.emptyList();
     }
 
-    /**
-     * 根据openId获取用户信息
-     *
-     * @param openId openId
-     * @return {@link User}
-     */
-    @Override
-    public User getUserByOpenId(String openId) {
-        return this.getOne(new LambdaQueryWrapper<User>().eq(User::getOpenId, openId));
-    }
 }

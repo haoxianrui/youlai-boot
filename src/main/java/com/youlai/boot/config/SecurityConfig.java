@@ -1,5 +1,6 @@
 package com.youlai.boot.config;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.collection.CollectionUtil;
 import com.youlai.boot.common.constant.SecurityConstants;
@@ -7,15 +8,20 @@ import com.youlai.boot.config.property.SecurityProperties;
 import com.youlai.boot.core.filter.RateLimiterFilter;
 import com.youlai.boot.core.security.exception.MyAccessDeniedHandler;
 import com.youlai.boot.core.security.exception.MyAuthenticationEntryPoint;
-import com.youlai.boot.core.security.filter.JwtValidationFilter;
+import com.youlai.boot.core.security.extension.WeChatAuthenticationProvider;
 import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
+import com.youlai.boot.core.security.filter.JwtValidationFilter;
+import com.youlai.boot.core.security.service.SysUserDetailsService;
 import com.youlai.boot.shared.auth.service.impl.JwtTokenService;
 import com.youlai.boot.system.service.ConfigService;
+import com.youlai.boot.system.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,7 +30,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -48,6 +53,10 @@ public class SecurityConfig {
     private final SecurityProperties securityProperties;
     private final ConfigService configService;
     private final JwtTokenService jwtTokenService;
+    private final WxMaService wxMaService;
+    private final UserService userService;
+    private final SysUserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -69,14 +78,12 @@ public class SecurityConfig {
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-
-        ;
-        // 限流过滤器
-        http.addFilterBefore(new RateLimiterFilter(redisTemplate, configService), UsernamePasswordAuthenticationFilter.class);
-        // 验证码校验过滤器
-        http.addFilterBefore(new CaptchaValidationFilter(redisTemplate, codeGenerator), UsernamePasswordAuthenticationFilter.class);
-        // JWT 校验过滤器
-        http.addFilterBefore(new JwtValidationFilter(jwtTokenService), UsernamePasswordAuthenticationFilter.class);
+                // 限流过滤器
+                .addFilterBefore(new RateLimiterFilter(redisTemplate, configService), UsernamePasswordAuthenticationFilter.class)
+                // 验证码校验过滤器
+                .addFilterBefore(new CaptchaValidationFilter(redisTemplate, codeGenerator), UsernamePasswordAuthenticationFilter.class)
+                // JWT 校验过滤器
+                .addFilterBefore(new JwtValidationFilter(jwtTokenService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -94,21 +101,32 @@ public class SecurityConfig {
     }
 
     /**
-     * 密码编码器
+     * 默认密码认证的 Provider
      */
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        daoAuthenticationProvider.setHideUserNotFoundExceptions(false);
+        return daoAuthenticationProvider;
     }
 
     /**
-     * AuthenticationManager 手动注入
-     *
-     * @param authenticationConfiguration 认证配置
+     * 微信认证 Provider
      */
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public WeChatAuthenticationProvider weChatAuthenticationProvider() {
+        return new WeChatAuthenticationProvider(userService, wxMaService);
     }
 
+    /**
+     * 手动注入 AuthenticationManager，支持多种认证方式
+     * - DaoAuthenticationProvider：用户名密码认证
+     * - WeChatAuthenticationProvider：微信认证
+     */
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        return new ProviderManager(daoAuthenticationProvider(), weChatAuthenticationProvider());
+    }
 }

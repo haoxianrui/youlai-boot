@@ -74,7 +74,7 @@ public class User extends BaseEntity {
     private Integer isDeleted;
 
     /**
-     * 微信openid
+     * 微信 OpenID
      */
-    private String openId;
+    private String openid;
 }

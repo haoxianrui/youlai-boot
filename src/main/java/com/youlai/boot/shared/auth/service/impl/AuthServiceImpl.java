@@ -11,6 +11,7 @@ import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.common.result.ResultCode;
+import com.youlai.boot.core.security.extension.WeChatAuthenticationToken;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.shared.auth.enums.CaptchaTypeEnum;
 import com.youlai.boot.shared.auth.model.RefreshTokenRequest;
@@ -57,24 +58,44 @@ public class AuthServiceImpl implements AuthService {
     private final UserService userService;
 
     /**
-     * 登录
+     * 用户名密码登录
      *
      * @param username 用户名
      * @param password 密码
-     * @return 登录结果
+     * @return 访问令牌
      */
     @Override
     public AuthTokenResponse login(String username, String password) {
-        // 创建认证令牌对象
+        // 1. 创建用于密码认证的令牌（未认证）
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(username.toLowerCase().trim(), password);
-        // 执行用户认证，认证成功返回的Authentication是SysUserDetailsService#loadUserByUsername获取到的的UserDetails
+                new UsernamePasswordAuthenticationToken(username.trim(), password);
+        // 2. 执行认证（认证中）
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        // 认证成功后生成JWT令牌
+
+        // 3. 认证成功后生成 JWT 令牌，并存入 Security 上下文，供登录日志 AOP 使用（已认证）
         AuthTokenResponse authTokenResponse = tokenService.generateToken(authentication);
-        // 将认证信息存入Security上下文，便于在AOP（如日志记录）中获取当前用户信息
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        // 返回包含JWT令牌的登录结果
+        return authTokenResponse;
+    }
+
+    /**
+     * 微信一键授权登录
+     *
+     * @param code 微信登录code
+     * @return 访问令牌
+     */
+    @Override
+    public AuthTokenResponse wechatLogin(String code) {
+        // 1. 创建用户微信认证的令牌（未认证）
+        WeChatAuthenticationToken authenticationToken = new WeChatAuthenticationToken(code);
+
+        // 2. 执行认证（认证中）
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+        // 3. 认证成功后生成 JWT 令牌，并存入 Security 上下文，供登录日志 AOP 使用（已认证）
+        AuthTokenResponse authTokenResponse = tokenService.generateToken(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         return authTokenResponse;
     }
 
@@ -158,54 +179,5 @@ public class AuthServiceImpl implements AuthService {
         return tokenService.refreshToken(refreshToken);
     }
 
-    /**
-     *  微信小程序登录
-     *
-     * @param code 微信登录code
-     * @return 访问令牌
-     */
-    @Override
-    public AuthTokenResponse wechatLogin(String code) {
-        // 1. 通过code获取微信access_token
-        WxMaJscode2SessionResult sessionInfo = null;
-        try {
-            sessionInfo = wxMaService.getUserService().getSessionInfo(code);
-        } catch (WxErrorException e) {
-            log.error("微信小程序登录失败", e);
-            throw new BusinessException(e);
-        }
-
-        String openId = sessionInfo.getOpenid();
-        if (StrUtil.isBlank(openId)) {
-            throw new BusinessException("微信授权失败");
-        }
-
-        // todo 获取微信用户信息
-//      WxMaUserInfo userInfo = wxMaService.getUserService().getUserInfo(sessionInfo.getSessionKey(), sessionInfo.getOpenid());
-
-        // 2. 根据openId查询用户信息，如果不存在则注册新用户
-        User user = userService.getUserByOpenId(openId);
-        if (Objects.isNull(user)) {
-            String name = "微信用户" + IdUtil.simpleUUID();
-            UserForm newUser = new UserForm();
-            newUser.setOpenId(openId);
-            newUser.setNickname(name);
-            newUser.setUsername(name);
-            boolean result = userService.saveUser(newUser);
-            if (!result) {
-                throw new BusinessException("微信用户注册失败");
-            }
-        }
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(user.getUsername().toLowerCase().trim(), SystemConstants.DEFAULT_PASSWORD);
-        // 执行用户认证
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        // 认证成功后生成JWT令牌
-        AuthTokenResponse authTokenResponse = tokenService.generateToken(authentication);
-        // 将认证信息存入Security上下文，便于在AOP（如日志记录）中获取当前用户信息
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        // 返回包含JWT令牌的登录结果
-        return authTokenResponse;
-    }
 
 }
