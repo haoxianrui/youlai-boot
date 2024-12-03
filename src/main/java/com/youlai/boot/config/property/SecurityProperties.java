@@ -16,9 +16,9 @@ import java.util.List;
 public class SecurityProperties {
 
     /**
-     * 白名单 URL 集合
+     * 会话方式
      */
-    private List<String> ignoreUrls;
+    private SessionProperty session;
 
     /**
      * JWT 配置
@@ -26,9 +26,17 @@ public class SecurityProperties {
     private JwtProperty jwt;
 
     /**
-     * 令牌类型 jwt / redis-token
+     * 白名单 URL 集合
      */
-    private String tokenType;
+    private List<String> ignoreUrls;
+
+    /**
+     * 会话属性
+     */
+    @Data
+    public static class SessionProperty {
+        private String type;
+    }
 
     /**
      * JWT 配置

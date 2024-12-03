@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 /**
  * JWT 令牌服务实现
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2024/11/15
  */
-@ConditionalOnProperty(value = "security.token-type", havingValue = "redis-token")
+@ConditionalOnProperty(value = "security.session.type", havingValue = "redis-token")
 @Service
 public class RedisTokenService implements TokenService {
 

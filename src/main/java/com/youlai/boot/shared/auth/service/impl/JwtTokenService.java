@@ -33,10 +33,10 @@ import java.util.stream.Collectors;
 /**
  * JWT 令牌服务实现
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2024/11/15
  */
-@ConditionalOnProperty(value = "security.token-type", havingValue = "jwt")
+@ConditionalOnProperty(value = "security.session.type", havingValue = "jwt")
 @Service
 public class JwtTokenService implements TokenService {
 

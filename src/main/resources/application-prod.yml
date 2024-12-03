@@ -59,8 +59,9 @@ mybatis-plus:
 
 # 安全配置
 security:
-  # JWT 认证类型， 支持 jwt、redis-token
-  token-type: jwt
+  session:
+    # 会话方式，支持 jwt、redis-token
+    type: jwt
   # JWT 配置
   jwt:
     # JWT 秘钥

@@ -22,7 +22,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -35,9 +34,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * Spring Security 权限配置
+ * Spring Security 安全配置
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2023/2/17
  */
 @Configuration
@@ -46,17 +45,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final MyAuthenticationEntryPoint authenticationEntryPoint;
-    private final MyAccessDeniedHandler accessDeniedHandler;
     private final RedisTemplate<String, Object> redisTemplate;
-    private final CodeGenerator codeGenerator;
-    private final SecurityProperties securityProperties;
-    private final ConfigService configService;
+    private final PasswordEncoder passwordEncoder;
+
     private final JwtTokenService jwtTokenService;
     private final WxMaService wxMaService;
     private final UserService userService;
     private final SysUserDetailsService userDetailsService;
-    private final PasswordEncoder passwordEncoder;
+
+    private final CodeGenerator codeGenerator;
+    private final SecurityProperties securityProperties;
+    private final ConfigService configService;
+
+    private final MyAuthenticationEntryPoint authenticationEntryPoint; // 项目内安全类
+    private final MyAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
