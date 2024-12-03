@@ -39,13 +39,28 @@ spring:
       time-to-live: 3600000
       # 缓存null值，防止缓存穿透
       cache-null-values: true
+  # 邮件配置
+  mail:
+    host: smtp.youlai.tech
+    port: 587
+    username: your-email@example.com
+    password: 123456
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    # 邮件发送者
+    from: youlaitech@163.com
+
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
   global-config:
     db-config:
       # 主键ID类型
       id-type: none
-      # 逻辑删除字段名称
+      # 逻辑删除全局属性名(驼峰和下划线都支持)
       logic-delete-field: isDeleted
       # 逻辑删除-删除值
       logic-delete-value: 1
@@ -62,7 +77,6 @@ security:
   session:
     # 会话方式，支持 jwt、redis-token
     type: jwt
-  # JWT 配置
   jwt:
     # JWT 秘钥
     key: SecretKey012345678901234567890123456789012345678901234567890123456789
@@ -76,9 +90,7 @@ security:
     - /doc.html
     - /swagger-resources/**
     - /webjars/**
-    - /doc.html
     - /swagger-ui/**
-    - /swagger-ui.html
     - /api/v1/auth/captcha
     - /api/v1/auth/refresh-token
     - /ws/**
@@ -150,7 +162,7 @@ knife4j:
   # 是否开启 Knife4j 增强功能
   enable: true  # 设置为 true 表示开启增强功能
   # 生产环境配置
-  production: false # 设置为 true 表示在生产环境中不显示文档，为 false 表示显示文档（通常在开发环境中使用）
+  production: false  # 设置为 true 表示在生产环境中不显示文档，为 false 表示显示文档（通常在开发环境中使用）
   setting:
     language: zh_cn
 
@@ -196,7 +208,12 @@ captcha:
     # 字体样式 0-普通|1-粗体|2-斜体
     weight: 1
     # 字体大小
-    size: 20
+    size: 24
   # 验证码有效期(秒)
   expire-seconds: 120
 
+# 微信小程序
+wechat:
+  miniapp:
+    appId: xxxxxx
+    appSecret: xxxxxx

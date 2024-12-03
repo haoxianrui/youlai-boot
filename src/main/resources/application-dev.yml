@@ -91,9 +91,7 @@ security:
     - /doc.html
     - /swagger-resources/**
     - /webjars/**
-    - /doc.html
     - /swagger-ui/**
-    - /swagger-ui.html
     - /api/v1/auth/captcha
     - /api/v1/auth/refresh-token
     - /ws/**
