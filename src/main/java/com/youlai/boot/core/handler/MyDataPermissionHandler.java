@@ -24,21 +24,41 @@ import java.lang.reflect.Method;
 @Slf4j
 public class MyDataPermissionHandler implements DataPermissionHandler {
 
+    /**
+     * 获取数据权限的sql片段
+     * @param where 查询条件
+     * @param mappedStatementId mapper接口方法的全路径
+     * @return sql片段
+     */
     @Override
     @SneakyThrows
     public Expression getSqlSegment(Expression where, String mappedStatementId) {
-
+        // 如果是超级管理员，直接返回
+        if(SecurityUtils.isRoot()){
+            return where;
+        }
+        // 获取当前用户的数据权限
+        Integer dataScope = SecurityUtils.getDataScope();
+        DataScopeEnum dataScopeEnum = IBaseEnum.getEnumByValue(dataScope, DataScopeEnum.class);
+        // 如果是全部数据权限，直接返回
+        if (DataScopeEnum.ALL.equals(dataScopeEnum)) {
+            return where;
+        }
+        // 获取当前执行的接口类
         Class<?> clazz = Class.forName(mappedStatementId.substring(0, mappedStatementId.lastIndexOf(StringPool.DOT)));
+        // 获取当前执行的方法名称
         String methodName = mappedStatementId.substring(mappedStatementId.lastIndexOf(StringPool.DOT) + 1);
+        // 获取当前执行的接口类里所有的方法
         Method[] methods = clazz.getDeclaredMethods();
         for (Method method : methods) {
+            //找到当前执行的方法
             if (method.getName().equals(methodName)) {
-            DataPermission annotation = method.getAnnotation(DataPermission.class);
-            // 如果没有注解或者是超级管理员，直接返回
-            if (annotation == null || SecurityUtils.isRoot() ) {
-                return where;
-            }
-                return dataScopeFilter(annotation.deptAlias(), annotation.deptIdColumnName(), annotation.userAlias(), annotation.userIdColumnName(), where);
+                DataPermission annotation = method.getAnnotation(DataPermission.class);
+                // 判断当前执行的方法是否有权限注解，如果没有注解直接返回
+                if (annotation == null ) {
+                    return where;
+                }
+                return dataScopeFilter(annotation.deptAlias(), annotation.deptIdColumnName(), annotation.userAlias(), annotation.userIdColumnName(), dataScopeEnum,where);
             }
         }
         return where;
@@ -51,16 +71,11 @@ public class MyDataPermissionHandler implements DataPermissionHandler {
      * @return 构建后查询条件
      */
     @SneakyThrows
-    public static Expression dataScopeFilter(String deptAlias, String deptIdColumnName, String userAlias, String userIdColumnName, Expression where) {
+    public static Expression dataScopeFilter(String deptAlias, String deptIdColumnName, String userAlias, String userIdColumnName,DataScopeEnum dataScopeEnum, Expression where) {
 
-
+        // 获取部门和用户的别名
         String deptColumnName = StrUtil.isNotBlank(deptAlias) ? (deptAlias + StringPool.DOT + deptIdColumnName) : deptIdColumnName;
         String userColumnName = StrUtil.isNotBlank(userAlias) ? (userAlias + StringPool.DOT + userIdColumnName) : userIdColumnName;
-
-        // 获取当前用户的数据权限
-        Integer dataScope = SecurityUtils.getDataScope();
-
-        DataScopeEnum dataScopeEnum = IBaseEnum.getEnumByValue(dataScope, DataScopeEnum.class);
 
         Long deptId, userId;
         String appendSqlStr;
