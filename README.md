@@ -3,7 +3,7 @@
    <img alt="logo" width="100" height="100" src="https://foruda.gitee.com/images/1733417239320800627/3c5290fe_716974.png">
    <h2>youlai-boot</h2>
    <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
-   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.3.4-green.svg"/>
+   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.3.6-green.svg"/>
    <a href="https://gitee.com/youlaiorg/youlai-boot" target="_blank">
      <img alt="有来技术" src="https://gitee.com/youlaiorg/youlai-boot/badge/star.svg"/>
    </a>     
@@ -47,7 +47,6 @@ youlai-boot
 │   └── mysql8                          # MySQL8 脚本
 ├── src                                 # 源码目录
 │   ├── common                          # 公共模块
-│   │   ├── annotation                  # 注解定义
 │   │   ├── base                        # 基础类
 │   │   ├── constant                    # 常量
 │   │   ├── enums                       # 枚举类型
@@ -72,6 +71,7 @@ youlai-boot
 │   │   ├── WebSocketConfig             # WebSocket 自动装配配置
 │   │   └── XxlJobConfig                # XXL-JOB 自动装配配置
 │   ├── core                            # 核心功能
+│   │   ├── annotation                  # 注解定义
 │   │   ├── aspect                      # 切面
 │   │   │   ├── LogAspect               # 日志切面
 │   │   │   └── RepeatSubmitAspect      # 防重提交切面
