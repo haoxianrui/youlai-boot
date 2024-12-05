@@ -33,16 +33,10 @@ public class MyDataPermissionHandler implements DataPermissionHandler {
     @Override
     @SneakyThrows
     public Expression getSqlSegment(Expression where, String mappedStatementId) {
-        // 如果是超级管理员，直接返回
-        if(SecurityUtils.isRoot()){
+        // 如果是未登录，或者是定时任务执行的SQL，或者是超级管理员，直接返回
+        if(SecurityUtils.getUserId() == null || SecurityUtils.isRoot()){
             return where;
         }
-        // 如果是未登录，或者是定时任务执行的SQL，直接返回
-        Long userId = SecurityUtils.getUserId();
-        if(userId == null){
-            return where;
-        }
-
         // 获取当前用户的数据权限
         Integer dataScope = SecurityUtils.getDataScope();
         DataScopeEnum dataScopeEnum = IBaseEnum.getEnumByValue(dataScope, DataScopeEnum.class);
