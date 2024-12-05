@@ -47,11 +47,11 @@ public class MenuController {
 
     @Operation(summary = "菜单下拉列表")
     @GetMapping("/options")
-    public Result<?> listMenuOptions(
+    public Result<List<Option<Long>>> listMenuOptions(
           @Parameter(description = "是否只查询父级菜单")
           @RequestParam(required = false, defaultValue = "false") boolean onlyParent
     ) {
-        List<Option> menus = menuService.listMenuOptions(onlyParent);
+        List<Option<Long>> menus = menuService.listMenuOptions(onlyParent);
         return Result.success(menus);
     }
 
