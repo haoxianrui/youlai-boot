@@ -1,6 +1,6 @@
 
 <div align="center">
-   <img alt="logo" width="100" height="100" src="https://foruda.gitee.com/images/1724259461244885014/4de96569_716974.png">
+   <img alt="logo" width="100" height="100" src="https://foruda.gitee.com/images/1733417239320800627/3c5290fe_716974.png">
    <h2>youlai-boot</h2>
    <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
    <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.3.4-green.svg"/>
