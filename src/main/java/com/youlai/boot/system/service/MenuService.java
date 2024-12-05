@@ -30,7 +30,7 @@ public interface MenuService extends IService<Menu> {
      *
      * @param onlyParent 是否只查询父级菜单
      */
-    List<Option> listMenuOptions(boolean onlyParent);
+    List<Option<Long>> listMenuOptions(boolean onlyParent);
 
     /**
      * 新增菜单

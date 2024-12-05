@@ -106,7 +106,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * @param onlyParent 是否只查询父级菜单 如果为true，排除按钮
      */
     @Override
-    public List<Option> listMenuOptions(boolean onlyParent) {
+    public List<Option<Long>> listMenuOptions(boolean onlyParent) {
         List<Menu> menuList = this.list(new LambdaQueryWrapper<Menu>()
                 .in(onlyParent, Menu::getType, MenuTypeEnum.CATALOG.getValue(), MenuTypeEnum.MENU.getValue())
                 .orderByAsc(Menu::getSort)
@@ -121,13 +121,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * @param menuList 菜单列表
      * @return 菜单下拉列表
      */
-    private List<Option> buildMenuOptions(Long parentId, List<Menu> menuList) {
-        List<Option> menuOptions = new ArrayList<>();
+    private List<Option<Long>> buildMenuOptions(Long parentId, List<Menu> menuList) {
+        List<Option<Long>> menuOptions = new ArrayList<>();
 
         for (Menu menu : menuList) {
             if (menu.getParentId().equals(parentId)) {
-                Option option = new Option(menu.getId(), menu.getName());
-                List<Option> subMenuOptions = buildMenuOptions(menu.getId(), menuList);
+                Option<Long> option = new Option<>(menu.getId(), menu.getName());
+                List<Option<Long>> subMenuOptions = buildMenuOptions(menu.getId(), menuList);
                 if (!subMenuOptions.isEmpty()) {
                     option.setChildren(subMenuOptions);
                 }
