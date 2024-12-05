@@ -241,7 +241,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
             menuForm.setComponent(null);
         }
-
+        if (Objects.equals(menuForm.getParentId(), menuForm.getId())){
+            throw new RuntimeException("父级菜单不能为当前菜单");
+        }
         Menu entity = menuConverter.toEntity(menuForm);
         String treePath = generateMenuTreePath(menuForm.getParentId());
         entity.setTreePath(treePath);
