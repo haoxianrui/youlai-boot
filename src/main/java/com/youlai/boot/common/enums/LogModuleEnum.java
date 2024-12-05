@@ -21,8 +21,8 @@ public enum LogModuleEnum {
     ROLE("角色"),
     MENU("菜单"),
     DICT("字典"),
-    OTHER("其他")
-    ;
+    SETTING("系统配置"),
+    OTHER("其他");
 
     @JsonValue
     private final String moduleName;
