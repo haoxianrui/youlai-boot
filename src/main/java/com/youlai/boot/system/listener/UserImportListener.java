@@ -1,6 +1,7 @@
 package com.youlai.boot.system.listener;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -112,7 +113,7 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
                         .last("limit 1")
                 );
                 if (dictData != null) {
-                    Integer genderValue = Integer.parseInt(dictData.getValue());
+                    Integer genderValue = Convert.toInt(dictData.getValue(),0);
                     entity.setGender(genderValue);
                 }
             }
