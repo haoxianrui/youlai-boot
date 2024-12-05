@@ -1,5 +1,6 @@
 package com.youlai.boot.core.filter;
 
+import cn.hutool.core.convert.Convert;
 import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.result.ResultCode;
 import com.youlai.boot.common.util.IPUtils;
@@ -51,7 +52,7 @@ public class RateLimiterFilter extends OncePerRequestFilter {
         Object systemConfig = configService.getSystemConfig(RedisConstants.IP_QPS_THRESHOLD_LIMIT_KEY);
         long limit = 10;
         if(systemConfig != null){
-            limit =  Long.parseLong(systemConfig.toString());
+            limit = Convert.toLong(systemConfig,50L);
         }else{
             log.warn("[RedisRateLimiterFilter.rateLimit]系统配置中未配置IP请求限制QPS阈值配置,使用默认值:{},请检查配置项:{}",
                     limit,RedisConstants.IP_QPS_THRESHOLD_LIMIT_KEY);
