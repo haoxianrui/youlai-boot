@@ -15,9 +15,35 @@ import java.lang.annotation.*;
 @Documented
 public @interface Log {
 
+    /**
+     * 日志描述
+     *
+     * @return 日志描述
+     */
     String value() default "";
 
-    LogModuleEnum module()  ;
+    /**
+     * 日志模块
+     *
+     * @return 日志模块
+     */
+
+    LogModuleEnum module();
+
+    /**
+     * 是否记录请求参数
+     *
+     * @return 是否记录请求参数
+     */
+    boolean params() default true;
+
+    /**
+     * 是否记录响应结果
+     * <br/>
+     * 请求参数默认不记录，避免日志过大
+     * @return 是否记录响应结果
+     */
+    boolean result() default false;
 
 
 }

@@ -8,16 +8,19 @@ import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.json.JSONUtil;
 import com.aliyun.oss.HttpMethod;
 import com.youlai.boot.common.constant.SecurityConstants;
+import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.util.IPUtils;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.system.model.entity.Log;
 import com.youlai.boot.system.service.LogService;
+import groovyjarjarpicocli.CommandLine;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
@@ -55,6 +58,25 @@ public class LogAspect {
      */
     @AfterReturning(pointcut = "logPointcut() && @annotation(logAnnotation)", returning = "jsonResult")
     public void doAfterReturning(JoinPoint joinPoint, com.youlai.boot.core.annotation.Log logAnnotation, Object jsonResult) {
+        this.saveLog(joinPoint, null, jsonResult, logAnnotation);
+    }
+
+
+    /**
+     * 拦截异常操作
+     *
+     * @param joinPoint 切点
+     * @param e         异常
+     */
+    @AfterThrowing(value = "logPointcut()", throwing = "e")
+    public void doAfterThrowing(JoinPoint joinPoint, Exception e) {
+        this.saveLog(joinPoint, e, null,null);
+    }
+
+    /**
+     * 保持日志
+     */
+    private void saveLog(final JoinPoint joinPoint, final Exception e, Object jsonResult, com.youlai.boot.core.annotation.Log logAnnotation) {
         String requestURI = request.getRequestURI();
 
         Long userId = null;
@@ -69,8 +91,24 @@ public class LogAspect {
 
         // 创建日志记录
         Log log = new Log();
-        log.setModule(logAnnotation.module());
-        log.setContent(logAnnotation.value());
+        if (logAnnotation == null && e != null) {
+            log.setModule(LogModuleEnum.EXCEPTION);
+            log.setContent("系统发生异常");
+            this.setRequestParameters(joinPoint, log);
+            log.setResponseContent(JSONUtil.toJsonStr(e.getStackTrace()));
+        }else{
+            log.setModule(logAnnotation.module());
+            log.setContent(logAnnotation.value());
+            // 请求参数
+            if (logAnnotation.params()) {
+                this.setRequestParameters(joinPoint, log);
+            }
+            // 响应结果
+            if (logAnnotation.result() && jsonResult != null) {
+                log.setResponseContent(JSONUtil.toJsonStr(jsonResult));
+            }
+        }
+
         log.setRequestUri(requestURI);
         // 登录方法需要在登录成功后获取用户ID
         if (userId == null) {
@@ -90,8 +128,7 @@ public class LogAspect {
                 }
             }
         }
-        this.setRequestParameters(joinPoint, log);
-        log.setResponseContent(JSONUtil.toJsonStr(jsonResult));
+
         log.setExecutionTime(executionTime);
         // 获取浏览器和终端系统信息
         String userAgentString = request.getHeader("User-Agent");
@@ -103,7 +140,6 @@ public class LogAspect {
         log.setBrowserVersion(userAgent.getBrowser().getVersion(userAgentString));
         // 保存日志到数据库
         logService.save(log);
-
     }
 
     /**

@@ -37,6 +37,7 @@ public class ConfigController {
     @Operation(summary = "系统配置分页列表")
     @GetMapping("/page")
     @PreAuthorize("@ss.hasPerm('sys:config:query')")
+    @Log( value = "系统配置分页列表",module = LogModuleEnum.SETTING)
     public PageResult<ConfigVO> page(@ParameterObject ConfigPageQuery configPageQuery) {
         IPage<ConfigVO> result = configService.page(configPageQuery);
         return PageResult.success(result);

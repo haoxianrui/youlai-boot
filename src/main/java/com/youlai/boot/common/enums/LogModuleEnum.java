@@ -14,7 +14,7 @@ import lombok.Getter;
 @Getter
 public enum LogModuleEnum {
 
-
+    EXCEPTION("异常"),
     LOGIN("登录"),
     USER("用户"),
     DEPT("部门"),
