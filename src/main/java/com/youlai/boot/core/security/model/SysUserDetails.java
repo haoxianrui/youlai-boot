@@ -36,8 +36,6 @@ public class SysUserDetails implements UserDetails {
 
     private Collection<SimpleGrantedAuthority> authorities;
 
-    private Set<String> perms;
-
     private Long deptId;
 
     private Integer dataScope;
@@ -57,7 +55,6 @@ public class SysUserDetails implements UserDetails {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.enabled = ObjectUtil.equal(user.getStatus(), 1);
-        this.perms = user.getPerms();
         this.deptId = user.getDeptId();
         this.dataScope = user.getDataScope();
     }

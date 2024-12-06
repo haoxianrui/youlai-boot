@@ -49,11 +49,6 @@ public class UserAuthInfo {
     private Set<String> roles;
 
     /**
-     * 用户拥有的权限集合
-     */
-    private Set<String> perms;
-
-    /**
      * 数据权限范围，用于控制用户可以访问的数据级别
      *
      * @see com.youlai.boot.common.enums.DataScopeEnum

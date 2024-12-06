@@ -202,11 +202,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UserAuthInfo userAuthInfo = this.baseMapper.getUserAuthInfo(username);
         if (userAuthInfo != null) {
             Set<String> roles = userAuthInfo.getRoles();
-            if (CollectionUtil.isNotEmpty(roles)) {
-                Set<String> perms = roleMenuService.getRolePermsByRoleCodes(roles);
-                userAuthInfo.setPerms(perms);
-            }
-
             // 获取最大范围的数据权限
             Integer dataScope = roleService.getMaximumDataScope(roles);
             userAuthInfo.setDataScope(dataScope);
@@ -226,11 +221,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         UserAuthInfo userAuthInfo = this.baseMapper.getUserAuthInfoByOpenId(openid);
         if (userAuthInfo != null) {
             Set<String> roles = userAuthInfo.getRoles();
-            if (CollectionUtil.isNotEmpty(roles)) {
-                Set<String> perms = roleMenuService.getRolePermsByRoleCodes(roles);
-                userAuthInfo.setPerms(perms);
-            }
-
             // 获取最大范围的数据权限
             Integer dataScope = roleService.getMaximumDataScope(roles);
             userAuthInfo.setDataScope(dataScope);
