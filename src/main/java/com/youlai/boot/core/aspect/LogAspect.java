@@ -7,13 +7,12 @@ import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.json.JSONUtil;
 import com.aliyun.oss.HttpMethod;
-import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.common.enums.LogModuleEnum;
+import com.youlai.boot.common.util.AnonymousUtils;
 import com.youlai.boot.common.util.IPUtils;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.system.model.entity.Log;
 import com.youlai.boot.system.service.LogService;
-import groovyjarjarpicocli.CommandLine;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +22,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -31,6 +31,7 @@ import org.springframework.web.servlet.HandlerMapping;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 日志切面
@@ -43,9 +44,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class LogAspect {
-
     private final LogService logService;
     private final HttpServletRequest request;
+    private final ApplicationContext applicationContext;
 
     @Pointcut("@annotation(com.youlai.boot.core.annotation.Log)")
     public void logPointcut() {
@@ -70,7 +71,7 @@ public class LogAspect {
      */
     @AfterThrowing(value = "logPointcut()", throwing = "e")
     public void doAfterThrowing(JoinPoint joinPoint, Exception e) {
-        this.saveLog(joinPoint, e, null,null);
+        this.saveLog(joinPoint, e, null, null);
     }
 
     /**
@@ -80,8 +81,12 @@ public class LogAspect {
         String requestURI = request.getRequestURI();
 
         Long userId = null;
+
+        // 获取所有匿名标记
+        Set<String> anonymousUrls = AnonymousUtils.getAnonymousUrls(applicationContext);
+
         // 非登录请求获取用户ID，登录请求在登录成功后(joinPoint.proceed())获取用户ID
-        if (!SecurityConstants.LOGIN_PATH.equals(requestURI)) {
+        if (!anonymousUrls.contains(requestURI)) {
             userId = SecurityUtils.getUserId();
         }
 
@@ -96,7 +101,7 @@ public class LogAspect {
             log.setContent("系统发生异常");
             this.setRequestParameters(joinPoint, log);
             log.setResponseContent(JSONUtil.toJsonStr(e.getStackTrace()));
-        }else{
+        } else {
             log.setModule(logAnnotation.module());
             log.setContent(logAnnotation.value());
             // 请求参数
