@@ -7,7 +7,7 @@
     -- ----------------------------
     -- 1. 创建数据库
     -- ----------------------------
-    CREATE DATABASE IF NOT EXISTS youlai_boot DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;
+    CREATE DATABASE IF NOT EXISTS youlai_boot DEFAULT CHARACTER SET utf8mb4 DEFAULT ;
 
 
     -- ----------------------------
@@ -84,7 +84,7 @@
                                      `dict_code` varchar(50)  DEFAULT NULL COMMENT '关联字典编码，与sys_dict表中的dict_code对应',
                                      `value` varchar(50)  DEFAULT '' COMMENT '字典项值',
                                      `label` varchar(100)  DEFAULT '' COMMENT '字典项标签',
-                                     `tag_type` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '标签类型，用于前端样式展示（如success、warning等）',
+                                     `tag_type` varchar(50)  DEFAULT NULL COMMENT '标签类型，用于前端样式展示（如success、warning等）',
                                      `status` tinyint DEFAULT '0' COMMENT '状态（1-正常，0-禁用）',
                                      `sort` int DEFAULT '0' COMMENT '排序',
                                      `remark` varchar(255)  DEFAULT '' COMMENT '备注',
@@ -403,22 +403,26 @@
     DROP TABLE IF EXISTS `sys_log`;
     CREATE TABLE `sys_log` (
                                `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-                               `module`  varchar(50)   NOT NULL COMMENT '日志模块',
-                               `content` varchar(255)  NOT NULL COMMENT '日志内容',
-                               `request_uri` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '请求路径',
-                               `ip` varchar(45)  DEFAULT NULL COMMENT 'IP地址',
-                               `province` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '省份',
-                               `city` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '城市',
+                               `module` varchar(50) CHARACTER SET utf8mb4  NOT NULL COMMENT '日志模块',
+                               `request_method` varchar(64)  NOT NULL DEFAULT '' COMMENT '请求方式',
+                               `request_params` text  COMMENT '请求参数(批量请求参数可能会超过text)',
+                               `response_content` mediumtext  COMMENT '返回参数',
+                               `content` varchar(255) CHARACTER SET utf8mb4  NOT NULL COMMENT '日志内容',
+                               `request_uri` varchar(255)  DEFAULT NULL COMMENT '请求路径',
+                               `method` varchar(255) CHARACTER SET utf8mb4  DEFAULT NULL COMMENT '方法名',
+                               `ip` varchar(45) CHARACTER SET utf8mb4  DEFAULT NULL COMMENT 'IP地址',
+                               `province` varchar(100)  DEFAULT NULL COMMENT '省份',
+                               `city` varchar(100)  DEFAULT NULL COMMENT '城市',
                                `execution_time` bigint DEFAULT NULL COMMENT '执行时间(ms)',
-                               `browser` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '浏览器',
-                               `browser_version` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '浏览器版本',
-                               `os` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '终端系统',
+                               `browser` varchar(100)  DEFAULT NULL COMMENT '浏览器',
+                               `browser_version` varchar(100)  DEFAULT NULL COMMENT '浏览器版本',
+                               `os` varchar(100)  DEFAULT NULL COMMENT '终端系统',
                                `create_by` bigint DEFAULT NULL COMMENT '创建人ID',
                                `create_time` datetime DEFAULT NULL COMMENT '创建时间',
                                `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '逻辑删除标识(1-已删除 0-未删除)',
-                               PRIMARY KEY (`id`) USING BTREE
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='系统日志表';
-
+                               PRIMARY KEY (`id`) USING BTREE,
+                               KEY `idx_create_time` (`create_time`)
+    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='系统日志表';
 
     -- ----------------------------
     -- Table structure for gen_config

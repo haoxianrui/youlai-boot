@@ -130,19 +130,28 @@ INSERT INTO `sys_dict_data` VALUES (12, 'notice_level', 'H', '高', 'danger', 1,
 -- Table structure for sys_log
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_log`;
-CREATE TABLE `sys_log`  (
-                            `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-                            `type` tinyint NULL DEFAULT NULL COMMENT '日志类型(1-操作日志 2-登录日志)',
-                            `title` varchar(100)  NULL DEFAULT NULL COMMENT '日志标题',
-                            `ip` varchar(50)  NULL DEFAULT NULL COMMENT 'IP地址',
-                            `content` text  NULL COMMENT '日志内容',
-                            `create_by` bigint NULL DEFAULT NULL COMMENT '创建人ID',
-                            `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-                            `update_by` bigint NULL DEFAULT NULL COMMENT '修改人ID',
-                            `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-                            `is_deleted` tinyint NOT NULL DEFAULT 0 COMMENT '逻辑删除标识(1-已删除 0-未删除)',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = DYNAMIC;
+CREATE TABLE `sys_log` (
+                           `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+                           `module` varchar(50) CHARACTER SET utf8mb4  NOT NULL COMMENT '日志模块',
+                           `request_method` varchar(64)  NOT NULL DEFAULT '' COMMENT '请求方式',
+                           `request_params` text  COMMENT '请求参数(批量请求参数可能会超过text)',
+                           `response_content` mediumtext  COMMENT '返回参数',
+                           `content` varchar(255) CHARACTER SET utf8mb4  NOT NULL COMMENT '日志内容',
+                           `request_uri` varchar(255)  DEFAULT NULL COMMENT '请求路径',
+                           `method` varchar(255) CHARACTER SET utf8mb4  DEFAULT NULL COMMENT '方法名',
+                           `ip` varchar(45) CHARACTER SET utf8mb4  DEFAULT NULL COMMENT 'IP地址',
+                           `province` varchar(100)  DEFAULT NULL COMMENT '省份',
+                           `city` varchar(100)  DEFAULT NULL COMMENT '城市',
+                           `execution_time` bigint DEFAULT NULL COMMENT '执行时间(ms)',
+                           `browser` varchar(100)  DEFAULT NULL COMMENT '浏览器',
+                           `browser_version` varchar(100)  DEFAULT NULL COMMENT '浏览器版本',
+                           `os` varchar(100)  DEFAULT NULL COMMENT '终端系统',
+                           `create_by` bigint DEFAULT NULL COMMENT '创建人ID',
+                           `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+                           `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '逻辑删除标识(1-已删除 0-未删除)',
+                           PRIMARY KEY (`id`) USING BTREE,
+                           KEY `idx_create_time` (`create_time`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ROW_FORMAT=DYNAMIC COMMENT='系统日志表';
 
 -- ----------------------------
 -- Records of sys_log
