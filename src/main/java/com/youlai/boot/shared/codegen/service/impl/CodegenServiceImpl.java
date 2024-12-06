@@ -169,8 +169,8 @@ public class CodegenServiceImpl implements CodegenService {
             path = (codegenProperties.getBackendAppName()
                     + File.separator
                     + "src" + File.separator + "main" + File.separator + "resources"
-                    + File.separator + moduleName
                     + File.separator + subPackageName
+                    + File.separator + moduleName
             );
         } else if ("API".equals(templateName)) {
             // path = "src/api/system";
