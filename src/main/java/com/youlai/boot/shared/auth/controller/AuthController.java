@@ -1,5 +1,6 @@
 package com.youlai.boot.shared.auth.controller;
 
+import com.youlai.boot.common.annotation.methods.AnonymousPostMapping;
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.result.Result;
 import com.youlai.boot.shared.auth.model.RefreshTokenRequest;
@@ -30,7 +31,7 @@ public class AuthController {
     private final AuthService authService;
 
     @Operation(summary = "登录")
-    @PostMapping("/login")
+    @AnonymousPostMapping("/login")
     @Log(value = "登录", module = LogModuleEnum.LOGIN)
     public Result<AuthTokenResponse> login(
             @Parameter(description = "用户名", example = "admin") @RequestParam String username,
@@ -63,7 +64,7 @@ public class AuthController {
     }
 
     @Operation(summary = "微信登录")
-    @PostMapping("/wechat-login")
+    @AnonymousPostMapping("/wechat-login")
     @Log(value = "微信登录", module = LogModuleEnum.LOGIN)
     public Result<AuthTokenResponse> wechatLogin(
             @Parameter(description = "微信授权码", example = "code") @RequestParam String code

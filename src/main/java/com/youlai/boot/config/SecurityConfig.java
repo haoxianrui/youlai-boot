@@ -3,7 +3,8 @@ package com.youlai.boot.config;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.collection.CollectionUtil;
-import com.youlai.boot.common.constant.SecurityConstants;
+import com.youlai.boot.common.enums.RequestMethodEnum;
+import com.youlai.boot.common.util.AnonymousUtils;
 import com.youlai.boot.config.property.SecurityProperties;
 import com.youlai.boot.core.filter.RateLimiterFilter;
 import com.youlai.boot.core.security.exception.MyAccessDeniedHandler;
@@ -16,9 +17,11 @@ import com.youlai.boot.shared.auth.service.impl.JwtTokenService;
 import com.youlai.boot.system.service.ConfigService;
 import com.youlai.boot.system.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -32,6 +35,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Spring Security 安全配置
@@ -60,16 +66,30 @@ public class SecurityConfig {
     private final MyAuthenticationEntryPoint authenticationEntryPoint; // 项目内安全类
     private final MyAccessDeniedHandler accessDeniedHandler;
 
+    private final ApplicationContext applicationContext;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        // 获取所有匿名访问路径
+        Map<String, Set<String>> anonymousUrls = AnonymousUtils.getAllAnonymousUrls(applicationContext);
+
         http
 
                 .authorizeHttpRequests(requestMatcherRegistry ->
                         requestMatcherRegistry
-                                .requestMatchers(
-                                        SecurityConstants.LOGIN_PATH,
-                                        SecurityConstants.WECHAT_LOGIN_PATH)
-                                .permitAll()
+                                // GET
+                                .requestMatchers(HttpMethod.GET, anonymousUrls.get(RequestMethodEnum.GET.getType()).toArray(new String[0])).permitAll()
+                                // POST
+                                .requestMatchers(HttpMethod.POST, anonymousUrls.get(RequestMethodEnum.POST.getType()).toArray(new String[0])).permitAll()
+                                // PUT
+                                .requestMatchers(HttpMethod.PUT, anonymousUrls.get(RequestMethodEnum.PUT.getType()).toArray(new String[0])).permitAll()
+                                // PATCH
+                                .requestMatchers(HttpMethod.PATCH, anonymousUrls.get(RequestMethodEnum.PATCH.getType()).toArray(new String[0])).permitAll()
+                                // DELETE
+                                .requestMatchers(HttpMethod.DELETE, anonymousUrls.get(RequestMethodEnum.DELETE.getType()).toArray(new String[0])).permitAll()
+                                // 所有类型的接口都放行
+                                .requestMatchers(anonymousUrls.get(RequestMethodEnum.ALL.getType()).toArray(new String[0])).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
