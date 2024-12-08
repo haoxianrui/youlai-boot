@@ -14,16 +14,13 @@ import java.util.List;
 /**
  * 系统日志 服务接口
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2.10.0
  */
 public interface LogService extends IService<Log> {
 
     /**
      * 获取日志分页列表
-     *
-     * @param queryParams 查询参数
-     * @return
      */
     Page<LogPageVO> getLogPage(LogPageQuery queryParams);
 
@@ -33,15 +30,12 @@ public interface LogService extends IService<Log> {
      *
      * @param startDate 开始时间
      * @param endDate   结束时间
-     * @return
      */
     VisitTrendVO getVisitTrend(LocalDate startDate, LocalDate endDate);
 
     /**
      * 获取访问统计
-     *
-     * @return
      */
-    List<VisitStatsVO> getVisitStats();
+    VisitStatsVO getVisitStats();
 
 }

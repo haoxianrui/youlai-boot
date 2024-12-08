@@ -53,11 +53,11 @@ public class LogController {
         return Result.success(data);
     }
 
-    @Operation(summary = "获取统计数据")
+    @Operation(summary = "获取访问统计")
     @GetMapping("/visit-stats")
-    public Result<List<VisitStatsVO>> getVisitStats() {
-        List<VisitStatsVO> list = logService.getVisitStats();
-        return Result.success(list);
+    public Result<VisitStatsVO> getVisitStats() {
+        VisitStatsVO result = logService.getVisitStats();
+        return Result.success(result);
     }
 
 }
