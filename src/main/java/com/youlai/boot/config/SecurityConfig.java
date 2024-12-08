@@ -9,7 +9,7 @@ import com.youlai.boot.config.property.SecurityProperties;
 import com.youlai.boot.core.filter.RateLimiterFilter;
 import com.youlai.boot.core.security.exception.MyAccessDeniedHandler;
 import com.youlai.boot.core.security.exception.MyAuthenticationEntryPoint;
-import com.youlai.boot.core.security.extension.WeChatAuthenticationProvider;
+import com.youlai.boot.core.security.extension.WechatAuthenticationProvider;
 import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
 import com.youlai.boot.core.security.filter.JwtValidationFilter;
 import com.youlai.boot.core.security.service.SysUserDetailsService;
@@ -138,8 +138,8 @@ public class SecurityConfig {
      * 微信认证 Provider
      */
     @Bean
-    public WeChatAuthenticationProvider weChatAuthenticationProvider() {
-        return new WeChatAuthenticationProvider(userService, wxMaService);
+    public WechatAuthenticationProvider weChatAuthenticationProvider() {
+        return new WechatAuthenticationProvider(userService, wxMaService);
     }
 
     /**

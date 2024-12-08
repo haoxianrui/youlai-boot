@@ -52,12 +52,12 @@ public class SecurityProperties {
         /**
          * 访问令牌有效期(单位：秒)
          */
-        private Integer accessTokenExpiration;
+        private Integer accessTokenTimeToLive;
 
         /**
          * 刷新令牌有效期(单位：秒)
          */
-        private Integer refreshTokenExpiration;
+        private Integer refreshTokenTimeToLive;
 
     }
 }

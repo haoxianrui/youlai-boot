@@ -81,9 +81,9 @@ security:
     # JWT 秘钥
     key: SecretKey012345678901234567890123456789012345678901234567890123456789
     # 访问令牌 有效期(单位：秒)，默认 1 小时
-    access-token-expiration: 3600
+    access-token-time-to-live: 3600
     # 刷新令牌有效期(单位：秒)，默认 7 天
-    refresh-token-expiration: 604800
+    refresh-token-time-to-live: 604800
   # 白名单列表
   ignore-urls:
     - /v3/api-docs/**
@@ -212,8 +212,8 @@ captcha:
   # 验证码有效期(秒)
   expire-seconds: 120
 
-# 微信小程序
-wechat:
+# 微信小程配置
+wx:
   miniapp:
-    appId: xxxxxx
-    appSecret: xxxxxx
+    app-id: xxxxxx
+    app-secret: xxxxxx
