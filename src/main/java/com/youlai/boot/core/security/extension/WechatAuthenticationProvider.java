@@ -24,14 +24,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  * @since 2.17.0
  */
 @Slf4j
-public class WeChatAuthenticationProvider implements AuthenticationProvider {
+public class WechatAuthenticationProvider implements AuthenticationProvider {
 
     private final UserService userService;
 
     private final WxMaService wxMaService;
 
 
-    public WeChatAuthenticationProvider(UserService userService, WxMaService wxMaService) {
+    public WechatAuthenticationProvider(UserService userService, WxMaService wxMaService) {
         this.userService = userService;
         this.wxMaService = wxMaService;
     }
@@ -86,15 +86,14 @@ public class WeChatAuthenticationProvider implements AuthenticationProvider {
         SysUserDetails userDetails = new SysUserDetails(userAuthInfo);
 
         // 创建已认证的 WeChatAuthenticationToken
-        WeChatAuthenticationToken weChatAuthenticationToken = WeChatAuthenticationToken.authenticated(
+        return WechatAuthenticationToken.authenticated(
                 userDetails,
                 userDetails.getAuthorities()
         );
-        return weChatAuthenticationToken;
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return WeChatAuthenticationToken.class.isAssignableFrom(authentication);
+        return WechatAuthenticationToken.class.isAssignableFrom(authentication);
     }
 }

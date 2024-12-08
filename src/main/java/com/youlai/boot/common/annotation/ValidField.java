@@ -1,4 +1,4 @@
-package com.youlai.boot.core.annotation;
+package com.youlai.boot.common.annotation;
 
 
 import com.youlai.boot.core.validator.FieldValidator;

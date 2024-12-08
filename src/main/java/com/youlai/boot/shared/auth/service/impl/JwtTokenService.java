@@ -59,17 +59,17 @@ public class JwtTokenService implements TokenService {
      */
     @Override
     public AuthTokenResponse generateToken(Authentication authentication) {
-        int accessTokenExpiration = securityProperties.getJwt().getAccessTokenExpiration();
-        int refreshTokenExpiration = securityProperties.getJwt().getRefreshTokenExpiration();
+        int accessTokenTimeToLive = securityProperties.getJwt().getAccessTokenTimeToLive();
+        int refreshTokenTimeToLive = securityProperties.getJwt().getRefreshTokenTimeToLive();
 
-        String accessToken = generateToken(authentication, accessTokenExpiration);
-        String refreshToken = generateToken(authentication, refreshTokenExpiration);
+        String accessToken = generateToken(authentication, accessTokenTimeToLive);
+        String refreshToken = generateToken(authentication, refreshTokenTimeToLive);
 
         return AuthTokenResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .tokenType("Bearer")
-                .expiresIn(accessTokenExpiration)
+                .expiresIn(accessTokenTimeToLive)
                 .build();
     }
 
@@ -172,7 +172,7 @@ public class JwtTokenService implements TokenService {
         }
 
         Authentication authentication = parseToken(refreshToken);
-        int accessTokenExpiration = securityProperties.getJwt().getAccessTokenExpiration();
+        int accessTokenExpiration = securityProperties.getJwt().getRefreshTokenTimeToLive();
         String newAccessToken = generateToken(authentication, accessTokenExpiration);
 
         return AuthTokenResponse.builder()
@@ -187,11 +187,11 @@ public class JwtTokenService implements TokenService {
     /**
      * 生成 JWT Token
      *
-     * @param authentication
-     * @param expiration
+     * @param authentication 认证信息
+     * @param ttl           过期时间
      * @return
      */
-    private String generateToken(Authentication authentication, int expiration) {
+    private String generateToken(Authentication authentication, int ttl) {
 
         SysUserDetails userDetails = (SysUserDetails) authentication.getPrincipal();
 
@@ -210,8 +210,8 @@ public class JwtTokenService implements TokenService {
         payload.put(JWTPayload.ISSUED_AT, now);
 
         // 设置过期时间 -1 表示永不过期
-        if (expiration != -1) {
-            Date expiresAt = DateUtil.offsetSecond(now, expiration);
+        if (ttl != -1) {
+            Date expiresAt = DateUtil.offsetSecond(now, ttl);
             payload.put(JWTPayload.EXPIRES_AT, expiresAt);
         }
         payload.put(JWTPayload.SUBJECT, authentication.getName());

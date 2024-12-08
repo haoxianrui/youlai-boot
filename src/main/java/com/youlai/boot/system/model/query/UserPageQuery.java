@@ -2,7 +2,7 @@ package com.youlai.boot.system.model.query;
 
 import cn.hutool.db.sql.Direction;
 import com.youlai.boot.common.base.BasePageQuery;
-import com.youlai.boot.core.annotation.ValidField;
+import com.youlai.boot.common.annotation.ValidField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

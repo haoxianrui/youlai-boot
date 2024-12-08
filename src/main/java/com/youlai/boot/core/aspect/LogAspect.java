@@ -48,7 +48,7 @@ public class LogAspect {
     private final HttpServletRequest request;
     private final ApplicationContext applicationContext;
 
-    @Pointcut("@annotation(com.youlai.boot.core.annotation.Log)")
+    @Pointcut("@annotation(com.youlai.boot.common.annotation.Log)")
     public void logPointcut() {
     }
 
@@ -58,7 +58,7 @@ public class LogAspect {
      * @param joinPoint 切点
      */
     @AfterReturning(pointcut = "logPointcut() && @annotation(logAnnotation)", returning = "jsonResult")
-    public void doAfterReturning(JoinPoint joinPoint, com.youlai.boot.core.annotation.Log logAnnotation, Object jsonResult) {
+    public void doAfterReturning(JoinPoint joinPoint, com.youlai.boot.common.annotation.Log logAnnotation, Object jsonResult) {
         this.saveLog(joinPoint, null, jsonResult, logAnnotation);
     }
 
@@ -77,7 +77,7 @@ public class LogAspect {
     /**
      * 保持日志
      */
-    private void saveLog(final JoinPoint joinPoint, final Exception e, Object jsonResult, com.youlai.boot.core.annotation.Log logAnnotation) {
+    private void saveLog(final JoinPoint joinPoint, final Exception e, Object jsonResult, com.youlai.boot.common.annotation.Log logAnnotation) {
         String requestURI = request.getRequestURI();
 
         Long userId = null;

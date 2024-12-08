@@ -3,7 +3,7 @@ package com.youlai.boot.core.handler;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
-import com.youlai.boot.core.annotation.DataPermission;
+import com.youlai.boot.common.annotation.DataPermission;
 import com.youlai.boot.common.base.IBaseEnum;
 import com.youlai.boot.common.enums.DataScopeEnum;
 import com.youlai.boot.core.security.util.SecurityUtils;

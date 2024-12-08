@@ -9,7 +9,7 @@ import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.common.result.ResultCode;
 import com.youlai.boot.config.property.CaptchaProperties;
-import com.youlai.boot.core.security.extension.WeChatAuthenticationToken;
+import com.youlai.boot.core.security.extension.WechatAuthenticationToken;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.shared.auth.enums.CaptchaTypeEnum;
 import com.youlai.boot.shared.auth.model.AuthTokenResponse;
@@ -78,7 +78,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthTokenResponse wechatLogin(String code) {
         // 1. 创建用户微信认证的令牌（未认证）
-        WeChatAuthenticationToken authenticationToken = new WeChatAuthenticationToken(code);
+        WechatAuthenticationToken authenticationToken = new WechatAuthenticationToken(code);
 
         // 2. 执行认证（认证中）
         Authentication authentication = authenticationManager.authenticate(authenticationToken);

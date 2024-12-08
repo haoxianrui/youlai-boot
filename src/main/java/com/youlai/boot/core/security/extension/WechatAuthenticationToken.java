@@ -12,7 +12,7 @@ import java.util.Collection;
  * @author Ray.Hao
  * @since 2024/12/2
  */
-public class WeChatAuthenticationToken extends AbstractAuthenticationToken {
+public class WechatAuthenticationToken extends AbstractAuthenticationToken {
     @Serial
     private static final long serialVersionUID = 621L;
     private final Object principal;
@@ -22,7 +22,7 @@ public class WeChatAuthenticationToken extends AbstractAuthenticationToken {
      *
      * @param principal 微信用户信息
      */
-    public WeChatAuthenticationToken(Object principal) {
+    public WechatAuthenticationToken(Object principal) {
         // 没有授权信息时，设置为 null
         super(null);
         this.principal = principal;
@@ -37,7 +37,7 @@ public class WeChatAuthenticationToken extends AbstractAuthenticationToken {
      * @param principal   微信用户信息
      * @param authorities 授权信息
      */
-    public WeChatAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
+    public WechatAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         // 认证通过
@@ -52,8 +52,8 @@ public class WeChatAuthenticationToken extends AbstractAuthenticationToken {
      * @param authorities 授权信息
      * @return
      */
-    public static WeChatAuthenticationToken authenticated(Object principal, Collection<? extends GrantedAuthority> authorities) {
-        return new WeChatAuthenticationToken(principal, authorities);
+    public static WechatAuthenticationToken authenticated(Object principal, Collection<? extends GrantedAuthority> authorities) {
+        return new WechatAuthenticationToken(principal, authorities);
     }
 
     @Override

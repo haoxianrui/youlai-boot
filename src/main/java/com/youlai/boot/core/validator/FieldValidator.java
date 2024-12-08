@@ -1,6 +1,6 @@
 package com.youlai.boot.core.validator;
 
-import com.youlai.boot.core.annotation.ValidField;
+import com.youlai.boot.common.annotation.ValidField;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

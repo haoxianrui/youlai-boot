@@ -6,7 +6,7 @@ import com.youlai.boot.system.model.bo.UserBO;
 import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.query.UserPageQuery;
 import com.youlai.boot.system.model.form.UserForm;
-import com.youlai.boot.core.annotation.DataPermission;
+import com.youlai.boot.common.annotation.DataPermission;
 import com.youlai.boot.system.model.dto.UserAuthInfo;
 import com.youlai.boot.system.model.dto.UserExportDTO;
 import org.apache.ibatis.annotations.Mapper;
