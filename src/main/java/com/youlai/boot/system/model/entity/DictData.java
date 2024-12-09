@@ -18,11 +18,6 @@ import lombok.EqualsAndHashCode;
 @TableName("sys_dict_data")
 @Data
 public class DictData extends BaseEntity {
-    /**
-     * 主键
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
 
     /**
      * 字典编码
