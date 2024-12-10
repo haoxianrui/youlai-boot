@@ -122,7 +122,10 @@ oss:
     access-key-secret: your-access-key-secret
     # 存储桶名称
     bucket-name: default
-
+  # 本地存储
+  local:
+    # 文件存储路径 请注意下，mac用户请使用 /Users/your-username/your-path/，否则会有权限问题，windows用户请使用 D:/your-path/
+    storage-path: /Users/theo/home/
 # 短信配置
 sms:
   # 阿里云短信
