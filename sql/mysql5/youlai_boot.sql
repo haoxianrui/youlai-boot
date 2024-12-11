@@ -414,7 +414,7 @@ CREATE TABLE `sys_user`  (
                              `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                              `update_by` bigint NULL DEFAULT NULL COMMENT '修改人ID',
                              `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '逻辑删除标识(0-未删除 1-已删除)',
-                             `open_id` char(28) DEFAULT NULL COMMENT '微信 openid',
+                             `openid` char(28) DEFAULT NULL COMMENT '微信 openid',
                              PRIMARY KEY (`id`) USING BTREE,
                              UNIQUE INDEX `login_name`(`username` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户信息表' ROW_FORMAT = DYNAMIC;
