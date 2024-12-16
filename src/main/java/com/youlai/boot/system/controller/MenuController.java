@@ -57,9 +57,8 @@ public class MenuController {
 
     @Operation(summary = "菜单路由列表")
     @GetMapping("/routes")
-    public Result<List<RouteVO>> listRoutes() {
-        Set<String> roles = SecurityUtils.getRoles();
-        List<RouteVO> routeList = menuService.listRoutes(roles);
+    public Result<List<RouteVO>> getCurrentUserRoutes() {
+        List<RouteVO> routeList = menuService.getCurrentUserRoutes();
         return Result.success(routeList);
     }
 
