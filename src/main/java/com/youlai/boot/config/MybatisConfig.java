@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * mybatis-plus 自动配置类
  *
- * @author haoxr
+ * @author Ray.Hao
  * @since 2022/7/2
  */
 @Configuration

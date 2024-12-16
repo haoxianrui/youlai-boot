@@ -73,7 +73,7 @@ public class RateLimiterFilter extends OncePerRequestFilter {
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
         String ip = IPUtils.getIpAddr(request);
         if (rateLimit(ip)) {
-            ResponseUtils.writeErrMsg(response, ResultCode.FLOW_LIMITING);
+            ResponseUtils.writeErrMsg(response, ResultCode.REQUEST_CONCURRENCY_LIMIT_EXCEEDED);
             return;
         }
         filterChain.doFilter(request, response);

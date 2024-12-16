@@ -55,13 +55,13 @@ public class CaptchaValidationFilter extends OncePerRequestFilter {
             String verifyCodeKey = request.getParameter(CAPTCHA_KEY_PARAM_NAME);
             String cacheVerifyCode = (String) redisTemplate.opsForValue().get(SecurityConstants.CAPTCHA_CODE_PREFIX + verifyCodeKey);
             if (cacheVerifyCode == null) {
-                ResponseUtils.writeErrMsg(response, ResultCode.VERIFY_CODE_TIMEOUT);
+                ResponseUtils.writeErrMsg(response, ResultCode.USER_VERIFICATION_CODE_EXPIRED);
             } else {
                 // 验证码比对
                 if (codeGenerator.verify(cacheVerifyCode, captchaCode)) {
                     chain.doFilter(request, response);
                 } else {
-                    ResponseUtils.writeErrMsg(response, ResultCode.VERIFY_CODE_ERROR);
+                    ResponseUtils.writeErrMsg(response, ResultCode.USER_VERIFICATION_CODE_ERROR);
                 }
             }
         } else {
