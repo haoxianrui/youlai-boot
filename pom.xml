@@ -6,7 +6,7 @@
 
     <groupId>com.youlai</groupId>
     <artifactId>youlai-boot</artifactId>
-    <version>2.18.0</version>
+    <version>2.18.1</version>
     <description>基于 Java 17 + SpringBoot 3 + Spring Security 构建的权限管理系统。</description>
 
     <parent>
@@ -20,18 +20,18 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <hutool.version>5.8.27</hutool.version>
+        <hutool.version>5.8.34</hutool.version>
 
         <mysql-connector-j.version>9.1.0</mysql-connector-j.version>
-        <druid.version>1.2.23</druid.version>
+        <druid.version>1.2.24</druid.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
 
         <knife4j.version>4.5.0</knife4j.version>
 
-        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 
-        <xxl-job.version>2.4.1</xxl-job.version>
+        <xxl-job.version>2.4.2</xxl-job.version>
 
         <easyexcel.version>3.2.1</easyexcel.version>
 
@@ -42,7 +42,7 @@
         <aliyun-sdk-oss.version>3.16.3</aliyun-sdk-oss.version>
 
         <!-- redisson 分布式锁 -->
-        <redisson.version>3.30.0</redisson.version>
+        <redisson.version>3.40.2</redisson.version>
 
         <!-- 自动代码生成 -->
         <mybatis-plus-generator.version>3.5.6</mybatis-plus-generator.version>
