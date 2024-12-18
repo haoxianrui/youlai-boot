@@ -88,6 +88,7 @@ security:
   ignore-urls:
     - /v3/api-docs/**
     - /doc.html
+    - ${springdoc.swagger-ui.path}
     - /swagger-resources/**
     - /webjars/**
     - /swagger-ui/**
