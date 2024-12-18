@@ -2,16 +2,16 @@
 <!-- 日志级别从低到高分为TRACE < DEBUG < INFO < WARN < ERROR < FATAL，如果设置为WARN，则低于WARN的信息都不会输出 -->
 <configuration>
 
-    <!-- SpringBoot默认logback的配置 -->
+    <!-- Spring Boot 默认 logback 的配置 -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
     <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
     <property name="LOG_HOME" value="/logs/${APP_NAME}"/>
 
-    <!--1. 输出到控制台-->
+    <!-- 1. 输出到控制台-->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <!-- <withJansi>true</withJansi>-->
-        <!--此日志appender是为开发使用，只配置最低级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
+        <!--此日志 appender 是为开发使用，只配置最低级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>DEBUG</level>
         </filter>
