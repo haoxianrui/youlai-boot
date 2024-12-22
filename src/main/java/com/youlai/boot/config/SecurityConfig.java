@@ -11,7 +11,7 @@ import com.youlai.boot.core.security.exception.MyAccessDeniedHandler;
 import com.youlai.boot.core.security.exception.MyAuthenticationEntryPoint;
 import com.youlai.boot.core.security.extension.WechatAuthenticationProvider;
 import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
-import com.youlai.boot.core.security.filter.JwtValidationFilter;
+import com.youlai.boot.core.security.filter.JwtAuthenticationFilter;
 import com.youlai.boot.core.security.service.SysUserDetailsService;
 import com.youlai.boot.shared.auth.service.impl.JwtTokenService;
 import com.youlai.boot.system.service.ConfigService;
@@ -104,8 +104,8 @@ public class SecurityConfig {
                 .addFilterBefore(new RateLimiterFilter(redisTemplate, configService), UsernamePasswordAuthenticationFilter.class)
                 // 验证码校验过滤器
                 .addFilterBefore(new CaptchaValidationFilter(redisTemplate, codeGenerator), UsernamePasswordAuthenticationFilter.class)
-                // JWT 校验过滤器
-                .addFilterBefore(new JwtValidationFilter(jwtTokenService), UsernamePasswordAuthenticationFilter.class);
+                // JWT 验证和解析过滤器
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
