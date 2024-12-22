@@ -7,7 +7,7 @@
     -- ----------------------------
     -- 1. 创建数据库
     -- ----------------------------
-    CREATE DATABASE IF NOT EXISTS youlai_boot DEFAULT CHARACTER SET utf8mb4 DEFAULT ;
+    CREATE DATABASE IF NOT EXISTS youlai_boot DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;
 
 
     -- ----------------------------
@@ -227,9 +227,9 @@
                                  `status` tinyint(1) NULL DEFAULT 1 COMMENT '角色状态(1-正常 0-停用)',
                                  `data_scope` tinyint NULL DEFAULT NULL COMMENT '数据权限(0-所有数据 1-部门及子部门数据 2-本部门数据3-本人数据)',
                                  `create_by` bigint NULL DEFAULT NULL COMMENT '创建人 ID',
-                                 `create_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+                                 `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                                  `update_by` bigint NULL DEFAULT NULL COMMENT '更新人ID',
-                                 `update_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                                 `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                                  `is_deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除标识(0-未删除 1-已删除)',
                                  PRIMARY KEY (`id`) USING BTREE,
                                  UNIQUE INDEX `uk_name`(`name` ASC) USING BTREE COMMENT '角色名称唯一索引',
@@ -367,7 +367,7 @@
                                  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                                  `update_by` bigint NULL DEFAULT NULL COMMENT '修改人ID',
                                  `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '逻辑删除标识(0-未删除 1-已删除)',
-                                 `open_id` char(28) DEFAULT NULL COMMENT '微信 openid',
+                                 `openid` char(28) DEFAULT NULL COMMENT '微信 openid',
                                  PRIMARY KEY (`id`) USING BTREE,
                                  UNIQUE INDEX `login_name`(`username` ASC) USING BTREE
     ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户信息表' ROW_FORMAT = DYNAMIC;

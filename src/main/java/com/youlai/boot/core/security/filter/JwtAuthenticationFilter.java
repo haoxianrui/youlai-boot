@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // 校验 JWT Token ，包括验签和是否过期
                 boolean isValidate = jwtTokenService.validateToken(token);
                 if (!isValidate) {
-                    ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
+                    ResponseUtils.writeErrMsg(response, ResultCode.ACCESS_TOKEN_INVALID);
                     return;
                 }
                 // 将 Token 解析为 Authentication 对象，并设置到 Spring Security 上下文中
@@ -57,7 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             SecurityContextHolder.clearContext();
-            ResponseUtils.writeErrMsg(response, ResultCode.TOKEN_INVALID);
+            ResponseUtils.writeErrMsg(response, ResultCode.ACCESS_TOKEN_INVALID);
             return;
         }
         // Token有效或无Token时继续执行过滤链

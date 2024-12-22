@@ -42,7 +42,7 @@ public interface MenuService extends IService<Menu> {
     /**
      * 获取路由列表
      */
-    List<RouteVO> listRoutes( Set<String> roles);
+    List<RouteVO> getCurrentUserRoutes();
 
     /**
      * 修改菜单显示状态

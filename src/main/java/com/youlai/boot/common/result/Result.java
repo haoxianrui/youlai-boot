@@ -32,11 +32,11 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> failed() {
-        return result(ResultCode.SYSTEM_EXECUTION_ERROR.getCode(), ResultCode.SYSTEM_EXECUTION_ERROR.getMsg(), null);
+        return result(ResultCode.SYSTEM_ERROR.getCode(), ResultCode.SYSTEM_ERROR.getMsg(), null);
     }
 
     public static <T> Result<T> failed(String msg) {
-        return result(ResultCode.SYSTEM_EXECUTION_ERROR.getCode(), msg, null);
+        return result(ResultCode.SYSTEM_ERROR.getCode(), msg, null);
     }
 
     public static <T> Result<T> judge(boolean status) {

@@ -132,14 +132,14 @@ INSERT INTO `sys_dict_data` VALUES (12, 'notice_level', 'H', '高', 'danger', 1,
 DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log` (
                            `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-                           `module` varchar(50) CHARACTER SET utf8mb4  NOT NULL COMMENT '日志模块',
+                           `module` varchar(50) NOT NULL COMMENT '日志模块',
                            `request_method` varchar(64)  NOT NULL DEFAULT '' COMMENT '请求方式',
                            `request_params` text  COMMENT '请求参数(批量请求参数可能会超过text)',
                            `response_content` mediumtext  COMMENT '返回参数',
-                           `content` varchar(255) CHARACTER SET utf8mb4  NOT NULL COMMENT '日志内容',
-                           `request_uri` varchar(255)  DEFAULT NULL COMMENT '请求路径',
-                           `method` varchar(255) CHARACTER SET utf8mb4  DEFAULT NULL COMMENT '方法名',
-                           `ip` varchar(45) CHARACTER SET utf8mb4  DEFAULT NULL COMMENT 'IP地址',
+                           `content` varchar(255)  NOT NULL COMMENT '日志内容',
+                           `request_uri` varchar(255) DEFAULT NULL COMMENT '请求路径',
+                           `method` varchar(255)  DEFAULT NULL COMMENT '方法名',
+                           `ip` varchar(45) DEFAULT NULL COMMENT 'IP地址',
                            `province` varchar(100)  DEFAULT NULL COMMENT '省份',
                            `city` varchar(100)  DEFAULT NULL COMMENT '城市',
                            `execution_time` bigint DEFAULT NULL COMMENT '执行时间(ms)',
@@ -152,10 +152,6 @@ CREATE TABLE `sys_log` (
                            PRIMARY KEY (`id`) USING BTREE,
                            KEY `idx_create_time` (`create_time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ROW_FORMAT=DYNAMIC COMMENT='系统日志表';
-
--- ----------------------------
--- Records of sys_log
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -273,9 +269,9 @@ CREATE TABLE `sys_role`  (
                              `status` tinyint(1) NULL DEFAULT 1 COMMENT '角色状态(1-正常 0-停用)',
                              `data_scope` tinyint NULL DEFAULT NULL COMMENT '数据权限(0-所有数据 1-部门及子部门数据 2-本部门数据3-本人数据)',
                              `create_by` bigint NULL DEFAULT NULL COMMENT '创建人 ID',
-                             `create_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+                             `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                              `update_by` bigint NULL DEFAULT NULL COMMENT '更新人ID',
-                             `update_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+                             `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                              `is_deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除标识(0-未删除 1-已删除)',
                              PRIMARY KEY (`id`) USING BTREE,
                              UNIQUE INDEX `uk_name`(`name` ASC) USING BTREE COMMENT '角色名称唯一索引',
@@ -414,7 +410,7 @@ CREATE TABLE `sys_user`  (
                              `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
                              `update_by` bigint NULL DEFAULT NULL COMMENT '修改人ID',
                              `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '逻辑删除标识(0-未删除 1-已删除)',
-                             `open_id` char(28) DEFAULT NULL COMMENT '微信 openid',
+                             `openid` char(28) DEFAULT NULL COMMENT '微信 openid',
                              PRIMARY KEY (`id`) USING BTREE,
                              UNIQUE INDEX `login_name`(`username` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户信息表' ROW_FORMAT = DYNAMIC;
@@ -442,28 +438,6 @@ CREATE TABLE `sys_user_role`  (
 INSERT INTO `sys_user_role` VALUES (1, 1);
 INSERT INTO `sys_user_role` VALUES (2, 2);
 INSERT INTO `sys_user_role` VALUES (3, 3);
-
--- ----------------------------
--- Table structure for sys_log
--- ----------------------------
-DROP TABLE IF EXISTS `sys_log`;
-CREATE TABLE `sys_log` (
-                           `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-                           `module`  varchar(50)  CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '日志模块',
-                           `content` varchar(255)  NOT NULL COMMENT '日志内容',
-                           `request_uri` varchar(255) COLLATE utf8_general_ci DEFAULT NULL COMMENT '请求路径',
-                           `ip` varchar(45)  DEFAULT NULL COMMENT 'IP地址',
-                           `province` varchar(100) COLLATE utf8_general_ci DEFAULT NULL COMMENT '省份',
-                           `city` varchar(100) COLLATE utf8_general_ci DEFAULT NULL COMMENT '城市',
-                           `execution_time` bigint DEFAULT NULL COMMENT '执行时间(ms)',
-                           `browser` varchar(100) COLLATE utf8_general_ci DEFAULT NULL COMMENT '浏览器',
-                           `browser_version` varchar(100) COLLATE utf8_general_ci DEFAULT NULL COMMENT '浏览器版本',
-                           `os` varchar(100) COLLATE utf8_general_ci DEFAULT NULL COMMENT '终端系统',
-                           `create_by` bigint DEFAULT NULL COMMENT '创建人ID',
-                           `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-                           `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '逻辑删除标识(1-已删除 0-未删除)',
-                           PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB  ROW_FORMAT=DYNAMIC COMMENT='系统日志表';
 
 -- ----------------------------
 -- Table structure for gen_config

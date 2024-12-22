@@ -2,6 +2,7 @@ package com.youlai.boot.core.security.util;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.core.security.model.SysUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
@@ -83,21 +84,21 @@ public class SecurityUtils {
 
 
     /**
-     * 获取用户角色集合
+     * 获取角色集合
      *
      * @return 角色集合
      */
     public static Set<String> getRoles() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-            if (CollectionUtil.isNotEmpty(authorities)) {
-                return authorities.stream().filter(item -> item.getAuthority().startsWith("ROLE_"))
-                        .map(item -> StrUtil.removePrefix(item.getAuthority(), "ROLE_"))
-                        .collect(Collectors.toSet());
-            }
-        }
-        return Collections.EMPTY_SET;
+        return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+                .map(Authentication::getAuthorities)
+                .filter(CollectionUtil::isNotEmpty)
+                .stream()
+                .flatMap(Collection::stream)
+                .map(GrantedAuthority::getAuthority)
+                // 筛选角色,authorities 中的角色都是以 ROLE_ 开头
+                .filter(authority -> authority.startsWith(SecurityConstants.ROLE_PREFIX))
+                .map(authority -> StrUtil.removePrefix(authority, SecurityConstants.ROLE_PREFIX))
+                .collect(Collectors.toSet());
     }
 
     /**

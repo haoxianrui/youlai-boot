@@ -39,4 +39,9 @@ public interface SecurityConstants {
      * 微信登录路径
      */
     String WECHAT_LOGIN_PATH = "/api/v1/auth/wechat-login";
+
+    /**
+     * 角色前缀 Spring Security 的 authorities 角色前缀，用于区分角色和权限
+     */
+    String ROLE_PREFIX = "ROLE_";
 }
