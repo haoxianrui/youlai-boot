@@ -14,23 +14,23 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 
 /**
- * Swagger 配置
- * <p>
+ * OpenAPI 接口文档配置
  *
- * @author Ray
+ * @author Ray.Hao
  * @see <a href="https://doc.xiaominfo.com/docs/quick-start">knife4j 快速开始</a>
  * @since 2023/2/17
  */
 @Configuration
-@Slf4j
 @RequiredArgsConstructor
-public class SwaggerConfig {
+@Slf4j
+public class OpenApiConfig {
 
     private final Environment environment;
 
     /**
      * 接口信息
      */
+
     @Bean
     public OpenAPI openApi() {
 
