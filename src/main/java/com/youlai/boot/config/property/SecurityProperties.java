@@ -28,7 +28,9 @@ public class SecurityProperties {
     /**
      * 白名单 URL 集合
      */
-    private List<String> ignoreUrls;
+    private String[] ignoreUrls;
+
+    private String[] unsecuredUrls;
 
     /**
      * 会话属性

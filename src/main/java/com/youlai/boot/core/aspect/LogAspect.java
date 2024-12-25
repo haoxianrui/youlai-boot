@@ -8,7 +8,6 @@ import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.json.JSONUtil;
 import com.aliyun.oss.HttpMethod;
 import com.youlai.boot.common.enums.LogModuleEnum;
-import com.youlai.boot.common.util.AnonymousUtils;
 import com.youlai.boot.common.util.IPUtils;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.system.model.entity.Log;
@@ -22,7 +21,6 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -31,12 +29,11 @@ import org.springframework.web.servlet.HandlerMapping;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 日志切面
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2024/6/25
  */
 @Aspect
@@ -46,7 +43,6 @@ import java.util.Set;
 public class LogAspect {
     private final LogService logService;
     private final HttpServletRequest request;
-    private final ApplicationContext applicationContext;
 
     @Pointcut("@annotation(com.youlai.boot.common.annotation.Log)")
     public void logPointcut() {
@@ -80,16 +76,6 @@ public class LogAspect {
     private void saveLog(final JoinPoint joinPoint, final Exception e, Object jsonResult, com.youlai.boot.common.annotation.Log logAnnotation) {
         String requestURI = request.getRequestURI();
 
-        Long userId = null;
-
-        // 获取所有匿名标记
-        Set<String> anonymousUrls = AnonymousUtils.getAnonymousUrls(applicationContext);
-
-        // 非登录请求获取用户ID，登录请求在登录成功后(joinPoint.proceed())获取用户ID
-        if (!anonymousUrls.contains(requestURI)) {
-            userId = SecurityUtils.getUserId();
-        }
-
         TimeInterval timer = DateUtil.timer();
         // 执行方法
         long executionTime = timer.interval();
@@ -113,12 +99,8 @@ public class LogAspect {
                 log.setResponseContent(JSONUtil.toJsonStr(jsonResult));
             }
         }
-
         log.setRequestUri(requestURI);
-        // 登录方法需要在登录成功后获取用户ID
-        if (userId == null) {
-            userId = SecurityUtils.getUserId();
-        }
+        Long userId = SecurityUtils.getUserId();
         log.setCreateBy(userId);
         String ipAddr = IPUtils.getIpAddr(request);
         if (StrUtil.isNotBlank(ipAddr)) {

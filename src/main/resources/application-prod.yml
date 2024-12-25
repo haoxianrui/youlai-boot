@@ -84,17 +84,19 @@ security:
     access-token-time-to-live: 3600
     # 刷新令牌有效期(单位：秒)，默认 7 天
     refresh-token-time-to-live: 604800
-  # 白名单列表
+  # 无需认证的请求路径
   ignore-urls:
-    - /v3/api-docs/**
-    - /doc.html
+    - /api/v1/auth/login          # 用户登录接口
+    - /api/v1/auth/wechat-login   # 微信登录接口
+    - /api/v1/auth/captcha        # 验证码获取接口
+    - /api/v1/auth/refresh-token  # 刷新令牌接口
+    - /ws/**                      # WebSocket接口
+  # 不走 Spring Security 过滤器链的请求路径(一般是静态资源)
+  unsecured-urls:
     - ${springdoc.swagger-ui.path}
-    - /swagger-resources/**
+    - /doc.html
+    - /v3/api-docs/**
     - /webjars/**
-    - /swagger-ui/**
-    - /api/v1/auth/captcha
-    - /api/v1/auth/refresh-token
-    - /ws/**
 
 # 文件存储配置
 oss:
