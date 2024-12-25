@@ -11,3 +11,8 @@ target
 *.log
 logs
 .history
+
+
+docker/*/data/
+docker/minio/config
+docker/xxljob/logs
