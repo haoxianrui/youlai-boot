@@ -15,12 +15,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 认证异常处理
+ * 未认证处理器
  *
  * @author Ray.Hao
  * @since 2.0.0
  */
-@Component
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
@@ -29,7 +28,7 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
             // 资源不存在
             ResponseUtils.writeErrMsg(response, ResultCode.USER_RESOURCE_NOT_FOUND);
         } else {
-            if (authException instanceof UsernameNotFoundException || authException instanceof BadCredentialsException) {
+            if (authException instanceof BadCredentialsException) {
                 // 用户名或密码错误
                 ResponseUtils.writeErrMsg(response, ResultCode.USER_PASSWORD_ERROR);
             } else {

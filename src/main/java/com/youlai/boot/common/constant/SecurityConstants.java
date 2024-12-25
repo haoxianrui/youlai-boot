@@ -1,9 +1,9 @@
 package com.youlai.boot.common.constant;
 
 /**
- * 缓存常量
+ * 安全模块常量
  *
- * @author haoxr
+ * @author Ray.Hao
  * @since 2023/11/24
  */
 public interface SecurityConstants {
@@ -23,12 +23,10 @@ public interface SecurityConstants {
      */
     String BLACKLIST_TOKEN_PREFIX = "token:blacklist:";
 
-
     /**
      * 登录路径
      */
     String LOGIN_PATH = "/api/v1/auth/login";
-
 
     /**
      * JWT Token 前缀
@@ -36,12 +34,7 @@ public interface SecurityConstants {
     String JWT_TOKEN_PREFIX = "Bearer ";
 
     /**
-     * 微信登录路径
-     */
-    String WECHAT_LOGIN_PATH = "/api/v1/auth/wechat-login";
-
-    /**
-     * 角色前缀 Spring Security 的 authorities 角色前缀，用于区分角色和权限
+     * 角色前缀，用于区分 authorities 角色和权限， ROLE_* 角色 、没有前缀的是权限
      */
     String ROLE_PREFIX = "ROLE_";
 }

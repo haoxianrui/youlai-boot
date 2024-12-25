@@ -11,15 +11,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Spring Security访问异常处理器
+ * 无权限访问处理器
  *
- * @author haoxr
- * @since 2022/10/18
+ * @author Ray.Hao
+ * @since 2.0.0
  */
-@Component
 public class MyAccessDeniedHandler implements AccessDeniedHandler {
+
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) {
         ResponseUtils.writeErrMsg(response, ResultCode.ACCESS_UNAUTHORIZED);
     }
+
 }
