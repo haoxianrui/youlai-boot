@@ -95,6 +95,7 @@ security:
   unsecured-urls:
     - ${springdoc.swagger-ui.path}
     - /doc.html
+    - /swagger-ui/**
     - /v3/api-docs/**
     - /webjars/**
 
@@ -179,7 +180,7 @@ xxl:
     enabled: false
     admin:
       # 多个地址使用,分割
-      addresses: http://127.0.0.1:8080/xxl-job-admin
+      addresses: http://127.0.0.1:8686/xxl-job-admin
     accessToken: default_token
     executor:
       appname: xxl-job-executor-${spring.application.name}

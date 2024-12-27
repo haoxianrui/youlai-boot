@@ -12,8 +12,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @since 0.0.1
  */
 @SpringBootApplication
-@ConfigurationPropertiesScan
-@EnableScheduling
+@ConfigurationPropertiesScan // 开启配置属性绑定
+@EnableScheduling // 开启定时任务
 public class YouLaiBootApplication {
 
     public static void main(String[] args) {

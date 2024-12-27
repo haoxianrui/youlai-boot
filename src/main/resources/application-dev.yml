@@ -96,6 +96,7 @@ security:
   unsecured-urls:
     - ${springdoc.swagger-ui.path}
     - /doc.html
+    - /swagger-ui/**
     - /v3/api-docs/**
     - /webjars/**
 
@@ -180,16 +181,17 @@ xxl:
     # 定时任务开关
     enabled: false
     admin:
-      # 多个地址使用,分割
+      # 调度中心地址,多个逗号分隔
       addresses: http://127.0.0.1:8080/xxl-job-admin
     accessToken: default_token
+    # 执行器配置
     executor:
-      appname: xxl-job-executor-${spring.application.name}
-      address:
-      ip:
-      port: 9999
-      logpath: /data/applogs/xxl-job/jobhandler
-      logretentiondays: 30
+      appname: xxl-job-executor-${spring.application.name} # 执行器AppName
+      address: # 执行器注册地址，默认为空，多网卡时可手动设置
+      ip: # 执行器IP，默认为空，多网卡时可手动设置
+      port: 9999 # 执行器通讯端口
+      logpath: /data/applogs/xxl-job/jobhandler # 任务运行日志文件存储磁盘路径
+      logretentiondays: 30 # 日志保存天数，值大于3时生效
 
 # 验证码配置
 captcha:
