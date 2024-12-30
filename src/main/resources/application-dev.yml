@@ -10,8 +10,8 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://www.youlai.tech:3306/youlai_boot?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true&allowMultiQueries=true
-    username: youlai
+    url: jdbc:mysql://localhost:3306/youlai_boot?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true&allowMultiQueries=true
+    username: root
     password: 123456
   data:
     redis:
@@ -61,8 +61,8 @@ mybatis-plus:
     db-config:
       # 主键ID类型
       id-type: none
-      # 逻辑删除全局属性名(驼峰和下划线都支持)
-      logic-delete-field: is_deleted
+      # 逻辑删除对应的全局属性名（注意：须是对象属性名，不能是表字段名，如 isDeleted 而非 is_deleted，否则逻辑删除失效）
+      logic-delete-field: isDeleted
       # 逻辑删除-删除值
       logic-delete-value: 1
       # 逻辑删除-未删除值

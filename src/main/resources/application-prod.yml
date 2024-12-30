@@ -60,7 +60,7 @@ mybatis-plus:
     db-config:
       # 主键ID类型
       id-type: none
-      # 逻辑删除全局属性名(驼峰和下划线都支持)
+      # 逻辑删除对应的全局属性名（注意：须是对象属性名，不能是表字段名，如 isDeleted 而非 is_deleted，否则逻辑删除失效）
       logic-delete-field: isDeleted
       # 逻辑删除-删除值
       logic-delete-value: 1
