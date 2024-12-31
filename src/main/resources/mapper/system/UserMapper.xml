@@ -156,7 +156,7 @@
                 LEFT JOIN sys_user_role t2 ON t2.user_id = t1.id
                 LEFT JOIN sys_role t3 ON t3.id = t2.role_id
         WHERE
-            t1.username = #{username} AND t1.is_deleted = 0
+            t1.openid = #{openid} AND t1.is_deleted = 0
     </select>
 
     <!-- 获取用户导出列表 -->
