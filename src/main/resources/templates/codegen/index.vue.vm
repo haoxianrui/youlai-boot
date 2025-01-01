@@ -125,13 +125,21 @@
         <el-table-column type="selection" width="55" align="center" />
           #foreach($fieldConfig in $fieldConfigs)
               #if($fieldConfig.isShowInList == 1)
-                <el-table-column
-                    key="$fieldConfig.fieldName"
-                    label="$fieldConfig.fieldComment"
-                    prop="$fieldConfig.fieldName"
-                    min-width="150"
-                    align="center"
-                />
+                  #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
+                    <el-table-column label="$fieldConfig.fieldComment" width="150" align="center">
+                      <template #default="scope">
+                        <DictLabel v-model="scope.row.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
+                      </template>
+                    </el-table-column>
+                  #else
+                    <el-table-column
+                        key="$fieldConfig.fieldName"
+                        label="$fieldConfig.fieldComment"
+                        prop="$fieldConfig.fieldName"
+                        min-width="150"
+                        align="center"
+                    />
+                  #end
               #end
           #end
         <el-table-column fixed="right" label="操作" width="220">
@@ -178,7 +186,7 @@
     >
       <el-form ref="dataFormRef" :model="formData" :rules="rules" label-width="100px">
           #foreach($fieldConfig in $fieldConfigs)
-              #if($fieldConfig.isShowInForm == 1)
+              #if($fieldConfig.isShowInForm == 1 && $fieldConfig.formType != "HIDDEN")
                 <el-form-item label="$fieldConfig.fieldComment" prop="$fieldConfig.fieldName">
                     #if($fieldConfig.formType == "INPUT")
                       <el-input
@@ -237,6 +245,9 @@
                       />
                     #end
                 </el-form-item>
+
+              #elseif($fieldConfig.formType == "HIDDEN")
+                <el-input type="hidden" v-model="formData.$fieldConfig.fieldName" />
               #end
           #end
       </el-form>
