@@ -13,7 +13,7 @@
                           @keyup.enter="handleQuery()"
                       />
                     #elseif($fieldConfig.formType == "SELECT")
-                        #if($fieldConfig.dictType != "")
+                        #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
                           <dict v-model="queryParams.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
                         #else
                           <el-select v-model="queryParams.$fieldConfig.fieldName" placeholder="请选择$fieldConfig.fieldComment">
@@ -22,15 +22,23 @@
                           </el-select>
                         #end
                     #elseif($fieldConfig.formType == "RADIO")
-                      <el-radio-group v-model="queryParams.$fieldConfig.fieldName">
-                        <el-radio :key="1" :label="1">选项一</el-radio>
-                        <el-radio :key="2" :label="2">选项二</el-radio>
-                      </el-radio-group>
+                        #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
+                          <dict v-model="queryParams.$fieldConfig.fieldName" type="radio" code="$fieldConfig.dictType" />
+                        #else
+                          <el-radio-group v-model="queryParams.$fieldConfig.fieldName">
+                            <el-radio :key="1" :label="1">选项一</el-radio>
+                            <el-radio :key="2" :label="2">选项二</el-radio>
+                          </el-radio-group>
+                        #end
                     #elseif($fieldConfig.formType == "CHECK_BOX")
-                      <el-checkbox-group v-model="queryParams.$fieldConfig.fieldName">
-                        <el-checkbox :key="1" :label="1">选项一</el-checkbox>
-                        <el-checkbox :key="2" :label="2">选项二</el-checkbox>
-                      </el-checkbox-group>
+                        #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
+                          <dict v-model="queryParams.$fieldConfig.fieldName" type="checkbox" code="$fieldConfig.dictType" />
+                        #else
+                          <el-checkbox-group v-model="queryParams.$fieldConfig.fieldName">
+                            <el-checkbox :key="1" :label="1">选项一</el-checkbox>
+                            <el-checkbox :key="2" :label="2">选项二</el-checkbox>
+                          </el-checkbox-group>
+                        #end
                     #elseif($fieldConfig.formType == "INPUT_NUMBER")
                       <el-input-number
                           v-model="queryParams.$fieldConfig.fieldName"
@@ -194,7 +202,7 @@
                           placeholder="$fieldConfig.fieldComment"
                       />
                     #elseif($fieldConfig.formType == "SELECT")
-                        #if($fieldConfig.dictType != "")
+                        #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
                           <dict v-model="formData.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
                         #else
                           <el-select v-model="formData.$fieldConfig.fieldName" placeholder="请选择$fieldConfig.fieldComment">
@@ -203,15 +211,23 @@
                           </el-select>
                         #end
                     #elseif($fieldConfig.formType == "RADIO")
-                      <el-radio-group v-model="formData.$fieldConfig.fieldName">
-                        <el-radio :value="0">选项一</el-radio>
-                        <el-radio :value="1">选项二</el-radio>
-                      </el-radio-group>
+                        #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
+                          <dict v-model="queryParams.$fieldConfig.fieldName" type="radio" code="$fieldConfig.dictType" />
+                        #else
+                          <el-radio-group v-model="formData.$fieldConfig.fieldName">
+                            <el-radio :value="0">选项一</el-radio>
+                            <el-radio :value="1">选项二</el-radio>
+                          </el-radio-group>
+                        #end
                     #elseif($fieldConfig.formType == "CHECK_BOX")
-                      <el-checkbox-group v-model="formData.$fieldConfig.fieldName">
-                        <el-checkbox :value="0">选项一</el-checkbox>
-                        <el-checkbox :value="1">选项二</el-checkbox>
-                      </el-checkbox-group>
+                        #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
+                          <dict v-model="queryParams.$fieldConfig.fieldName" type="checkbox" code="$fieldConfig.dictType" />
+                        #else
+                          <el-checkbox-group v-model="formData.$fieldConfig.fieldName">
+                            <el-checkbox :value="0">选项一</el-checkbox>
+                            <el-checkbox :value="1">选项二</el-checkbox>
+                          </el-checkbox-group>
+                        #end
                     #elseif($fieldConfig.formType == "INPUT_NUMBER")
                       <el-input-number
                           v-model="formData.$fieldConfig.fieldName"
