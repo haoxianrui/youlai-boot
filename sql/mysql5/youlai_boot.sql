@@ -1,8 +1,6 @@
-/*
-* youlai_boot 权限系统数据库(MySQL5.x)
-* @author youlai
-* @date 2024/06/24
-*/
+
+# YouLai_Boot 数据库(MySQL 5.x)
+# Copyright (c) 2021-present, youlai.tech
 
 -- ----------------------------
 -- 1. 创建数据库
