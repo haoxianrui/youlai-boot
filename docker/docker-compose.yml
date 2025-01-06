@@ -1,5 +1,3 @@
-version: '3'
-
 # 创建一个名为 "youlai-boot" 的桥接网络，在同一个网络中的容器可以通过容器名互相访问
 networks:
   youlai-boot:
