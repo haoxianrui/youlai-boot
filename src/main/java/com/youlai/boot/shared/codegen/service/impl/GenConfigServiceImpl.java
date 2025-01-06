@@ -154,7 +154,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         fieldConfig.setColumnType(columnMetaData.getDataType());
         fieldConfig.setFieldComment(columnMetaData.getColumnComment());
         fieldConfig.setFieldName(StrUtil.toCamelCase(columnMetaData.getColumnName()));
-        fieldConfig.setIsRequired("YES".equals(columnMetaData.getIsNullable()) ? 1 : 0);
+        fieldConfig.setIsRequired("YES".equals(columnMetaData.getIsNullable()) ? 0 : 1);
 
         if (fieldConfig.getColumnType().equals("date")) {
             fieldConfig.setFormType(FormTypeEnum.DATE);
