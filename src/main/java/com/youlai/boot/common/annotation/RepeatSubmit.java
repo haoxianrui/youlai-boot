@@ -6,10 +6,9 @@ import java.lang.annotation.*;
 /**
  * 防止重复提交注解
  * <p>
- * 该注解用于方法上，防止在指定时间内的重复提交。
- * 默认时间为5秒。
+ * 该注解用于方法上，防止在指定时间内的重复提交。 默认时间为5秒。
  *
- * @author haoxr
+ * @author Ray.Hao
  * @since 2.3.0
  */
 @Target(ElementType.METHOD)

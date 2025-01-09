@@ -115,7 +115,7 @@ public enum ResultCode implements IResultCode, Serializable {
     USER_OPERATION_PLEASE_WAIT("A0503", "用户操作请等待"),
     WEBSOCKET_CONNECTION_EXCEPTION("A0504", "WebSocket 连接异常"),
     WEBSOCKET_CONNECTION_DISCONNECTED("A0505", "WebSocket 连接断开"),
-    USER_DUPLICATE_REQUEST("A0506", "用户重复请求"),
+    USER_DUPLICATE_REQUEST("A0506", "请求过于频繁，请稍后再试。"),
 
     /** 二级宏观错误码  */
     USER_RESOURCE_EXCEPTION("A0600", "用户资源异常"),
