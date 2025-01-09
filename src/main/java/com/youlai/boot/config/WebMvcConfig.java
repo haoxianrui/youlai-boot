@@ -20,6 +20,7 @@ import org.springframework.validation.beanvalidation.SpringConstraintValidatorFa
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -50,6 +51,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
         simpleModule.addSerializer(BigInteger.class, ToStringSerializer.instance);
         objectMapper.registerModule(simpleModule);
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
         converters.add(1, jackson2HttpMessageConverter);
