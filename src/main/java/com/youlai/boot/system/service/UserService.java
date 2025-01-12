@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 用户业务接口
  *
- * @author haoxr
+ * @author Ray.Hao
  * @since 2022/1/14
  */
 public interface UserService extends IService<User> {
@@ -174,4 +174,12 @@ public interface UserService extends IService<User> {
      * @param openId 微信 OpenID
      */
     void registerOrBindWechatUser(String openId);
+
+    /**
+     * 根据手机号获取用户认证信息
+     *
+     * @param mobile 手机号
+     * @return {@link UserAuthInfo}
+     */
+    UserAuthInfo getUserAuthInfoByMobile(String mobile);
 }
