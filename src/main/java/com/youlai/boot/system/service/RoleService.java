@@ -64,10 +64,8 @@ public interface RoleService extends IService<Role> {
      * 批量删除角色
      *
      * @param ids 角色ID，多个使用英文逗号(,)分割
-     * @return
      */
-    boolean deleteRoles(String ids);
-
+    void deleteRoles(String ids);
 
     /**
      * 获取角色的菜单ID集合
@@ -77,15 +75,13 @@ public interface RoleService extends IService<Role> {
      */
     List<Long> getRoleMenuIds(Long roleId);
 
-
     /**
      * 修改角色的资源权限
      *
-     * @param roleId
-     * @param menuIds
-     * @return
+     * @param roleId 角色ID
+     * @param menuIds 菜单ID集合
      */
-    boolean assignMenusToRole(Long roleId, List<Long> menuIds);
+    void assignMenusToRole(Long roleId, List<Long> menuIds);
 
     /**
      * 获取最大范围的数据权限

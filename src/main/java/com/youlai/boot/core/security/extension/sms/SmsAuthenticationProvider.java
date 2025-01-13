@@ -3,17 +3,17 @@ package com.youlai.boot.core.security.extension.sms;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.common.constant.RedisConstants;
-import com.youlai.boot.core.security.extension.WechatAuthenticationToken;
 import com.youlai.boot.core.security.model.SysUserDetails;
 import com.youlai.boot.system.model.dto.UserAuthInfo;
 import com.youlai.boot.system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
 /**
@@ -27,10 +27,10 @@ public class SmsAuthenticationProvider implements AuthenticationProvider {
 
     private final UserService userService;
 
-    private final StringRedisTemplate redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
 
-    public SmsAuthenticationProvider(UserService userService, StringRedisTemplate redisTemplate) {
+    public SmsAuthenticationProvider(UserService userService, RedisTemplate<String, Object> redisTemplate) {
         this.userService = userService;
         this.redisTemplate = redisTemplate;
     }
@@ -46,10 +46,14 @@ public class SmsAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String mobile = (String) authentication.getPrincipal();
-        String verifyCode = (String) authentication.getCredentials();
+        String inputVerifyCode = (String) authentication.getCredentials();
 
         // 根据手机号获取用户信息
         UserAuthInfo userAuthInfo = userService.getUserAuthInfoByMobile(mobile);
+
+        if (userAuthInfo == null) {
+            throw new UsernameNotFoundException("用户不存在");
+        }
 
         // 检查用户状态是否有效
         if (ObjectUtil.notEqual(userAuthInfo.getStatus(), 1)) {
@@ -57,11 +61,13 @@ public class SmsAuthenticationProvider implements AuthenticationProvider {
         }
 
         // 校验发送短信验证码的手机号是否与当前登录用户一致
+        String cachedVerifyCode = (String) redisTemplate.opsForValue().get(RedisConstants.SMS_LOGIN_CODE_PREFIX + mobile);
 
-        String cachedVerifyCode= redisTemplate.opsForValue().get(RedisConstants.SMS_LOGIN_VERIFY_CODE_PREFIX + mobile);
-
-        if ( !StrUtil.equals(verifyCode, cachedVerifyCode)) {
-            throw new CredentialsExpiredException("验证码错误");
+        if (!StrUtil.equals(inputVerifyCode, cachedVerifyCode)) {
+            throw new BadCredentialsException("验证码错误");
+        } else {
+            // 验证成功后删除验证码
+            redisTemplate.delete(RedisConstants.SMS_LOGIN_CODE_PREFIX + mobile);
         }
 
         // 构建认证后的用户详情信息
@@ -76,6 +82,6 @@ public class SmsAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return WechatAuthenticationToken.class.isAssignableFrom(authentication);
+        return SmsAuthenticationToken.class.isAssignableFrom(authentication);
     }
 }

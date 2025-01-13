@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.system.converter.RoleConverter;
 import com.youlai.boot.system.mapper.RoleMapper;
 import com.youlai.boot.system.model.entity.Role;
@@ -88,7 +89,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         );
 
         // 实体转换
-        return roleConverter.entities2Options(roleList);
+        return roleConverter.toOptions(roleList);
     }
 
     /**
@@ -157,7 +158,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public boolean updateRoleStatus(Long roleId, Integer status) {
 
         Role role = this.getById(roleId);
-        Assert.isTrue(role != null, "角色不存在");
+        if (role == null) {
+            throw new BusinessException("角色不存在");
+        }
 
         role.setStatus(status);
         boolean result = this.updateById(role);
@@ -172,10 +175,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
      * 批量删除角色
      *
      * @param ids 角色ID，多个使用英文逗号(,)分割
-     * @return {@link Boolean}
      */
     @Override
-    public boolean deleteRoles(String ids) {
+    public void deleteRoles(String ids) {
         Assert.isTrue(StrUtil.isNotBlank(ids), "删除的角色ID不能为空");
         List<Long> roleIds = Arrays.stream(ids.split(","))
                 .map(Long::parseLong)
@@ -195,7 +197,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 roleMenuService.refreshRolePermsCache(role.getCode());
             }
         }
-        return true;
     }
 
     /**
@@ -214,15 +215,15 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
      *
      * @param roleId  角色ID
      * @param menuIds 菜单ID集合
-     * @return {@link Boolean}
      */
     @Override
     @Transactional
     @CacheEvict(cacheNames = "menu", key = "'routes'")
-    public boolean assignMenusToRole(Long roleId, List<Long> menuIds) {
+    public void assignMenusToRole(Long roleId, List<Long> menuIds) {
         Role role = this.getById(roleId);
-        Assert.isTrue(role != null, "角色不存在");
-
+        if (role == null) {
+            throw new RuntimeException("角色不存在");
+        }
         // 删除角色菜单
         roleMenuService.remove(
                 new LambdaQueryWrapper<RoleMenu>()
@@ -239,8 +240,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
         // 刷新角色的权限缓存
         roleMenuService.refreshRolePermsCache(role.getCode());
-
-        return true;
     }
 
     /**

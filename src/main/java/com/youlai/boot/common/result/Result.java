@@ -1,5 +1,6 @@
 package com.youlai.boot.common.result;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -52,7 +53,7 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> failed(IResultCode resultCode, String msg) {
-        return result(resultCode.getCode(), msg, null);
+        return result(resultCode.getCode(), StrUtil.isNotBlank(msg) ? msg : resultCode.getMsg(), null);
     }
 
     private static <T> Result<T> result(IResultCode resultCode, T data) {

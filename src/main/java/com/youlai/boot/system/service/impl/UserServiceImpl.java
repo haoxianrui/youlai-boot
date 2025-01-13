@@ -11,14 +11,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.core.security.manager.TokenManager;
-import com.youlai.boot.system.enums.ContactType;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.shared.mail.service.MailService;
+import com.youlai.boot.shared.sms.enums.SmsTypeEnum;
 import com.youlai.boot.shared.sms.service.SmsService;
 import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.entity.UserRole;
 import com.youlai.boot.system.model.form.*;
-import com.youlai.boot.config.property.AliyunSmsProperties;
 import com.youlai.boot.system.converter.UserConverter;
 import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.system.model.vo.UserProfileVO;
@@ -40,17 +39,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
  * 用户业务实现类
  *
- * @author haoxr
+ * @author Ray.Hao
  * @since 2022/1/14
  */
 @Service
@@ -68,8 +64,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final SmsService smsService;
 
     private final MailService mailService;
-
-    private final AliyunSmsProperties aliyunSmsProperties;
 
     private final StringRedisTemplate redisTemplate;
 
@@ -101,7 +95,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 获取用户表单数据
      *
      * @param userId 用户ID
-     * @return
+     * @return {@link UserForm} 用户表单数据
      */
     @Override
     public UserForm getUserFormData(Long userId) {
@@ -112,7 +106,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 新增用户
      *
      * @param userForm 用户表单对象
-     * @return
+     * @return true|false
      */
     @Override
     public boolean saveUser(UserForm userForm) {
@@ -144,7 +138,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      *
      * @param userId   用户ID
      * @param userForm 用户表单对象
-     * @return
+     * @return true|false
      */
     @Override
     @Transactional
@@ -206,7 +200,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userAuthInfo;
     }
 
-
     /**
      * 根据 openid 获取用户认证信息
      *
@@ -225,7 +218,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userAuthInfo;
     }
 
-
     /**
      * 根据手机号获取用户认证信息
      *
@@ -235,8 +227,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public UserAuthInfo getUserAuthInfoByMobile(String mobile) {
         UserAuthInfo userAuthInfo = this.baseMapper.getUserAuthInfoByMobile(mobile);
-
-        return null;
+        if (userAuthInfo != null) {
+            Set<String> roles = userAuthInfo.getRoles();
+            // 获取最大范围的数据权限
+            Integer dataScope = roleService.getMaximumDataScope(roles);
+            userAuthInfo.setDataScope(dataScope);
+        }
+        return userAuthInfo;
     }
 
 
@@ -319,7 +316,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 获取个人中心用户信息
      *
      * @param userId 用户ID
-     * @return
+     * @return {@link UserProfileVO} 个人中心用户信息
      */
     @Override
     public UserProfileVO getUserProfile(Long userId) {
@@ -331,7 +328,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 修改个人中心用户信息
      *
      * @param formData 表单数据
-     * @return
+     * @return true|false
      */
     @Override
     public boolean updateUserProfile(UserProfileForm formData) {
@@ -347,10 +344,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      *
      * @param userId 用户ID
      * @param data   密码修改表单数据
-     * @return
+     * @return true|false
      */
     @Override
-    public boolean changePassword(Long userId, PasswordChangeForm data) {
+    public boolean changePassword(Long userId, PasswordUpdateForm data) {
 
         User user = this.getById(userId);
         if (user == null) {
@@ -387,7 +384,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      *
      * @param userId   用户ID
      * @param password 密码重置表单数据
-     * @return
+     * @return true|false
      */
     @Override
     public boolean resetPassword(Long userId, String password) {
@@ -398,47 +395,38 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
-     * 发送验证码
+     * 发送短信验证码(绑定或更换手机号)
      *
-     * @param contact 联系方式 手机号/邮箱
-     * @param type    联系方式类型 {@link ContactType}
-     * @return
+     * @param mobile 手机号
+     * @return true|false
      */
     @Override
-    public boolean sendVerificationCode(String contact, ContactType type) {
+    public boolean sendMobileCode(String mobile) {
 
-        // 随机生成4位验证码
-        String code = String.valueOf((int) ((Math.random() * 9 + 1) * 1000));
-        // 发送验证码
+        // String code = String.valueOf((int) ((Math.random() * 9 + 1) * 1000));
+        // TODO 为了方便测试，验证码固定为 1234，实际开发中在配置了厂商短信服务后，可以使用上面的随机验证码
+        String code = "1234";
 
-        String verificationCodePrefix = null;
-        switch (type) {
-            case MOBILE:
-                // 获取修改密码的模板code
-                String changePasswordSmsTemplateCode = aliyunSmsProperties.getTemplateCodes().get("changePassword");
-                smsService.sendSms(contact, changePasswordSmsTemplateCode, "[{\"code\":\"" + code + "\"}]");
-                verificationCodePrefix = RedisConstants.MOBILE_VERIFICATION_CODE_PREFIX;
-                break;
-            case EMAIL:
-                mailService.sendMail(contact, "验证码", "您的验证码是：" + code);
-                verificationCodePrefix = RedisConstants.EMAIL_VERIFICATION_CODE_PREFIX;
-                break;
-            default:
-                throw new BusinessException("不支持的联系方式类型");
+        Map<String, String> templateParams = new HashMap<>();
+        templateParams.put("code", code);
+        boolean result = smsService.sendSms(mobile, SmsTypeEnum.CHANGE_MOBILE, templateParams);
+        if (result) {
+            // 缓存验证码，5分钟有效，用于更换手机号校验
+            String redisCacheKey = RedisConstants.SMS_CHANGE_CODE_PREFIX + mobile;
+            redisTemplate.opsForValue().set(redisCacheKey, code, 5, TimeUnit.MINUTES);
         }
-        // 存入 redis 用于校验, 5分钟有效
-        redisTemplate.opsForValue().set(verificationCodePrefix + contact, code, 5, TimeUnit.MINUTES);
-        return true;
+        return result;
     }
 
     /**
-     * 修改当前用户手机号码
+     * 绑定或更换手机号
      *
      * @param form 表单数据
-     * @return
+     * @return true|false
      */
     @Override
-    public boolean bindMobile(MobileBindingForm form) {
+    public boolean bindOrChangeMobile(MobileUpdateForm form) {
+
         Long currentUserId = SecurityUtils.getUserId();
         User currentUser = this.getById(currentUserId);
 
@@ -447,13 +435,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         // 校验验证码
-        String inputVerificationCode = form.getCode();
+        String inputVerifyCode = form.getCode();
         String mobile = form.getMobile();
 
-        String redisCacheKey = RedisConstants.MOBILE_VERIFICATION_CODE_PREFIX + mobile;
-        String cachedVerificationCode = redisTemplate.opsForValue().get(redisCacheKey);
+        String redisCacheKey = RedisConstants.SMS_CHANGE_CODE_PREFIX + mobile;
+        String cachedVerifyCode = redisTemplate.opsForValue().get(redisCacheKey);
 
-        if (!inputVerificationCode.equals(cachedVerificationCode)) {
+        if (!inputVerifyCode.equals(cachedVerifyCode)) {
             throw new BusinessException("验证码错误");
         }
 
@@ -466,13 +454,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
+     * 发送邮箱验证码（绑定或更换邮箱）
+     *
+     * @param email 邮箱
+     */
+    @Override
+    public void sendEmailCode(String email) {
+
+        // String code = String.valueOf((int) ((Math.random() * 9 + 1) * 1000));
+        // TODO 为了方便测试，验证码固定为 1234，实际开发中在配置了邮箱服务后，可以使用上面的随机验证码
+        String code = "1234";
+
+        mailService.sendMail(email, "邮箱验证码", "您的验证码为：" + code + "，请在5分钟内使用");
+        // 缓存验证码，5分钟有效，用于更换邮箱校验
+        String redisCacheKey = RedisConstants.EMAIL_CHANGE_CODE_PREFIX + email;
+        redisTemplate.opsForValue().set(redisCacheKey, code, 5, TimeUnit.MINUTES);
+    }
+
+    /**
      * 修改当前用户邮箱
      *
      * @param form 表单数据
      * @return true|false
      */
     @Override
-    public boolean bindEmail(EmailBindingForm form) {
+    public boolean bindOrChangeEmail(EmailUpdateForm form) {
+
         Long currentUserId = SecurityUtils.getUserId();
 
         User currentUser = this.getById(currentUserId);
@@ -480,14 +487,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException("用户不存在");
         }
 
-        // 校验验证码
-        String inputVerificationCode = form.getCode();
-        String email = form.getEmail();
+        // 获取前端输入的验证码
+        String inputVerifyCode = form.getCode();
 
-        String redisCacheKey = RedisConstants.EMAIL_VERIFICATION_CODE_PREFIX + email;
+        // 获取缓存的验证码
+        String email = form.getEmail();
+        String redisCacheKey = RedisConstants.EMAIL_CHANGE_CODE_PREFIX + email;
         String cachedVerifyCode = redisTemplate.opsForValue().get(redisCacheKey);
 
-        if (!inputVerificationCode.equals(cachedVerifyCode)) {
+        if (!inputVerifyCode.equals(cachedVerifyCode)) {
             throw new BusinessException("验证码错误");
         }
 
@@ -506,11 +514,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public List<Option<String>> listUserOptions() {
-        List<User> list = this.list();
-        if (CollectionUtil.isNotEmpty(list)) {
-            return list.stream().map(user -> new Option<>(user.getId().toString(), user.getNickname())).collect(Collectors.toList());
-        }
-        return Collections.emptyList();
+        List<User> list = this.list(new LambdaQueryWrapper<User>()
+                .eq(User::getStatus, 1)
+        );
+        return userConverter.toOptions(list);
     }
 
 }

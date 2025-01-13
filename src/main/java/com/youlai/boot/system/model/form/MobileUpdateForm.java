@@ -4,17 +4,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 绑定邮箱表单
+ * 修改手机表单
  *
  * @author Ray.Hao
  * @since 2024/8/19
  */
-@Schema(description = "绑定邮箱表单")
+@Schema(description = "修改手机表单")
 @Data
-public class EmailBindingForm {
+public class MobileUpdateForm {
 
-    @Schema(description = "邮箱")
-    private String email;
+    @Schema(description = "手机号码")
+    private String mobile;
 
     @Schema(description = "验证码")
     private String code;

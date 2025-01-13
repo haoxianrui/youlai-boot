@@ -13,7 +13,7 @@ import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.common.result.ResultCode;
 import com.youlai.boot.config.property.SecurityProperties;
 import com.youlai.boot.core.security.model.SysUserDetails;
-import com.youlai.boot.core.security.model.AuthToken;
+import com.youlai.boot.core.security.model.AuthenticationToken;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -57,14 +57,14 @@ public class JwtTokenManager implements TokenManager {
      * @return 令牌响应对象
      */
     @Override
-    public AuthToken generateToken(Authentication authentication) {
+    public AuthenticationToken generateToken(Authentication authentication) {
         int accessTokenTimeToLive = securityProperties.getJwt().getAccessTokenTimeToLive();
         int refreshTokenTimeToLive = securityProperties.getJwt().getRefreshTokenTimeToLive();
 
         String accessToken = generateToken(authentication, accessTokenTimeToLive);
         String refreshToken = generateToken(authentication, refreshTokenTimeToLive);
 
-        return AuthToken.builder()
+        return AuthenticationToken.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .tokenType("Bearer")
@@ -163,7 +163,7 @@ public class JwtTokenManager implements TokenManager {
      */
 
     @Override
-    public AuthToken refreshToken(String refreshToken) {
+    public AuthenticationToken refreshToken(String refreshToken) {
 
         boolean isValid = validateToken(refreshToken);
         if (!isValid) {
@@ -174,7 +174,7 @@ public class JwtTokenManager implements TokenManager {
         int accessTokenExpiration = securityProperties.getJwt().getRefreshTokenTimeToLive();
         String newAccessToken = generateToken(authentication, accessTokenExpiration);
 
-        return AuthToken.builder()
+        return AuthenticationToken.builder()
                 .accessToken(newAccessToken)
                 .refreshToken(refreshToken)
                 .tokenType("Bearer")

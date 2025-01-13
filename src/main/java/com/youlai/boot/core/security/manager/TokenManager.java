@@ -1,7 +1,7 @@
 package com.youlai.boot.core.security.manager;
 
 
-import com.youlai.boot.core.security.model.AuthToken;
+import com.youlai.boot.core.security.model.AuthenticationToken;
 import org.springframework.security.core.Authentication;
 
 /**
@@ -18,7 +18,7 @@ public interface TokenManager {
      * @param authentication 用户认证信息
      * @return 认证 Token 响应
      */
-    AuthToken generateToken(Authentication authentication);
+    AuthenticationToken generateToken(Authentication authentication);
 
     /**
      * 解析 Token 获取认证信息
@@ -44,7 +44,7 @@ public interface TokenManager {
      * @param token 刷新令牌
      * @return 认证 Token 响应
      */
-    AuthToken refreshToken(String token);
+    AuthenticationToken refreshToken(String token);
 
     /**
      * 将 Token 加入黑名单

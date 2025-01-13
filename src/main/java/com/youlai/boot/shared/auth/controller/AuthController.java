@@ -2,10 +2,9 @@ package com.youlai.boot.shared.auth.controller;
 
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.result.Result;
-import com.youlai.boot.shared.auth.model.RefreshTokenRequest;
 import com.youlai.boot.shared.auth.service.AuthService;
-import com.youlai.boot.shared.auth.model.CaptchaResponse;
-import com.youlai.boot.core.security.model.AuthToken;
+import com.youlai.boot.shared.auth.model.CaptchaInfo;
+import com.youlai.boot.core.security.model.AuthenticationToken;
 import com.youlai.boot.common.annotation.Log;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,18 +28,25 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Operation(summary = "登录")
+    @Operation(summary = "获取登录验证码")
+    @GetMapping("/captcha")
+    public Result<CaptchaInfo> getCaptcha() {
+        CaptchaInfo captcha = authService.getCaptcha();
+        return Result.success(captcha);
+    }
+
+    @Operation(summary = "账号密码登录")
     @PostMapping("/login")
     @Log(value = "登录", module = LogModuleEnum.LOGIN)
-    public Result<AuthToken> login(
+    public Result<AuthenticationToken> login(
             @Parameter(description = "用户名", example = "admin") @RequestParam String username,
             @Parameter(description = "密码", example = "123456") @RequestParam String password
     ) {
-        AuthToken authToken = authService.login(username, password);
-        return Result.success(authToken);
+        AuthenticationToken authenticationToken = authService.login(username, password);
+        return Result.success(authenticationToken);
     }
 
-    @Operation(summary = "注销")
+    @Operation(summary = "注销登录")
     @DeleteMapping("/logout")
     @Log(value = "注销", module = LogModuleEnum.LOGIN)
     public Result<?> logout() {
@@ -48,48 +54,42 @@ public class AuthController {
         return Result.success();
     }
 
-    @Operation(summary = "获取验证码")
-    @GetMapping("/captcha")
-    public Result<CaptchaResponse> getCaptcha() {
-        CaptchaResponse captcha = authService.getCaptcha();
-        return Result.success(captcha);
-    }
-
-    @Operation(summary = "刷新token")
+    @Operation(summary = "刷新访问令牌")
     @PostMapping("/refresh-token")
-    public Result<?> refreshToken(@RequestBody RefreshTokenRequest request) {
-        AuthToken authToken = authService.refreshToken(request);
-        return Result.success(authToken);
+    public Result<?> refreshToken(
+            @Parameter(description = "刷新令牌", example = "xxx.xxx.xxx") @RequestParam String refreshToken
+    ) {
+        AuthenticationToken authenticationToken = authService.refreshToken(refreshToken);
+        return Result.success(authenticationToken);
     }
 
-    @Operation(summary = "微信登录")
-    @PostMapping("/wechat-login")
+    @Operation(summary = "微信授权登录")
+    @PostMapping("/login/wechat")
     @Log(value = "微信登录", module = LogModuleEnum.LOGIN)
-    public Result<AuthToken> wechatLogin(
+    public Result<AuthenticationToken> loginByWechat(
             @Parameter(description = "微信授权码", example = "code") @RequestParam String code
     ) {
-        AuthToken loginResult = authService.wechatLogin(code);
+        AuthenticationToken loginResult = authService.loginByWechat(code);
         return Result.success(loginResult);
     }
 
+    @Operation(summary = "发送登录短信验证码")
+    @PostMapping("/login/sms/code")
+    public Result<?> sendLoginVerifyCode(
+            @Parameter(description = "手机号", example = "18812345678") @RequestParam String mobile
+    ) {
+        authService.sendSmsLoginCode(mobile);
+        return Result.success();
+    }
 
     @Operation(summary = "短信验证码登录")
-    @PostMapping("/sms-login")
+    @PostMapping("/login/sms")
     @Log(value = "短信验证码登录", module = LogModuleEnum.LOGIN)
-    public Result<AuthToken> smsLogin(
-            @Parameter(description = "手机号", example = "18888888888") @RequestParam String mobile,
+    public Result<AuthenticationToken> loginBySms(
+            @Parameter(description = "手机号", example = "18812345678") @RequestParam String mobile,
             @Parameter(description = "验证码", example = "123456") @RequestParam String code
     ) {
-        AuthToken loginResult = authService.smsLogin(mobile, code);
+        AuthenticationToken loginResult = authService.loginBySms(mobile, code);
         return Result.success(loginResult);
-    }
-
-    @Operation(summary = "短信验证码登录发送短信")
-    @PostMapping("/sms-login/verify-code")
-    public Result<?> sendLoginVerifyCode(
-            @Parameter(description = "手机号", example = "18888888888") @RequestParam String mobile
-    ) {
-        authService.sendLoginVerifyCode(mobile);
-        return Result.success();
     }
 }

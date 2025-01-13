@@ -1,9 +1,7 @@
 package com.youlai.boot.system.service;
 
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.boot.system.enums.ContactType;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.dto.UserAuthInfo;
 import com.youlai.boot.system.model.dto.UserExportDTO;
@@ -27,16 +25,15 @@ public interface UserService extends IService<User> {
     /**
      * 用户分页列表
      *
-     * @return
+     * @return {@link IPage<UserPageVO>} 用户分页列表
      */
     IPage<UserPageVO> getUserPage(UserPageQuery queryParams);
-
 
     /**
      * 获取用户表单数据
      *
-     * @param userId
-     * @return
+     * @param userId 用户ID
+     * @return {@link UserForm} 用户表单数据
      */
     UserForm getUserFormData(Long userId);
 
@@ -45,7 +42,7 @@ public interface UserService extends IService<User> {
      * 新增用户
      *
      * @param userForm 用户表单对象
-     * @return
+     * @return {@link Boolean} 是否新增成功
      */
     boolean saveUser(UserForm userForm);
 
@@ -54,7 +51,7 @@ public interface UserService extends IService<User> {
      *
      * @param userId   用户ID
      * @param userForm 用户表单对象
-     * @return
+     * @return {@link Boolean} 是否修改成功
      */
     boolean updateUser(Long userId, UserForm userForm);
 
@@ -63,7 +60,7 @@ public interface UserService extends IService<User> {
      * 删除用户
      *
      * @param idsStr 用户ID，多个以英文逗号(,)分割
-     * @return
+     * @return {@link Boolean} 是否删除成功
      */
     boolean deleteUsers(String idsStr);
 
@@ -82,7 +79,7 @@ public interface UserService extends IService<User> {
      * 获取导出用户列表
      *
      * @param queryParams 查询参数
-     * @return
+     * @return {@link List<UserExportDTO>} 导出用户列表
      */
     List<UserExportDTO> listExportUsers(UserPageQuery queryParams);
 
@@ -90,14 +87,14 @@ public interface UserService extends IService<User> {
     /**
      * 获取登录用户信息
      *
-     * @return
+     * @return {@link UserInfoVO} 登录用户信息
      */
     UserInfoVO getCurrentUserInfo();
 
     /**
      * 获取个人中心用户信息
      *
-     * @return
+     * @return {@link UserProfileVO} 个人中心用户信息
      */
     UserProfileVO getUserProfile(Long userId);
 
@@ -105,7 +102,7 @@ public interface UserService extends IService<User> {
      * 修改个人中心用户信息
      *
      * @param formData 表单数据
-     * @return
+     * @return {@link Boolean} 是否修改成功
      */
     boolean updateUserProfile(UserProfileForm formData);
 
@@ -114,43 +111,49 @@ public interface UserService extends IService<User> {
      *
      * @param userId 用户ID
      * @param data   修改密码表单数据
-     * @return
+     * @return {@link Boolean} 是否修改成功
      */
-    boolean changePassword(Long userId, PasswordChangeForm data);
+    boolean changePassword(Long userId, PasswordUpdateForm data);
 
     /**
      * 重置用户密码
      *
      * @param userId   用户ID
      * @param password 重置后的密码
-     * @return
+     * @return {@link Boolean} 是否重置成功
      */
     boolean resetPassword(Long userId, String password);
 
     /**
-     * 发送验证码
+     * 发送短信验证码(绑定或更换手机号)
      *
-     * @param contact 联系方式
-     * @param type    联系方式类型
-     * @return
+     * @param mobile 手机号
+     * @return {@link Boolean} 是否发送成功
      */
-    boolean sendVerificationCode(String contact, ContactType type);
+    boolean sendMobileCode(String mobile);
 
     /**
      * 修改当前用户手机号
      *
      * @param data 表单数据
-     * @return
+     * @return {@link Boolean} 是否修改成功
      */
-    boolean bindMobile(MobileBindingForm data);
+    boolean bindOrChangeMobile(MobileUpdateForm data);
 
     /**
-     * 修改当前用户邮箱
+     * 发送邮箱验证码(绑定或更换邮箱)
+     *
+     * @param email 邮箱
+     */
+    void sendEmailCode(String email);
+
+    /**
+     * 绑定或更换邮箱
      *
      * @param data 表单数据
      * @return {@link Boolean} 是否绑定成功
      */
-    boolean bindEmail(EmailBindingForm data);
+    boolean bindOrChangeEmail(EmailUpdateForm data);
 
     /**
      * 获取用户选项列表
@@ -182,4 +185,6 @@ public interface UserService extends IService<User> {
      * @return {@link UserAuthInfo}
      */
     UserAuthInfo getUserAuthInfoByMobile(String mobile);
+
+
 }

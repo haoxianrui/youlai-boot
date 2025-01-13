@@ -1,6 +1,6 @@
 package com.youlai.boot.core.security.manager;
 
-import com.youlai.boot.core.security.model.AuthToken;
+import com.youlai.boot.core.security.model.AuthenticationToken;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class RedisTokenManager implements TokenManager {
      * @return
      */
     @Override
-    public AuthToken generateToken(Authentication authentication) {
+    public AuthenticationToken generateToken(Authentication authentication) {
         return null;
     }
 
@@ -55,7 +55,7 @@ public class RedisTokenManager implements TokenManager {
      * @return
      */
     @Override
-    public AuthToken refreshToken(String token) {
+    public AuthenticationToken refreshToken(String token) {
         return null;
     }
 }

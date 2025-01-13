@@ -15,18 +15,27 @@ import java.util.Collection;
 public class SmsAuthenticationToken extends AbstractAuthenticationToken {
     @Serial
     private static final long serialVersionUID = 621L;
+
+    /**
+     * 认证信息 (手机号)
+     */
     private final Object principal;
-    private Object credentials;
+
+    /**
+     * 凭证信息 (短信验证码)
+     */
+    private final Object credentials;
 
     /**
      * 短信验证码认证 Token (未认证)
      *
      * @param principal 微信用户信息
      */
-    public SmsAuthenticationToken(Object principal) {
+    public SmsAuthenticationToken(Object principal, Object credentials) {
         // 没有授权信息时，设置为 null
         super(null);
         this.principal = principal;
+        this.credentials = credentials;
         // 默认未认证
         this.setAuthenticated(false);
     }
@@ -40,6 +49,7 @@ public class SmsAuthenticationToken extends AbstractAuthenticationToken {
     public SmsAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
+        this.credentials = null;
         // 认证通过
         super.setAuthenticated(true);
     }
@@ -58,7 +68,7 @@ public class SmsAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getCredentials() {
-        return this.credentials ;
+        return this.credentials;
     }
 
     @Override

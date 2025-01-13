@@ -7,13 +7,13 @@ import lombok.Data;
 /**
  * 认证令牌响应对象
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 0.0.1
  */
 @Schema(description = "认证令牌响应对象")
 @Data
 @Builder
-public class AuthToken {
+public class AuthenticationToken {
 
     @Schema(description = "令牌类型", example = "Bearer")
     private String tokenType;
