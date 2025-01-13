@@ -165,7 +165,6 @@
             t1.id userId,
             t1.username,
             t1.nickname,
-            t1.PASSWORD,
             t1.STATUS,
             t1.dept_id ,
             t3.CODE
@@ -231,8 +230,5 @@
         WHERE
             u.id = #{userId} AND u.is_deleted = 0
     </select>
-
-
-
 
 </mapper>

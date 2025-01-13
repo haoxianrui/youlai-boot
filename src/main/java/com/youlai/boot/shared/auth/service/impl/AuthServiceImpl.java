@@ -53,7 +53,6 @@ public class AuthServiceImpl implements AuthService {
     private final CodeGenerator codeGenerator;
 
     private final SmsService smsService;
-
     private final RedisTemplate<String, Object> redisTemplate;
 
     /**
@@ -101,7 +100,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * 发送短信验证码
+     * 发送登录短信验证码
      *
      * @param mobile 手机号
      */
@@ -134,7 +133,7 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public AuthenticationToken loginBySms(String mobile, String code) {
-        // 1. 创建用户微信认证的令牌（未认证）
+        // 1. 创建用户短信验证码认证的令牌（未认证）
         SmsAuthenticationToken smsAuthenticationToken = new SmsAuthenticationToken(mobile, code);
 
         // 2. 执行认证（认证中）

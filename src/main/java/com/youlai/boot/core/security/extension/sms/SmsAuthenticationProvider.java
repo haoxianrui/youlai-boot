@@ -73,7 +73,7 @@ public class SmsAuthenticationProvider implements AuthenticationProvider {
         // 构建认证后的用户详情信息
         SysUserDetails userDetails = new SysUserDetails(userAuthInfo);
 
-        // 创建已认证的 WeChatAuthenticationToken
+        // 创建已认证的 SmsAuthenticationToken
         return SmsAuthenticationToken.authenticated(
                 userDetails,
                 userDetails.getAuthorities()

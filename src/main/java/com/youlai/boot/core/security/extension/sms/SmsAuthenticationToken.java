@@ -60,7 +60,7 @@ public class SmsAuthenticationToken extends AbstractAuthenticationToken {
      *
      * @param principal   用户信息
      * @param authorities 授权信息
-     * @return
+     * @return SmsAuthenticationToken
      */
     public static SmsAuthenticationToken authenticated(Object principal, Collection<? extends GrantedAuthority> authorities) {
         return new SmsAuthenticationToken(principal, authorities);

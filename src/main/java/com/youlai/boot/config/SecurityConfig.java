@@ -34,7 +34,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * Spring Security 安全配置
+ * Spring Security 配置类
  *
  * @author Ray.Hao
  * @since 2023/2/17
@@ -82,7 +82,7 @@ public class SecurityConfig {
 
                 // 禁用默认的 Spring Security 特性，适用于前后端分离架构
                 .sessionManagement(configurer ->
-                                configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 无状态认证，不使用 Session
+                        configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 无状态认证，不使用 Session
                 )
                 .csrf(AbstractHttpConfigurer::disable)      // 禁用 CSRF 防护，前后端分离无需此防护机制
                 .formLogin(AbstractHttpConfigurer::disable) // 禁用默认的表单登录功能，前后端分离采用 Token 认证方式
@@ -132,21 +132,28 @@ public class SecurityConfig {
         return new WechatAuthenticationProvider(userService, wxMaService);
     }
 
+
+    /**
+     * 短信验证码认证 Provider
+     */
+    @Bean
     public SmsAuthenticationProvider smsAuthenticationProvider() {
         return new SmsAuthenticationProvider(userService, redisTemplate);
     }
 
     /**
-     * 手动注入 AuthenticationManager，支持多种认证方式
-     * - DaoAuthenticationProvider：用户名密码认证
-     * - WeChatAuthenticationProvider：微信认证
+     * 认证管理器
      */
     @Bean
-    public AuthenticationManager authenticationManager() {
+    public AuthenticationManager authenticationManager(
+            DaoAuthenticationProvider daoAuthenticationProvider,
+            WechatAuthenticationProvider weChatAuthenticationProvider,
+            SmsAuthenticationProvider smsAuthenticationProvider
+    ) {
         return new ProviderManager(
-                daoAuthenticationProvider(),
-                weChatAuthenticationProvider(),
-                smsAuthenticationProvider()
+                daoAuthenticationProvider,
+                weChatAuthenticationProvider,
+                smsAuthenticationProvider
         );
     }
 }
