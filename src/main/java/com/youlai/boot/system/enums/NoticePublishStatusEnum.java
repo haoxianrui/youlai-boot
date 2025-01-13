@@ -7,7 +7,7 @@ import lombok.Getter;
 /**
  * 通告发布状态枚举
  *
- * @author haoxr
+ * @author Ray.Hao
  * @since 2024/10/14
  */
 @Getter

@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.youlai.boot.common.annotation.Log;
 import com.youlai.boot.common.annotation.RepeatSubmit;
-import com.youlai.boot.system.enums.ContactType;
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.common.result.PageResult;
@@ -45,7 +44,7 @@ import java.util.List;
 /**
  * 用户控制层
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2022/10/16
  */
 @Tag(name = "02.用户接口")
@@ -203,39 +202,46 @@ public class UserController {
     @Operation(summary = "修改密码")
     @PutMapping(value = "/password")
     public Result<?> changePassword(
-            @RequestBody PasswordChangeForm data
+            @RequestBody PasswordUpdateForm data
     ) {
         Long currUserId = SecurityUtils.getUserId();
         boolean result = userService.changePassword(currUserId, data);
         return Result.judge(result);
     }
 
-    @Operation(summary = "发送短信/邮箱验证码")
-    @PostMapping(value = "/send-verification-code")
-    public Result<?> sendVerificationCode(
-            @Parameter(description = "联系方式（手机号码或邮箱地址）", required = true) @RequestParam String contact,
-            @Parameter(description = "联系方式类型（Mobile或Email）", required = true) @RequestParam ContactType contactType
+    @Operation(summary = "发送短信验证码（绑定或更换手机号）")
+    @PostMapping(value = "/mobile/code")
+    public Result<?> sendMobileCode(
+            @Parameter(description = "手机号码", required = true) @RequestParam String mobile
     ) {
-        boolean result = userService.sendVerificationCode(contact, contactType);
+        boolean result = userService.sendMobileCode(mobile);
         return Result.judge(result);
     }
 
-    @Operation(summary = "个人中心绑定用户手机号")
+    @Operation(summary = "绑定或更换手机号")
     @PutMapping(value = "/mobile")
-    public Result<?> bindMobile(
-            @RequestBody @Validated MobileBindingForm data
+    public Result<?> bindOrChangeMobile(
+            @RequestBody @Validated MobileUpdateForm data
     ) {
-        boolean result = userService.bindMobile(data);
+        boolean result = userService.bindOrChangeMobile(data);
         return Result.judge(result);
     }
 
-
-    @Operation(summary = "个人中心绑定用户邮箱")
-    @PutMapping(value = "/email")
-    public Result<?> bindEmail(
-            @RequestBody @Validated EmailBindingForm data
+    @Operation(summary = "发送邮箱验证码（绑定或更换邮箱）")
+    @PostMapping(value = "/email/code")
+    public Result<Void> sendEmailCode(
+            @Parameter(description = "邮箱地址", required = true) @RequestParam String email
     ) {
-        boolean result = userService.bindEmail(data);
+        userService.sendEmailCode(email);
+        return Result.success();
+    }
+
+    @Operation(summary = "绑定或更换邮箱")
+    @PutMapping(value = "/email")
+    public Result<?> bindOrChangeEmail(
+            @RequestBody @Validated EmailUpdateForm data
+    ) {
+        boolean result = userService.bindOrChangeEmail(data);
         return Result.judge(result);
     }
 

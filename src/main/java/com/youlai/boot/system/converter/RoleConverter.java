@@ -26,9 +26,9 @@ public interface RoleConverter {
             @Mapping(target = "value", source = "id"),
             @Mapping(target = "label", source = "name")
     })
-    Option<Long> entity2Option(Role role);
+    Option<Long> toOption(Role role);
 
-    List<Option<Long>> entities2Options(List<Role> roles);
+    List<Option<Long>> toOptions(List<Role> roles);
 
     Role toEntity(RoleForm roleForm);
 

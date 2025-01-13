@@ -22,11 +22,10 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 
-
 /**
  * 角色控制层
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2022/10/16
  */
 @Tag(name = "03.角色接口")
@@ -39,9 +38,9 @@ public class RoleController {
 
     @Operation(summary = "角色分页列表")
     @GetMapping("/page")
-    @Log( value = "角色分页列表",module = LogModuleEnum.ROLE)
+    @Log(value = "角色分页列表", module = LogModuleEnum.ROLE)
     public PageResult<RolePageVO> getRolePage(
-             RolePageQuery queryParams
+            RolePageQuery queryParams
     ) {
         Page<RolePageVO> result = roleService.getRolePage(queryParams);
         return PageResult.success(result);
@@ -83,11 +82,11 @@ public class RoleController {
     @Operation(summary = "删除角色")
     @DeleteMapping("/{ids}")
     @PreAuthorize("@ss.hasPerm('sys:role:delete')")
-    public Result<?> deleteRoles(
+    public Result<Void> deleteRoles(
             @Parameter(description = "删除角色，多个以英文逗号(,)拼接") @PathVariable String ids
     ) {
-        boolean result = roleService.deleteRoles(ids);
-        return Result.judge(result);
+        roleService.deleteRoles(ids);
+        return Result.success();
     }
 
     @Operation(summary = "修改角色状态")
@@ -111,11 +110,11 @@ public class RoleController {
 
     @Operation(summary = "分配菜单(包括按钮权限)给角色")
     @PutMapping("/{roleId}/menus")
-    public Result<?> assignMenusToRole(
+    public Result<Void> assignMenusToRole(
             @PathVariable Long roleId,
             @RequestBody List<Long> menuIds
     ) {
-        boolean result = roleService.assignMenusToRole(roleId, menuIds);
-        return Result.judge(result);
+        roleService.assignMenusToRole(roleId, menuIds);
+        return Result.success();
     }
 }

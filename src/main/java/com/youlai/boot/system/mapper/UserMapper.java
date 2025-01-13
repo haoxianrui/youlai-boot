@@ -57,6 +57,14 @@ public interface UserMapper extends BaseMapper<User> {
     UserAuthInfo getUserAuthInfoByOpenId(String openid);
 
     /**
+     * 根据手机号获取用户认证信息
+     *
+     * @param mobile
+     * @return
+     */
+    UserAuthInfo getUserAuthInfoByMobile(String mobile);
+
+    /**
      * 获取导出用户列表
      *
      * @param queryParams
@@ -72,6 +80,5 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     UserBO getUserProfile(Long userId);
-
 
 }

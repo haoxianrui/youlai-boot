@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.common.result.ResultCode;
 import com.youlai.boot.common.util.ResponseUtils;
-import com.youlai.boot.shared.auth.service.impl.JwtTokenService;
+import com.youlai.boot.core.security.manager.JwtTokenManager;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,10 +24,10 @@ import java.io.IOException;
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenService jwtTokenService;
+    private final JwtTokenManager jwtTokenService;
 
 
-    public JwtAuthenticationFilter(JwtTokenService jwtTokenService) {
+    public JwtAuthenticationFilter(JwtTokenManager jwtTokenService) {
         this.jwtTokenService = jwtTokenService;
     }
 

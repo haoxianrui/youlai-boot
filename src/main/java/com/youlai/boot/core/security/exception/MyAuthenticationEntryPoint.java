@@ -30,10 +30,10 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
         } else {
             if (authException instanceof BadCredentialsException) {
                 // 用户名或密码错误
-                ResponseUtils.writeErrMsg(response, ResultCode.USER_PASSWORD_ERROR);
+                ResponseUtils.writeErrMsg(response, ResultCode.USER_PASSWORD_ERROR, authException.getMessage());
             } else {
                 // 未认证或者token过期
-                ResponseUtils.writeErrMsg(response, ResultCode.ACCESS_TOKEN_INVALID);
+                ResponseUtils.writeErrMsg(response, ResultCode.USER_LOGIN_EXCEPTION, authException.getMessage());
             }
         }
     }

@@ -7,8 +7,8 @@ import lombok.Getter;
 /**
  * 通知目标类型枚举
  *
- * @author haoxr
- * @since 2022/10/14
+ * @author Ray.Hao
+ * @since 2024/10/14
  */
 @Getter
 @Schema(enumAsRef = true)

@@ -21,19 +21,15 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class ResponseUtils {
 
+
     /**
      * 异常消息返回(适用过滤器中处理异常响应)
      *
-     * @param response  HttpServletResponse
+     * @param response   HttpServletResponse
      * @param resultCode 响应结果码
      */
     public static void writeErrMsg(HttpServletResponse response, ResultCode resultCode) {
-        // 根据不同的结果码设置HTTP状态
-        int status = switch (resultCode) {
-            case ACCESS_UNAUTHORIZED, ACCESS_TOKEN_INVALID , REFRESH_TOKEN_INVALID
-                    -> HttpStatus.UNAUTHORIZED.value();
-            default -> HttpStatus.BAD_REQUEST.value();
-        };
+        int status = getHttpStatus(resultCode);
 
         response.setStatus(status);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -46,6 +42,42 @@ public class ResponseUtils {
         } catch (IOException e) {
             log.error("响应异常处理失败", e);
         }
+    }
+
+    /**
+     * 异常消息返回(适用过滤器中处理异常响应)
+     *
+     * @param response   HttpServletResponse
+     * @param resultCode 响应结果码
+     */
+    public static void writeErrMsg(HttpServletResponse response, ResultCode resultCode, String message) {
+        int status = getHttpStatus(resultCode);
+
+        response.setStatus(status);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+
+        try (PrintWriter writer = response.getWriter()) {
+            String jsonResponse = JSONUtil.toJsonStr(Result.failed(resultCode, message));
+            writer.print(jsonResponse);
+            writer.flush(); // 确保将响应内容写入到输出流
+        } catch (IOException e) {
+            log.error("响应异常处理失败", e);
+        }
+    }
+
+
+    /**
+     * 根据结果码获取HTTP状态码
+     *
+     * @param resultCode 结果码
+     * @return HTTP状态码
+     */
+    private static int getHttpStatus(ResultCode resultCode) {
+        return switch (resultCode) {
+            case ACCESS_UNAUTHORIZED, ACCESS_TOKEN_INVALID, REFRESH_TOKEN_INVALID -> HttpStatus.UNAUTHORIZED.value();
+            default -> HttpStatus.BAD_REQUEST.value();
+        };
     }
 
 }

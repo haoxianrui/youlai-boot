@@ -1,4 +1,4 @@
-package com.youlai.boot.core.security.extension;
+package com.youlai.boot.core.security.extension.wechat;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;

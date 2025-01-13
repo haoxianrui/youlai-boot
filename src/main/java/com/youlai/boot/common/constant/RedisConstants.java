@@ -9,35 +9,32 @@ package com.youlai.boot.common.constant;
 public interface RedisConstants {
 
     /**
-     * 系统配置Redis-key
+     * 系统配置 Redis 键
      */
     String SYSTEM_CONFIG_KEY = "system:config";
 
     /**
-     * IP限流Redis-key
+     * IP 限流 Redis 键
      */
-    String IP_RATE_LIMITER_KEY = "ip:rate:limiter:";
+    String IP_RATE_LIMITER_KEY = "rate:limiter:ip:";
 
     /**
-     * 防重复提交Redis-key
+     * 防重复提交 Redis 键前缀
      */
-    String RESUBMIT_LOCK_PREFIX = "resubmit:lock:";
+    String RESUBMIT_LOCK_PREFIX = "lock:resubmit:";
 
     /**
-     * 单个IP请求的最大每秒查询数（QPS）阈值Key
+     * 登录手机验证码 Redis 键前缀
      */
-    String IP_QPS_THRESHOLD_LIMIT_KEY = "IP_QPS_THRESHOLD_LIMIT";
+    String SMS_LOGIN_CODE_PREFIX= "code:sms:login:";
 
     /**
-     * 手机验证码缓存前缀
+     * 绑定或更换手机号验证码 Redis 键前缀
      */
-
-    String MOBILE_VERIFICATION_CODE_PREFIX = "VERIFICATION_CODE:MOBILE:";
-
+    String SMS_CHANGE_CODE_PREFIX = "code:sms:change:";
 
     /**
-     * 邮箱验证码缓存前缀
+     * 绑定或更换邮箱验证码 Redis 键前缀
      */
-    String EMAIL_VERIFICATION_CODE_PREFIX = "VERIFICATION_CODE:EMAIL:";
-
+    String EMAIL_CHANGE_CODE_PREFIX = "code:email:change:";
 }

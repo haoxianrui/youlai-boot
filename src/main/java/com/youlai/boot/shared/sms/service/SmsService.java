@@ -1,11 +1,13 @@
 package com.youlai.boot.shared.sms.service;
 
+import com.youlai.boot.shared.sms.enums.SmsTypeEnum;
+
+import java.util.Map;
+
 /**
  * 短信服务接口层
- * <p>
- * SMS = Short Message Service 短信服务
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2024/8/17
  */
 public interface SmsService {
@@ -13,10 +15,10 @@ public interface SmsService {
     /**
      * 发送短信
      *
-     * @param mobile        手机号 13388886666
-     * @param templateCode  短信模板 SMS_194640010
-     * @param templateParam 模板参数 "[{"code":"123456"}]"
+     * @param mobile         手机号 13388886666
+     * @param smsType        短信模板 SMS_194640010，模板内容：您的验证码为：${code}，请在5分钟内使用
+     * @param templateParams 模板参数 [{"code":"123456"}] ，用于替换短信模板中的变量
      * @return boolean 是否发送成功
      */
-    boolean sendSms(String mobile, String templateCode, String templateParam);
+    boolean sendSms(String mobile, SmsTypeEnum smsType, Map<String, String> templateParams);
 }

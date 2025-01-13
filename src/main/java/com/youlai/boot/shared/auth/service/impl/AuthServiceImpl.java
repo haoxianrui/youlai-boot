@@ -5,18 +5,21 @@ import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.common.result.ResultCode;
 import com.youlai.boot.config.property.CaptchaProperties;
-import com.youlai.boot.core.security.extension.WechatAuthenticationToken;
+import com.youlai.boot.core.security.extension.sms.SmsAuthenticationToken;
+import com.youlai.boot.core.security.extension.wechat.WechatAuthenticationToken;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.shared.auth.enums.CaptchaTypeEnum;
-import com.youlai.boot.shared.auth.model.AuthTokenResponse;
-import com.youlai.boot.shared.auth.model.CaptchaResponse;
-import com.youlai.boot.shared.auth.model.RefreshTokenRequest;
+import com.youlai.boot.core.security.model.AuthenticationToken;
+import com.youlai.boot.shared.auth.model.CaptchaInfo;
 import com.youlai.boot.shared.auth.service.AuthService;
-import com.youlai.boot.shared.auth.service.TokenService;
+import com.youlai.boot.core.security.manager.TokenManager;
+import com.youlai.boot.shared.sms.enums.SmsTypeEnum;
+import com.youlai.boot.shared.sms.service.SmsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,12 +30,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
  * 认证服务实现类
  *
- * @author haoxr
+ * @author Ray.Hao
  * @since 2.4.0
  */
 @Service
@@ -41,11 +46,15 @@ import java.util.concurrent.TimeUnit;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
-    private final RedisTemplate<String, Object> redisTemplate;
-    private final CodeGenerator codeGenerator;
+    private final TokenManager tokenManager;
+
     private final Font captchaFont;
     private final CaptchaProperties captchaProperties;
-    private final TokenService tokenService;
+    private final CodeGenerator codeGenerator;
+
+    private final SmsService smsService;
+
+    private final RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 用户名密码登录
@@ -55,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
      * @return 访问令牌
      */
     @Override
-    public AuthTokenResponse login(String username, String password) {
+    public AuthenticationToken login(String username, String password) {
         // 1. 创建用于密码认证的令牌（未认证）
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username.trim(), password);
@@ -64,9 +73,10 @@ public class AuthServiceImpl implements AuthService {
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
         // 3. 认证成功后生成 JWT 令牌，并存入 Security 上下文，供登录日志 AOP 使用（已认证）
-        AuthTokenResponse authTokenResponse = tokenService.generateToken(authentication);
+        AuthenticationToken authenticationTokenResponse =
+                tokenManager.generateToken(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return authTokenResponse;
+        return authenticationTokenResponse;
     }
 
     /**
@@ -76,22 +86,69 @@ public class AuthServiceImpl implements AuthService {
      * @return 访问令牌
      */
     @Override
-    public AuthTokenResponse wechatLogin(String code) {
+    public AuthenticationToken loginByWechat(String code) {
         // 1. 创建用户微信认证的令牌（未认证）
-        WechatAuthenticationToken authenticationToken = new WechatAuthenticationToken(code);
+        WechatAuthenticationToken wechatAuthenticationToken = new WechatAuthenticationToken(code);
 
         // 2. 执行认证（认证中）
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        Authentication authentication = authenticationManager.authenticate(wechatAuthenticationToken);
 
         // 3. 认证成功后生成 JWT 令牌，并存入 Security 上下文，供登录日志 AOP 使用（已认证）
-        AuthTokenResponse authTokenResponse = tokenService.generateToken(authentication);
+        AuthenticationToken authenticationToken = tokenManager.generateToken(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return authTokenResponse;
+        return authenticationToken;
     }
 
     /**
-     * 注销
+     * 发送短信验证码
+     *
+     * @param mobile 手机号
+     */
+    @Override
+    public void sendSmsLoginCode(String mobile) {
+
+        // 随机生成4位验证码
+        // String code = String.valueOf((int) ((Math.random() * 9 + 1) * 1000));
+        // TODO 为了方便测试，验证码固定为 1234，实际开发中在配置了厂商短信服务后，可以使用上面的随机验证码
+        String code = "1234";
+
+        // 发送短信验证码
+        Map<String, String> templateParams = new HashMap<>();
+        templateParams.put("code", code);
+        try {
+            smsService.sendSms(mobile, SmsTypeEnum.LOGIN, templateParams);
+        } catch (Exception e) {
+            log.error("发送短信验证码失败", e);
+        }
+        // 缓存验证码至Redis，用于登录校验
+        redisTemplate.opsForValue().set(RedisConstants.SMS_LOGIN_CODE_PREFIX + mobile, code, 5, TimeUnit.MINUTES);
+    }
+
+    /**
+     * 短信验证码登录
+     *
+     * @param mobile 手机号
+     * @param code   验证码
+     * @return 访问令牌
+     */
+    @Override
+    public AuthenticationToken loginBySms(String mobile, String code) {
+        // 1. 创建用户微信认证的令牌（未认证）
+        SmsAuthenticationToken smsAuthenticationToken = new SmsAuthenticationToken(mobile, code);
+
+        // 2. 执行认证（认证中）
+        Authentication authentication = authenticationManager.authenticate(smsAuthenticationToken);
+
+        // 3. 认证成功后生成 JWT 令牌，并存入 Security 上下文，供登录日志 AOP 使用（已认证）
+        AuthenticationToken authenticationToken = tokenManager.generateToken(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return authenticationToken;
+    }
+
+    /**
+     * 注销登录
      */
     @Override
     public void logout() {
@@ -99,7 +156,7 @@ public class AuthServiceImpl implements AuthService {
         if (StrUtil.isNotBlank(token) && token.startsWith(SecurityConstants.JWT_TOKEN_PREFIX)) {
             token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
             // 将JWT令牌加入黑名单
-            tokenService.blacklistToken(token);
+            tokenManager.blacklistToken(token);
             // 清除Security上下文
             SecurityContextHolder.clearContext();
         }
@@ -111,7 +168,7 @@ public class AuthServiceImpl implements AuthService {
      * @return 验证码
      */
     @Override
-    public CaptchaResponse getCaptcha() {
+    public CaptchaInfo getCaptcha() {
 
         String captchaType = captchaProperties.getType();
         int width = captchaProperties.getWidth();
@@ -143,31 +200,28 @@ public class AuthServiceImpl implements AuthService {
         redisTemplate.opsForValue().set(SecurityConstants.CAPTCHA_CODE_PREFIX + captchaKey, captchaCode,
                 captchaProperties.getExpireSeconds(), TimeUnit.SECONDS);
 
-        return CaptchaResponse.builder()
+        return CaptchaInfo.builder()
                 .captchaKey(captchaKey)
                 .captchaBase64(imageBase64Data)
                 .build();
     }
 
     /**
-     * 刷新令牌
+     * 刷新token
      *
-     * @param request 刷新令牌请求参数
+     * @param refreshToken 刷新令牌
      * @return 新的访问令牌
      */
     @Override
-    public AuthTokenResponse refreshToken(RefreshTokenRequest request) {
+    public AuthenticationToken refreshToken(String refreshToken) {
         // 验证刷新令牌
-
-        String refreshToken = request.getRefreshToken();
-
-        boolean isValidate = tokenService.validateToken(refreshToken);
+        boolean isValidate = tokenManager.validateToken(refreshToken);
 
         if (!isValidate) {
             throw new BusinessException(ResultCode.REFRESH_TOKEN_INVALID);
         }
-
-        return tokenService.refreshToken(refreshToken);
+        // 刷新令牌有效，生成新的访问令牌
+        return tokenManager.refreshToken(refreshToken);
     }
 
 

@@ -7,11 +7,12 @@ import com.youlai.boot.config.property.SecurityProperties;
 import com.youlai.boot.core.filter.RateLimiterFilter;
 import com.youlai.boot.core.security.exception.MyAccessDeniedHandler;
 import com.youlai.boot.core.security.exception.MyAuthenticationEntryPoint;
-import com.youlai.boot.core.security.extension.WechatAuthenticationProvider;
+import com.youlai.boot.core.security.extension.sms.SmsAuthenticationProvider;
+import com.youlai.boot.core.security.extension.wechat.WechatAuthenticationProvider;
 import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
 import com.youlai.boot.core.security.filter.JwtAuthenticationFilter;
 import com.youlai.boot.core.security.service.SysUserDetailsService;
-import com.youlai.boot.shared.auth.service.impl.JwtTokenService;
+import com.youlai.boot.core.security.manager.JwtTokenManager;
 import com.youlai.boot.system.service.ConfigService;
 import com.youlai.boot.system.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class SecurityConfig {
     private final RedisTemplate<String, Object> redisTemplate;
     private final PasswordEncoder passwordEncoder;
 
-    private final JwtTokenService jwtTokenService;
+    private final JwtTokenManager jwtTokenService;
     private final WxMaService wxMaService;
     private final UserService userService;
     private final SysUserDetailsService userDetailsService;
@@ -131,6 +132,10 @@ public class SecurityConfig {
         return new WechatAuthenticationProvider(userService, wxMaService);
     }
 
+    public SmsAuthenticationProvider smsAuthenticationProvider() {
+        return new SmsAuthenticationProvider(userService, redisTemplate);
+    }
+
     /**
      * 手动注入 AuthenticationManager，支持多种认证方式
      * - DaoAuthenticationProvider：用户名密码认证
@@ -138,6 +143,10 @@ public class SecurityConfig {
      */
     @Bean
     public AuthenticationManager authenticationManager() {
-        return new ProviderManager(daoAuthenticationProvider(), weChatAuthenticationProvider());
+        return new ProviderManager(
+                daoAuthenticationProvider(),
+                weChatAuthenticationProvider(),
+                smsAuthenticationProvider()
+        );
     }
 }

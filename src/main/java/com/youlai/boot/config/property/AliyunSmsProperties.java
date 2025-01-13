@@ -43,8 +43,8 @@ public class AliyunSmsProperties {
     private String signName;
 
     /**
-     * 模板编码
+     * 短信模板集合
      */
-    private Map<String, String> templateCodes;
+    private Map<String, String> templates;
 
 }

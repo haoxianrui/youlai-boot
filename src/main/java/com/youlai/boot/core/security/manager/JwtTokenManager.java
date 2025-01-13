@@ -1,4 +1,4 @@
-package com.youlai.boot.shared.auth.service.impl;
+package com.youlai.boot.core.security.manager;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
@@ -13,8 +13,7 @@ import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.common.result.ResultCode;
 import com.youlai.boot.config.property.SecurityProperties;
 import com.youlai.boot.core.security.model.SysUserDetails;
-import com.youlai.boot.shared.auth.model.AuthTokenResponse;
-import com.youlai.boot.shared.auth.service.TokenService;
+import com.youlai.boot.core.security.model.AuthenticationToken;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,14 +37,14 @@ import java.util.stream.Collectors;
  */
 @ConditionalOnProperty(value = "security.session.type", havingValue = "jwt")
 @Service
-public class JwtTokenService implements TokenService {
+public class JwtTokenManager implements TokenManager {
 
     private final SecurityProperties securityProperties;
     private final RedisTemplate<String, Object> redisTemplate;
     private final byte[] secretKey;
 
 
-    public JwtTokenService(SecurityProperties securityProperties, RedisTemplate<String, Object> redisTemplate) {
+    public JwtTokenManager(SecurityProperties securityProperties, RedisTemplate<String, Object> redisTemplate) {
         this.securityProperties = securityProperties;
         this.redisTemplate = redisTemplate;
         this.secretKey = securityProperties.getJwt().getKey().getBytes();
@@ -58,14 +57,14 @@ public class JwtTokenService implements TokenService {
      * @return 令牌响应对象
      */
     @Override
-    public AuthTokenResponse generateToken(Authentication authentication) {
+    public AuthenticationToken generateToken(Authentication authentication) {
         int accessTokenTimeToLive = securityProperties.getJwt().getAccessTokenTimeToLive();
         int refreshTokenTimeToLive = securityProperties.getJwt().getRefreshTokenTimeToLive();
 
         String accessToken = generateToken(authentication, accessTokenTimeToLive);
         String refreshToken = generateToken(authentication, refreshTokenTimeToLive);
 
-        return AuthTokenResponse.builder()
+        return AuthenticationToken.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .tokenType("Bearer")
@@ -164,7 +163,7 @@ public class JwtTokenService implements TokenService {
      */
 
     @Override
-    public AuthTokenResponse refreshToken(String refreshToken) {
+    public AuthenticationToken refreshToken(String refreshToken) {
 
         boolean isValid = validateToken(refreshToken);
         if (!isValid) {
@@ -175,7 +174,7 @@ public class JwtTokenService implements TokenService {
         int accessTokenExpiration = securityProperties.getJwt().getRefreshTokenTimeToLive();
         String newAccessToken = generateToken(authentication, accessTokenExpiration);
 
-        return AuthTokenResponse.builder()
+        return AuthenticationToken.builder()
                 .accessToken(newAccessToken)
                 .refreshToken(refreshToken)
                 .tokenType("Bearer")

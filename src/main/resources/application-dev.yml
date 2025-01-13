@@ -87,8 +87,7 @@ security:
     refresh-token-time-to-live: 604800
   # 无需认证的请求路径
   ignore-urls:
-    - /api/v1/auth/login          # 用户登录接口
-    - /api/v1/auth/wechat-login   # 微信登录接口
+    - /api/v1/auth/login/**       # 登录接口(账号密码登录、手机验证码登录和微信登录)
     - /api/v1/auth/captcha        # 验证码获取接口
     - /api/v1/auth/refresh-token  # 刷新令牌接口
     - /ws/**                      # WebSocket接口
@@ -103,25 +102,25 @@ security:
 
 # 文件存储配置
 oss:
-  # OSS 类型 (目前支持aliyun、minio)
+  # OSS 类型 (目前支持aliyun、minio、local)
   type: minio
   # MinIO 对象存储服务
   minio:
-    # 服务Endpoint
+    # MinIO 服务地址
     endpoint: http://localhost:9000
     # 访问凭据
     access-key: minioadmin
     # 凭据密钥
     secret-key: minioadmin
     # 存储桶名称
-    bucket-name: public
-    # (可选)自定义域名，如果配置了域名，生成的文件URL是域名格式，未配置则URL则是IP格式 (eg: https://oss.youlai.tech)
+    bucket-name: youlai
+    # (可选) 自定义域名：配置后，文件 URL 会使用该域名格式
     custom-domain:
   # 阿里云OSS对象存储服务
   aliyun:
     # 服务Endpoint
     endpoint: oss-cn-hangzhou.aliyuncs.com
-    # 访问凭据
+    # 访问凭据`
     access-key-id: your-access-key-id
     # 凭据密钥
     access-key-secret: your-access-key-secret
@@ -140,19 +139,19 @@ sms:
     domain: dysmsapi.aliyuncs.com
     regionId: cn-shanghai
     signName: 有来技术
-    templateCodes:
-      # 注册（预留）
+    templates:
+      #  注册短信验证码模板
       register: SMS_22xxx771
-      # 登录（预留）
+      # 登录短信验证码模板
       login: SMS_22xxx772
-      # 修改密码
-      changePassword: SMS_22xxx773
+      # 修改手机号短信验证码模板
+      change-mobile: SMS_22xxx773
 
 # springdoc配置： https://springdoc.org/properties.html
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
-    operationsSorter: alpha
+    operations-sorter: alpha
     tags-sorter: alpha
   api-docs:
     path: /v3/api-docs
@@ -195,32 +194,32 @@ xxl:
 
 # 验证码配置
 captcha:
-    # 验证码类型 circle-圆圈干扰验证码|gif-Gif验证码|line-干扰线验证码|shear-扭曲干扰验证码
-    type: circle
-    # 验证码宽度
-    width: 120
-    # 验证码高度
-    height: 40
-    # 验证码干扰元素个数
-    interfere-count: 2
-    # 文本透明度(0.0-1.0)
-    text-alpha: 0.8
-    # 验证码字符配置
-    code:
-      # 验证码字符类型 math-算术|random-随机字符
-      type: math
-      # 验证码字符长度，type=算术时，表示运算位数(1:个位数运算 2:十位数运算)；type=随机字符时，表示字符个数
-      length: 1
-    # 验证码字体
-    font:
-      # 字体名称 Dialog|DialogInput|Monospaced|Serif|SansSerif
-      name: SansSerif
-      # 字体样式 0-普通|1-粗体|2-斜体
-      weight: 1
-      # 字体大小
-      size: 24
-    # 验证码有效期(秒)
-    expire-seconds: 120
+  # 验证码类型 circle-圆圈干扰验证码|gif-Gif验证码|line-干扰线验证码|shear-扭曲干扰验证码
+  type: circle
+  # 验证码宽度
+  width: 120
+  # 验证码高度
+  height: 40
+  # 验证码干扰元素个数
+  interfere-count: 2
+  # 文本透明度(0.0-1.0)
+  text-alpha: 0.8
+  # 验证码字符配置
+  code:
+    # 验证码字符类型 math-算术|random-随机字符
+    type: math
+    # 验证码字符长度，type=算术时，表示运算位数(1:个位数运算 2:十位数运算)；type=随机字符时，表示字符个数
+    length: 1
+  # 验证码字体
+  font:
+    # 字体名称 Dialog|DialogInput|Monospaced|Serif|SansSerif
+    name: SansSerif
+    # 字体样式 0-普通|1-粗体|2-斜体
+    weight: 1
+    # 字体大小
+    size: 24
+  # 验证码有效期(秒)
+  expire-seconds: 120
 
 # 微信小程配置
 wx:

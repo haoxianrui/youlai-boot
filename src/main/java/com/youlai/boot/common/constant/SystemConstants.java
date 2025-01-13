@@ -3,7 +3,7 @@ package com.youlai.boot.common.constant;
 /**
  * 系统常量
  *
- * @author haoxr
+ * @author Ray.Hao
  * @since 1.0.0
  */
 public interface SystemConstants {
@@ -24,5 +24,9 @@ public interface SystemConstants {
     String ROOT_ROLE_CODE = "ROOT";
 
 
+    /**
+     * 系统配置 IP的QPS限流的KEY
+     */
+    String SYSTEM_CONFIG_IP_QPS_LIMIT_KEY = "IP_QPS_THRESHOLD_LIMIT";
 
 }

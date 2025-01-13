@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
+import org.springframework.util.AntPathMatcher;
 
 import java.util.stream.Stream;
 
@@ -82,10 +83,12 @@ public class OpenApiConfig {
             if (openApi.getPaths() != null) {
                 openApi.getPaths().forEach((path, pathItem) -> {
 
-                    // 忽略认证的请求无需携带Authorization
+                    // 忽略认证的请求无需携带 Authorization
                     String[] ignoreUrls = securityProperties.getIgnoreUrls();
                     if (ArrayUtil.isNotEmpty(ignoreUrls)) {
-                        if (Stream.of(ignoreUrls).anyMatch(path::equals)) {
+                        // Ant 匹配忽略的路径，不添加Authorization
+                        AntPathMatcher antPathMatcher = new AntPathMatcher();
+                        if (Stream.of(ignoreUrls).anyMatch(ignoreUrl -> antPathMatcher.match(ignoreUrl, path))) {
                             return;
                         }
                     }
