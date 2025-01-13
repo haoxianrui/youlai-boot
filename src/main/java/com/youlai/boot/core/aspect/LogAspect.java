@@ -29,6 +29,7 @@ import org.springframework.web.servlet.HandlerMapping;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 日志切面
@@ -120,11 +121,13 @@ public class LogAspect {
         // 获取浏览器和终端系统信息
         String userAgentString = request.getHeader("User-Agent");
         UserAgent userAgent = UserAgentUtil.parse(userAgentString);
-        // 系统信息
-        log.setOs(userAgent.getOs().getName());
-        // 浏览器信息
-        log.setBrowser(userAgent.getBrowser().getName());
-        log.setBrowserVersion(userAgent.getBrowser().getVersion(userAgentString));
+        if(Objects.nonNull(userAgent)) {
+            // 系统信息
+            log.setOs(userAgent.getOs().getName());
+            // 浏览器信息
+            log.setBrowser(userAgent.getBrowser().getName());
+            log.setBrowserVersion(userAgent.getBrowser().getVersion(userAgentString));
+        }
         // 保存日志到数据库
         logService.save(log);
     }
