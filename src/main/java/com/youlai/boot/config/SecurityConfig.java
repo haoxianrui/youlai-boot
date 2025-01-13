@@ -11,7 +11,7 @@ import com.youlai.boot.core.security.extension.WechatAuthenticationProvider;
 import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
 import com.youlai.boot.core.security.filter.JwtAuthenticationFilter;
 import com.youlai.boot.core.security.service.SysUserDetailsService;
-import com.youlai.boot.shared.auth.service.impl.JwtTokenService;
+import com.youlai.boot.core.security.manager.JwtTokenManager;
 import com.youlai.boot.system.service.ConfigService;
 import com.youlai.boot.system.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,7 @@ public class SecurityConfig {
     private final RedisTemplate<String, Object> redisTemplate;
     private final PasswordEncoder passwordEncoder;
 
-    private final JwtTokenService jwtTokenService;
+    private final JwtTokenManager jwtTokenService;
     private final WxMaService wxMaService;
     private final UserService userService;
     private final SysUserDetailsService userDetailsService;

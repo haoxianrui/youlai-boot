@@ -128,8 +128,8 @@ public class MinioFileService implements FileService {
     /**
      * 删除文件
      *
-     * @param filePath 文件路径
-     *                 https://oss.youlai.tech/default/20221120/test.jpg
+     * @param filePath 文件路径  http://localhost:9000/default/20221120/test.jpg
+     *
      * @return
      */
     @Override
@@ -151,10 +151,8 @@ public class MinioFileService implements FileService {
 
             minioClient.removeObject(removeObjectArgs);
             return true;
-        } catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException |
-                 InvalidResponseException | IOException | NoSuchAlgorithmException | ServerException |
-                 XmlParserException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException("文件删除失败", e);
         }
     }
 

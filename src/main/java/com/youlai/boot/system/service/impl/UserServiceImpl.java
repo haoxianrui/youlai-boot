@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SystemConstants;
-import com.youlai.boot.shared.auth.service.TokenService;
+import com.youlai.boot.core.security.manager.TokenManager;
 import com.youlai.boot.system.enums.ContactType;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.shared.mail.service.MailService;
@@ -31,7 +31,6 @@ import com.youlai.boot.system.model.dto.UserExportDTO;
 import com.youlai.boot.system.model.vo.UserInfoVO;
 import com.youlai.boot.system.model.vo.UserPageVO;
 import com.youlai.boot.core.security.service.PermissionService;
-import com.youlai.boot.system.service.RoleMenuService;
 import com.youlai.boot.system.service.RoleService;
 import com.youlai.boot.system.service.UserRoleService;
 import com.youlai.boot.system.service.UserService;
@@ -62,8 +61,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private final UserRoleService userRoleService;
 
-    private final RoleMenuService roleMenuService;
-
     private final RoleService roleService;
 
     private final PermissionService permissionService;
@@ -76,7 +73,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private final StringRedisTemplate redisTemplate;
 
-    private final TokenService tokenService;
+    private final TokenManager tokenManager;
 
     private final UserConverter userConverter;
 
@@ -228,6 +225,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userAuthInfo;
     }
 
+
+    /**
+     * 根据手机号获取用户认证信息
+     *
+     * @param mobile 手机号
+     * @return {@link UserAuthInfo}
+     */
+    @Override
+    public UserAuthInfo getUserAuthInfoByMobile(String mobile) {
+        UserAuthInfo userAuthInfo = this.baseMapper.getUserAuthInfoByMobile(mobile);
+
+        return null;
+    }
+
+
     /**
      * 根据微信 OpenID 注册或绑定用户
      * <p>
@@ -365,7 +377,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (result) {
             // 加入黑名单，重新登录
             String accessToken = SecurityUtils.getTokenFromRequest();
-            tokenService.blacklistToken(accessToken);
+            tokenManager.blacklistToken(accessToken);
         }
         return result;
     }
@@ -457,7 +469,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 修改当前用户邮箱
      *
      * @param form 表单数据
-     * @return
+     * @return true|false
      */
     @Override
     public boolean bindEmail(EmailBindingForm form) {
@@ -473,9 +485,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String email = form.getEmail();
 
         String redisCacheKey = RedisConstants.EMAIL_VERIFICATION_CODE_PREFIX + email;
-        String cachedVerificationCode = redisTemplate.opsForValue().get(redisCacheKey);
+        String cachedVerifyCode = redisTemplate.opsForValue().get(redisCacheKey);
 
-        if (cachedVerificationCode == null || !inputVerificationCode.equals(cachedVerificationCode)) {
+        if (!inputVerificationCode.equals(cachedVerifyCode)) {
             throw new BusinessException("验证码错误");
         }
 

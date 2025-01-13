@@ -31,8 +31,13 @@ public interface RedisConstants {
     /**
      * 手机验证码缓存前缀
      */
+    String SMS_LOGIN_VERIFY_CODE_PREFIX = "sms_login:mobile:";
 
-    String MOBILE_VERIFICATION_CODE_PREFIX = "VERIFICATION_CODE:MOBILE:";
+    /**
+     * 重置密码验证码缓存前缀
+     */
+
+    String SMS_RESET_PASSWORD_VERIFY_CODE_PREFIX = "sms_reset_password:mobile:";
 
 
     /**

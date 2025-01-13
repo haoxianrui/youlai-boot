@@ -1,7 +1,6 @@
-package com.youlai.boot.shared.auth.service.impl;
+package com.youlai.boot.core.security.manager;
 
-import com.youlai.boot.shared.auth.model.AuthTokenResponse;
-import com.youlai.boot.shared.auth.service.TokenService;
+import com.youlai.boot.core.security.model.AuthToken;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Service;
  */
 @ConditionalOnProperty(value = "security.session.type", havingValue = "redis-token")
 @Service
-public class RedisTokenService implements TokenService {
+public class RedisTokenManager implements TokenManager {
 
     /**
      * 生成令牌
@@ -23,7 +22,7 @@ public class RedisTokenService implements TokenService {
      * @return
      */
     @Override
-    public AuthTokenResponse generateToken(Authentication authentication) {
+    public AuthToken generateToken(Authentication authentication) {
         return null;
     }
 
@@ -56,7 +55,7 @@ public class RedisTokenService implements TokenService {
      * @return
      */
     @Override
-    public AuthTokenResponse refreshToken(String token) {
+    public AuthToken refreshToken(String token) {
         return null;
     }
 }

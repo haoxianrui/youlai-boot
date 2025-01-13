@@ -1,7 +1,7 @@
-package com.youlai.boot.shared.auth.service;
+package com.youlai.boot.core.security.manager;
 
 
-import com.youlai.boot.shared.auth.model.AuthTokenResponse;
+import com.youlai.boot.core.security.model.AuthToken;
 import org.springframework.security.core.Authentication;
 
 /**
@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
  * @author Ray
  * @since 2.16.0
  */
-public interface TokenService {
+public interface TokenManager {
 
     /**
      * 生成认证 Token
@@ -18,7 +18,7 @@ public interface TokenService {
      * @param authentication 用户认证信息
      * @return 认证 Token 响应
      */
-    AuthTokenResponse generateToken(Authentication authentication);
+    AuthToken generateToken(Authentication authentication);
 
     /**
      * 解析 Token 获取认证信息
@@ -44,7 +44,7 @@ public interface TokenService {
      * @param token 刷新令牌
      * @return 认证 Token 响应
      */
-    AuthTokenResponse refreshToken(String token);
+    AuthToken refreshToken(String token);
 
     /**
      * 将 Token 加入黑名单

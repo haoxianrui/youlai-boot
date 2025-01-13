@@ -1,7 +1,7 @@
 package com.youlai.boot.shared.auth.service;
 
 import com.youlai.boot.shared.auth.model.CaptchaResponse;
-import com.youlai.boot.shared.auth.model.AuthTokenResponse;
+import com.youlai.boot.core.security.model.AuthToken;
 import com.youlai.boot.shared.auth.model.RefreshTokenRequest;
 
 /**
@@ -19,7 +19,7 @@ public interface AuthService {
      * @param password 密码
      * @return 登录结果
      */
-    AuthTokenResponse login(String username, String password);
+    AuthToken login(String username, String password);
 
     /**
      * 登出
@@ -39,7 +39,7 @@ public interface AuthService {
      * @param request 刷新令牌请求参数
      * @return 登录结果
      */
-    AuthTokenResponse refreshToken(RefreshTokenRequest request);
+    AuthToken refreshToken(RefreshTokenRequest request);
 
     /**
      * 微信小程序登录
@@ -47,5 +47,12 @@ public interface AuthService {
      * @param code 微信登录code
      * @return 登录结果
      */
-    AuthTokenResponse wechatLogin(String code);
+    AuthToken wechatLogin(String code);
+
+    /**
+     * 发送短信验证码
+     *
+     * @param mobile 手机号
+     */
+    void sendLoginVerifyCode(String mobile);
 }

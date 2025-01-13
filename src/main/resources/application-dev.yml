@@ -10,8 +10,8 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://www.youlai.tech:3306/youlai_boot?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true&allowMultiQueries=true
-    username: youlai
+    url: jdbc:mysql://localhost:3306/youlai_boot?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true&allowMultiQueries=true
+    username: root
     password: 123456
   data:
     redis:
@@ -103,25 +103,25 @@ security:
 
 # 文件存储配置
 oss:
-  # OSS 类型 (目前支持aliyun、minio)
+  # OSS 类型 (目前支持aliyun、minio、local)
   type: minio
   # MinIO 对象存储服务
   minio:
-    # 服务Endpoint
+    # MinIO 服务地址
     endpoint: http://localhost:9000
     # 访问凭据
     access-key: minioadmin
     # 凭据密钥
     secret-key: minioadmin
     # 存储桶名称
-    bucket-name: public
-    # (可选)自定义域名，如果配置了域名，生成的文件URL是域名格式，未配置则URL则是IP格式 (eg: https://oss.youlai.tech)
+    bucket-name: youlai
+    # (可选) 自定义域名：配置后，文件 URL 会使用该域名格式
     custom-domain:
   # 阿里云OSS对象存储服务
   aliyun:
     # 服务Endpoint
     endpoint: oss-cn-hangzhou.aliyuncs.com
-    # 访问凭据
+    # 访问凭据`
     access-key-id: your-access-key-id
     # 凭据密钥
     access-key-secret: your-access-key-secret
@@ -140,13 +140,13 @@ sms:
     domain: dysmsapi.aliyuncs.com
     regionId: cn-shanghai
     signName: 有来技术
-    templateCodes:
-      # 注册（预留）
+    templates:
+      # 注册短信验证码模板
       register: SMS_22xxx771
-      # 登录（预留）
+      # 登录短信验证码模板
       login: SMS_22xxx772
-      # 修改密码
-      changePassword: SMS_22xxx773
+      # 修改密码短信验证码模板
+      reset-password: SMS_22xxx773
 
 # springdoc配置： https://springdoc.org/properties.html
 springdoc:
