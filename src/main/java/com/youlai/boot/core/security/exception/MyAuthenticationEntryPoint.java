@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 未认证处理器
+ * 未认证异常处理器
  *
  * @author Ray.Hao
  * @since 2.0.0
@@ -32,7 +32,7 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 // 用户名或密码错误
                 ResponseUtils.writeErrMsg(response, ResultCode.USER_PASSWORD_ERROR, authException.getMessage());
             } else {
-                // 未认证或者token过期
+                // 登录异常
                 ResponseUtils.writeErrMsg(response, ResultCode.USER_LOGIN_EXCEPTION, authException.getMessage());
             }
         }

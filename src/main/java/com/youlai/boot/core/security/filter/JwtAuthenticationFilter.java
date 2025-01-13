@@ -17,9 +17,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
- * 验证和解析 JWT Token 的过滤器
+ *  JWT Token 验证和解析过滤器
  *
- * @author Ray Hao
+ * @author Ray.Hao
  * @since 2023/9/13
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
