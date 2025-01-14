@@ -38,10 +38,10 @@ import java.util.stream.Collectors;
 public class UserImportListener extends AnalysisEventListener<UserImportDTO> {
 
     /**
-     * excel导入结果实体
+     * Excel 导入结果
      */
     @Getter
-    private ExcelResult excelResult;
+    private final ExcelResult excelResult;
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -50,7 +50,7 @@ public class UserImportListener extends AnalysisEventListener<UserImportDTO> {
 
     private final List<Role> roleList;
     private final List<Dept> deptList;
-    private final List<DictData> genderDataList;
+    private final List<DictData> genderList;
 
     /**
      * 当前行
@@ -71,7 +71,7 @@ public class UserImportListener extends AnalysisEventListener<UserImportDTO> {
                         .select(Role::getId, Role::getCode));
         this.deptList = SpringUtil.getBean(DeptService.class)
                 .list(new LambdaQueryWrapper<Dept>().select(Dept::getId, Dept::getCode));
-        this.genderDataList = SpringUtil.getBean(DictDataService.class)
+        this.genderList = SpringUtil.getBean(DictDataService.class)
                 .list(new LambdaQueryWrapper<DictData>().eq(DictData::getDictCode, DictCodeEnum.GENDER.getValue()));
         this.excelResult = new ExcelResult();
     }
@@ -92,29 +92,29 @@ public class UserImportListener extends AnalysisEventListener<UserImportDTO> {
         String errorMsg = "第" + currentRow + "行数据校验失败：";
         String username = userImportDTO.getUsername();
         if (StrUtil.isBlank(username)) {
-            errorMsg +="用户名为空；";
+            errorMsg += "用户名为空；";
             validation = false;
         } else {
             long count = userService.count(new LambdaQueryWrapper<User>().eq(User::getUsername, username));
             if (count > 0) {
-                errorMsg +="用户名已存在；";
+                errorMsg += "用户名已存在；";
                 validation = false;
             }
         }
 
         String nickname = userImportDTO.getNickname();
         if (StrUtil.isBlank(nickname)) {
-            errorMsg +="用户昵称为空；";
+            errorMsg += "用户昵称为空；";
             validation = false;
         }
 
         String mobile = userImportDTO.getMobile();
         if (StrUtil.isBlank(mobile)) {
-            errorMsg +="手机号码为空；";
+            errorMsg += "手机号码为空；";
             validation = false;
         } else {
             if (!Validator.isMobile(mobile)) {
-                errorMsg +="手机号码不正确；";
+                errorMsg += "手机号码不正确；";
                 validation = false;
             }
         }
@@ -132,7 +132,6 @@ public class UserImportListener extends AnalysisEventListener<UserImportDTO> {
             // 部门解析
             String deptCode = userImportDTO.getDeptCode();
             entity.setDeptId(getDeptId(deptCode));
-
 
             boolean saveResult = userService.save(entity);
             if (saveResult) {
@@ -200,8 +199,12 @@ public class UserImportListener extends AnalysisEventListener<UserImportDTO> {
      */
     private Integer getGenderValue(String genderLabel) {
         if (StrUtil.isNotBlank(genderLabel)) {
-            return this.genderDataList.stream().filter(r -> r.getLabel().equals(genderLabel))
-                    .findFirst().map(DictData::getValue).map(Convert::toInt).orElse(null);
+            return this.genderList.stream()
+                    .filter(r -> r.getLabel().equals(genderLabel))
+                    .findFirst()
+                    .map(DictData::getValue)
+                    .map(Convert::toInt)
+                    .orElse(null);
         }
         return null;
     }
