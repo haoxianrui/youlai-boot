@@ -146,7 +146,7 @@ public class UserImportListener extends AnalysisEventListener<UserImportDTO> {
                 }
             } else {
                 excelResult.setInvalidCount(excelResult.getInvalidCount() + 1);
-                errorMsg += "数据保存失败；";
+                errorMsg += "第" + currentRow + "行数据保存失败；";
                 excelResult.getMessageList().add(errorMsg);
             }
         } else {
