@@ -31,52 +31,67 @@ public class RateLimiterFilter extends OncePerRequestFilter {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ConfigService configService;
 
+    private static final long DEFAULT_IP_LIMIT = 10L; // 默认 IP 限流阈值
+
     public RateLimiterFilter(RedisTemplate<String, Object> redisTemplate, ConfigService configService) {
         this.redisTemplate = redisTemplate;
         this.configService = configService;
     }
 
     /**
-     * 确认是否限流方法
-     * 默认情况下：限制同一个IP的QPS最大为10,可以通过修改系统配置进行调整
-     * 这里也可以进行扩展，比如redis记录同一个ip每天出发限流的上限次数，记录在redis中，达到某个阈值后，进行永久封禁这个ip
+     * 判断 IP 是否触发限流
+     * 默认限制同一 IP 每秒最多请求 10 次，可通过系统配置调整。
+     * 如果系统未配置限流阈值，默认跳过限流。
      *
-     * @param ip ip地址
-     * @return  是否限流
+     * @param ip IP 地址
+     * @return 是否限流：true 表示限流；false 表示未限流
      */
     public boolean rateLimit(String ip) {
+        // 限流 Redis 键
         String key = RedisConstants.IP_RATE_LIMITER_KEY + ip;
+
+        // 自增请求计数
         Long count = redisTemplate.opsForValue().increment(key);
         if (count == null || count == 1) {
-            redisTemplate.expire(key,1, TimeUnit.SECONDS);
+            // 第一次访问时设置过期时间为 1 秒
+            redisTemplate.expire(key, 1, TimeUnit.SECONDS);
         }
+
+        // 获取系统配置的限流阈值
         Object systemConfig = configService.getSystemConfig(SystemConstants.SYSTEM_CONFIG_IP_QPS_LIMIT_KEY);
-        long limit = 10;
-        if(systemConfig != null){
-            limit = Convert.toLong(systemConfig,50L);
-        }else{
-            log.warn("[RedisRateLimiterFilter.rateLimit]系统配置中未配置IP请求限制QPS阈值配置,使用默认值:{},请检查配置项:{}",
-                    limit,SystemConstants.SYSTEM_CONFIG_IP_QPS_LIMIT_KEY);
+        if (systemConfig == null) {
+            // 系统未配置限流，跳过限流逻辑
+            log.warn("系统未配置限流阈值，跳过限流");
+            return false;
         }
+
+        // 转换系统配置为限流值，默认为 10
+        long limit = Convert.toLong(systemConfig, DEFAULT_IP_LIMIT);
         return count != null && count > limit;
     }
 
     /**
-     * IP限流过滤器
-     * 默认情况下：限制同一个IP在一秒内只能访问10次，可以通过修改系统配置进行调整
+     * 执行 IP 限流逻辑
+     * 如果 IP 请求超出限制，直接返回限流响应；否则继续执行过滤器链。
      *
-     * @param request 请求体
-     * @param response 响应体
+     * @param request     请求体
+     * @param response    响应体
      * @param filterChain 过滤器链
      */
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
+        // 获取请求的 IP 地址
         String ip = IPUtils.getIpAddr(request);
+
+        // 判断是否限流
         if (rateLimit(ip)) {
+            // 返回限流错误信息
             ResponseUtils.writeErrMsg(response, ResultCode.REQUEST_CONCURRENCY_LIMIT_EXCEEDED);
             return;
         }
+
+        // 未触发限流，继续执行过滤器链
         filterChain.doFilter(request, response);
     }
 }
