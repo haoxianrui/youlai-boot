@@ -7,19 +7,22 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.context.AnalysisContext;
+import com.alibaba.excel.event.AnalysisEventListener;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.youlai.boot.common.base.BaseAnalysisEventListener;
-import com.youlai.boot.system.enums.DictCodeEnum;
-import com.youlai.boot.system.model.entity.*;
-import com.youlai.boot.common.base.IBaseEnum;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.common.enums.StatusEnum;
+import com.youlai.boot.common.result.ExcelResult;
 import com.youlai.boot.system.converter.UserConverter;
+import com.youlai.boot.system.enums.DictCodeEnum;
 import com.youlai.boot.system.model.dto.UserImportDTO;
+import com.youlai.boot.system.model.entity.*;
 import com.youlai.boot.system.service.*;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,34 +35,45 @@ import java.util.stream.Collectors;
  * @since 2022/4/10
  */
 @Slf4j
-public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO> {
+public class UserImportListener extends AnalysisEventListener<UserImportDTO> {
 
-
-    // 有效条数
-    private int validCount;
-
-    // 无效条数
-    private int invalidCount;
-
-    // 导入返回信息
-    StringBuilder msg = new StringBuilder();
+    /**
+     * excel导入结果实体
+     */
+    @Getter
+    private ExcelResult excelResult;
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final UserConverter userConverter;
-    private final RoleService roleService;
     private final UserRoleService userRoleService;
-    private final DeptService deptService;
-    private final DictDataService dictDataService;
 
+    private final List<Role> roleList;
+    private final List<Dept> deptList;
+    private final List<DictData> genderDataList;
+
+    /**
+     * 当前行
+     */
+    private Integer currentRow = 1;
+
+    /**
+     * 构造方法
+     * <p>在构造方法中给需要查询的内容查询好，尽量避免每条数据查询一次</p>
+     */
     public UserImportListener() {
         this.userService = SpringUtil.getBean(UserService.class);
         this.passwordEncoder = SpringUtil.getBean(PasswordEncoder.class);
-        this.roleService = SpringUtil.getBean(RoleService.class);
         this.userRoleService = SpringUtil.getBean(UserRoleService.class);
-        this.deptService = SpringUtil.getBean(DeptService.class);
-        this.dictDataService = SpringUtil.getBean(DictDataService.class);
         this.userConverter = SpringUtil.getBean(UserConverter.class);
+        this.roleList = SpringUtil.getBean(RoleService.class)
+                .list(new LambdaQueryWrapper<Role>().eq(Role::getStatus, StatusEnum.ENABLE.getValue())
+                        .select(Role::getId, Role::getCode));
+        this.deptList = SpringUtil.getBean(DeptService.class)
+                .list(new LambdaQueryWrapper<Dept>().select(Dept::getId, Dept::getCode));
+        this.genderDataList = SpringUtil.getBean(DictDataService.class)
+                .list(new LambdaQueryWrapper<DictData>().eq(DictData::getDictCode, DictCodeEnum.GENDER.getValue()));
+        this.excelResult = new ExcelResult();
     }
 
     /**
@@ -73,78 +87,56 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
     @Override
     public void invoke(UserImportDTO userImportDTO, AnalysisContext analysisContext) {
         log.info("解析到一条用户数据:{}", JSONUtil.toJsonStr(userImportDTO));
-        // 校验数据
-        StringBuilder validationMsg = new StringBuilder();
 
+        boolean validation = true;
+        String errorMsg = "第" + currentRow + "行数据校验失败：";
         String username = userImportDTO.getUsername();
         if (StrUtil.isBlank(username)) {
-            validationMsg.append("用户名为空；");
+            errorMsg +="用户名为空；";
+            validation = false;
         } else {
             long count = userService.count(new LambdaQueryWrapper<User>().eq(User::getUsername, username));
             if (count > 0) {
-                validationMsg.append("用户名已存在；");
+                errorMsg +="用户名已存在；";
+                validation = false;
             }
         }
 
         String nickname = userImportDTO.getNickname();
         if (StrUtil.isBlank(nickname)) {
-            validationMsg.append("用户昵称为空；");
+            errorMsg +="用户昵称为空；";
+            validation = false;
         }
 
         String mobile = userImportDTO.getMobile();
         if (StrUtil.isBlank(mobile)) {
-            validationMsg.append("手机号码为空；");
+            errorMsg +="手机号码为空；";
+            validation = false;
         } else {
             if (!Validator.isMobile(mobile)) {
-                validationMsg.append("手机号码不正确；");
+                errorMsg +="手机号码不正确；";
+                validation = false;
             }
         }
 
-        if (validationMsg.isEmpty()) {
+        if (validation) {
             // 校验通过，持久化至数据库
             User entity = userConverter.toEntity(userImportDTO);
             entity.setPassword(passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD));   // 默认密码
             // 性别逆向翻译 根据字典标签得到字典值
             String genderLabel = userImportDTO.getGenderLabel();
-            if (StrUtil.isNotBlank(genderLabel)) {
-                DictData dictData = dictDataService.getOne(new LambdaQueryWrapper<DictData>()
-                        .eq(DictData::getDictCode, DictCodeEnum.GENDER.getValue())
-                        .eq(DictData::getLabel, genderLabel)
-                        .last("limit 1")
-                );
-                if (dictData != null) {
-                    Integer genderValue = Convert.toInt(dictData.getValue(),0);
-                    entity.setGender(genderValue);
-                }
-            }
+            entity.setGender(getGenderValue(genderLabel));
             // 角色解析
             String roleCodes = userImportDTO.getRoleCodes();
-            List<Long> roleIds = null;
-            if (StrUtil.isNotBlank(roleCodes)) {
-                roleIds = roleService.list(
-                                new LambdaQueryWrapper<Role>()
-                                        .in(Role::getCode, (Object) roleCodes.split(","))
-                                        .eq(Role::getStatus, StatusEnum.ENABLE.getValue())
-                                        .select(Role::getId)
-                        ).stream()
-                        .map(Role::getId)
-                        .collect(Collectors.toList());
-            }
+            List<Long> roleIds = getRoleIds(roleCodes);
             // 部门解析
             String deptCode = userImportDTO.getDeptCode();
-            if (StrUtil.isNotBlank(deptCode)) {
-                Dept dept = deptService.getOne(new LambdaQueryWrapper<Dept>().eq(Dept::getCode, deptCode)
-                        .select(Dept::getId)
-                );
-                if (dept != null) {
-                    entity.setDeptId(dept.getId());
-                }
-            }
+            entity.setDeptId(getDeptId(deptCode));
 
 
             boolean saveResult = userService.save(entity);
             if (saveResult) {
-                validCount++;
+                excelResult.setValidCount(excelResult.getValidCount() + 1);
                 // 保存用户角色关联
                 if (CollectionUtil.isNotEmpty(roleIds)) {
                     List<UserRole> userRoles = roleIds.stream()
@@ -153,15 +145,66 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
                     userRoleService.saveBatch(userRoles);
                 }
             } else {
-                invalidCount++;
-                msg.append("第").append(validCount + invalidCount).append("行数据保存失败；<br/>");
+                excelResult.setInvalidCount(excelResult.getInvalidCount() + 1);
+                errorMsg += "数据保存失败；";
+                excelResult.getMessageList().add(errorMsg);
             }
         } else {
-            invalidCount++;
-            msg.append("第").append(validCount + invalidCount).append("行数据校验失败：").append(validationMsg).append("<br/>");
+            excelResult.setInvalidCount(excelResult.getInvalidCount() + 1);
+            excelResult.getMessageList().add(errorMsg);
         }
+        currentRow++;
     }
 
+
+    /**
+     * 根据角色编码获取角色ID
+     *
+     * @param roleCodes 角色编码 逗号分隔
+     * @return 角色ID集合
+     */
+    private List<Long> getRoleIds(String roleCodes) {
+        if (StrUtil.isNotBlank(roleCodes)) {
+            String[] split = roleCodes.split(",");
+            if (split.length > 0) {
+                List<Long> roleIds = new ArrayList<>();
+                for (String roleCode : split) {
+                    this.roleList.stream().filter(r -> r.getCode().equals(roleCode))
+                            .findFirst().ifPresent(role -> roleIds.add(role.getId()));
+                }
+                return roleIds.stream().distinct().toList();
+            }
+        }
+        return Collections.emptyList();
+    }
+
+    /**
+     * 根据部门编码获取部门ID
+     *
+     * @param deptCode 部门编码
+     * @return 部门ID
+     */
+    private Long getDeptId(String deptCode) {
+        if (StrUtil.isNotBlank(deptCode)) {
+            return this.deptList.stream().filter(r -> r.getCode().equals(deptCode))
+                    .findFirst().map(Dept::getId).orElse(null);
+        }
+        return null;
+    }
+
+    /**
+     * 根据性别标签获取性别值
+     *
+     * @param genderLabel 性别标签
+     * @return 性别值
+     */
+    private Integer getGenderValue(String genderLabel) {
+        if (StrUtil.isNotBlank(genderLabel)) {
+            return this.genderDataList.stream().filter(r -> r.getLabel().equals(genderLabel))
+                    .findFirst().map(DictData::getValue).map(Convert::toInt).orElse(null);
+        }
+        return null;
+    }
 
     /**
      * 所有数据解析完成会来调用
@@ -171,10 +214,4 @@ public class UserImportListener extends BaseAnalysisEventListener<UserImportDTO>
         log.info("所有数据解析完成！");
     }
 
-
-    @Override
-    public String getMsg() {
-        // 总结信息
-        return StrUtil.format("导入用户结束：成功{}条，失败{}条；<br/>{}", validCount, invalidCount, msg);
-    }
 }

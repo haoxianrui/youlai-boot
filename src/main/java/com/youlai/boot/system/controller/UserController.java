@@ -8,6 +8,7 @@ import com.youlai.boot.common.annotation.Log;
 import com.youlai.boot.common.annotation.RepeatSubmit;
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.model.Option;
+import com.youlai.boot.common.result.ExcelResult;
 import com.youlai.boot.common.result.PageResult;
 import com.youlai.boot.common.result.Result;
 import com.youlai.boot.common.util.ExcelUtils;
@@ -152,10 +153,10 @@ public class UserController {
     @Operation(summary = "导入用户")
     @PostMapping("/import")
     @Log(value = "导入用户", module = LogModuleEnum.USER)
-    public Result<String> importUsers(MultipartFile file) throws IOException {
+    public Result<ExcelResult> importUsers(MultipartFile file) throws IOException {
         UserImportListener listener = new UserImportListener();
-        String msg = ExcelUtils.importExcel(file.getInputStream(), UserImportDTO.class, listener);
-        return Result.success(msg);
+        ExcelUtils.importExcel(file.getInputStream(), UserImportDTO.class, listener);
+        return Result.success(listener.getExcelResult());
     }
 
     @Operation(summary = "导出用户")
