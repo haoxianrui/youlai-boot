@@ -152,9 +152,10 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         List<Menu> menuList;
         if (SecurityUtils.isRoot()) {
             // 超级管理员获取所有菜单
-            menuList = this.list(new LambdaQueryWrapper<Menu>().ne(
-                    Menu::getType, MenuTypeEnum.BUTTON.getValue()
-            ));
+            menuList = this.list(new LambdaQueryWrapper<Menu>()
+                    .ne(Menu::getType, MenuTypeEnum.BUTTON.getValue())
+                    .orderByAsc(Menu::getSort)
+            );
         } else {
             menuList = this.baseMapper.getMenusByRoleCodes(roleCodes);
         }
