@@ -184,11 +184,7 @@
             u.nickname,
             u.mobile,
             u.email,
-            CASE u.gender
-                WHEN 1 THEN '男'
-                WHEN 2 THEN '女'
-                ELSE '保密'
-            END gender,
+            u.gender,
             d.NAME AS dept_name,
             u.create_time
         FROM
