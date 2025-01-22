@@ -14,6 +14,7 @@
             u.gender,
             u.avatar,
             u.STATUS,
+            u.email,
             d.NAME AS dept_name,
             GROUP_CONCAT( r.NAME ) AS roleNames,
             u.create_time
@@ -182,6 +183,7 @@
             u.username,
             u.nickname,
             u.mobile,
+            u.email,
             CASE u.gender
                 WHEN 1 THEN '男'
                 WHEN 2 THEN '女'
@@ -219,6 +221,7 @@
             u.gender,
             u.avatar,
             u.STATUS,
+            u.email,
             d.NAME AS deptName,
             GROUP_CONCAT(r.NAME) AS roleNames,
             u.create_time
