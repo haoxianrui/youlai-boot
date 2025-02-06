@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 访问趋势VO
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2.3.0
  */
 @Schema(description = "访问趋势VO")
@@ -23,9 +23,6 @@ public class VisitTrendVO {
 
     @Schema(description = "浏览量(PV)")
     private List<Integer> pvList;
-
-    @Schema(description = "访客数(UV)")
-    private List<Integer> uvList;
 
     @Schema(description = "IP数")
     private List<Integer> ipList;
