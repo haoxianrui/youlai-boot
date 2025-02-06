@@ -351,7 +351,7 @@ INSERT INTO `sys_role_menu` VALUES (2, 143);
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user`  (
-                             `id` int NOT NULL AUTO_INCREMENT,
+                             `id` bigint NOT NULL AUTO_INCREMENT,
                              `username` varchar(64)  DEFAULT NULL COMMENT '用户名',
                              `nickname` varchar(64)  DEFAULT NULL COMMENT '昵称',
                              `gender` tinyint(1) NULL DEFAULT 1 COMMENT '性别((1-男 2-女 0-保密)',
