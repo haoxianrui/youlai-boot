@@ -3,6 +3,13 @@ package com.youlai.boot.shared.file.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+
+/**
+ * 文件信息对象
+ *
+ * @author Ray.Hao
+ * @since 1.0.0
+ */
 @Schema(description = "文件对象")
 @Data
 public class FileInfo {

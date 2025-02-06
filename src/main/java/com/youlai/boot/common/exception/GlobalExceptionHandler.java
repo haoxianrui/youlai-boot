@@ -30,7 +30,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-
 /**
  * 全局系统异常处理器
  * <p>
@@ -219,9 +218,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public <T> Result<T> handleBizException(BusinessException e) {
-        log.error("biz exception: {}", e.getMessage());
+        log.error("biz exception", e);
         if (e.getResultCode() != null) {
-            return Result.failed(e.getResultCode());
+            return Result.failed(e.getResultCode(), e.getMessage());
         }
         return Result.failed(e.getMessage());
     }
@@ -239,8 +238,7 @@ public class GlobalExceptionHandler {
                 || e instanceof AuthenticationException) {
             throw e;
         }
-        log.error("unknown exception: {}", e.getMessage());
-        e.printStackTrace();
+        log.error("unknown exception", e);
         return Result.failed(e.getLocalizedMessage());
     }
 
