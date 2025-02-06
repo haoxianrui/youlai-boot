@@ -1,9 +1,8 @@
 package com.youlai.boot.system.model.bo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 用户持久化对象
@@ -67,6 +66,5 @@ public class UserBO {
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date createTime;
+    private LocalDateTime createTime;
 }

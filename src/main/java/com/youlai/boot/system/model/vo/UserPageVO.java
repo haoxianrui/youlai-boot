@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 用户分页视图对象
@@ -48,6 +48,6 @@ public class UserPageVO {
 
     @Schema(description="创建时间")
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm")
-    private Date createTime;
+    private LocalDateTime createTime;
 
 }
