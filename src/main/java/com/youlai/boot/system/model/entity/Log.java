@@ -2,7 +2,6 @@ package com.youlai.boot.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.youlai.boot.common.enums.LogModuleEnum;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -86,6 +85,11 @@ public class Log implements Serializable {
      * 终端系统
      */
     private String os;
+
+    /**
+     * 原生的用户代理字符串
+     */
+    private String userAgent;
 
     /**
      * 执行时间(毫秒)

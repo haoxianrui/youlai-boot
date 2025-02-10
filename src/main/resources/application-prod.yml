@@ -48,7 +48,8 @@ spring:
             enable: true
     # 邮件发送者
     from: youlaitech@163.com
-
+    caffeine:
+      spec: initialCapacity=50,maximumSize=500,expireAfterWrite=3600s
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
   global-config:

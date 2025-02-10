@@ -57,6 +57,7 @@
 
         <!-- 微信 jdk -->
         <weixin-java.version>4.5.5.B</weixin-java.version>
+        <caffeine.version>2.9.3</caffeine.version>
     </properties>
 
     <dependencies>
@@ -230,6 +231,12 @@
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-miniapp</artifactId>
             <version>${weixin-java.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
         </dependency>
 
     </dependencies>
