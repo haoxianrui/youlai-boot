@@ -451,9 +451,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String redisCacheKey = RedisConstants.SMS_CHANGE_CODE_PREFIX + mobile;
         String cachedVerifyCode = redisTemplate.opsForValue().get(redisCacheKey);
 
+        if (StrUtil.isBlank(cachedVerifyCode)) {
+            throw new BusinessException("验证码已过期");
+        }
         if (!inputVerifyCode.equals(cachedVerifyCode)) {
             throw new BusinessException("验证码错误");
         }
+        // 验证完成删除验证码
+        redisTemplate.delete(redisCacheKey);
 
         // 更新手机号码
         return this.update(
@@ -505,9 +510,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String redisCacheKey = RedisConstants.EMAIL_CHANGE_CODE_PREFIX + email;
         String cachedVerifyCode = redisTemplate.opsForValue().get(redisCacheKey);
 
+        if (StrUtil.isBlank(cachedVerifyCode)) {
+            throw new BusinessException("验证码已过期");
+        }
+
         if (!inputVerifyCode.equals(cachedVerifyCode)) {
             throw new BusinessException("验证码错误");
         }
+        // 验证完成删除验证码
+        redisTemplate.delete(redisCacheKey);
 
         // 更新邮箱地址
         return this.update(
