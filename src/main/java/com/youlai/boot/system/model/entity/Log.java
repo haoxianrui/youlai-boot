@@ -87,11 +87,6 @@ public class Log implements Serializable {
     private String os;
 
     /**
-     * 原生的用户代理字符串
-     */
-    private String userAgent;
-
-    /**
      * 执行时间(毫秒)
      */
     private Long executionTime;

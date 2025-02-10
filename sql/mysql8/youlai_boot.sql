@@ -416,7 +416,6 @@ CREATE TABLE `sys_log` (
                            `browser` varchar(100)  DEFAULT NULL COMMENT '浏览器',
                            `browser_version` varchar(100)  DEFAULT NULL COMMENT '浏览器版本',
                            `os` varchar(100)  DEFAULT NULL COMMENT '终端系统',
-                           `user_agent` varchar(255)  DEFAULT NULL COMMENT '原生的用户代理字符串',
                            `create_by` bigint DEFAULT NULL COMMENT '创建人ID',
                            `create_time` datetime DEFAULT NULL COMMENT '创建时间',
                            `is_deleted` tinyint NOT NULL DEFAULT '0' COMMENT '逻辑删除标识(1-已删除 0-未删除)',

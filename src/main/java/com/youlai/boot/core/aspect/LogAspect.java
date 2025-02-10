@@ -132,7 +132,6 @@ public class LogAspect {
         log.setExecutionTime(executionTime);
         // 获取浏览器和终端系统信息
         String userAgentString = request.getHeader("User-Agent");
-        log.setUserAgent(userAgentString);
         UserAgent userAgent = resolveUserAgent(userAgentString);
         if (Objects.nonNull(userAgent)) {
             // 系统信息
