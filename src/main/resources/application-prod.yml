@@ -34,6 +34,8 @@ spring:
       time-to-live: 3600000
       # 缓存null值，防止缓存穿透
       cache-null-values: true
+    caffeine:
+      spec: initialCapacity=50,maximumSize=1000,expireAfterWrite=600s
   # 邮件配置
   mail:
     host: smtp.youlai.tech
@@ -48,8 +50,6 @@ spring:
             enable: true
     # 邮件发送者
     from: youlaitech@163.com
-    caffeine:
-      spec: initialCapacity=50,maximumSize=500,expireAfterWrite=3600s
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
   global-config:
