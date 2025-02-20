@@ -20,7 +20,7 @@
 ![](https://raw.gitmirror.com/youlaitech/image/main/docs/rainbow.png)
 
 <div align="center">
-  <a target="_blank" href="https://admin.youlai.tech/">🔍 在线预览</a> |  <a target="_blank" href="https://youlai.blog.csdn.net/article/details/145178880">📖 阅读文档</a> 
+  <a target="_blank" href="https://vue.youlai.tech/">🖥️ 在线预览</a> |  <a target="_blank" href="https://youlai.blog.csdn.net/article/details/145178880">📑 阅读文档</a> 
 </div>
 
 ## 📢 项目简介
