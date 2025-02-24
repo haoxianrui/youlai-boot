@@ -54,7 +54,7 @@
 
 2. **数据库初始化**
 
-   执行 [youlai_boot.sql](sql/mysql8/youlai_boot.sql) 脚本完成数据库创建、表结构和基础数据的初始化。
+   执行 [youlai_boot.sql](sql/mysql/youlai_boot.sql) 脚本完成数据库创建、表结构和基础数据的初始化。
 
 3. **修改配置**
 
