@@ -71,8 +71,7 @@
 ```
 youlai-boot
 ├── sql                                 # SQL脚本
-│   ├── mysql5                          # MySQL5 脚本
-│   └── mysql8                          # MySQL8 脚本
+│   ├── mysql                           # MySQL 脚本
 ├── src                                 # 源码目录
 │   ├── common                          # 公共模块
 │   │   ├── annotation                  # 注解定义
