@@ -1,6 +1,5 @@
 package com.youlai.boot.system.controller;
 
-import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -64,7 +63,6 @@ public class UserController {
             @Valid UserPageQuery queryParams
     ) {
         IPage<UserPageVO> result = userService.getUserPage(queryParams);
-
         return PageResult.success(result);
     }
 
