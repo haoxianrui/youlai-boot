@@ -43,7 +43,7 @@ services:
     command: server /data --console-address ":9090"
     ports:
       - 9000:9000
-      - 9090:9090
+      - 9001:9001
     environment:
       - TZ=Asia/Shanghai
       - LANG=en_US.UTF-8
