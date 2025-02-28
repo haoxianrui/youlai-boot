@@ -241,13 +241,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
         MenuTypeEnum menuType = menuForm.getType();
 
-        if (menuType == MenuTypeEnum.CATALOG) {  // 如果是外链
+        if (menuType == MenuTypeEnum.CATALOG) {  // 如果是目录
             String path = menuForm.getRoutePath();
             if (menuForm.getParentId() == 0 && !path.startsWith("/")) {
                 menuForm.setRoutePath("/" + path); // 一级目录需以 / 开头
             }
             menuForm.setComponent("Layout");
-        } else if (menuType == MenuTypeEnum.EXTLINK) {   // 如果是目录
+        } else if (menuType == MenuTypeEnum.EXTLINK) {   // 如果是外链
 
             menuForm.setComponent(null);
         }
