@@ -50,11 +50,8 @@ import java.util.stream.Collectors;
 public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> implements NoticeService {
 
     private final NoticeConverter noticeConverter;
-
     private final UserNoticeService userNoticeService;
-
     private final UserService userService;
-
     private final SimpMessagingTemplate messagingTemplate;
     private final OnlineUserService onlineUserService;
 
@@ -266,10 +263,9 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
     }
 
     /**
-     * 阅读获取通知公告详情
      *
      * @param id 通知公告ID
-     * @return
+     * @return NoticeDetailVO 通知公告详情
      */
     @Override
     public NoticeDetailVO getNoticeDetail(Long id) {

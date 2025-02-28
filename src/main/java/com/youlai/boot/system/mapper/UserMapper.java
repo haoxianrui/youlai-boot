@@ -25,11 +25,11 @@ public interface UserMapper extends BaseMapper<User> {
     /**
      * 获取用户分页列表
      *
-     * @param page       分页参数
+     * @param page        分页参数
      * @param queryParams 查询参数
      * @return 用户分页列表
      */
-    @DataPermission(deptAlias = "u")
+    @DataPermission(deptAlias = "u", userAlias = "u")
     Page<UserBO> getUserPage(Page<UserBO> page, UserPageQuery queryParams);
 
     /**
@@ -70,7 +70,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param queryParams 查询参数
      * @return 导出用户列表
      */
-    @DataPermission(deptAlias = "u")
+    @DataPermission(deptAlias = "u", userAlias = "u")
     List<UserExportDTO> listExportUsers(UserPageQuery queryParams);
 
     /**

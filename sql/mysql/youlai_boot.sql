@@ -6,7 +6,7 @@
 -- ----------------------------
 -- 1. 创建数据库
 -- ----------------------------
-CREATE DATABASE IF NOT EXISTS youlai_boot DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS youlai_boot CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
 
 -- ----------------------------
@@ -14,11 +14,8 @@ CREATE DATABASE IF NOT EXISTS youlai_boot DEFAULT CHARACTER SET utf8mb4 DEFAULT 
 -- ----------------------------
 use youlai_boot;
 
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
-  -- 开启事务
-START TRANSACTION;
+SET NAMES utf8mb4;  # 设置字符集
+SET FOREIGN_KEY_CHECKS = 0; # 关闭外键检查，加快导入速度
 
 -- ----------------------------
 -- Table structure for sys_dept
@@ -39,7 +36,7 @@ CREATE TABLE `sys_dept`  (
                              `is_deleted` tinyint DEFAULT 0 COMMENT '逻辑删除标识(1-已删除 0-未删除)',
                              PRIMARY KEY (`id`) USING BTREE,
                              UNIQUE INDEX `uk_code`(`code` ASC) USING BTREE COMMENT '部门编号唯一索引'
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '部门表';
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '部门表';
 
 -- ----------------------------
 -- Records of sys_dept
@@ -65,7 +62,7 @@ CREATE TABLE `sys_dict` (
                             `is_deleted` tinyint DEFAULT '0' COMMENT '是否删除(1-删除，0-未删除)',
                             PRIMARY KEY (`id`) USING BTREE,
                             KEY `idx_dict_code` (`dict_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='字典表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字典表';
 -- ----------------------------
 -- Records of sys_dict
 -- ----------------------------
@@ -92,7 +89,7 @@ CREATE TABLE `sys_dict_data` (
                                  `update_time` datetime COMMENT '更新时间',
                                  `update_by` bigint COMMENT '修改人ID',
                                  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='字典数据表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字典数据表';
 
 -- ----------------------------
 -- Records of sys_dict_data
@@ -132,9 +129,9 @@ CREATE TABLE `sys_menu`  (
                              `redirect` varchar(128) COMMENT '跳转路径',
                              `create_time` datetime NULL COMMENT '创建时间',
                              `update_time` datetime NULL COMMENT '更新时间',
-                             `params` json NULL COMMENT '路由参数',
+                             `params` varchar(255) NULL COMMENT '路由参数',
                              PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单管理';
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '菜单管理';
 
 -- ----------------------------
 -- Records of sys_menu
@@ -233,7 +230,7 @@ CREATE TABLE `sys_role`  (
                              PRIMARY KEY (`id`) USING BTREE,
                              UNIQUE INDEX `uk_name`(`name` ASC) USING BTREE COMMENT '角色名称唯一索引',
                              UNIQUE INDEX `uk_code`(`code` ASC) USING BTREE COMMENT '角色编码唯一索引'
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色表';
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '角色表';
 
 -- ----------------------------
 -- Records of sys_role
@@ -259,7 +256,7 @@ CREATE TABLE `sys_role_menu`  (
                                   `role_id` bigint NOT NULL COMMENT '角色ID',
                                   `menu_id` bigint NOT NULL COMMENT '菜单ID',
                                   UNIQUE INDEX `uk_roleid_menuid`(`role_id` ASC, `menu_id` ASC) USING BTREE COMMENT '角色菜单唯一索引'
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '角色和菜单关联表';
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '角色和菜单关联表';
 
 -- ----------------------------
 -- Records of sys_role_menu
@@ -370,7 +367,7 @@ CREATE TABLE `sys_user`  (
                              `openid` char(28) COMMENT '微信 openid',
                              PRIMARY KEY (`id`) USING BTREE,
                              UNIQUE INDEX `login_name`(`username` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户信息表';
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '用户信息表';
 
 -- ----------------------------
 -- Records of sys_user
@@ -387,7 +384,7 @@ CREATE TABLE `sys_user_role`  (
                                   `user_id` bigint NOT NULL COMMENT '用户ID',
                                   `role_id` bigint NOT NULL COMMENT '角色ID',
                                   PRIMARY KEY (`user_id`, `role_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户和角色关联表';
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '用户和角色关联表';
 
 -- ----------------------------
 -- Records of sys_user_role
@@ -403,14 +400,14 @@ INSERT INTO `sys_user_role` VALUES (3, 3);
 DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log` (
                            `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-                           `module` varchar(50) CHARACTER SET utf8mb4 NOT NULL COMMENT '日志模块',
+                           `module` varchar(50) NOT NULL COMMENT '日志模块',
                            `request_method` varchar(64) NOT NULL COMMENT '请求方式',
                            `request_params` text COMMENT '请求参数(批量请求参数可能会超过text)',
                            `response_content` mediumtext COMMENT '返回参数',
-                           `content` varchar(255) CHARACTER SET utf8mb4 NOT NULL COMMENT '日志内容',
+                           `content` varchar(255) NOT NULL COMMENT '日志内容',
                            `request_uri` varchar(255) COMMENT '请求路径',
-                           `method` varchar(255) CHARACTER SET utf8mb4 COMMENT '方法名',
-                           `ip` varchar(45) CHARACTER SET utf8mb4 COMMENT 'IP地址',
+                           `method` varchar(255) COMMENT '方法名',
+                           `ip` varchar(45) COMMENT 'IP地址',
                            `province` varchar(100) COMMENT '省份',
                            `city` varchar(100) COMMENT '城市',
                            `execution_time` bigint COMMENT '执行时间(ms)',
@@ -422,7 +419,7 @@ CREATE TABLE `sys_log` (
                            `is_deleted` tinyint DEFAULT '0' COMMENT '逻辑删除标识(1-已删除 0-未删除)',
                            PRIMARY KEY (`id`) USING BTREE,
                            KEY `idx_create_time` (`create_time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统日志表';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COMMENT='系统日志表';
 
 -- ----------------------------
 -- Table structure for gen_config
@@ -442,7 +439,7 @@ CREATE TABLE `gen_config` (
                               `is_deleted` bit(1) DEFAULT b'0' COMMENT '是否删除',
                               PRIMARY KEY (`id`),
                               UNIQUE KEY `uk_tablename` (`table_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='代码生成基础配置表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='代码生成基础配置表';
 
 -- ----------------------------
 -- Table structure for gen_field_config
@@ -470,7 +467,7 @@ CREATE TABLE `gen_field_config` (
                                     `update_time` datetime COMMENT '更新时间',
                                     PRIMARY KEY (`id`),
                                     KEY `config_id` (`config_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='代码生成字段配置表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='代码生成字段配置表';
 
 -- ----------------------------
 -- 系统配置表
@@ -514,7 +511,7 @@ CREATE TABLE `sys_notice` (
                               `update_time` datetime COMMENT '更新时间',
                               `is_deleted` tinyint(1) DEFAULT '0' COMMENT '是否删除（0: 未删除, 1: 已删除）',
                               PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='通知公告表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='通知公告表';
 
 INSERT INTO `sys_notice`  VALUES (1, 'v2.12.0 新增系统日志，访问趋势统计功能。', '<p>1. 消息通知</p><p>2. 字典重构</p><p>3. 代码生成</p>', 1, 'L', 1, '2', 1, 1, now(), now(), 2, now(), 1, now(), 0);
 INSERT INTO `sys_notice`  VALUES (2, 'v2.13.0 新增菜单搜索。', '<p>1. 消息通知</p><p>2. 字典重构</p><p>3. 代码生成</p>', 1, 'L', 1, '2', 1, 1, now(), now(), 2, now(), 1, now(), 0);
@@ -541,7 +538,7 @@ CREATE TABLE `sys_user_notice` (
                                    `update_time` datetime COMMENT '更新时间',
                                    `is_deleted` tinyint DEFAULT '0' COMMENT '逻辑删除(0: 未删除, 1: 已删除)',
                                    PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户通知公告表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户通知公告表';
 
 INSERT INTO `sys_user_notice` VALUES (1, 1, 2, 1, NULL, now(), now(), 0);
 INSERT INTO `sys_user_notice` VALUES (2, 2, 2, 1, NULL, now(), now(), 0);
@@ -554,7 +551,4 @@ INSERT INTO `sys_user_notice` VALUES (8, 8, 2, 1, NULL, now(), now(), 0);
 INSERT INTO `sys_user_notice` VALUES (9, 9, 2, 1, NULL, now(), now(), 0);
 INSERT INTO `sys_user_notice` VALUES (10, 10, 2, 1, NULL, now(), now(), 0);
 
-SET FOREIGN_KEY_CHECKS = 1;
-
- -- 提交事务
-COMMIT;
+SET FOREIGN_KEY_CHECKS = 1; 
