@@ -188,7 +188,7 @@ public class JwtTokenManager implements TokenManager {
      *
      * @param authentication 认证信息
      * @param ttl           过期时间
-     * @return
+     * @return JWT Token
      */
     private String generateToken(Authentication authentication, int ttl) {
 
