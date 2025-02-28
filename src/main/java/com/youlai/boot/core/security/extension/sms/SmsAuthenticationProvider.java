@@ -3,13 +3,13 @@ package com.youlai.boot.core.security.extension.sms;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.common.constant.RedisConstants;
+import com.youlai.boot.core.security.exception.CaptchaValidationException;
 import com.youlai.boot.core.security.model.SysUserDetails;
 import com.youlai.boot.system.model.dto.UserAuthInfo;
 import com.youlai.boot.system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -64,7 +64,7 @@ public class SmsAuthenticationProvider implements AuthenticationProvider {
         String cachedVerifyCode = (String) redisTemplate.opsForValue().get(RedisConstants.SMS_LOGIN_CODE_PREFIX + mobile);
 
         if (!StrUtil.equals(inputVerifyCode, cachedVerifyCode)) {
-            throw new BadCredentialsException("验证码错误");
+            throw new CaptchaValidationException("验证码错误");
         } else {
             // 验证成功后删除验证码
             redisTemplate.delete(RedisConstants.SMS_LOGIN_CODE_PREFIX + mobile);

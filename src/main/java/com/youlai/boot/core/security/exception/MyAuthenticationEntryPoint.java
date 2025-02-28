@@ -32,7 +32,7 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         if (authException instanceof BadCredentialsException) {
             // 用户名或密码错误
-            ResponseUtils.writeErrMsg(response, ResultCode.USER_PASSWORD_ERROR, authException.getMessage());
+            ResponseUtils.writeErrMsg(response, ResultCode.USER_PASSWORD_ERROR);
         } else if(authException instanceof InsufficientAuthenticationException){
             // 请求头缺失Authorization、Token格式错误、Token过期、签名验证失败
             ResponseUtils.writeErrMsg(response, ResultCode.ACCESS_TOKEN_INVALID);
