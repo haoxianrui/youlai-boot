@@ -67,7 +67,7 @@ public enum ResultCode implements IResultCode, Serializable {
     REFRESH_TOKEN_INVALID("A0231", "刷新令牌无效或已过期"),
 
     // 验证码错误
-    USER_VERIFICATION_CODE_ERROR("A0240", "用户验证码错误"),
+    USER_VERIFICATION_CODE_ERROR("A0240", "验证码错误"),
     USER_VERIFICATION_CODE_ATTEMPT_LIMIT_EXCEEDED("A0241", "用户验证码尝试次数超限"),
     USER_VERIFICATION_CODE_EXPIRED("A0242", "用户验证码过期"),
 
