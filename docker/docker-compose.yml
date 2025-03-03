@@ -40,7 +40,7 @@ services:
     image: minio/minio:latest
     container_name: minio
     restart: unless-stopped
-    command: server /data --console-address ":9090"
+    command: server /data --console-address ":9001"
     ports:
       - 9000:9000
       - 9001:9001
