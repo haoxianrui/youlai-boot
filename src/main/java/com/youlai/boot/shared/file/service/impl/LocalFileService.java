@@ -44,11 +44,14 @@ public class LocalFileService implements FileService {
      */
     @Override
     public FileInfo uploadFile(MultipartFile file) {
+        // 获取文件名
+        String originalFilename = file.getOriginalFilename();
+        // 获取文件后缀
+        String suffix = FileUtil.getSuffix(originalFilename);
+        // 生成uuid
+        String fileName = IdUtil.simpleUUID()+ "." + suffix;;
         // 生成文件名(日期文件夹)
-        String suffix = FileUtil.getSuffix(file.getOriginalFilename());
-        String uuid = IdUtil.simpleUUID();
         String folder = DateUtil.format(LocalDateTime.now(), DatePattern.PURE_DATE_PATTERN);
-        String fileName = uuid + "." + suffix;
         String filePrefix = storagePath.endsWith(File.separator) ? storagePath : storagePath + File.separator;
         //  try-with-resource 语法糖自动释放流
         try (InputStream inputStream = file.getInputStream()) {
@@ -61,7 +64,7 @@ public class LocalFileService implements FileService {
         // 获取文件访问路径，因为这里是本地存储，所以直接返回文件的相对路径，需要前端自行处理访问前缀
         String fileUrl = File.separator + folder + File.separator + fileName;
         FileInfo fileInfo = new FileInfo();
-        fileInfo.setName(fileName);
+        fileInfo.setName(originalFilename);
         fileInfo.setUrl(fileUrl);
         return fileInfo;
     }

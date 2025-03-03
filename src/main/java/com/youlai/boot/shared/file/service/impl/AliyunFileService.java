@@ -62,8 +62,10 @@ public class AliyunFileService implements FileService {
     @SneakyThrows
     public FileInfo uploadFile(MultipartFile file) {
 
+        // 获取文件名称
+        String originalFilename = file.getOriginalFilename();
         // 生成文件名(日期文件夹)
-        String suffix = FileUtil.getSuffix(file.getOriginalFilename());
+        String suffix = FileUtil.getSuffix(originalFilename);
         String uuid = IdUtil.simpleUUID();
         String fileName = DateUtil.format(LocalDateTime.now(), "yyyyMMdd") + "/" + uuid + "." + suffix;
         //  try-with-resource 语法糖自动释放流
@@ -82,7 +84,7 @@ public class AliyunFileService implements FileService {
         // 获取文件访问路径
         String fileUrl = "https://" + bucketName + "." + endpoint + "/" + fileName;
         FileInfo fileInfo = new FileInfo();
-        fileInfo.setName(fileName);
+        fileInfo.setName(originalFilename);
         fileInfo.setUrl(fileUrl);
         return fileInfo;
     }
