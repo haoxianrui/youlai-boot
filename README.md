@@ -20,12 +20,10 @@
 ![](https://raw.gitmirror.com/youlaitech/image/main/docs/rainbow.png)
 
 <div align="center">
-  <a target="_blank" href="https://admin.youlai.tech/">🔍 在线预览</a> |  <a target="_blank" href="https://doc.youlai.tech/%E5%89%8D%E5%90%8E%E7%AB%AF%E6%A8%A1%E6%9D%BF/%E5%90%8E%E7%AB%AF%E6%89%8B%E5%86%8C/%E9%A1%B9%E7%9B%AE%E7%AE%80%E4%BB%8B.html">📖 阅读文档</a> | <a href="./README.en-US.md">🌐English</a>
+  <a target="_blank" href="https://vue.youlai.tech/">🖥️ 在线预览</a> |  <a target="_blank" href="https://youlai.blog.csdn.net/article/details/145178880">📑 阅读文档</a> 
 </div>
 
 ## 📢 项目简介
-
-**在线预览**: [https://vue3.youlai.tech](https://vue3.youlai.tech)
 
 基于 JDK 17、Spring Boot 3、Spring Security 6、JWT、Redis、Mybatis-Plus、Knife4j、Vue 3、Element-Plus 构建的前后端分离单体权限管理系统。
 
@@ -37,16 +35,46 @@
 
 - **🛠️ 功能模块**: 包括用户管理、角色管理、菜单管理、部门管理、字典管理等多个功能。
 
-- **📘 接口文档**: 自动生成接口文档，支持在线调试，提高开发效率。
+
+## 🌈 项目地址
+
+- **在线预览**：[https://vue.youlai.tech](https://vue.youlai.tech)
+- **前端项目**：[vue3-element-admin](https://gitee.com/youlaiorg/vue3-element-admin)
+- **接口文档**：[https://www.apifox.cn/apidoc](https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5)
+- **项目文档**：[youlai-boot 企业级权限管理系统全功能详解](https://youlai.blog.csdn.net/article/details/145178880)
+- **从0到1文档**：[从0到1搭建 youlai-boot 企业级权限管理系统](https://youlai.blog.csdn.net/article/details/145177011)
+
+## 🚀 项目启动
+
+1. **克隆项目**
+
+   ```bash
+   git clone https://gitee.com/youlaiorg/youlai-boot.git
+   ```
+
+2. **数据库初始化**
+
+   执行 [youlai_boot.sql](sql/mysql/youlai_boot.sql) 脚本完成数据库创建、表结构和基础数据的初始化。
+
+3. **修改配置**
+
+   [application-dev.yml](src/main/resources/application-dev.yml) 修改MySQL、Redis连接配置；
+
+4. **启动项目**
+
+   执行 [YoulaiBootApplication.java](src/main/java/com/youlai/boot/YoulaiBootApplication.java) 的 main 方法完成后端项目启动；
+
+   访问接口文档地址 [http://localhost:8989/doc.html](http://localhost:8989/doc.html) 验证项目启动是否成功。
+
 
 ## 📁 项目目录
 ```
 youlai-boot
 ├── sql                                 # SQL脚本
-│   ├── mysql5                          # MySQL5 脚本
-│   └── mysql8                          # MySQL8 脚本
+│   ├── mysql                           # MySQL 脚本
 ├── src                                 # 源码目录
 │   ├── common                          # 公共模块
+│   │   ├── annotation                  # 注解定义
 │   │   ├── base                        # 基础类
 │   │   ├── constant                    # 常量
 │   │   ├── enums                       # 枚举类型
@@ -71,7 +99,7 @@ youlai-boot
 │   │   ├── WebSocketConfig             # WebSocket 自动装配配置
 │   │   └── XxlJobConfig                # XXL-JOB 自动装配配置
 │   ├── core                            # 核心功能
-│   │   ├── annotation                  # 注解定义
+
 │   │   ├── aspect                      # 切面
 │   │   │   ├── LogAspect               # 日志切面
 │   │   │   └── RepeatSubmitAspect      # 防重提交切面
@@ -81,7 +109,7 @@ youlai-boot
 │   │   ├── handler                     # 处理器
 │   │   │   ├── MyDataPermissionHandler # 数据权限处理器
 │   │   │   └── MyMetaObjectHandler     # 元对象字段填充处理器
-│   │   └── security                    # Security 安全中心
+│   │   └── security                    # Spring Security 安全模块
 │   ├── modules                         # 业务模块
 │   │   ├── member                      # 会员模块【业务模块演示】
 │   │   ├── order                       # 订单模块【业务模块演示】
@@ -112,34 +140,7 @@ youlai-boot
 └── end                             
 ```
 
-## 🌺 前端工程
-| Gitee | Github |
-|-------|------|
-| [vue3-element-admin](https://gitee.com/youlaiorg/vue3-element-admin)  | [vue3-element-admin](https://github.com/youlaitech/vue3-element-admin)  |
 
-
-## 🌈 接口文档
-
-- `knife4j` 接口文档：[http://localhost:8989/doc.html](http://localhost:8989/doc.html)
-- `swagger` 接口文档：[http://localhost:8989/swagger-ui/index.html](http://localhost:8989/swagger-ui/index.html)
-- `apifox`  在线接口文档：[https://www.apifox.cn/apidoc](https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5)
-
-
-## 🚀 项目启动
-
-1. **数据库初始化**
-
-    执行 [youlai_boot.sql](sql/mysql8/youlai_boot.sql) 脚本完成数据库创建、表结构和基础数据的初始化。
-
-2. **修改配置**
-
-    [application-dev.yml](src/main/resources/application-dev.yml) 修改MySQL、Redis连接配置；
-
-3. **启动项目**
-
-    执行 [SystemApplication.java](src/main/java/com/youlai/boot/YouLaiApplication.java) 的 main 方法完成后端项目启动；
-
-    访问接口文档地址 [http://localhost:8989/doc.html](http://localhost:8989/doc.html) 验证项目启动是否成功。
 
 ## ✅ 项目统计
 
@@ -152,9 +153,7 @@ Thanks to all the contributors!
 
 ## 💖 加交流群
 
-> 关注公众号【有来技术】，获取交流群二维码，不想关注公众号或二维码过期欢迎加我微信(`haoxianrui`)备注【有来】即可，拉你进群。
+> 关注公众号 有来技术 ，点击菜单 交流群 获取加群二维码。
 
-| ![](https://s2.loli.net/2022/11/19/OGjum9wr8f6idLX.png) |
-|---------------------------------------------------------|
-
+![](https://foruda.gitee.com/images/1737108820762592766/3390ed0d_716974.png)
 

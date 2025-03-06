@@ -14,6 +14,7 @@
             u.gender,
             u.avatar,
             u.STATUS,
+            u.email,
             d.NAME AS dept_name,
             GROUP_CONCAT( r.NAME ) AS roleNames,
             u.create_time
@@ -23,7 +24,9 @@
                 LEFT JOIN sys_user_role sur ON u.id = sur.user_id
                 LEFT JOIN sys_role r ON sur.role_id = r.id
         <where>
-            u.is_deleted = 0 AND u.username != 'root'
+            u.is_deleted = 0
+            <!-- 超级管理员不显示在列表 -->
+            AND r.code != '${@com.youlai.boot.common.constant.SystemConstants@ROOT_ROLE_CODE}'
             <if test='queryParams.keywords!=null and queryParams.keywords.trim() neq ""'>
                 AND (
                     u.username LIKE CONCAT('%',#{queryParams.keywords},'%')
@@ -36,12 +39,6 @@
             </if>
             <if test='queryParams.deptId!=null'>
                 AND concat(',',concat(d.tree_path,',',d.id),',') like concat('%,',#{queryParams.deptId},',%')
-            </if>
-            <if test='queryParams.roleIds!=null and queryParams.roleIds.size > 0'>
-                AND sur.role_id in
-                <foreach collection="queryParams.roleIds" item="roleId" open="(" close=")" separator=",">
-                    #{roleId}
-                </foreach>
             </if>
             <if test="queryParams.createTime != null and queryParams.createTime.size > 0">
                 <if test="queryParams.createTime[0] != null and queryParams.createTime[0] != ''">
@@ -117,9 +114,9 @@
         <result property="username" column="username" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>
         <result property="status" column="status" jdbcType="BOOLEAN"/>
-        <result property="deptId" column="dept_id" jdbcType="BIGINT"></result>
+        <result property="deptId" column="dept_id" jdbcType="BIGINT"/>
         <collection property="roles" ofType="string" javaType="java.util.Set">
-            <result column="code"></result>
+            <result column="code" />
         </collection>
     </resultMap>
 
@@ -182,18 +179,15 @@
             u.username,
             u.nickname,
             u.mobile,
-            CASE u.gender
-                WHEN 1 THEN '男'
-                WHEN 2 THEN '女'
-                ELSE '保密'
-            END gender,
+            u.email,
+            u.gender,
             d.NAME AS dept_name,
             u.create_time
         FROM
             sys_user u
                 LEFT JOIN sys_dept d ON u.dept_id = d.id
         <where>
-            u.is_deleted = 0 AND u.username != 'root'
+            u.is_deleted = 0
             <if test='keywords!=null and keywords.trim() neq ""'>
                 AND (u.username LIKE CONCAT('%',#{keywords},'%')
                 OR u.nickname LIKE CONCAT('%',#{keywords},'%')
@@ -219,6 +213,7 @@
             u.gender,
             u.avatar,
             u.STATUS,
+            u.email,
             d.NAME AS deptName,
             GROUP_CONCAT(r.NAME) AS roleNames,
             u.create_time

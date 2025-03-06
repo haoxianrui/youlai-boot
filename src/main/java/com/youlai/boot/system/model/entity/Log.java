@@ -2,7 +2,6 @@ package com.youlai.boot.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.youlai.boot.common.enums.LogModuleEnum;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;

@@ -42,7 +42,7 @@ public enum ResultCode implements IResultCode, Serializable {
     VOICE_VERIFICATION_CODE_INPUT_ERROR("A0133", "语音校验码输入错误"),
 
     USER_CERTIFICATE_EXCEPTION("A0140", "用户证件异常"),
-    USER_CERTIFICATE_TYPE_NOT_SELECTED("A0141", "用户证��类型未选择"),
+    USER_CERTIFICATE_TYPE_NOT_SELECTED("A0141", "用户证件类型未选择"),
     MAINLAND_ID_NUMBER_VERIFICATION_ILLEGAL("A0142", "大陆身份证编号校验非法"),
 
     USER_BASIC_INFORMATION_VERIFICATION_FAILED("A0150", "用户基本信息校验失败"),
@@ -67,7 +67,7 @@ public enum ResultCode implements IResultCode, Serializable {
     REFRESH_TOKEN_INVALID("A0231", "刷新令牌无效或已过期"),
 
     // 验证码错误
-    USER_VERIFICATION_CODE_ERROR("A0240", "用户验证码错误"),
+    USER_VERIFICATION_CODE_ERROR("A0240", "验证码错误"),
     USER_VERIFICATION_CODE_ATTEMPT_LIMIT_EXCEEDED("A0241", "用户验证码尝试次数超限"),
     USER_VERIFICATION_CODE_EXPIRED("A0242", "用户验证码过期"),
 
@@ -127,12 +127,14 @@ public enum ResultCode implements IResultCode, Serializable {
     USER_RESOURCE_NOT_FOUND("A0606", "用户资源不存在"),
 
     /** 二级宏观错误码  */
-    USER_UPLOAD_FILE_EXCEPTION("A0700", "用户上传文件异常"),
-    USER_UPLOAD_FILE_TYPE_MISMATCH("A0701", "用户上传文件类型不匹配"),
-    USER_UPLOAD_FILE_TOO_LARGE("A0702", "用户上传文件太大"),
-    USER_UPLOAD_IMAGE_TOO_LARGE("A0703", "用户上传图片太大"),
-    USER_UPLOAD_VIDEO_TOO_LARGE("A0704", "用户上传视频太大"),
-    USER_UPLOAD_COMPRESSED_FILE_TOO_LARGE("A0705", "用户上传压缩文件太大"),
+    UPLOAD_FILE_EXCEPTION("A0700", "上传文件异常"),
+    UPLOAD_FILE_TYPE_MISMATCH("A0701", "上传文件类型不匹配"),
+    UPLOAD_FILE_TOO_LARGE("A0702", "上传文件太大"),
+    UPLOAD_IMAGE_TOO_LARGE("A0703", "上传图片太大"),
+    UPLOAD_VIDEO_TOO_LARGE("A0704", "上传视频太大"),
+    UPLOAD_COMPRESSED_FILE_TOO_LARGE("A0705", "上传压缩文件太大"),
+
+    DELETE_FILE_EXCEPTION("A0710", "删除文件异常"),
 
     /** 二级宏观错误码  */
     USER_CURRENT_VERSION_EXCEPTION("A0800", "用户当前版本异常"),

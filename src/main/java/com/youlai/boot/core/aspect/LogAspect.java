@@ -3,9 +3,11 @@ package com.youlai.boot.core.aspect;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.json.JSONUtil;
+import com.alibaba.excel.util.StringUtils;
 import com.aliyun.oss.HttpMethod;
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.util.IPUtils;
@@ -21,6 +23,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -37,14 +40,18 @@ import java.util.Objects;
  * @author Ray.Hao
  * @since 2024/6/25
  */
+@Slf4j
 @Aspect
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class LogAspect {
     private final LogService logService;
     private final HttpServletRequest request;
+    private final CacheManager cacheManager;
 
+    /**
+     * 切点
+     */
     @Pointcut("@annotation(com.youlai.boot.common.annotation.Log)")
     public void logPointcut() {
     }
@@ -72,7 +79,12 @@ public class LogAspect {
     }
 
     /**
-     * 保持日志
+     * 保存日志
+     *
+     * @param joinPoint     切点
+     * @param e             异常
+     * @param jsonResult    响应结果
+     * @param logAnnotation 日志注解
      */
     private void saveLog(final JoinPoint joinPoint, final Exception e, Object jsonResult, com.youlai.boot.common.annotation.Log logAnnotation) {
         String requestURI = request.getRequestURI();
@@ -120,8 +132,8 @@ public class LogAspect {
         log.setExecutionTime(executionTime);
         // 获取浏览器和终端系统信息
         String userAgentString = request.getHeader("User-Agent");
-        UserAgent userAgent = UserAgentUtil.parse(userAgentString);
-        if(Objects.nonNull(userAgent)) {
+        UserAgent userAgent = resolveUserAgent(userAgentString);
+        if (Objects.nonNull(userAgent)) {
             // 系统信息
             log.setOs(userAgent.getOs().getName());
             // 浏览器信息
@@ -191,6 +203,29 @@ public class LogAspect {
             return map.values().stream().anyMatch(value -> value instanceof MultipartFile);
         }
         return obj instanceof MultipartFile || obj instanceof HttpServletRequest || obj instanceof HttpServletResponse;
+    }
+
+
+    /**
+     * 解析UserAgent
+     *
+     * @param userAgentString UserAgent字符串
+     * @return UserAgent
+     */
+    public UserAgent resolveUserAgent(String userAgentString) {
+        if (StringUtils.isBlank(userAgentString)) {
+            return null;
+        }
+        // 给userAgentStringMD5加密一次防止过长
+        String userAgentStringMD5 = DigestUtil.md5Hex(userAgentString);
+        //判断是否命中缓存
+        UserAgent userAgent = Objects.requireNonNull(cacheManager.getCache("userAgent")).get(userAgentStringMD5, UserAgent.class);
+        if (userAgent != null) {
+            return userAgent;
+        }
+        userAgent = UserAgentUtil.parse(userAgentString);
+        Objects.requireNonNull(cacheManager.getCache("userAgent")).put(userAgentStringMD5, userAgent);
+        return userAgent;
     }
 
 }

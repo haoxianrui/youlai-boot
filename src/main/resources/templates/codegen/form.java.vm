@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 #if(${hasLocalDateTime})
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 #end
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
@@ -45,6 +46,9 @@ public class ${entityName}Form implements Serializable {
             #end
     #if($fieldConfig.maxLength)
     @Size(max=$fieldConfig.maxLength, message="$fieldConfig.fieldComment长度不能超过${fieldConfig.maxLength}个字符")
+    #end
+    #if($fieldConfig.fieldType == 'LocalDateTime')
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     #end
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
 

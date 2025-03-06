@@ -10,29 +10,29 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SystemConstants;
-import com.youlai.boot.core.security.manager.TokenManager;
+import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.common.model.Option;
+import com.youlai.boot.core.security.manager.TokenManager;
+import com.youlai.boot.core.security.service.PermissionService;
+import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.shared.mail.service.MailService;
 import com.youlai.boot.shared.sms.enums.SmsTypeEnum;
 import com.youlai.boot.shared.sms.service.SmsService;
+import com.youlai.boot.system.converter.UserConverter;
+import com.youlai.boot.system.enums.DictCodeEnum;
+import com.youlai.boot.system.mapper.UserMapper;
+import com.youlai.boot.system.model.bo.UserBO;
+import com.youlai.boot.system.model.dto.UserAuthInfo;
+import com.youlai.boot.system.model.dto.UserExportDTO;
+import com.youlai.boot.system.model.entity.DictData;
 import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.entity.UserRole;
 import com.youlai.boot.system.model.form.*;
-import com.youlai.boot.system.converter.UserConverter;
-import com.youlai.boot.common.exception.BusinessException;
-import com.youlai.boot.system.model.vo.UserProfileVO;
-import com.youlai.boot.core.security.util.SecurityUtils;
-import com.youlai.boot.system.mapper.UserMapper;
-import com.youlai.boot.system.model.dto.UserAuthInfo;
-import com.youlai.boot.system.model.bo.UserBO;
 import com.youlai.boot.system.model.query.UserPageQuery;
-import com.youlai.boot.system.model.dto.UserExportDTO;
 import com.youlai.boot.system.model.vo.UserInfoVO;
 import com.youlai.boot.system.model.vo.UserPageVO;
-import com.youlai.boot.core.security.service.PermissionService;
-import com.youlai.boot.system.service.RoleService;
-import com.youlai.boot.system.service.UserRoleService;
-import com.youlai.boot.system.service.UserService;
+import com.youlai.boot.system.model.vo.UserProfileVO;
+import com.youlai.boot.system.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,6 +68,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final StringRedisTemplate redisTemplate;
 
     private final TokenManager tokenManager;
+
+    private final DictDataService dictDataService;
 
     private final UserConverter userConverter;
 
@@ -274,7 +276,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public List<UserExportDTO> listExportUsers(UserPageQuery queryParams) {
-        return this.baseMapper.listExportUsers(queryParams);
+        List<UserExportDTO> userExportDTOS = this.baseMapper.listExportUsers(queryParams);
+        //获取角色的字典数据
+        List<DictData> list = dictDataService.list(new LambdaQueryWrapper<DictData>().eq(DictData::getDictCode, DictCodeEnum.GENDER.getValue()));
+        Map<String, String> genderMap = list.stream().collect(Collectors.toMap(DictData::getValue, DictData::getLabel));
+        userExportDTOS.forEach(userExportDTO -> {
+            String genderLabel = genderMap.get(userExportDTO.getGender());
+            userExportDTO.setGender(genderLabel);
+        });
+        return null;
     }
 
     /**
@@ -441,9 +451,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String redisCacheKey = RedisConstants.SMS_CHANGE_CODE_PREFIX + mobile;
         String cachedVerifyCode = redisTemplate.opsForValue().get(redisCacheKey);
 
+        if (StrUtil.isBlank(cachedVerifyCode)) {
+            throw new BusinessException("验证码已过期");
+        }
         if (!inputVerifyCode.equals(cachedVerifyCode)) {
             throw new BusinessException("验证码错误");
         }
+        // 验证完成删除验证码
+        redisTemplate.delete(redisCacheKey);
 
         // 更新手机号码
         return this.update(
@@ -495,9 +510,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String redisCacheKey = RedisConstants.EMAIL_CHANGE_CODE_PREFIX + email;
         String cachedVerifyCode = redisTemplate.opsForValue().get(redisCacheKey);
 
+        if (StrUtil.isBlank(cachedVerifyCode)) {
+            throw new BusinessException("验证码已过期");
+        }
+
         if (!inputVerifyCode.equals(cachedVerifyCode)) {
             throw new BusinessException("验证码错误");
         }
+        // 验证完成删除验证码
+        redisTemplate.delete(redisCacheKey);
 
         // 更新邮箱地址
         return this.update(

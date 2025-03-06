@@ -15,7 +15,7 @@ services:
     volumes:
       - ./mysql/conf/my.cnf:/etc/my.cnf # 挂载 my.cnf 文件到容器的指定路径
       - ./mysql/data:/var/lib/mysql # 持久化 MySQL 数据
-      - ../sql/mysql8:/docker-entrypoint-initdb.d # 初始化 SQL 脚本目录
+      - ../sql/mysql:/docker-entrypoint-initdb.d # 初始化 SQL 脚本目录
     ports:
       - 3306:3306
     networks:
@@ -40,10 +40,10 @@ services:
     image: minio/minio:latest
     container_name: minio
     restart: unless-stopped
-    command: server /data --console-address ":9090"
+    command: server /data --console-address ":9001"
     ports:
       - 9000:9000
-      - 9090:9090
+      - 9001:9001
     environment:
       - TZ=Asia/Shanghai
       - LANG=en_US.UTF-8
