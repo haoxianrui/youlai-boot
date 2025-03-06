@@ -7,8 +7,8 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.common.result.ResultCode;
-import com.youlai.boot.shared.file.service.FileService;
 import com.youlai.boot.shared.file.model.FileInfo;
+import com.youlai.boot.shared.file.service.FileService;
 import io.minio.*;
 import io.minio.http.Method;
 import jakarta.annotation.PostConstruct;
@@ -21,7 +21,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 
@@ -86,8 +85,10 @@ public class MinioFileService implements FileService {
         // 创建存储桶(存储桶不存在)，如果有搭建好的minio服务，建议放在init方法中
         createBucketIfAbsent(bucketName);
 
+        // 文件原生名称
+        String originalFilename = file.getOriginalFilename();
         // 文件后缀
-        String suffix = FileUtil.getSuffix(file.getOriginalFilename());
+        String suffix = FileUtil.getSuffix(originalFilename);
         // 文件夹名称
         String dateFolder = DateUtil.format(LocalDateTime.now(), "yyyyMMdd");
         // 文件名称
@@ -123,7 +124,7 @@ public class MinioFileService implements FileService {
             }
 
             FileInfo fileInfo = new FileInfo();
-            fileInfo.setName(fileName);
+            fileInfo.setName(originalFilename);
             fileInfo.setUrl(fileUrl);
             return fileInfo;
         } catch (Exception e) {
