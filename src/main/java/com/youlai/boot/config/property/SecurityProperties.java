@@ -26,6 +26,11 @@ public class SecurityProperties {
     private JwtProperty jwt;
 
     /**
+     * Redis-Token 配置
+     */
+    private RedisTokenProperty redisToken;
+
+    /**
      * 白名单 URL 集合
      */
     private String[] ignoreUrls;
@@ -61,5 +66,23 @@ public class SecurityProperties {
          */
         private Integer refreshTokenTimeToLive;
 
+    }
+
+    @Data
+    public static class RedisTokenProperty {
+        /**
+         * 是否允许多点登录
+         */
+        private Boolean multiLogin;
+
+        /**
+         * 访问令牌有效期(单位：秒)
+         */
+        private Integer accessTokenTimeToLive;
+
+        /**
+         * 刷新令牌有效期(单位：秒)
+         */
+        private Integer refreshTokenTimeToLive;
     }
 }

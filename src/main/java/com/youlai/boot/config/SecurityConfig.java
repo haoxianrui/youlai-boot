@@ -10,9 +10,9 @@ import com.youlai.boot.core.security.exception.MyAuthenticationEntryPoint;
 import com.youlai.boot.core.security.extension.sms.SmsAuthenticationProvider;
 import com.youlai.boot.core.security.extension.wechat.WechatAuthenticationProvider;
 import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
-import com.youlai.boot.core.security.filter.JwtAuthenticationFilter;
+import com.youlai.boot.core.security.filter.TokenFilter;
+import com.youlai.boot.core.security.manager.TokenManager;
 import com.youlai.boot.core.security.service.SysUserDetailsService;
-import com.youlai.boot.core.security.manager.JwtTokenManager;
 import com.youlai.boot.system.service.ConfigService;
 import com.youlai.boot.system.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +48,7 @@ public class SecurityConfig {
     private final RedisTemplate<String, Object> redisTemplate;
     private final PasswordEncoder passwordEncoder;
 
-    private final JwtTokenManager jwtTokenService;
+    private final TokenManager tokenManager;
     private final WxMaService wxMaService;
     private final UserService userService;
     private final SysUserDetailsService userDetailsService;
@@ -93,8 +93,8 @@ public class SecurityConfig {
                 .addFilterBefore(new RateLimiterFilter(redisTemplate, configService), UsernamePasswordAuthenticationFilter.class)
                 // 验证码校验过滤器
                 .addFilterBefore(new CaptchaValidationFilter(redisTemplate, codeGenerator), UsernamePasswordAuthenticationFilter.class)
-                // JWT 验证和解析过滤器
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenService), UsernamePasswordAuthenticationFilter.class)
+                // 验证和解析过滤器
+                .addFilterBefore(new TokenFilter(tokenManager), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

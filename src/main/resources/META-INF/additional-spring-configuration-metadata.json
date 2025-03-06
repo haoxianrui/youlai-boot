@@ -50,8 +50,6 @@
       "type": "java.lang.String",
       "description": "阿里云 OSS 存储桶名称"
     },
-
-
     {
       "name": "xxl.job.enabled",
       "type": "java.lang.Boolean",
@@ -101,7 +99,21 @@
       "name": "spring.cache.enabled",
       "type": "java.lang.Boolean",
       "description": "缓存开关"
+    },
+    {
+      "name": "security.redis-token.multi-login",
+      "type": "java.lang.String",
+      "description": "是否允许多点登录"
+    },
+    {
+      "name": "security.redis-token.access-token-time-to-live",
+      "type": "java.lang.String",
+      "description": "访问令牌有效期"
+    },
+    {
+      "name": "security.redis-token.refresh-token-time-to-live",
+      "type": "java.lang.String",
+      "description": "刷新令牌有效期"
     }
-
   ]
 }

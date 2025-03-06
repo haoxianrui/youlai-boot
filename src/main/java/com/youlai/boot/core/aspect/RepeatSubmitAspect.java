@@ -8,6 +8,7 @@ import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.common.result.ResultCode;
 import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.common.annotation.RepeatSubmit;
+import com.youlai.boot.config.property.SecurityProperties;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 public class RepeatSubmitAspect {
 
     private final RedissonClient redissonClient;
+    private final SecurityProperties securityProperties;
 
     /**
      * 防重复提交切点
@@ -86,17 +88,17 @@ public class RepeatSubmitAspect {
             return null;
         }
 
-        // 解析 JWT Token 获取 jti
         token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
-        String jti = (String) JWTUtil.parseToken(token).getPayload(RegisteredPayload.JWT_ID);
-
-        if (StrUtil.isBlank(jti)) {
-            log.warn("JWT Token 中未找到 jti");
-            return null;
+        // 如果会话方式是jwt，解析 JWT Token 获取 jti
+        if (securityProperties.getSession().getType().equals("jwt")) {
+            String jti = (String) JWTUtil.parseToken(token).getPayload(RegisteredPayload.JWT_ID);
+            if (StrUtil.isBlank(jti)) {
+                log.warn("JWT Token 中未找到 jti");
+                return null;
+            }
         }
-
-        // 生成锁的 key：前缀 + jti + 请求方法 + 请求路径
-        return RedisConstants.RESUBMIT_LOCK_PREFIX + jti + ":" + request.getMethod() + "-" + request.getRequestURI();
+        // 否则会话方式为redis-token，直接使用token
+        token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
+        return RedisConstants.RESUBMIT_LOCK_PREFIX + token + ":" + request.getMethod() + "-" + request.getRequestURI();
     }
-
 }
