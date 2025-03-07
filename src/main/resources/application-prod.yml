@@ -70,16 +70,22 @@ mybatis-plus:
 
 # 安全配置
 security:
-  session:
-    # 会话方式，支持 jwt、redis-token
+  # 认证策略核心配置
+  auth:
+    # 认证策略 [jwt|redis-token]
     type: jwt
-  jwt:
-    # JWT 秘钥
-    key: SecretKey012345678901234567890123456789012345678901234567890123456789
     # 访问令牌 有效期(单位：秒)，默认 1 小时，-1 表示永不过期
-    access-token-time-to-live: 3600
+    access-token-ttl: 3600
     # 刷新令牌有效期(单位：秒)，默认 7 天，-1 表示永不过期
-    refresh-token-time-to-live: 604800
+    refresh-token-ttl: 604800
+    # JWT 认证配置
+    jwt:
+      key: SecretKey012345678901234567890123456789012345678901234567890123456789 # JWT密钥(HS256算法至少32字符，RS256至少2048位)
+    # Redis Token 认证配置
+    redis-token:
+      max-sessions: 1  # 最大允许多个设备同时登录的数量（默认为1）
+      session-control: REVOKE_OLDEST  # 会话超限处理策略 [REJECT|REVOKE_OLDEST|REVOKE_ALL]
+
   # 无需认证的请求路径
   ignore-urls:
     - /api/v1/auth/login/**       # 登录接口(账号密码登录、手机验证码登录和微信登录)

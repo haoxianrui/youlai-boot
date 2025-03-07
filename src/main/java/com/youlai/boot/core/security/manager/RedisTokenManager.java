@@ -24,19 +24,29 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * JWT 令牌服务实现
+ * Redis Token 管理器
+ * <p>
+ * 用于生成、解析、校验、刷新 JWT Token
  *
  * @author Ray.Hao
  * @since 2024/11/15
  */
-@ConditionalOnProperty(value = "security.session.type", havingValue = "redis-token")
+@ConditionalOnProperty(value = "security.auth.type", havingValue = "redis-token")
 @Service
 public class RedisTokenManager implements TokenManager {
+
+    // 常量定义
+    private static final String USER_SESSION_MAP = "user_sessions:%s"; // %s=token_type
+    private static final String SESSION_KEY = "session:%s:%s"; // %s=token_type,token
+    private static final String SESSION_QUEUE = "session_queue:%s"; // %s=user_id
 
     private final SecurityProperties securityProperties;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public RedisTokenManager(SecurityProperties securityProperties, RedisTemplate<String, Object> redisTemplate) {
+    public RedisTokenManager(
+            SecurityProperties securityProperties,
+            RedisTemplate<String, Object> redisTemplate
+    ) {
         this.securityProperties = securityProperties;
         this.redisTemplate = redisTemplate;
     }
@@ -49,20 +59,73 @@ public class RedisTokenManager implements TokenManager {
      */
     @Override
     public AuthenticationToken generateToken(Authentication authentication) {
-        int accessTokenTimeToLive = securityProperties.getRedisToken().getAccessTokenTimeToLive();
-        int refreshTokenTimeToLive = securityProperties.getRedisToken().getRefreshTokenTimeToLive();
-        Boolean multiLogin = securityProperties.getRedisToken().getMultiLogin();
+        int accessTokenTtl = securityProperties.getAuth().getAccessTokenTtl();
 
-        String accessToken = generateToken(authentication, TokenKeyEnum.ACCESS_TOKEN_KEY, accessTokenTimeToLive, multiLogin);
-        String refreshToken = generateToken(authentication, TokenKeyEnum.REFRESH_TOKEN_KEY, refreshTokenTimeToLive, multiLogin);
+        // 创建新会话
+        String accessToken = createNewSession(authentication, );
+
+        // 创建刷新令牌（独立控制）
+        String refreshToken = createNewSession(authentication, TokenType.REFRESH,
+                config.getRefreshTokenTtl(), 1); // 刷新令牌强制单设备
 
         return AuthenticationToken.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .tokenType("Bearer")
-                .expiresIn(accessTokenTimeToLive)
+                .expiresIn(accessTokenTtl)
                 .build();
     }
+
+    private String createNewSession(Authentication authentication,
+                                    TokenType tokenType,
+                                    int ttl,
+                                    int maxSessions) {
+        SysUserDetails userDetails = (SysUserDetails) authentication.getPrincipal();
+        Long userId = userDetails.getUserId();
+        String token = UUID.randomUUID().toString();
+
+        // 会话存储
+        String sessionKey = keyGenerator.getSessionKey(tokenType, token);
+        redisTemplate.opsForValue().set(sessionKey, buildOnlineUser(userDetails), ttl, TimeUnit.SECONDS);
+
+        // 用户-会话映射
+        String userMapKey = keyGenerator.getUserSessionMapKey(tokenType);
+        redisTemplate.opsForHash().put(userMapKey, userId.toString(), token);
+        redisTemplate.expire(userMapKey, ttl, TimeUnit.SECONDS);
+
+        // 多设备控制
+        enforceMaxSessions(userId, token, tokenType, maxSessions);
+
+        return token;
+    }
+
+    private void enforceMaxSessions(Long userId, String currentToken, TokenType tokenType, int maxSessions) {
+        if (maxSessions <= 0) return;
+
+        String sessionQueueKey = keyGenerator.getSessionQueueKey(userId);
+        long now = System.currentTimeMillis();
+
+        // 使用ZSet维护会话队列
+        redisTemplate.opsForZSet().add(sessionQueueKey, currentToken, now);
+        redisTemplate.expire(sessionQueueKey, 7, TimeUnit.DAYS);
+
+        // 移除超出数量的旧会话
+        long excess = redisTemplate.opsForZSet().size(sessionQueueKey) - maxSessions;
+        if (excess > 0) {
+            Set<String> oldTokens = redisTemplate.opsForZSet().range(sessionQueueKey, 0, excess - 1);
+            redisTemplate.opsForZSet().removeRange(sessionQueueKey, 0, excess - 1);
+
+            // 吊销旧令牌
+            oldTokens.forEach(oldToken -> {
+                redisTemplate.delete(keyGenerator.getSessionKey(tokenType, oldToken));
+                redisTemplate.opsForHash().delete(
+                        keyGenerator.getUserSessionMapKey(tokenType),
+                        userId.toString()
+                );
+            });
+        }
+    }
+
 
     /**
      * 解析令牌
@@ -84,7 +147,6 @@ public class RedisTokenManager implements TokenManager {
         userDetails.setDeptId(user.getDeptId());
         userDetails.setDataScope(user.getDataScope());
         userDetails.setAuthorities(authorities);
-
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 
@@ -97,8 +159,7 @@ public class RedisTokenManager implements TokenManager {
     @Override
     public boolean validateToken(String token) {
         String accessTokenKey = TokenKeyEnum.ACCESS_TOKEN_KEY.getValue() + token;
-        Boolean hasKey = redisTemplate.hasKey(accessTokenKey);
-        return hasKey != null && hasKey;
+        return redisTemplate.hasKey(accessTokenKey);
     }
 
     /**
@@ -115,7 +176,7 @@ public class RedisTokenManager implements TokenManager {
             throw new BusinessException(ResultCode.REFRESH_TOKEN_INVALID);
         }
 
-        int accessTokenExpiration = securityProperties.getRedisToken().getRefreshTokenTimeToLive();
+        int accessTokenExpiration = securityProperties.getAuth().getRefreshTokenTtl();
         // 生成新的访问令牌
         String newAccessToken = generateToken(authentication, TokenKeyEnum.ACCESS_TOKEN_KEY, accessTokenExpiration, true);
 
@@ -143,14 +204,14 @@ public class RedisTokenManager implements TokenManager {
         // 不允许多点登录，使用hashmap存储在线用户id和token
         if (!multiLogin) {
             // 查找当前用户id是否有token，有的话，说明已经登录了，就删除旧的token
-            String oldToken = (String) redisTemplate.opsForHash().get("userId-token:"+tokenKeyEnum.getValue(), userDetails.getUserId().toString());
+            String oldToken = (String) redisTemplate.opsForHash().get("userId-token:" + tokenKeyEnum.getValue(), userDetails.getUserId().toString());
             if (StringUtils.isNotBlank(oldToken)) {
-                redisTemplate.opsForHash().delete("userId-token:"+tokenKeyEnum.getValue(), userDetails.getUserId().toString());
+                redisTemplate.opsForHash().delete("userId-token:" + tokenKeyEnum.getValue(), userDetails.getUserId().toString());
                 redisTemplate.delete(tokenKeyEnum.getValue() + oldToken);
             }
-            redisTemplate.opsForHash().put("userId-token:"+tokenKeyEnum.getValue(), userDetails.getUserId().toString(), token);
+            redisTemplate.opsForHash().put("userId-token:" + tokenKeyEnum.getValue(), userDetails.getUserId().toString(), token);
             // 设置userId-token的过期时间
-            redisTemplate.opsForHash().getOperations().expire("userId-token:"+tokenKeyEnum.getValue(), ttl, TimeUnit.SECONDS);
+            redisTemplate.opsForHash().getOperations().expire("userId-token:" + tokenKeyEnum.getValue(), ttl, TimeUnit.SECONDS);
         }
 
         // 存储用户信息
@@ -182,13 +243,13 @@ public class RedisTokenManager implements TokenManager {
         OnlineUser user = (OnlineUser) redisTemplate.opsForValue().get(TokenKeyEnum.ACCESS_TOKEN_KEY.getValue() + token);
         if (!Objects.isNull(user)) {
             Long userId = user.getId();
-            String refreshToken = (String) redisTemplate.opsForHash().get("userId-token:"+TokenKeyEnum.REFRESH_TOKEN_KEY.getValue(), user.getId().toString());
+            String refreshToken = (String) redisTemplate.opsForHash().get("userId-token:" + TokenKeyEnum.REFRESH_TOKEN_KEY.getValue(), user.getId().toString());
 
             redisTemplate.delete(TokenKeyEnum.ACCESS_TOKEN_KEY.getValue() + token);
             redisTemplate.delete(TokenKeyEnum.REFRESH_TOKEN_KEY.getValue() + refreshToken);
             // 删除 userId-token 的hashmap
-            redisTemplate.opsForHash().delete("userId-token:"+TokenKeyEnum.ACCESS_TOKEN_KEY.getValue(), userId.toString());
-            redisTemplate.opsForHash().delete("userId-token:"+TokenKeyEnum.REFRESH_TOKEN_KEY.getValue(), userId.toString());
+            redisTemplate.opsForHash().delete("userId-token:" + TokenKeyEnum.ACCESS_TOKEN_KEY.getValue(), userId.toString());
+            redisTemplate.opsForHash().delete("userId-token:" + TokenKeyEnum.REFRESH_TOKEN_KEY.getValue(), userId.toString());
         }
     }
 }

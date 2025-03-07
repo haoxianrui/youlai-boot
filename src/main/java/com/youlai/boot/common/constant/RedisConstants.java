@@ -14,16 +14,21 @@ public interface RedisConstants {
     interface RateLimiter {
         String IP = "rate_limiter:ip:{}"; // IP限流（示例：rate_limiter:ip:192.168.1.1）
     }
+
     /**
      * 分布式锁相关键
      */
     interface Lock {
-        String RESUBMIT = "lock:resubmit:{}:{}"; // 防重复提交（示例：lock:resubmit:methodName:md5Hash）
+        String RESUBMIT = "lock:resubmit:{}:{}"; // 防重复提交（示例：lock:resubmit:userIdentifier:requestIdentifier）
     }
+
     /**
      * 认证模块
      */
     interface Auth {
+
+        String ACCESS_TOKEN = "auth:token:access:{}";    // 访问Token
+        String REFRESH_TOKEN = "auth:token:refresh:{}";   // 刷新Token
         String BLACKLIST_TOKEN = "auth:token:blacklist:{}";  // 黑名单Token
     }
 

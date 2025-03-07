@@ -10,7 +10,7 @@ import com.youlai.boot.core.security.exception.MyAuthenticationEntryPoint;
 import com.youlai.boot.core.security.extension.sms.SmsAuthenticationProvider;
 import com.youlai.boot.core.security.extension.wechat.WechatAuthenticationProvider;
 import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
-import com.youlai.boot.core.security.filter.TokenFilter;
+import com.youlai.boot.core.security.filter.TokenAuthenticationFilter;
 import com.youlai.boot.core.security.manager.TokenManager;
 import com.youlai.boot.core.security.service.SysUserDetailsService;
 import com.youlai.boot.system.service.ConfigService;
@@ -94,7 +94,7 @@ public class SecurityConfig {
                 // 验证码校验过滤器
                 .addFilterBefore(new CaptchaValidationFilter(redisTemplate, codeGenerator), UsernamePasswordAuthenticationFilter.class)
                 // 验证和解析过滤器
-                .addFilterBefore(new TokenFilter(tokenManager), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new TokenAuthenticationFilter(tokenManager), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

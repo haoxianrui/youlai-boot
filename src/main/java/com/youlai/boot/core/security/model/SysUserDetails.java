@@ -43,7 +43,7 @@ public class SysUserDetails implements UserDetails {
     private String password;
 
     /**
-     * 账号是否启用（true：启用，false：禁用）
+     * 账号是否启用(true:启用 false:禁用)
      */
     private Boolean enabled;
 

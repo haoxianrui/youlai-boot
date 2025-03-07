@@ -422,7 +422,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         boolean result = smsService.sendSms(mobile, SmsTypeEnum.CHANGE_MOBILE, templateParams);
         if (result) {
             // 缓存验证码，5分钟有效，用于更换手机号校验
-            String redisCacheKey =StrUtil.format(RedisConstants.Captcha.MOBILE_CODE, mobile);
+            String redisCacheKey = StrUtil.format(RedisConstants.Captcha.MOBILE_CODE, mobile);
             redisTemplate.opsForValue().set(redisCacheKey, code, 5, TimeUnit.MINUTES);
         }
         return result;
@@ -448,8 +448,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String inputVerifyCode = form.getCode();
         String mobile = form.getMobile();
 
-        String redisCacheKey = RedisConstants.Captcha.MOBILE_CODE + mobile;
-        String cachedVerifyCode = redisTemplate.opsForValue().get(redisCacheKey);
+        String cacheKey = StrUtil.format(RedisConstants.Captcha.MOBILE_CODE, mobile);
+
+        String cachedVerifyCode = redisTemplate.opsForValue().get(cacheKey);
 
         if (StrUtil.isBlank(cachedVerifyCode)) {
             throw new BusinessException("验证码已过期");
@@ -458,7 +459,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException("验证码错误");
         }
         // 验证完成删除验证码
-        redisTemplate.delete(redisCacheKey);
+        redisTemplate.delete(cacheKey);
 
         // 更新手机号码
         return this.update(
@@ -482,7 +483,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         mailService.sendMail(email, "邮箱验证码", "您的验证码为：" + code + "，请在5分钟内使用");
         // 缓存验证码，5分钟有效，用于更换邮箱校验
-        String redisCacheKey =  StrUtil.format(RedisConstants.Captcha.EMAIL_CODE, email);
+        String redisCacheKey = StrUtil.format(RedisConstants.Captcha.EMAIL_CODE, email);
         redisTemplate.opsForValue().set(redisCacheKey, code, 5, TimeUnit.MINUTES);
     }
 
