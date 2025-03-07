@@ -32,9 +32,9 @@ public class TokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         try {
-            if (StrUtil.isNotBlank(token) && token.startsWith(SecurityConstants.JWT_TOKEN_PREFIX)) {
+            if (StrUtil.isNotBlank(token) && token.startsWith(SecurityConstants.BEARER_TOKEN_PREFIX )) {
                 // 去除 Bearer 前缀
-                token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
+                token = token.substring(SecurityConstants.BEARER_TOKEN_PREFIX .length());
                 // 校验 JWT Token ，包括验签和是否过期
                 boolean isValidate = tokenManager.validateToken(token);
                 if (!isValidate) {

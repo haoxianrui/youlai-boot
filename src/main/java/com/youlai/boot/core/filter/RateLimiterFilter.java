@@ -1,6 +1,7 @@
 package com.youlai.boot.core.filter;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.common.result.ResultCode;
@@ -48,7 +49,7 @@ public class RateLimiterFilter extends OncePerRequestFilter {
      */
     public boolean rateLimit(String ip) {
         // 限流 Redis 键
-        String key = RedisConstants.IP_RATE_LIMITER_KEY + ip;
+        String key = StrUtil.format(RedisConstants.RateLimiter.IP, ip);
 
         // 自增请求计数
         Long count = redisTemplate.opsForValue().increment(key);

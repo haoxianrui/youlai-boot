@@ -1,6 +1,7 @@
 package com.youlai.boot.core.aspect;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.RegisteredPayload;
 import com.youlai.boot.common.constant.RedisConstants;
@@ -74,31 +75,23 @@ public class RepeatSubmitAspect {
     }
 
 
-    /**
-     * 生成防重复提交锁的 key
-     *
-     * @return 锁的 key，如果无法生成则返回 null
-     */
     private String buildLockKey() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String tokenHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (StrUtil.isBlank(token) || !token.startsWith(SecurityConstants.JWT_TOKEN_PREFIX)) {
-            log.warn("请求头中未找到有效的 JWT Token");
+        // 统一校验 Token 格式
+        if (StrUtil.isBlank(tokenHeader) || !tokenHeader.startsWith(SecurityConstants.BEARER_TOKEN_PREFIX )) {
+            log.warn("请求头中未找到有效的 Token");
             return null;
         }
 
-        token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
-        // 如果会话方式是jwt，解析 JWT Token 获取 jti
-        if (securityProperties.getSession().getType().equals("jwt")) {
-            String jti = (String) JWTUtil.parseToken(token).getPayload(RegisteredPayload.JWT_ID);
-            if (StrUtil.isBlank(jti)) {
-                log.warn("JWT Token 中未找到 jti");
-                return null;
-            }
-        }
-        // 否则会话方式为redis-token，直接使用token
-        token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
-        return RedisConstants.RESUBMIT_LOCK_PREFIX + token + ":" + request.getMethod() + "-" + request.getRequestURI();
+        String rawToken = tokenHeader.substring(SecurityConstants.BEARER_TOKEN_PREFIX .length());
+
+        String tokenHash = DigestUtil.sha256Hex(rawToken); // 建议替换为 SHA256 更安全
+
+        return RedisConstants.RESUBMIT_LOCK_PREFIX
+                + tokenHash + ":"
+                + request.getMethod() + "-"
+                + request.getRequestURI();
     }
 }

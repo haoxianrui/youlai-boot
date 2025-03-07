@@ -2,7 +2,7 @@ package com.youlai.boot.core.security.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import com.youlai.boot.common.constant.SecurityConstants;
+import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -81,7 +81,7 @@ public class PermissionService {
         Set<String> perms = new HashSet<>();
         // 从缓存中一次性获取所有角色的权限
         Collection<Object> roleCodesAsObjects = new ArrayList<>(roleCodes);
-        List<Object> rolePermsList = redisTemplate.opsForHash().multiGet(SecurityConstants.ROLE_PERMS_PREFIX, roleCodesAsObjects);
+        List<Object> rolePermsList = redisTemplate.opsForHash().multiGet(RedisConstants.System.ROLE_PERMS, roleCodesAsObjects);
 
         for (Object rolePermsObj : rolePermsList) {
             if (rolePermsObj instanceof Set) {

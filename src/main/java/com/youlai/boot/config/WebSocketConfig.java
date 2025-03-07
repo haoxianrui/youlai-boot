@@ -85,7 +85,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     if (StompCommand.CONNECT.equals(accessor.getCommand())) {
                         String bearerToken = accessor.getFirstNativeHeader(HttpHeaders.AUTHORIZATION);
                         if (StrUtil.isNotBlank(bearerToken) && bearerToken.startsWith("Bearer ")) {
-                            bearerToken = bearerToken.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
+                            bearerToken = bearerToken.substring(SecurityConstants.BEARER_TOKEN_PREFIX .length());
                             String username = JWTUtil.parseToken(bearerToken).getPayloads().getStr(JWTPayload.SUBJECT);
                             if (StrUtil.isNotBlank(username)) {
                                 accessor.setUser(() -> username);

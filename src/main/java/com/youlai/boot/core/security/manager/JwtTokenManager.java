@@ -8,6 +8,7 @@ import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
 import com.youlai.boot.common.constant.JwtClaimConstants;
+import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.common.result.ResultCode;
@@ -116,7 +117,7 @@ public class JwtTokenManager implements TokenManager {
             String jti = payloads.getStr(JWTPayload.JWT_ID);
 
             // 判断是否在黑名单中，如果在，则返回false 标识Token无效
-            if (Boolean.TRUE.equals(redisTemplate.hasKey(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti))) {
+            if (Boolean.TRUE.equals(redisTemplate.hasKey(RedisConstants.Auth.BLACKLIST_TOKEN + jti))) {
                 return false;
             }
         }
@@ -130,8 +131,8 @@ public class JwtTokenManager implements TokenManager {
      */
     @Override
     public void blacklistToken(String token) {
-        if (token.startsWith(SecurityConstants.JWT_TOKEN_PREFIX)) {
-            token = token.substring(SecurityConstants.JWT_TOKEN_PREFIX.length());
+        if (token.startsWith(SecurityConstants.BEARER_TOKEN_PREFIX )) {
+            token = token.substring(SecurityConstants.BEARER_TOKEN_PREFIX .length());
         }
         JWT jwt = JWTUtil.parseToken(token);
         JSONObject payloads = jwt.getPayloads();
@@ -146,10 +147,10 @@ public class JwtTokenManager implements TokenManager {
             }
             // 计算Token剩余时间，将其加入黑名单
             int expirationIn = expirationAt - currentTimeSeconds;
-            redisTemplate.opsForValue().set(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti, null, expirationIn, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(RedisConstants.Auth.BLACKLIST_TOKEN + jti, null, expirationIn, TimeUnit.SECONDS);
         } else {
             // 永不过期的Token永久加入黑名单
-            redisTemplate.opsForValue().set(SecurityConstants.BLACKLIST_TOKEN_PREFIX + jti, null);
+            redisTemplate.opsForValue().set(RedisConstants.Auth.BLACKLIST_TOKEN + jti, null);
         }
         ;
     }
