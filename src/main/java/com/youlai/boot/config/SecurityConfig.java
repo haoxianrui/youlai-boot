@@ -11,7 +11,7 @@ import com.youlai.boot.core.security.extension.sms.SmsAuthenticationProvider;
 import com.youlai.boot.core.security.extension.wechat.WechatAuthenticationProvider;
 import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
 import com.youlai.boot.core.security.filter.TokenAuthenticationFilter;
-import com.youlai.boot.core.security.manager.TokenManager;
+import com.youlai.boot.core.security.token.TokenManager;
 import com.youlai.boot.core.security.service.SysUserDetailsService;
 import com.youlai.boot.system.service.ConfigService;
 import com.youlai.boot.system.service.UserService;

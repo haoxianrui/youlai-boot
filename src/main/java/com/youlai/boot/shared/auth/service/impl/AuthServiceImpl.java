@@ -17,7 +17,7 @@ import com.youlai.boot.shared.auth.enums.CaptchaTypeEnum;
 import com.youlai.boot.core.security.model.AuthenticationToken;
 import com.youlai.boot.shared.auth.model.CaptchaInfo;
 import com.youlai.boot.shared.auth.service.AuthService;
-import com.youlai.boot.core.security.manager.TokenManager;
+import com.youlai.boot.core.security.token.TokenManager;
 import com.youlai.boot.shared.sms.enums.SmsTypeEnum;
 import com.youlai.boot.shared.sms.service.SmsService;
 import lombok.RequiredArgsConstructor;

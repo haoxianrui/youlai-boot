@@ -1,108 +1,111 @@
 package com.youlai.boot.config.property;
-
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * 安全配置属性
+ * 安全模块配置属性类
+ *
+ * <p>映射 application.yml 中 security 前缀的安全相关配置</p>
  *
  * @author Ray.Hao
  * @since 2024/4/18
  */
 @Data
+@Component
 @Validated
 @ConfigurationProperties(prefix = "security")
 public class SecurityProperties {
 
     /**
-     * 免认证请求路径白名单
+     * 会话管理配置
      */
-    private List<String> ignoreUrls = new ArrayList<>();
+    private SessionConfig session;
 
     /**
-     * 静态资源路径（不经过安全过滤器）
+     * 安全白名单路径（完全绕过安全过滤器）
+     * <p>示例值：/api/v1/auth/login/**, /ws/**
      */
-    private List<String> unsecuredUrls = new ArrayList<>();
+    @NotEmpty
+    private String[] ignoreUrls;
 
     /**
-     * 认证核心配置
+     * 非安全端点路径（允许匿名访问的API）
+     * <p>示例值：/doc.html, /v3/api-docs/**
      */
-    private Auth auth = new Auth();
+    @NotEmpty
+    private String[] unsecuredUrls;
 
+    /**
+     * 会话配置嵌套类
+     */
     @Data
-    public static class Auth {
+    public static class SessionConfig {
         /**
          * 认证策略类型
+         * <ul>
+         *   <li>jwt - 基于JWT的无状态认证</li>
+         *   <li>redis-token - 基于Redis的有状态认证</li>
+         * </ul>
          */
         @NotNull
-        private AuthType type = AuthType.JWT;
+        private String type;
 
         /**
-         * 访问令牌有效期（秒）
+         * 访问令牌有效期（单位：秒）
+         * <p>默认值：3600（1小时）</p>
+         * <p>-1 表示永不过期</p>
          */
         @Min(-1)
-        private int accessTokenTtl = 3600;
+        private Integer accessTokenTimeToLive = 3600;
 
         /**
-         * 刷新令牌有效期（秒）
+         * 刷新令牌有效期（单位：秒）
+         * <p>默认值：604800（7天）</p>
+         * <p>-1 表示永不过期</p>
          */
         @Min(-1)
-        private int refreshTokenTtl = 604800;
+        private Integer refreshTokenTimeToLive = 604800;
 
         /**
-         * JWT 配置
+         * JWT 配置项
          */
-        private JwtConfig jwtConfig = new JwtConfig();
+        private JwtConfig jwt;
 
         /**
-         * Redis Token 配置
+         * Redis令牌配置项
          */
-        private RedisTokenConfig redisTokenConfig = new RedisTokenConfig();
-
-        @Data
-        public static class JwtConfig {
-            /**
-             * JWT 密钥
-             */
-            @NotBlank
-            @Size(min = 32, message = "HS256算法密钥至少需要32字符")
-            private String key;
-        }
-
-        @Data
-        public static class RedisTokenConfig {
-            /**
-             * 最大并发会话数
-             */
-            @Min(-1)
-            private int maxSessions = 1;
-
-            /**
-             * 会话超限处理策略
-             */
-            private SessionControlStrategy sessionControl = SessionControlStrategy.REVOKE_OLDEST;
-        }
+        private RedisTokenConfig redisToken;
     }
 
     /**
-     * 认证策略类型枚举
+     * JWT 配置嵌套类
      */
-    public enum AuthType {
-        JWT, REDIS_TOKEN
+    @Data
+    public static class JwtConfig {
+        /**
+         * JWT签名密钥
+         * <p>HS256算法要求至少32个字符</p>
+         * <p>示例：SecretKey012345678901234567890123456789</p>
+         */
+        @NotNull
+        private String secretKey;
     }
 
     /**
-     * 会话控制策略枚举
+     * Redis令牌配置嵌套类
      */
-    public enum SessionControlStrategy {
-        REVOKE_OLDEST, DENY_NEW
+    @Data
+    public static class RedisTokenConfig {
+        /**
+         * 是否允许多设备同时登录
+         * <p>true - 允许同一账户多设备登录（默认）</p>
+         * <p>false - 新登录会使旧令牌失效</p>
+         */
+        private Boolean allowMultiLogin = true;
     }
 }

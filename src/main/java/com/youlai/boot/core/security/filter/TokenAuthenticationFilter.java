@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.common.result.ResultCode;
 import com.youlai.boot.common.util.ResponseUtils;
-import com.youlai.boot.core.security.manager.TokenManager;
+import com.youlai.boot.core.security.token.TokenManager;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

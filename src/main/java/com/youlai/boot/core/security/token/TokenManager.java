@@ -1,4 +1,4 @@
-package com.youlai.boot.core.security.manager;
+package com.youlai.boot.core.security.token;
 
 
 import com.youlai.boot.core.security.model.AuthenticationToken;
@@ -25,7 +25,7 @@ public interface TokenManager {
     /**
      * 解析 Token 获取认证信息
      *
-     * @param token JWT Token
+     * @param token  Token
      * @return 用户认证信息
      */
     Authentication parseToken(String token);

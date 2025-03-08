@@ -72,25 +72,21 @@ mybatis-plus:
 
 # 安全配置
 security:
-  # 认证策略核心配置
-  auth:
-    type: jwt # 认证策略 [jwt|redis-token]
-    access-token-ttl: 3600   # 访问令牌 有效期(单位：秒)，默认 1 小时，-1 表示永不过期
-    refresh-token-ttl: 604800   # 刷新令牌有效期(单位：秒)，默认 7 天，-1 表示永不过期
-    # JWT 认证配置
+  session:
+    type: jwt # 会话方式 [jwt|redis-token]
+    access-token-time-to-live: 3600   # 访问令牌 有效期(单位：秒)，默认 1 小时，-1 表示永不过期
+    refresh-token-time-to-live: 604800   # 刷新令牌有效期(单位：秒)，默认 7 天，-1 表示永不过期
     jwt:
-      key: SecretKey012345678901234567890123456789012345678901234567890123456789  # JWT密钥(HS256算法至少32字符，RS256至少2048位)
-    # Redis Token 认证配置
+      secret-key: SecretKey012345678901234567890123456789012345678901234567890123456789 # JWT密钥(HS256算法至少32字符)
     redis-token:
-      max-sessions: 1  # 最大允许多个设备同时登录的数量（默认为1）
-      session-control: REVOKE_OLDEST  # 会话超限处理策略 [REJECT|REVOKE_OLDEST|REVOKE_ALL]
-  # 白名单路径
+      allow-multi-login: false # 是否允许多设备登录
+  # 安全白名单路径（完全绕过安全过滤器）
   ignore-urls:
     - /api/v1/auth/login/**       # 登录接口(账号密码登录、手机验证码登录和微信登录)
     - /api/v1/auth/captcha        # 验证码获取接口
     - /api/v1/auth/refresh-token  # 刷新令牌接口
     - /ws/**                      # WebSocket接口
-  # 不走 Spring Security 过滤器链的请求路径(一般是静态资源)
+  # 非安全端点路径（允许匿名访问的API）
   unsecured-urls:
     - ${springdoc.swagger-ui.path}
     - /doc.html

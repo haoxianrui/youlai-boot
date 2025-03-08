@@ -1,4 +1,4 @@
-package com.youlai.boot.core.security.manager;
+package com.youlai.boot.core.security.token;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * @author Ray.Hao
  * @since 2024/11/15
  */
-@ConditionalOnProperty(value = "security.auth.type", havingValue = "jwt")
+@ConditionalOnProperty(value = "security.session.type", havingValue = "jwt")
 @Service
 public class JwtTokenManager implements TokenManager {
 
@@ -49,7 +49,7 @@ public class JwtTokenManager implements TokenManager {
     public JwtTokenManager(SecurityProperties securityProperties, RedisTemplate<String, Object> redisTemplate) {
         this.securityProperties = securityProperties;
         this.redisTemplate = redisTemplate;
-        this.secretKey = securityProperties.getAuth().getJwtConfig().getKey().getBytes();
+        this.secretKey = securityProperties.getSession().getJwt().getSecretKey().getBytes();
     }
 
     /**
@@ -60,8 +60,8 @@ public class JwtTokenManager implements TokenManager {
      */
     @Override
     public AuthenticationToken generateToken(Authentication authentication) {
-        int accessTokenTimeToLive = securityProperties.getAuth().getAccessTokenTtl();
-        int refreshTokenTimeToLive = securityProperties.getAuth().getRefreshTokenTtl();
+        int accessTokenTimeToLive = securityProperties.getSession().getAccessTokenTimeToLive();
+        int refreshTokenTimeToLive = securityProperties.getSession().getRefreshTokenTimeToLive();
 
         String accessToken = generateToken(authentication, accessTokenTimeToLive);
         String refreshToken = generateToken(authentication, refreshTokenTimeToLive);
@@ -175,7 +175,7 @@ public class JwtTokenManager implements TokenManager {
         }
 
         Authentication authentication = parseToken(refreshToken);
-        int accessTokenExpiration = securityProperties.getAuth().getRefreshTokenTtl();
+        int accessTokenExpiration = securityProperties.getSession().getRefreshTokenTimeToLive();
         String newAccessToken = generateToken(authentication, accessTokenExpiration);
 
         return AuthenticationToken.builder()

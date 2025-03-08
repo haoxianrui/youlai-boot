@@ -12,7 +12,7 @@ import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.common.model.Option;
-import com.youlai.boot.core.security.manager.TokenManager;
+import com.youlai.boot.core.security.token.TokenManager;
 import com.youlai.boot.core.security.service.PermissionService;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.shared.mail.service.MailService;
