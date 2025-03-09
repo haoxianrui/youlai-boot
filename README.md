@@ -35,7 +35,7 @@
 
 - **🛠️ 功能模块**: 包括用户管理、角色管理、菜单管理、部门管理、字典管理等多个功能。
 
-## 📦 项目源码
+## 🌈 项目源码
 
 | 项目类型 | GitCode                        | Gitee                                                                 | Github                                                                 |
 |--------|----------------------------------|-----------------------------------------------------------------------|------------------------------------------------------------------------|
@@ -43,41 +43,26 @@
 | 前端    | [vue3-element-admin](https://gitcode.com/youlai/vue3-element-admin) | [vue3-element-admin](https://gitee.com/youlai/vue3-element-admin)     | [vue3-element-admin](https://github.com/youlaitech/vue3-element-admin) |
 | 移动端    | [vue-uniapp-template](https://gitcode.com/youlai/vue-uniapp-template) | [vue-uniapp-template](https://gitcode.com/youlai/vue-uniapp-template) | [vue-uniapp-template](https://gitcode.com/youlaitech/vue-uniapp-template)  |
 
-## 🌈 文档地址
+## 📚 文档地址
 
-| 文档类型 | 地址 |
-|------|------|
-| 在线演示 | [https://vue.youlai.tech](https://vue.youlai.tech) |
-| 接口文档 | [Apifox 在线文档](https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5) |
-| 官方文档 | [ 项目文档](https://www.youlai.tech/youlai-boot/) |
-| 系统文档 | [全功能手册](https://youlai.blog.csdn.net/article/details/145178880) |
-| 系统文档 | [从0到1搭建指南 ](https://youlai.blog.csdn.net/article/details/145177011) |
+| 文档类型 | 文档名称        | 地址                                                                                                                                                      |
+|----------|-------------|--------------------------------------------------------------------------------------|
+| 在线演示 | 项目在线演示      | 🌐 [https://vue.youlai.tech](https://vue.youlai.tech)                                                                                                   |
+| 接口文档 | Apifox 在线文档 | 📄 [https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5](https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5) |
+| 官方文档 |   项目文档       | 📚 [ https://www.youlai.tech/youlai-boot](https://www.youlai.tech/youlai-boot/)                                                                                                          |
+| 系统文档 | 全功能手册       | 📚 [https://youlai.blog.csdn.net/article/details/145178880](https://youlai.blog.csdn.net/article/details/145178880)                                     |
+| 系统文档 | 从0到1搭建指南    | 📚 [https://youlai.blog.csdn.net/article/details/145177011](https://youlai.blog.csdn.net/article/details/145177011)                                     |
 
-
-## 🚀 项目启动
-
-1. **克隆项目**
-
-   ```bash
-   git clone https://gitee.com/youlaiorg/youlai-boot.git
-   ```
-
-2. **数据库初始化**
-
-   执行 [youlai_boot.sql](sql/mysql/youlai_boot.sql) 脚本完成数据库创建、表结构和基础数据的初始化。
-
-3. **修改配置**
-
-   [application-dev.yml](src/main/resources/application-dev.yml) 修改MySQL、Redis连接配置；
-
-4. **启动项目**
-
-   执行 [YoulaiBootApplication.java](src/main/java/com/youlai/boot/YoulaiBootApplication.java) 的 main 方法完成后端项目启动；
-
-   访问接口文档地址 [http://localhost:8989/doc.html](http://localhost:8989/doc.html) 验证项目启动是否成功。
 
 
 ## 📁 项目目录
+
+
+<details>
+<summary> 目录结构 </summary>
+
+<br>
+
 ```
 youlai-boot
 ├── docker                              # Docker 目录
@@ -130,6 +115,39 @@ youlai-boot
 │   └── YouLaiBootApplication           # 启动类
 └── end                             
 ```
+</details>
+
+
+
+## 🚀 项目启动
+
+详细参考官方文档: [项目启动](https://www.youlai.tech/youlai-boot/1.%E9%A1%B9%E7%9B%AE%E5%90%AF%E5%8A%A8/)
+
+1. **克隆项目**
+
+   ```bash
+   git clone https://gitee.com/youlaiorg/youlai-boot.git
+   ```
+
+2. **数据库初始化**
+
+   执行 [youlai_boot.sql](sql/mysql/youlai_boot.sql) 脚本完成数据库创建、表结构和基础数据的初始化。
+
+3. **修改配置**
+
+   [application-dev.yml](src/main/resources/application-dev.yml) 修改MySQL、Redis连接配置；
+
+4. **启动项目**
+
+   执行 [YoulaiBootApplication.java](src/main/java/com/youlai/boot/YoulaiBootApplication.java) 的 main 方法完成后端项目启动；
+
+   访问接口文档地址 [http://localhost:8989/doc.html](http://localhost:8989/doc.html) 验证项目启动是否成功。
+
+
+## 🚀 项目部署
+
+参考官方文档: [项目部署](https://www.youlai.tech/youlai-boot/5.%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2/)
+
 
 ## ✅ 项目统计
 
