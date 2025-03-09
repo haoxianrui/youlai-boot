@@ -35,19 +35,24 @@
 
 - **🛠️ 功能模块**: 包括用户管理、角色管理、菜单管理、部门管理、字典管理等多个功能。
 
+## 📦 项目源码
 
-## 🌈 项目资源
+| 项目类型 | GitCode                        | Gitee                                                                 | Github                                                                 |
+|--------|----------------------------------|-----------------------------------------------------------------------|------------------------------------------------------------------------|
+| 后端      | [youlai-boot](https://gitcode.com/youlai/youlai-boot)   | [youlai-boot](https://gitee.com/youlaiorg/youlai-boot)                | [youlai-boot](https://gitee.com/haoxianrui/youlai-boot)                |
+| 前端    | [vue3-element-admin](https://gitcode.com/youlai/vue3-element-admin) | [vue3-element-admin](https://gitee.com/youlai/vue3-element-admin)     | [vue3-element-admin](https://github.com/youlaitech/vue3-element-admin) |
+| 移动端    | [vue-uniapp-template](https://gitcode.com/youlai/vue-uniapp-template) | [vue-uniapp-template](https://gitcode.com/youlai/vue-uniapp-template) | [vue-uniapp-template](https://gitcode.com/youlaitech/vue-uniapp-template)  |
 
-- **🌍 在线演示**: [https://vue.youlai.tech](https://vue.youlai.tech)
-- **📦 源码集合**  
-  `后端`・[youlai-boot](https://gitee.com/youlaiorg/youlai-boot)  
-  `前端`・[vue3-element-admin](https://gitee.com/youlaiorg/vue3-element-admin)  
-  `移动端`・[vue-uniapp-template](https://gitee.com/youlaiorg/vue-uniapp-template)
-- **📄 接口文档**  
-  [Apifox 在线文档](https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5)
-- **📚 系统文档**  
-  [全功能手册](https://youlai.blog.csdn.net/article/details/145178880)  
-  [从0到1搭建指南](https://youlai.blog.csdn.net/article/details/145177011)
+## 🌈 文档地址
+
+| 文档类型 | 文档名称        | 地址 |
+|------|-------------|------|
+| 在线演示 | 项目在线演示      | [https://vue.youlai.tech](https://vue.youlai.tech) |
+| 接口文档 | Apifox 在线文档 | [https://www.apifox.cn/apidoc](https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5) |
+| 官方文档 | 项目文档        | https://www.youlai.tech/youlai-boot](https://www.youlai.tech/youlai-boot/) |
+| 系统文档 | 全功能手册       | [https://youlai.blog.csdn.net/article/details/145178880](https://youlai.blog.csdn.net/article/details/145178880) |
+| 系统文档 | 从0到1搭建指南    | [https://youlai.blog.csdn.net/article/details/145177011](https://youlai.blog.csdn.net/article/details/145177011) |
+
 
 ## 🚀 项目启动
 
