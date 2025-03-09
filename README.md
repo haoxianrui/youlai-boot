@@ -20,7 +20,7 @@
 ![](https://raw.gitmirror.com/youlaitech/image/main/docs/rainbow.png)
 
 <div align="center">
-  <a target="_blank" href="https://vue.youlai.tech/">🖥️ 在线预览</a> |  <a target="_blank" href="https://youlai.blog.csdn.net/article/details/145178880">📑 阅读文档</a> 
+  <a target="_blank" href="https://vue.youlai.tech/">🖥️ 在线预览</a> |  <a target="_blank" href="https://youlai.blog.csdn.net/article/details/145178880">📑 阅读文档</a> |  <a target="_blank" href="https://www.youlai.tech/">🌐 官网</a>
 </div>
 
 ## 📢 项目简介
@@ -29,20 +29,25 @@
 
 - **🚀 开发框架**: 使用 Spring Boot 3 和 Vue 3，以及 Element-Plus 等主流技术栈，实时更新。
 
-- **🔐 安全认证**: 结合 Spring Security 和 JWT 提供安全、无状态、分布式友好的身份验证和授权机制。
+- **🔐 安全认证**: 基于 Spring Security 6 原生架构，集成 JWT 令牌自动续期（无状态）和 Redis 会话多端互斥管理（实时强制离线）双重认证机制，构建企业级身份安全中枢。
 
 - **🔑 权限管理**: 基于 RBAC 模型，实现细粒度的权限控制，涵盖接口方法和按钮级别。
 
 - **🛠️ 功能模块**: 包括用户管理、角色管理、菜单管理、部门管理、字典管理等多个功能。
 
 
-## 🌈 项目地址
+## 🌈 项目资源
 
-- **在线预览**：[https://vue.youlai.tech](https://vue.youlai.tech)
-- **前端项目**：[vue3-element-admin](https://gitee.com/youlaiorg/vue3-element-admin)
-- **接口文档**：[https://www.apifox.cn/apidoc](https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5)
-- **项目文档**：[youlai-boot 企业级权限管理系统全功能详解](https://youlai.blog.csdn.net/article/details/145178880)
-- **从0到1文档**：[从0到1搭建 youlai-boot 企业级权限管理系统](https://youlai.blog.csdn.net/article/details/145177011)
+- **🌍 在线演示**: [https://vue.youlai.tech](https://vue.youlai.tech)
+- **📦 源码集合**  
+  `后端`・[youlai-boot](https://gitee.com/youlaiorg/youlai-boot)  
+  `前端`・[vue3-element-admin](https://gitee.com/youlaiorg/vue3-element-admin)  
+  `移动端`・[vue-uniapp-template](https://gitee.com/youlaiorg/vue-uniapp-template)
+- **📄 接口文档**  
+  [Apifox 在线文档](https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5)
+- **📚 系统文档**  
+  [全功能手册](https://youlai.blog.csdn.net/article/details/145178880)  
+  [从0到1搭建指南](https://youlai.blog.csdn.net/article/details/145177011)
 
 ## 🚀 项目启动
 
@@ -70,6 +75,8 @@
 ## 📁 项目目录
 ```
 youlai-boot
+├── docker                              # Docker 目录
+│   ├── docker-compose.yml              # docker-compose 脚本
 ├── sql                                 # SQL脚本
 │   ├── mysql                           # MySQL 脚本
 ├── src                                 # 源码目录
@@ -83,32 +90,11 @@ youlai-boot
 │   │   ├── result                      # 结果封装
 │   │   └── util                        # 工具类
 │   ├── config                          # 自动装配配置
-│   │   ├── property                    # 配置属性
-│   │   │   ├── AliyunSmsProperties     # 阿里云短信配置属性
-│   │   │   ├── CaptchaProperties       # 验证码配置属性
-│   │   │   ├── CodegenProperties       # 文件配置属性
-│   │   │   ├── MailProperties          # 邮件配置属性
-│   │   │   ├── SecurityProperties      # 安全配置属性
-│   │   ├── CorsConfig                  # 跨域共享配置
-│   │   ├── MybatisConfig               # Mybatis 自动装配配置
-│   │   ├── RedisCacheConfig            # Redis 缓存自动装配配置
-│   │   ├── RedisConfig                 # Redis 自动装配配置
-│   │   ├── SecurityConfig              # Spring Security 自动装配配置
-│   │   ├── SwaggerConfig               # API 接口文档配置
-│   │   ├── WebMvcConfig                # WebMvc 配置
-│   │   ├── WebSocketConfig             # WebSocket 自动装配配置
-│   │   └── XxlJobConfig                # XXL-JOB 自动装配配置
+│   │   └── property                    # 配置属性目录
 │   ├── core                            # 核心功能
-
-│   │   ├── aspect                      # 切面
-│   │   │   ├── LogAspect               # 日志切面
-│   │   │   └── RepeatSubmitAspect      # 防重提交切面
-│   │   ├── filter                      # 过滤器
-│   │   │   ├── RateLimiterFilter       # 限流过滤器
-│   │   │   └── RequestLogFilter        # 请求日志过滤器
-│   │   ├── handler                     # 处理器
-│   │   │   ├── MyDataPermissionHandler # 数据权限处理器
-│   │   │   └── MyMetaObjectHandler     # 元对象字段填充处理器
+│   │   ├── aspect                      # 切面(日志、防重提交)
+│   │   ├── filter                      # 过滤器(请求日志、限流)
+│   │   ├── handler                     # 处理器(数据权限、数据填充)
 │   │   └── security                    # Spring Security 安全模块
 │   ├── modules                         # 业务模块
 │   │   ├── member                      # 会员模块【业务模块演示】
@@ -136,11 +122,9 @@ youlai-boot
 │   │   │   └── vo                      # 视图对象
 │   │   ├── mapper                      # 数据库访问层
 │   │   └── service                     # 业务逻辑层
-│   └── YouLaiApplication               # 启动类
+│   └── YouLaiBootApplication           # 启动类
 └── end                             
 ```
-
-
 
 ## ✅ 项目统计
 
@@ -153,7 +137,11 @@ Thanks to all the contributors!
 
 ## 💖 加交流群
 
-> 关注公众号 有来技术 ，点击菜单 交流群 获取加群二维码。
+> **关注「有来技术」公众号，点击菜单“交流群”获取加群二维码。**
+>
+> 如果二维码过期，请加微信(haoxianrui)备注「前端」、「后端」或「全栈」拉你进群。
+>
+> 交流群仅限技术交流，为过滤广告营销暂设此门槛，感谢理解与配合
 
-![](https://foruda.gitee.com/images/1737108820762592766/3390ed0d_716974.png)
+![有来技术公众号二维码](https://foruda.gitee.com/images/1737108820762592766/3390ed0d_716974.png)
 
