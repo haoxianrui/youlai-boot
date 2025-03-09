@@ -86,6 +86,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         int pageNum = queryParams.getPageNum();
         int pageSize = queryParams.getPageSize();
         Page<UserBO> page = new Page<>(pageNum, pageSize);
+
+        boolean isRoot = SecurityUtils.isRoot();
+        queryParams.setIsRoot(isRoot);
+
         // 查询数据
         Page<UserBO> userPage = this.baseMapper.getUserPage(page, queryParams);
 
@@ -276,15 +280,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public List<UserExportDTO> listExportUsers(UserPageQuery queryParams) {
-        List<UserExportDTO> userExportDTOS = this.baseMapper.listExportUsers(queryParams);
-        //获取角色的字典数据
-        List<DictData> list = dictDataService.list(new LambdaQueryWrapper<DictData>().eq(DictData::getDictCode, DictCodeEnum.GENDER.getValue()));
-        Map<String, String> genderMap = list.stream().collect(Collectors.toMap(DictData::getValue, DictData::getLabel));
-        userExportDTOS.forEach(userExportDTO -> {
-            String genderLabel = genderMap.get(userExportDTO.getGender());
-            userExportDTO.setGender(genderLabel);
-        });
-        return null;
+
+        boolean isRoot = SecurityUtils.isRoot();
+        queryParams.setIsRoot(isRoot);
+
+        List<UserExportDTO> exportUsers = this.baseMapper.listExportUsers(queryParams);
+        if (CollectionUtil.isNotEmpty(exportUsers)) {
+            //获取角色的字典数据
+            Map<String, String> genderMap = dictDataService.list(
+                            new LambdaQueryWrapper<DictData>().eq(DictData::getDictCode,
+                                    DictCodeEnum.GENDER.getValue())
+                    ).stream()
+                    .collect(Collectors.toMap(DictData::getValue, DictData::getLabel)
+                    );
+
+            exportUsers.forEach(item -> {
+                String gender = item.getGender();
+                if (StrUtil.isBlank(gender)) {
+                    return;
+                }
+
+                // 判断map是否为空
+                if (genderMap.isEmpty()) {
+                    return;
+                }
+
+                item.setGender(genderMap.get(gender));
+            });
+        }
+        return exportUsers;
     }
 
     /**
