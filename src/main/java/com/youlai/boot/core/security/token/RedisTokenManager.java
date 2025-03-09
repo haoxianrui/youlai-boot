@@ -43,6 +43,12 @@ public class RedisTokenManager implements TokenManager {
         this.redisTemplate = redisTemplate;
     }
 
+    /**
+     * 生成 Token
+     *
+     * @param authentication 用户认证信息
+     * @return
+     */
     @Override
     public AuthenticationToken generateToken(Authentication authentication) {
         SysUserDetails user = (SysUserDetails) authentication.getPrincipal();
@@ -57,36 +63,35 @@ public class RedisTokenManager implements TokenManager {
         OnlineUser onlineUser = buildOnlineUser(user);
 
         // 将访问令牌与刷新令牌与用户信息分别存入 Redis，并设置过期时间
-        redisTemplate.opsForValue().set(
+        setRedisValue(
                 StrUtil.format(RedisConstants.Auth.ACCESS_TOKEN_USER, accessToken),
                 onlineUser,
-                accessTtl,
-                TimeUnit.SECONDS
+                accessTtl
         );
-        redisTemplate.opsForValue().set(
+
+        setRedisValue(
                 StrUtil.format(RedisConstants.Auth.REFRESH_TOKEN_USER, refreshToken),
                 onlineUser,
-                refreshTtl,
-                TimeUnit.SECONDS
+                refreshTtl
         );
 
         // 单设备登录控制，若不允许多设备登录，则通过用户ID映射保存当前最新的访问令牌
         Boolean allowMultiLogin = securityProperties.getSession().getRedisToken().getAllowMultiLogin();
         if (!allowMultiLogin) {
             Long userId = user.getUserId();
-            String userAccessKey = StrUtil.format(RedisConstants.Auth.USER_ACCESS_TOKEN, userId);
+            String userAccessTokenKey = StrUtil.format(RedisConstants.Auth.USER_ACCESS_TOKEN, userId);
             // 获取当前用户已有的访问令牌
-            String oldAccessToken = (String) redisTemplate.opsForValue().get(userAccessKey);
+            String oldAccessToken = (String) redisTemplate.opsForValue().get(userAccessTokenKey);
             if (oldAccessToken != null) {
                 // 删除旧的访问令牌对应的用户信息缓存
                 redisTemplate.delete(StrUtil.format(RedisConstants.Auth.ACCESS_TOKEN_USER, oldAccessToken));
             }
             // 更新用户与访问令牌的映射
-            redisTemplate.opsForValue().set(userAccessKey, accessToken, accessTtl, TimeUnit.SECONDS);
+            setRedisValue(userAccessTokenKey, accessToken, accessTtl);
         }
         // 同时存储用户与刷新令牌的映射，便于后续刷新和踢出旧会话
-        String userRefreshKey = StrUtil.format(RedisConstants.Auth.USER_REFRESH_TOKEN, user.getUserId());
-        redisTemplate.opsForValue().set(userRefreshKey, refreshToken, refreshTtl, TimeUnit.SECONDS);
+        String userRefreshTokenKey = StrUtil.format(RedisConstants.Auth.USER_REFRESH_TOKEN, user.getUserId());
+        setRedisValue(userRefreshTokenKey, refreshToken, refreshTtl);
 
         return AuthenticationToken.builder()
                 .accessToken(accessToken)
@@ -181,7 +186,6 @@ public class RedisTokenManager implements TokenManager {
                 .build();
     }
 
-
     /**
      * 将 Token 加入黑名单
      *
@@ -226,4 +230,20 @@ public class RedisTokenManager implements TokenManager {
                 roles
         );
     }
+
+    /**
+     * 将 Token 存储到 Redis
+     *
+     * @param key   键
+     * @param value 值
+     * @param ttl   过期时间（秒）
+     */
+    private void setRedisValue(String key, Object value, int ttl) {
+        if (ttl != -1) {
+            redisTemplate.opsForValue().set(key, value, ttl, TimeUnit.SECONDS);
+        } else {
+            redisTemplate.opsForValue().set(key, value); // ttl=-1时永不过期
+        }
+    }
+
 }

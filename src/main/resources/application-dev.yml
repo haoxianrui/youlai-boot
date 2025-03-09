@@ -79,7 +79,7 @@ security:
     jwt:
       secret-key: SecretKey012345678901234567890123456789012345678901234567890123456789 # JWT密钥(HS256算法至少32字符)
     redis-token:
-      allow-multi-login: false # 是否允许多设备登录
+      allow-multi-login: true # 是否允许多设备登录
   # 安全白名单路径（完全绕过安全过滤器）
   ignore-urls:
     - /api/v1/auth/login/**       # 登录接口(账号密码登录、手机验证码登录和微信登录)
