@@ -49,7 +49,7 @@
 |------|-------------|------|
 | 在线演示 | 项目在线演示      | [https://vue.youlai.tech](https://vue.youlai.tech) |
 | 接口文档 | Apifox 在线文档 | [https://www.apifox.cn/apidoc](https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5) |
-| 官方文档 | 项目文档        | https://www.youlai.tech/youlai-boot](https://www.youlai.tech/youlai-boot/) |
+| 官方文档 | 项目文档        | [https://www.youlai.tech/youlai-boot](https://www.youlai.tech/youlai-boot/) |
 | 系统文档 | 全功能手册       | [https://youlai.blog.csdn.net/article/details/145178880](https://youlai.blog.csdn.net/article/details/145178880) |
 | 系统文档 | 从0到1搭建指南    | [https://youlai.blog.csdn.net/article/details/145177011](https://youlai.blog.csdn.net/article/details/145177011) |
 
