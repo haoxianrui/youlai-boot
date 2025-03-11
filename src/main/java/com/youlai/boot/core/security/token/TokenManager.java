@@ -30,7 +30,6 @@ public interface TokenManager {
      */
     Authentication parseToken(String token);
 
-
     /**
      * 校验 Token 是否有效
      *
@@ -38,7 +37,6 @@ public interface TokenManager {
      * @return 是否有效
      */
     boolean validateToken(String token);
-
 
     /**
      *  刷新 Token
@@ -49,11 +47,11 @@ public interface TokenManager {
     AuthenticationToken refreshToken(String token);
 
     /**
-     * 将 Token 加入黑名单
+     * 令 Token 失效
      *
      * @param token JWT Token
      */
-    default void blacklistToken(String token) {
+    default void invalidateToken(String token) {
         // 默认实现可以是空的，或者抛出不支持的操作异常
         // throw new UnsupportedOperationException("Not implemented");
     }

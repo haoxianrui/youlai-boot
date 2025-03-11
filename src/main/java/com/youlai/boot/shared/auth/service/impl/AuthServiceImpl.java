@@ -155,7 +155,7 @@ public class AuthServiceImpl implements AuthService {
         if (StrUtil.isNotBlank(token) && token.startsWith(SecurityConstants.BEARER_TOKEN_PREFIX )) {
             token = token.substring(SecurityConstants.BEARER_TOKEN_PREFIX .length());
             // 将JWT令牌加入黑名单
-            tokenManager.blacklistToken(token);
+            tokenManager.invalidateToken(token);
             // 清除Security上下文
             SecurityContextHolder.clearContext();
         }

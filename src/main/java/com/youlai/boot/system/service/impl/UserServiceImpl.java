@@ -408,7 +408,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (result) {
             // 加入黑名单，重新登录
             String accessToken = SecurityUtils.getTokenFromRequest();
-            tokenManager.blacklistToken(accessToken);
+            tokenManager.invalidateToken(accessToken);
         }
         return result;
     }

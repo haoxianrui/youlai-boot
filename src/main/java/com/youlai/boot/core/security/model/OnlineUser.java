@@ -41,5 +41,6 @@ public class OnlineUser {
     /**
      * 角色权限集合
      */
-    private Set<String> authorities;
+    private Set<String> roles;
+
 }

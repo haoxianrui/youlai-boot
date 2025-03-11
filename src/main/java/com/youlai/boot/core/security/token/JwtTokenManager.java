@@ -131,7 +131,7 @@ public class JwtTokenManager implements TokenManager {
      * @param token JWT Token
      */
     @Override
-    public void blacklistToken(String token) {
+    public void invalidateToken(String token) {
         if (token.startsWith(SecurityConstants.BEARER_TOKEN_PREFIX)) {
             token = token.substring(SecurityConstants.BEARER_TOKEN_PREFIX.length());
         }
