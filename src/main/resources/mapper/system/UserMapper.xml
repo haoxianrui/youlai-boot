@@ -25,6 +25,7 @@
                 LEFT JOIN sys_role r ON sur.role_id = r.id
         <where>
             u.is_deleted = 0
+            <!-- 非超级管理员用户限制查看超级管理员  -->
             <if test="!queryParams.isRoot">
                 AND NOT EXISTS (
                 SELECT

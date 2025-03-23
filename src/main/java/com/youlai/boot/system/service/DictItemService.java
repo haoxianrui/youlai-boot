@@ -3,22 +3,20 @@ package com.youlai.boot.system.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.youlai.boot.common.model.Option;
-import com.youlai.boot.system.model.entity.DictData;
-import com.youlai.boot.system.model.form.DictDataForm;
-import com.youlai.boot.system.model.form.DictForm;
-import com.youlai.boot.system.model.query.DictDataPageQuery;
-import com.youlai.boot.system.model.query.DictPageQuery;
-import com.youlai.boot.system.model.vo.DictDataPageVO;
+import com.youlai.boot.system.model.entity.DictItem;
+import com.youlai.boot.system.model.form.DictItemForm;
+import com.youlai.boot.system.model.query.DictItemPageQuery;
+import com.youlai.boot.system.model.vo.DictItemPageVO;
 
 import java.util.List;
 
 /**
- * 字典数据接口
+ * 字典项接口
  *
  * @author Ray Hao
  * @since 2023/3/4
  */
-public interface DictDataService extends IService<DictData> {
+public interface DictItemService extends IService<DictItem> {
 
     /**
      * 字典数据分页列表
@@ -26,23 +24,24 @@ public interface DictDataService extends IService<DictData> {
      * @param queryParams
      * @return
      */
-    Page<DictDataPageVO> getDictDataPage(DictDataPageQuery queryParams);
+    Page<DictItemPageVO> getDictItemPage(DictItemPageQuery queryParams);
 
     /**
      * 获取字典数据表单
      *
-     * @param id 字典数据ID
+     * @param dictCode 字典编码
+     * @param itemId 字典数据ID
      * @return
      */
-    DictDataForm getDictDataForm(Long id);
+    DictItemForm getDictItemForm(String dictCode,Long itemId);
 
     /**
-     * 保存字典数据
+     * 保存字典项
      *
      * @param formData
      * @return
      */
-    boolean saveDictData(DictDataForm formData);
+    boolean saveDictItem(DictItemForm formData);
 
     /**
      * 更新字典数据
@@ -50,14 +49,14 @@ public interface DictDataService extends IService<DictData> {
      * @param formData 字典数据表单
      * @return
      */
-    boolean updateDictData(DictDataForm formData);
+    boolean updateDictItem(DictItemForm formData);
 
     /**
      * 删除字典数据
      *
      * @param ids 字典数据ID,多个逗号分隔
      */
-    void deleteDictDataByIds(String ids);
+    void deleteDictItemByIds(String ids);
 
     /**
      * 获取字典数据列表

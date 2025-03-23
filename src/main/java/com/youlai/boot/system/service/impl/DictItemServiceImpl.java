@@ -5,13 +5,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.converter.DictDataConverter;
-import com.youlai.boot.system.mapper.DictDataMapper;
-import com.youlai.boot.system.model.entity.DictData;
-import com.youlai.boot.system.model.form.DictDataForm;
-import com.youlai.boot.system.model.query.DictDataPageQuery;
-import com.youlai.boot.system.model.query.DictPageQuery;
-import com.youlai.boot.system.model.vo.DictDataPageVO;
-import com.youlai.boot.system.service.DictDataService;
+import com.youlai.boot.system.mapper.DictItemMapper;
+import com.youlai.boot.system.model.entity.DictItem;
+import com.youlai.boot.system.model.form.DictItemForm;
+import com.youlai.boot.system.model.query.DictItemPageQuery;
+import com.youlai.boot.system.model.vo.DictItemPageVO;
+import com.youlai.boot.system.service.DictItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +25,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class DictDataServiceImpl extends ServiceImpl<DictDataMapper, DictData> implements DictDataService {
+public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> implements DictItemService {
 
     private final DictDataConverter dictDataConverter;
 
@@ -37,23 +36,24 @@ public class DictDataServiceImpl extends ServiceImpl<DictDataMapper, DictData> i
      * @return
      */
     @Override
-    public Page<DictDataPageVO> getDictDataPage(DictDataPageQuery queryParams) {
+    public Page<DictItemPageVO> getDictItemPage(DictItemPageQuery queryParams) {
         int pageNum = queryParams.getPageNum();
         int pageSize = queryParams.getPageSize();
-        Page<DictDataPageVO> page = new Page<>(pageNum, pageSize);
+        Page<DictItemPageVO> page = new Page<>(pageNum, pageSize);
 
-        return this.baseMapper.getDictDataPage(page, queryParams);
+        return this.baseMapper.getDictItemPage(page, queryParams);
     }
 
     /**
-     * 获取字典数据表单
+     * 获取字典项表单
      *
-     * @param id 字典数据ID
+     * @param dictCode 字典编码
+     * @param itemId 字典数据ID
      * @return
      */
     @Override
-    public DictDataForm getDictDataForm(Long id) {
-        DictData entity = this.getById(id);
+    public DictItemForm getDictItemForm(String dictCode,Long itemId) {
+        DictItem entity = this.getById(itemId);
         return dictDataConverter.toForm(entity);
     }
 
@@ -64,8 +64,8 @@ public class DictDataServiceImpl extends ServiceImpl<DictDataMapper, DictData> i
      * @return
      */
     @Override
-    public boolean saveDictData(DictDataForm formData) {
-        DictData entity = dictDataConverter.toEntity(formData);
+    public boolean saveDictItem(DictItemForm formData) {
+        DictItem entity = dictDataConverter.toEntity(formData);
         return this.save(entity);
     }
 
@@ -76,8 +76,8 @@ public class DictDataServiceImpl extends ServiceImpl<DictDataMapper, DictData> i
      * @return
      */
     @Override
-    public boolean updateDictData(DictDataForm formData) {
-        DictData entity = dictDataConverter.toEntity(formData);
+    public boolean updateDictItem(DictItemForm formData) {
+        DictItem entity = dictDataConverter.toEntity(formData);
         return this.updateById(entity);
     }
 
@@ -87,7 +87,7 @@ public class DictDataServiceImpl extends ServiceImpl<DictDataMapper, DictData> i
      * @param ids 字典数据ID集合
      */
     @Override
-    public void deleteDictDataByIds(String ids) {
+    public void deleteDictItemByIds(String ids) {
         List<Long> idList = Arrays.stream(ids.split(",")).map(Long::parseLong).toList();
         this.removeByIds(idList);
     }
@@ -100,9 +100,9 @@ public class DictDataServiceImpl extends ServiceImpl<DictDataMapper, DictData> i
      */
     @Override
     public List<Option<String>> getDictDataList(String dictCode) {
-        return this.list(new LambdaQueryWrapper<DictData>()
-                        .eq(DictData::getDictCode, dictCode)
-                        .eq(DictData::getStatus, 1)
+        return this.list(new LambdaQueryWrapper<DictItem>()
+                        .eq(DictItem::getDictCode, dictCode)
+                        .eq(DictItem::getStatus, 1)
                 ).stream().map(item -> new Option<>(item.getValue(), item.getLabel(),item.getTagType()))
                 .toList();
     }

@@ -6,15 +6,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.system.converter.DictConverter;
-import com.youlai.boot.system.converter.DictDataConverter;
 import com.youlai.boot.system.mapper.DictMapper;
 import com.youlai.boot.system.model.entity.Dict;
-import com.youlai.boot.system.model.entity.DictData;
+import com.youlai.boot.system.model.entity.DictItem;
 import com.youlai.boot.system.model.form.DictForm;
 import com.youlai.boot.system.model.query.DictPageQuery;
+import com.youlai.boot.system.model.vo.DictItemOptionVO;
 import com.youlai.boot.system.model.vo.DictPageVO;
-import com.youlai.boot.system.model.vo.DictVO;
-import com.youlai.boot.system.service.DictDataService;
+import com.youlai.boot.system.service.DictItemService;
 import com.youlai.boot.system.service.DictService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,9 +31,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements DictService {
 
-    private final DictDataService dictDataService;
+    private final DictItemService dictItemService;
     private final DictConverter dictConverter;
-    private final DictDataConverter dictDataConverter;
 
     /**
      * 字典分页列表
@@ -65,7 +63,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         String dictCode = entity.getDictCode();
 
         long count = this.count(new LambdaQueryWrapper<Dict>()
-            .eq(Dict::getDictCode, dictCode)
+                .eq(Dict::getDictCode, dictCode)
         );
 
         Assert.isTrue(count == 0, "字典编码已存在");
@@ -127,9 +125,9 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
                 boolean removeResult = this.removeById(id);
                 // 删除字典下的字典项
                 if (removeResult) {
-                    dictDataService.remove(
-                            new LambdaQueryWrapper<DictData>()
-                                    .eq(DictData::getDictCode, dict.getDictCode())
+                    dictItemService.remove(
+                            new LambdaQueryWrapper<DictItem>()
+                                    .eq(DictItem::getDictCode, dict.getDictCode())
                     );
                 }
 
@@ -137,13 +135,28 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         }
     }
 
-        /**
-         * 获取字典列表（包含字典数据）
-         */
-        @Override
-        public List<DictVO> getAllDictWithData() {
-            return this.baseMapper.getAllDictWithData();
-        }
+
+    /**
+     * 获取字典项列表
+     *
+     * @param dictCode 字典编码
+     */
+    @Override
+    public List<DictItemOptionVO> getDictItems(String dictCode) {
+        return dictItemService.list(
+                        new LambdaQueryWrapper<DictItem>()
+                                .eq(DictItem::getDictCode, dictCode)
+                                .eq(DictItem::getStatus, 1)
+                                .orderByAsc(DictItem::getSort)
+                ).stream()
+                .map(item -> {
+                    DictItemOptionVO dictItemOptionVO = new DictItemOptionVO();
+                    dictItemOptionVO.setLabel(item.getLabel());
+                    dictItemOptionVO.setValue(item.getValue());
+                    dictItemOptionVO.setTagType(item.getTagType());
+                    return dictItemOptionVO;
+                }).toList();
+    }
 }
 
 

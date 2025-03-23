@@ -1,11 +1,10 @@
 package com.youlai.boot.system.converter;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.boot.system.model.entity.DictData;
-import com.youlai.boot.system.model.form.DictDataForm;
+import com.youlai.boot.system.model.entity.DictItem;
+import com.youlai.boot.system.model.form.DictItemForm;
 import com.youlai.boot.system.model.vo.DictPageVO;
 import com.youlai.boot.common.model.Option;
-import com.youlai.boot.system.model.form.DictForm;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -19,12 +18,12 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface DictDataConverter {
 
-    Page<DictPageVO> toPageVo(Page<DictData> page);
+    Page<DictPageVO> toPageVo(Page<DictItem> page);
 
-    DictDataForm toForm(DictData entity);
+    DictItemForm toForm(DictItem entity);
 
-    DictData toEntity(DictDataForm formFata);
+    DictItem toEntity(DictItemForm formFata);
 
-    Option<Long> toOption(DictData dictData);
-    List<Option<Long>> toOption(List<DictData> dictData);
+    Option<Long> toOption(DictItem dictItem);
+    List<Option<Long>> toOption(List<DictItem> dictData);
 }

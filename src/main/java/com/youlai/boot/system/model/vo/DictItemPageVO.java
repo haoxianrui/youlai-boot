@@ -7,7 +7,7 @@ import lombok.Setter;
 
 
 /**
- * 字典数据项分页VO
+ * 字典项分页VO
  *
  * @author Ray
  * @since 0.0.1
@@ -15,7 +15,7 @@ import lombok.Setter;
 @Schema(description = "字典数据分页对象")
 @Getter
 @Setter
-public class DictDataPageVO {
+public class DictItemPageVO {
 
     @Schema(description = "字典数据ID")
     private Long id;

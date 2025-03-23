@@ -4,12 +4,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.boot.common.result.PageResult;
 import com.youlai.boot.common.result.Result;
 import com.youlai.boot.common.enums.LogModuleEnum;
+import com.youlai.boot.system.model.form.DictItemForm;
+import com.youlai.boot.system.model.query.DictItemPageQuery;
 import com.youlai.boot.system.model.query.DictPageQuery;
+import com.youlai.boot.system.model.vo.DictItemOptionVO;
+import com.youlai.boot.system.model.vo.DictItemPageVO;
 import com.youlai.boot.system.model.vo.DictPageVO;
 import com.youlai.boot.common.annotation.RepeatSubmit;
 import com.youlai.boot.system.model.form.DictForm;
 import com.youlai.boot.common.annotation.Log;
-import com.youlai.boot.system.model.vo.DictVO;
+import com.youlai.boot.system.service.DictItemService;
 import com.youlai.boot.system.service.DictService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,17 +29,23 @@ import java.util.List;
 /**
  * 字典控制层
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2.9.0
  */
 @Tag(name = "06.字典接口")
 @RestController
-@RequestMapping("/api/v1/dict")
+@SuppressWarnings("SpellCheckingInspection")
+@RequestMapping("/api/v1/dicts")
 @RequiredArgsConstructor
 public class DictController {
 
     private final DictService dictService;
+    private final DictItemService dictItemService;
 
+
+    //---------------------------------------------------
+    // 字典相关接口
+    //---------------------------------------------------
     @Operation(summary = "字典分页列表")
     @GetMapping("/page")
     @Log( value = "字典分页列表",module = LogModuleEnum.DICT)
@@ -46,14 +56,7 @@ public class DictController {
         return PageResult.success(result);
     }
 
-    @Operation(summary = "所有字典列表")
-    @GetMapping("/list")
-    public Result<List<DictVO>> getAllDictWithData() {
-        List<DictVO> list = dictService.getAllDictWithData();
-        return Result.success(list);
-    }
-
-    @Operation(summary = "字典表单")
+    @Operation(summary = "字典表单数据")
     @GetMapping("/{id}/form")
     public Result<DictForm> getDictForm(
             @Parameter(description = "字典ID") @PathVariable Long id
@@ -89,6 +92,78 @@ public class DictController {
             @Parameter(description = "字典ID，多个以英文逗号(,)拼接") @PathVariable String ids
     ) {
         dictService.deleteDictByIds(Arrays.stream(ids.split(",")).toList());
+        return Result.success();
+    }
+
+
+    //---------------------------------------------------
+    // 字典项相关接口
+    //---------------------------------------------------
+    @Operation(summary = "字典项分页")
+    @GetMapping("/{dictCode}/items/page")
+    public PageResult<DictItemPageVO> getDictItemPage(
+            @PathVariable String dictCode,
+            DictItemPageQuery queryParams
+    ) {
+        queryParams.setDictCode(dictCode);
+        Page<DictItemPageVO> result = dictItemService.getDictItemPage(queryParams);
+        return PageResult.success(result);
+    }
+
+    @Operation(summary = "字典项列表")
+    @GetMapping("/{dictCode}/items")
+    public Result<List<DictItemOptionVO>> getDictItems(
+            @Parameter(description = "字典编码") @PathVariable String dictCode
+    ) {
+        List<DictItemOptionVO> list = dictService.getDictItems(dictCode);
+        return Result.success(list);
+    }
+
+    @Operation(summary = "新增字典项")
+    @PostMapping("/{dictCode}/items")
+    @PreAuthorize("@ss.hasPerm('sys:dict-item:add')")
+    @RepeatSubmit
+    public Result<Void> saveDictItem(
+            @PathVariable String dictCode,
+            @Valid @RequestBody DictItemForm formData
+    ) {
+        formData.setDictCode(dictCode);
+        boolean result = dictItemService.saveDictItem(formData);
+        return Result.judge(result);
+    }
+
+    @Operation(summary = "字典项表单数据")
+    @GetMapping("/{dictCode}/items/{itemId}/form")
+    public Result<DictItemForm> getDictItemForm(
+            @PathVariable String dictCode,
+            @Parameter(description = "字典项ID") @PathVariable Long itemId
+    ) {
+        DictItemForm formData = dictItemService.getDictItemForm(dictCode,itemId);
+        return Result.success(formData);
+    }
+
+    @Operation(summary = "修改字典项")
+    @PutMapping("/{dictCode}/items/{itemId}")
+    @PreAuthorize("@ss.hasPerm('sys:dict-item:edit')")
+    @RepeatSubmit
+    public Result<?> updateDictItem(
+            @PathVariable String dictCode,
+            @PathVariable Long itemId,
+            @RequestBody DictItemForm formData
+    ) {
+        formData.setId(itemId);
+        formData.setDictCode(dictCode);
+        boolean status = dictItemService.updateDictItem(formData);
+        return Result.judge(status);
+    }
+
+    @Operation(summary = "删除字典项")
+    @DeleteMapping("/{dictCode}/items/{itemIds}")
+    @PreAuthorize("@ss.hasPerm('sys:dict-item:delete')")
+    public Result<Void> deleteDictItems(
+            @Parameter(description = "字典ID，多个以英文逗号(,)拼接") @PathVariable String ids
+    ) {
+        dictItemService.deleteDictItemByIds(ids);
         return Result.success();
     }
 

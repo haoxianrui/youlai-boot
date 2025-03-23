@@ -9,6 +9,10 @@ import java.io.Serializable;
  * 响应码枚举
  * <p>
  * 参考阿里巴巴开发手册响应码规范
+ * 00000 正常
+ * A**** 用户端错误
+ * B**** 系统执行出错
+ * C**** 调用第三方服务出错
  *
  * @author Ray.Hao
  * @since 2020/6/23
@@ -57,6 +61,7 @@ public enum ResultCode implements IResultCode, Serializable {
 
     USER_PASSWORD_ERROR("A0210", "用户名或密码错误"),
     USER_INPUT_PASSWORD_ERROR_LIMIT_EXCEEDED("A0211", "用户输入密码错误次数超限"),
+    USER_NOT_EXIST("A0212", "用户不存在"),
 
     USER_IDENTITY_VERIFICATION_FAILED("A0220", "用户身份校验失败"),
     USER_FINGERPRINT_RECOGNITION_FAILED("A0221", "用户指纹识别失败"),

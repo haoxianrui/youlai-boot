@@ -2,10 +2,10 @@ package com.youlai.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.entity.Dict;
 import com.youlai.boot.system.model.form.DictForm;
 import com.youlai.boot.system.model.query.DictPageQuery;
+import com.youlai.boot.system.model.vo.DictItemOptionVO;
 import com.youlai.boot.system.model.vo.DictPageVO;
 import com.youlai.boot.system.model.vo.DictVO;
 
@@ -59,11 +59,11 @@ public interface DictService extends IService<Dict> {
      */
     void deleteDictByIds(List<String> ids);
 
-
     /**
-     *  获取字典列表（包含字典数据）
+     * 获取字典项列表
      *
-     * @return 字典列表
+     * @param dictCode 字典编码
+     * @return 字典项列表
      */
-    List<DictVO> getAllDictWithData();
+    List<DictItemOptionVO> getDictItems(String dictCode);
 }

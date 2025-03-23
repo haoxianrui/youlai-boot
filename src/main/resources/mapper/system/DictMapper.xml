@@ -26,25 +26,4 @@
             t1.create_time DESC
     </select>
 
-    <resultMap id="DictWithDataMap" type="com.youlai.boot.system.model.vo.DictVO">
-        <result column="name" property="name"/>
-        <result column="dict_code" property="dictCode"/>
-        <collection property="dictDataList"
-                    column="{dictCode=dict_code}"
-                    select="com.youlai.boot.system.mapper.DictDataMapper.getDictDataList">
-        </collection>
-    </resultMap>
-
-    <!-- 获取字典列表（包含字典数据） -->
-    <select id="getAllDictWithData" resultMap="DictWithDataMap">
-        SELECT
-            t1.name,
-            t1.dict_code
-        FROM
-            sys_dict t1
-        WHERE
-            t1.is_deleted = 0 AND t1.status = 1
-        ORDER BY
-            t1.create_time DESC
-    </select>
 </mapper>

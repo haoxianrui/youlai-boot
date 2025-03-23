@@ -24,7 +24,7 @@ import com.youlai.boot.system.mapper.UserMapper;
 import com.youlai.boot.system.model.bo.UserBO;
 import com.youlai.boot.system.model.dto.UserAuthInfo;
 import com.youlai.boot.system.model.dto.UserExportDTO;
-import com.youlai.boot.system.model.entity.DictData;
+import com.youlai.boot.system.model.entity.DictItem;
 import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.entity.UserRole;
 import com.youlai.boot.system.model.form.*;
@@ -69,7 +69,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private final TokenManager tokenManager;
 
-    private final DictDataService dictDataService;
+    private final DictItemService dictItemService;
 
     private final UserConverter userConverter;
 
@@ -287,11 +287,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         List<UserExportDTO> exportUsers = this.baseMapper.listExportUsers(queryParams);
         if (CollectionUtil.isNotEmpty(exportUsers)) {
             //获取角色的字典数据
-            Map<String, String> genderMap = dictDataService.list(
-                            new LambdaQueryWrapper<DictData>().eq(DictData::getDictCode,
+            Map<String, String> genderMap = dictItemService.list(
+                            new LambdaQueryWrapper<DictItem>().eq(DictItem::getDictCode,
                                     DictCodeEnum.GENDER.getValue())
                     ).stream()
-                    .collect(Collectors.toMap(DictData::getValue, DictData::getLabel)
+                    .collect(Collectors.toMap(DictItem::getValue, DictItem::getLabel)
                     );
 
             exportUsers.forEach(item -> {

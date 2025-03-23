@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.youlai.boot.system.mapper.DictDataMapper">
+<mapper namespace="com.youlai.boot.system.mapper.DictItemMapper">
 
     <!-- 获取字典数据分页列表 -->
-    <select id="getDictDataPage" resultType="com.youlai.boot.system.model.vo.DictDataPageVO">
+    <select id="getDictItemPage" resultType="com.youlai.boot.system.model.vo.DictItemPageVO">
         SELECT
             id,
             dict_code,
@@ -14,7 +14,7 @@
             sort,
             status
         FROM
-            sys_dict_data
+            sys_dict_item
         <where>
             <if test="queryParams.keywords!=null and queryParams.keywords.trim() neq ''">
                AND (
@@ -36,7 +36,7 @@
             label,
             tag_type
         FROM
-            sys_dict_data
+            sys_dict_item
         WHERE
             status = 1 AND dict_code = #{dictCode}
         ORDER BY

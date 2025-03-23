@@ -3,41 +3,36 @@ package com.youlai.boot.system.model.form;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.validator.constraints.Range;
-
-import java.util.List;
 
 /**
- * 字典数据表单对象
+ * 字典项表单对象
  *
  * @author Ray Hao
  * @since 2.9.0
  */
-@Schema(description = "字典数据表单")
+@Schema(description = "字典项表单")
 @Data
-public class DictDataForm {
+public class DictItemForm {
 
-    @Schema(description = "字典ID")
+    @Schema(description = "字典项ID")
     private Long id;
 
     @Schema(description = "字典编码")
     private String dictCode;
 
-    @Schema(description = "字典值")
+    @Schema(description = "字典项值")
     private String value;
 
-    @Schema(description = "字典标签")
+    @Schema(description = "字典项标签")
     private String label;
 
     @Schema(description = "排序")
     private Integer sort;
 
-    @Schema(description = "状态（1-启用，0-禁用）")
+    @Schema(description = "状态（0：禁用，1：启用）")
     private Integer status;
 
-    @Schema(description = "字典类型")
+    @Schema(description = "字典类型（用于显示样式）")
     private String tagType;
 
 }

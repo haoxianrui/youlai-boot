@@ -8,10 +8,10 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Schema(description ="字典数据分页查询对象")
-public class DictDataPageQuery extends BasePageQuery {
+@Schema(description ="字典项分页查询对象")
+public class DictItemPageQuery extends BasePageQuery {
 
-    @Schema(description="关键字(字典数据标签/值)")
+    @Schema(description="关键字(字典项值/字典项名称)")
     private String keywords;
 
     @Schema(description="字典编码")

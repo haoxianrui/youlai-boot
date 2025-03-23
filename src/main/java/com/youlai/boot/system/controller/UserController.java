@@ -191,7 +191,7 @@ public class UserController {
 
     @Operation(summary = "重置用户密码")
     @PutMapping(value = "/{userId}/password/reset")
-    @PreAuthorize("@ss.hasPerm('sys:user:password:reset')")
+    @PreAuthorize("@ss.hasPerm('sys:user:reset-password')")
     public Result<?> resetPassword(
             @Parameter(description = "用户ID") @PathVariable Long userId,
             @RequestParam String password
