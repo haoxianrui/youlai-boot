@@ -40,8 +40,8 @@
 | 项目类型 | GitCode                        | Gitee                                                                 | Github                                                                 |
 |--------|----------------------------------|-----------------------------------------------------------------------|------------------------------------------------------------------------|
 | 后端      | [youlai-boot](https://gitcode.com/youlai/youlai-boot)   | [youlai-boot](https://gitee.com/youlaiorg/youlai-boot)                | [youlai-boot](https://gitee.com/haoxianrui/youlai-boot)                |
-| 前端    | [vue3-element-admin](https://gitcode.com/youlai/vue3-element-admin) | [vue3-element-admin](https://gitee.com/youlai/vue3-element-admin)     | [vue3-element-admin](https://github.com/youlaitech/vue3-element-admin) |
-| 移动端    | [vue-uniapp-template](https://gitcode.com/youlai/vue-uniapp-template) | [vue-uniapp-template](https://gitcode.com/youlai/vue-uniapp-template) | [vue-uniapp-template](https://gitcode.com/youlaitech/vue-uniapp-template)  |
+| 前端    | [vue3-element-admin](https://gitcode.com/youlai/vue3-element-admin) | [vue3-element-admin](https://gitee.com/youlaiorg/vue3-element-admin) | [vue3-element-admin](https://github.com/youlaitech/vue3-element-admin) |
+| 移动端    | [vue-uniapp-template](https://gitcode.com/youlai/vue-uniapp-template) | [vue-uniapp-template](https://gitee.com/youlaiorg/vue-uniapp-template) | [vue-uniapp-template](https://gitcode.com/youlaitech/vue-uniapp-template)  |
 
 ## 📚 文档地址
 
