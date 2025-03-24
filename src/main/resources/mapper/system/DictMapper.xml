@@ -25,5 +25,4 @@
         ORDER BY
             t1.create_time DESC
     </select>
-
 </mapper>

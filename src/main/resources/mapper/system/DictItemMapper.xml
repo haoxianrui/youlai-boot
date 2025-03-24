@@ -28,19 +28,4 @@
             </if>
         </where>
     </select>
-
-    <!-- 根据字典编码获取字典数据列表 -->
-    <select id="getDictDataList" resultType="com.youlai.boot.system.model.vo.DictVO$DictData">
-        SELECT
-            value,
-            label,
-            tag_type
-        FROM
-            sys_dict_item
-        WHERE
-            status = 1 AND dict_code = #{dictCode}
-        ORDER BY
-            sort ASC
-    </select>
-
 </mapper>

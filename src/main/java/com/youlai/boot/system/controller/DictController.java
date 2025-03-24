@@ -1,6 +1,7 @@
 package com.youlai.boot.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.youlai.boot.common.model.Option;
 import com.youlai.boot.common.result.PageResult;
 import com.youlai.boot.common.result.Result;
 import com.youlai.boot.common.enums.LogModuleEnum;
@@ -54,6 +55,14 @@ public class DictController {
     ) {
         Page<DictPageVO> result = dictService.getDictPage(queryParams);
         return PageResult.success(result);
+    }
+
+
+    @Operation(summary = "字典列表")
+    @GetMapping
+    public Result<List<Option<String>>> getDictList() {
+        List<Option<String>> list = dictService.getDictList();
+        return Result.success(list);
     }
 
     @Operation(summary = "字典表单数据")
