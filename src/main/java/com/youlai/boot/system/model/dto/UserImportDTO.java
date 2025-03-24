@@ -1,6 +1,6 @@
 package com.youlai.boot.system.model.dto;
 
-import com.alibaba.excel.annotation.ExcelProperty;
+import cn.idev.excel.annotation.ExcelProperty;
 import lombok.Data;
 
 /**

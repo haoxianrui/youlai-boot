@@ -7,7 +7,6 @@ import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.json.JSONUtil;
-import com.alibaba.excel.util.StringUtils;
 import com.aliyun.oss.HttpMethod;
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.util.IPUtils;
@@ -209,7 +208,7 @@ public class LogAspect {
      * @return UserAgent
      */
     public UserAgent resolveUserAgent(String userAgentString) {
-        if (StringUtils.isBlank(userAgentString)) {
+        if (StrUtil.isBlank(userAgentString)) {
             return null;
         }
         // 给userAgentStringMD5加密一次防止过长
