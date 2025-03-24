@@ -1,6 +1,5 @@
 package com.youlai.boot.system.model.form;
 
-import com.youlai.boot.system.enums.MenuTypeEnum;
 import com.youlai.boot.common.model.KeyValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -11,7 +10,7 @@ import java.util.List;
 /**
  * 菜单表单对象
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2024/06/23
  */
 @Schema(description = "菜单表单对象")
@@ -28,7 +27,7 @@ public class MenuForm {
     private String name;
 
     @Schema(description = "菜单类型（1-菜单 2-目录 3-外链 4-按钮）")
-    private MenuTypeEnum type;
+    private Integer type;
 
     @Schema(description = "路由名称")
     private String routeName;

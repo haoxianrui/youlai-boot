@@ -210,7 +210,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         meta.setIcon(menu.getIcon());
         meta.setHidden(StatusEnum.DISABLE.getValue().equals(menu.getVisible()));
         // 【菜单】是否开启页面缓存
-        if (MenuTypeEnum.MENU.equals(menu.getType())
+        if (MenuTypeEnum.MENU.getValue().equals(menu.getType())
                 && ObjectUtil.equals(menu.getKeepAlive(), 1)) {
             meta.setKeepAlive(true);
         }
@@ -239,16 +239,16 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @CacheEvict(cacheNames = "menu", key = "'routes'")
     public boolean saveMenu(MenuForm menuForm) {
 
-        MenuTypeEnum menuType = menuForm.getType();
+        Integer menuType = menuForm.getType();
 
-        if (menuType == MenuTypeEnum.CATALOG) {  // 如果是目录
+        if (MenuTypeEnum.CATALOG.getValue().equals(menuType)) {  // 如果是目录
             String path = menuForm.getRoutePath();
             if (menuForm.getParentId() == 0 && !path.startsWith("/")) {
                 menuForm.setRoutePath("/" + path); // 一级目录需以 / 开头
             }
             menuForm.setComponent("Layout");
-        } else if (menuType == MenuTypeEnum.EXTLINK) {   // 如果是外链
-
+        } else if (MenuTypeEnum.EXTLINK.getValue().equals(menuType)) {
+            // 外链菜单组件设置为 null
             menuForm.setComponent(null);
         }
         if (Objects.equals(menuForm.getParentId(), menuForm.getId())) {
@@ -267,7 +267,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             entity.setParams(null);
         }
         // 新增类型为菜单时候 路由名称唯一
-        if (MenuTypeEnum.MENU.equals(menuType)) {
+        if (MenuTypeEnum.MENU.getValue().equals(menuType)) {
             Assert.isFalse(this.exists(new LambdaQueryWrapper<Menu>()
                     .eq(Menu::getRouteName, entity.getRouteName())
                     .ne(menuForm.getId() != null, Menu::getId, menuForm.getId())
@@ -436,7 +436,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         menu.setRouteName(entityName);
         menu.setRoutePath(StrUtil.toSymbolCase(entityName, '-'));
         menu.setComponent(genConfig.getModuleName() + "/" + StrUtil.toSymbolCase(entityName, '-') + "/index");
-        menu.setType(MenuTypeEnum.MENU);
+        menu.setType(MenuTypeEnum.MENU.getValue());
         menu.setSort(sort);
         menu.setVisible(1);
         boolean result = this.save(menu);
@@ -455,13 +455,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             for (int i = 0; i < actions.length; i++) {
                 Menu button = new Menu();
                 button.setParentId(menu.getId());
-                button.setType(MenuTypeEnum.BUTTON);
+                button.setType(MenuTypeEnum.BUTTON.getValue());
                 button.setName(actions[i]);
                 button.setPerm(permPrefix + perms[i]);
                 button.setSort(i + 1);
                 this.save(button);
 
-                // 生成 treepath
+                // 生成treePath
                 button.setTreePath(treePath + "," + button.getId());
                 this.updateById(button);
             }
