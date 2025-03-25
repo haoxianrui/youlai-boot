@@ -19,7 +19,7 @@ import com.youlai.boot.system.model.dto.UserImportDTO;
 import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.form.*;
 import com.youlai.boot.system.model.query.UserPageQuery;
-import com.youlai.boot.system.model.vo.UserInfoVO;
+import com.youlai.boot.system.model.dto.CurrentUserDTO;
 import com.youlai.boot.system.model.vo.UserPageVO;
 import com.youlai.boot.system.model.vo.UserProfileVO;
 import com.youlai.boot.system.service.UserService;
@@ -128,9 +128,9 @@ public class UserController {
     @Operation(summary = "获取当前登录用户信息")
     @GetMapping("/me")
     @Log(value = "获取当前登录用户信息", module = LogModuleEnum.USER)
-    public Result<UserInfoVO> getCurrentUserInfo() {
-        UserInfoVO userInfoVO = userService.getCurrentUserInfo();
-        return Result.success(userInfoVO);
+    public Result<CurrentUserDTO> getCurrentUser() {
+        CurrentUserDTO currentUserDTO = userService.getCurrentUser();
+        return Result.success(currentUserDTO);
     }
 
     @Operation(summary = "用户导入模板下载")

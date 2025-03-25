@@ -22,6 +22,7 @@ import com.youlai.boot.system.converter.UserConverter;
 import com.youlai.boot.system.enums.DictCodeEnum;
 import com.youlai.boot.system.mapper.UserMapper;
 import com.youlai.boot.system.model.bo.UserBO;
+import com.youlai.boot.system.model.dto.CurrentUserDTO;
 import com.youlai.boot.system.model.dto.UserAuthInfo;
 import com.youlai.boot.system.model.dto.UserExportDTO;
 import com.youlai.boot.system.model.entity.DictItem;
@@ -29,7 +30,6 @@ import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.entity.UserRole;
 import com.youlai.boot.system.model.form.*;
 import com.youlai.boot.system.model.query.UserPageQuery;
-import com.youlai.boot.system.model.vo.UserInfoVO;
 import com.youlai.boot.system.model.vo.UserPageVO;
 import com.youlai.boot.system.model.vo.UserProfileVO;
 import com.youlai.boot.system.service.*;
@@ -314,15 +314,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 获取登录用户信息
      *
-     * @return {@link UserInfoVO}   用户信息
+     * @return {@link CurrentUserDTO}   用户信息
      */
     @Override
-    public UserInfoVO getCurrentUserInfo() {
+    public CurrentUserDTO getCurrentUser() {
 
         String username = SecurityUtils.getUsername();
 
         // 获取登录用户基础信息
-        User user = this.getOne(new LambdaQueryWrapper<User>()
+        User user = this.lambdaQuery()
                 .eq(User::getUsername, username)
                 .select(
                         User::getId,
@@ -330,20 +330,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                         User::getNickname,
                         User::getAvatar
                 )
-        );
-        // entity->VO
-        UserInfoVO userInfoVO = userConverter.toUserInfoVo(user);
+                .oneOpt()
+                .orElseThrow(() -> new BusinessException("用户[" + username + "]不存在"));
+
+        CurrentUserDTO currentUserDTO = userConverter.toCurrentUserDto(user);
 
         // 用户角色集合
         Set<String> roles = SecurityUtils.getRoles();
-        userInfoVO.setRoles(roles);
+        currentUserDTO.setRoles(roles);
 
         // 用户权限集合
         if (CollectionUtil.isNotEmpty(roles)) {
             Set<String> perms = permissionService.getRolePermsFormCache(roles);
-            userInfoVO.setPerms(perms);
+            currentUserDTO.setPerms(perms);
         }
-        return userInfoVO;
+        return currentUserDTO;
     }
 
     /**
@@ -355,7 +356,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public UserProfileVO getUserProfile(Long userId) {
         UserBO entity = this.baseMapper.getUserProfile(userId);
-        return userConverter.toProfileVO(entity);
+        return userConverter.toProfileVo(entity);
     }
 
     /**

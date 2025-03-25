@@ -1,4 +1,4 @@
-package com.youlai.boot.system.model.vo;
+package com.youlai.boot.system.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -6,14 +6,14 @@ import lombok.Data;
 import java.util.Set;
 
 /**
- * 用户登录视图对象
+ * 当前登录用户对象
  *
  * @author haoxr
  * @since 2022/1/14
  */
-@Schema(description ="当前登录用户视图对象")
+@Schema(description ="当前登录用户对象")
 @Data
-public class UserInfoVO {
+public class CurrentUserDTO {
 
     @Schema(description="用户ID")
     private Long userId;
