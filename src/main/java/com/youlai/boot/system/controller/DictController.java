@@ -170,9 +170,9 @@ public class DictController {
     @DeleteMapping("/{dictCode}/items/{itemIds}")
     @PreAuthorize("@ss.hasPerm('sys:dict-item:delete')")
     public Result<Void> deleteDictItems(
-            @Parameter(description = "字典ID，多个以英文逗号(,)拼接") @PathVariable String ids
+            @Parameter(description = "字典ID，多个以英文逗号(,)拼接") @PathVariable String itemIds
     ) {
-        dictItemService.deleteDictItemByIds(ids);
+        dictItemService.deleteDictItemByIds(itemIds);
         return Result.success();
     }
 
