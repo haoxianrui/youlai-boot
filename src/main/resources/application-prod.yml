@@ -91,6 +91,7 @@ security:
     - /swagger-ui/**
     - /v3/api-docs/**
     - /webjars/**
+    - /favicon.ico
 
 # 文件存储配置
 oss:
