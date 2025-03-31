@@ -129,7 +129,7 @@ public class UserController {
     @GetMapping("/me")
     @Log(value = "获取当前登录用户信息", module = LogModuleEnum.USER)
     public Result<CurrentUserDTO> getCurrentUser() {
-        CurrentUserDTO currentUserDTO = userService.getCurrentUser();
+        CurrentUserDTO currentUserDTO = userService.getCurrentUserInfo();
         return Result.success(currentUserDTO);
     }
 
