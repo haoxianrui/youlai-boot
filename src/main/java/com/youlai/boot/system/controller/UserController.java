@@ -136,7 +136,7 @@ public class UserController {
     @Operation(summary = "用户导入模板下载")
     @GetMapping("/template")
     @Log(value = "用户导入模板下载", module = LogModuleEnum.USER)
-    public void downloadTemplate(HttpServletResponse response) throws IOException {
+    public void downloadTemplate(HttpServletResponse response)  {
         String fileName = "用户导入模板.xlsx";
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
@@ -144,10 +144,12 @@ public class UserController {
         String fileClassPath = "templates" + File.separator + "excel" + File.separator + fileName;
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(fileClassPath);
 
-        ServletOutputStream outputStream = response.getOutputStream();
-        ExcelWriter excelWriter = EasyExcel.write(outputStream).withTemplate(inputStream).build();
-
-        excelWriter.finish();
+        try (ServletOutputStream outputStream = response.getOutputStream();
+             ExcelWriter excelWriter = EasyExcel.write(outputStream).withTemplate(inputStream).build()) {
+            excelWriter.finish();
+        } catch (IOException e) {
+            throw new RuntimeException("用户导入模板下载失败", e);
+        }
     }
 
     @Operation(summary = "导入用户")
