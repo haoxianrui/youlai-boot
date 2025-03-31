@@ -3,7 +3,7 @@ package com.youlai.boot.system.converter;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.entity.User;
-import com.youlai.boot.system.model.vo.UserInfoVO;
+import com.youlai.boot.system.model.dto.CurrentUserDTO;
 import com.youlai.boot.system.model.vo.UserPageVO;
 import com.youlai.boot.system.model.vo.UserProfileVO;
 import com.youlai.boot.system.model.bo.UserBO;
@@ -38,12 +38,12 @@ public interface UserConverter {
     @Mappings({
             @Mapping(target = "userId", source = "id")
     })
-    UserInfoVO toUserInfoVo(User entity);
+    CurrentUserDTO toCurrentUserDto(User entity);
 
     User toEntity(UserImportDTO vo);
 
 
-    UserProfileVO toProfileVO(UserBO bo);
+    UserProfileVO toProfileVo(UserBO bo);
 
     User toEntity(UserProfileForm formData);
 

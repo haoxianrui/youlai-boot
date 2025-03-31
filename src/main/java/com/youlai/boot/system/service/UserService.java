@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.core.security.model.AuthCredentials;
+import com.youlai.boot.system.model.dto.CurrentUserDTO;
 import com.youlai.boot.system.model.dto.UserExportDTO;
 import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.query.UserPageQuery;
-import com.youlai.boot.system.model.vo.UserInfoVO;
 import com.youlai.boot.system.model.vo.UserPageVO;
 import com.youlai.boot.system.model.vo.UserProfileVO;
 import com.youlai.boot.system.model.form.*;
@@ -87,9 +87,9 @@ public interface UserService extends IService<User> {
     /**
      * 获取登录用户信息
      *
-     * @return {@link UserInfoVO} 登录用户信息
+     * @return {@link CurrentUserDTO} 登录用户信息
      */
-    UserInfoVO getCurrentUserInfo();
+    CurrentUserDTO getCurrentUserInfo();
 
     /**
      * 获取个人中心用户信息

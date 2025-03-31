@@ -23,13 +23,13 @@ import com.youlai.boot.system.enums.DictCodeEnum;
 import com.youlai.boot.system.mapper.UserMapper;
 import com.youlai.boot.system.model.bo.UserBO;
 import com.youlai.boot.core.security.model.AuthCredentials;
+import com.youlai.boot.system.model.dto.CurrentUserDTO;
 import com.youlai.boot.system.model.dto.UserExportDTO;
 import com.youlai.boot.system.model.entity.DictItem;
 import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.entity.UserRole;
 import com.youlai.boot.system.model.form.*;
 import com.youlai.boot.system.model.query.UserPageQuery;
-import com.youlai.boot.system.model.vo.UserInfoVO;
 import com.youlai.boot.system.model.vo.UserPageVO;
 import com.youlai.boot.system.model.vo.UserProfileVO;
 import com.youlai.boot.system.service.*;
@@ -314,10 +314,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 获取登录用户信息
      *
-     * @return {@link UserInfoVO}   用户信息
+     * @return {@link CurrentUserDTO}   用户信息
      */
     @Override
-    public UserInfoVO getCurrentUserInfo() {
+    public CurrentUserDTO getCurrentUserInfo() {
 
         String username = SecurityUtils.getUsername();
 
@@ -332,7 +332,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 )
         );
         // entity->VO
-        UserInfoVO userInfoVO = userConverter.toUserInfoVo(user);
+        CurrentUserDTO userInfoVO = userConverter.toCurrentUserDto(user);
 
         // 用户角色集合
         Set<String> roles = SecurityUtils.getRoles();
@@ -355,7 +355,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public UserProfileVO getUserProfile(Long userId) {
         UserBO entity = this.baseMapper.getUserProfile(userId);
-        return userConverter.toProfileVO(entity);
+        return userConverter.toProfileVo(entity);
     }
 
     /**
