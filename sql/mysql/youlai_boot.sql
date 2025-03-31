@@ -223,7 +223,7 @@ CREATE TABLE `sys_role`  (
                              `code` varchar(32) NOT NULL COMMENT '角色编码',
                              `sort` int NULL COMMENT '显示顺序',
                              `status` tinyint(1) DEFAULT 1 COMMENT '角色状态(1-正常 0-停用)',
-                             `data_scope` tinyint NULL COMMENT '数据权限(0-所有数据 1-部门及子部门数据 2-本部门数据3-本人数据)',
+                             `data_scope` tinyint NULL COMMENT '数据权限(1-所有数据 2-部门及子部门数据 3-本部门数据 4-本人数据)',
                              `create_by` bigint NULL COMMENT '创建人 ID',
                              `create_time` datetime NULL COMMENT '创建时间',
                              `update_by` bigint NULL COMMENT '更新人ID',
@@ -237,9 +237,9 @@ CREATE TABLE `sys_role`  (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES (1, '超级管理员', 'ROOT', 1, 1, 0, NULL, now(), NULL, now(), 0);
-INSERT INTO `sys_role` VALUES (2, '系统管理员', 'ADMIN', 2, 1, 0, NULL, now(), NULL, NULL, 0);
-INSERT INTO `sys_role` VALUES (3, '访问游客', 'GUEST', 3, 1, 2, NULL, now(), NULL, now(), 0);
+INSERT INTO `sys_role` VALUES (1, '超级管理员', 'ROOT', 1, 1, 1, NULL, now(), NULL, now(), 0);
+INSERT INTO `sys_role` VALUES (2, '系统管理员', 'ADMIN', 2, 1, 1, NULL, now(), NULL, NULL, 0);
+INSERT INTO `sys_role` VALUES (3, '访问游客', 'GUEST', 3, 1, 3, NULL, now(), NULL, now(), 0);
 INSERT INTO `sys_role` VALUES (4, '系统管理员1', 'ADMIN1', 4, 1, 1, NULL, now(), NULL, NULL, 0);
 INSERT INTO `sys_role` VALUES (5, '系统管理员2', 'ADMIN2', 5, 1, 1, NULL, now(), NULL, NULL, 0);
 INSERT INTO `sys_role` VALUES (6, '系统管理员3', 'ADMIN3', 6, 1, 1, NULL, now(), NULL, NULL, 0);
