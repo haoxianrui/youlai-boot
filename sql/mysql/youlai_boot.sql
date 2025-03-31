@@ -212,6 +212,8 @@ INSERT INTO `sys_menu` VALUES (142, 6, '0,1,6', '字典查询', 4, NULL, '', NUL
 INSERT INTO `sys_menu` VALUES (143, 135, '0,1,135', '字典项查询', 4, NULL, '', NULL, 'sys:dict-item:query', NULL, NULL, 1, 1, '', NULL, now(), now(), NULL);
 INSERT INTO `sys_menu` VALUES (144, 26, '0,26', '后端文档', 3, NULL, 'https://youlai.blog.csdn.net/article/details/145178880', '', NULL, NULL, NULL, 1, 3, 'document', '', '2024-10-05 23:36:03', '2024-10-05 23:36:03', NULL);
 INSERT INTO `sys_menu` VALUES (145, 26, '0,26', '移动端文档', 3, NULL, 'https://youlai.blog.csdn.net/article/details/143222890', '', NULL, NULL, NULL, 1, 4, 'document', '', '2024-10-05 23:36:03', '2024-10-05 23:36:03', NULL);
+INSERT INTO `sys_menu` VALUES (146, 36, '0,36', '拖拽组件', 1, NULL, 'drag', 'demo/drag/index', NULL, NULL, NULL, 1, 5, '', '', '2025-03-31 14:14:45', '2025-03-31 14:14:52', NULL);
+INSERT INTO `sys_menu` VALUES (147, 36, '0,36', '文本滚动', 1, NULL, 'text-scroll', 'demo/text-scroll/index', NULL, NULL, NULL, 1, 6, '', '', '2025-03-31 14:14:49', '2025-03-31 14:14:56', NULL);
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -347,6 +349,8 @@ INSERT INTO `sys_role_menu` VALUES (2, 142);
 INSERT INTO `sys_role_menu` VALUES (2, 143);
 INSERT INTO `sys_role_menu` VALUES (2, 144);
 INSERT INTO `sys_role_menu` VALUES (2, 145);
+INSERT INTO `sys_role_menu` VALUES (2, 146);
+INSERT INTO `sys_role_menu` VALUES (2, 147);
 
 -- ----------------------------
 -- Table structure for sys_user
