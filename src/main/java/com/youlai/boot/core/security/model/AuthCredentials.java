@@ -1,17 +1,16 @@
-package com.youlai.boot.system.model.dto;
+package com.youlai.boot.core.security.model;
 
 import lombok.Data;
-
 import java.util.Set;
 
 /**
- * 用户认证信息
+ * 用户认证凭证信息
  *
  * @author Ray.Hao
  * @since 2022/10/22
  */
 @Data
-public class UserAuthInfo {
+public class AuthCredentials {
 
     /**
      * 用户ID

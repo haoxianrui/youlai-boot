@@ -119,7 +119,7 @@
     </select>
 
     <!-- 用户认证信息映射 -->
-    <resultMap id="UserAuthMap" type="com.youlai.boot.system.model.dto.UserAuthInfo">
+    <resultMap id="AuthCredentialsMap" type="com.youlai.boot.core.security.model.AuthCredentials">
         <id property="userId" column="userId" jdbcType="BIGINT"/>
         <result property="username" column="username" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>
@@ -131,7 +131,7 @@
     </resultMap>
 
     <!-- 根据用户名获取用户的认证信息 -->
-    <select id="getUserAuthInfo" resultMap="UserAuthMap">
+    <select id="getAuthCredentialsByUsername" resultMap="AuthCredentialsMap">
         SELECT
             t1.id userId,
             t1.username,
@@ -149,7 +149,7 @@
     </select>
 
     <!-- 根据微信openid获取用户的认证信息  -->
-    <select id="getUserAuthInfoByOpenId" resultMap="UserAuthMap">
+    <select id="getAuthCredentialsByOpenId" resultMap="AuthCredentialsMap">
         SELECT
             t1.id userId,
             t1.username,
@@ -167,7 +167,7 @@
     </select>
 
     <!-- 根据手机号获取用户的认证信息 -->
-    <select id="getUserAuthInfoByMobile" resultMap="UserAuthMap">
+    <select id="getAuthCredentialsByMobile" resultMap="AuthCredentialsMap">
         SELECT
             t1.id userId,
             t1.username,

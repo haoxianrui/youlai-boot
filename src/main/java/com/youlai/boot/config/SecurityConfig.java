@@ -65,12 +65,12 @@ public class SecurityConfig {
 
         return http
                 .authorizeHttpRequests(requestMatcherRegistry -> {
-                            // 忽略认证的 URI 地址
+                            // 配置无需登录即可访问的公开接口
                             String[] ignoreUrls = securityProperties.getIgnoreUrls();
                             if (ArrayUtil.isNotEmpty(ignoreUrls)) {
                                 requestMatcherRegistry.requestMatchers(ignoreUrls).permitAll();
                             }
-                            // 其他请求都需要认证
+                            // 其他所有请求需登录后访问
                             requestMatcherRegistry.anyRequest().authenticated();
                         }
                 )

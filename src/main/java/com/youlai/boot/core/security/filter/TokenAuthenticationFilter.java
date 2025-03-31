@@ -56,7 +56,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                     return;
                 }
 
-                // 将令牌解析为Spring Security认证对象
+                // 将令牌解析为 Spring Security 上下文认证对象
                 Authentication authentication = tokenManager.parseToken(rawToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

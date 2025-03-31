@@ -22,7 +22,7 @@ import com.youlai.boot.system.converter.UserConverter;
 import com.youlai.boot.system.enums.DictCodeEnum;
 import com.youlai.boot.system.mapper.UserMapper;
 import com.youlai.boot.system.model.bo.UserBO;
-import com.youlai.boot.system.model.dto.UserAuthInfo;
+import com.youlai.boot.core.security.model.AuthCredentials;
 import com.youlai.boot.system.model.dto.UserExportDTO;
 import com.youlai.boot.system.model.entity.DictItem;
 import com.youlai.boot.system.model.entity.User;
@@ -192,54 +192,54 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 根据用户名获取认证信息
      *
      * @param username 用户名
-     * @return 用户认证信息 {@link UserAuthInfo}
+     * @return 用户认证信息 {@link AuthCredentials}
      */
     @Override
-    public UserAuthInfo getUserAuthInfo(String username) {
-        UserAuthInfo userAuthInfo = this.baseMapper.getUserAuthInfo(username);
-        if (userAuthInfo != null) {
-            Set<String> roles = userAuthInfo.getRoles();
+    public AuthCredentials getAuthCredentialsByUsername(String username) {
+        AuthCredentials authCredentials = this.baseMapper.getAuthCredentialsByUsername(username);
+        if (authCredentials != null) {
+            Set<String> roles = authCredentials.getRoles();
             // 获取最大范围的数据权限
             Integer dataScope = roleService.getMaximumDataScope(roles);
-            userAuthInfo.setDataScope(dataScope);
+            authCredentials.setDataScope(dataScope);
         }
-        return userAuthInfo;
+        return authCredentials;
     }
 
     /**
      * 根据 openid 获取用户认证信息
      *
      * @param openid 微信
-     * @return {@link UserAuthInfo}
+     * @return {@link AuthCredentials}
      */
     @Override
-    public UserAuthInfo getUserAuthInfoByOpenId(String openid) {
-        UserAuthInfo userAuthInfo = this.baseMapper.getUserAuthInfoByOpenId(openid);
-        if (userAuthInfo != null) {
-            Set<String> roles = userAuthInfo.getRoles();
+    public AuthCredentials getAuthCredentialsByOpenId(String openid) {
+        AuthCredentials authCredentials = this.baseMapper.getAuthCredentialsByOpenId(openid);
+        if (authCredentials != null) {
+            Set<String> roles = authCredentials.getRoles();
             // 获取最大范围的数据权限
             Integer dataScope = roleService.getMaximumDataScope(roles);
-            userAuthInfo.setDataScope(dataScope);
+            authCredentials.setDataScope(dataScope);
         }
-        return userAuthInfo;
+        return authCredentials;
     }
 
     /**
      * 根据手机号获取用户认证信息
      *
      * @param mobile 手机号
-     * @return {@link UserAuthInfo}
+     * @return {@link AuthCredentials}
      */
     @Override
-    public UserAuthInfo getUserAuthInfoByMobile(String mobile) {
-        UserAuthInfo userAuthInfo = this.baseMapper.getUserAuthInfoByMobile(mobile);
-        if (userAuthInfo != null) {
-            Set<String> roles = userAuthInfo.getRoles();
+    public AuthCredentials getAuthCredentialsByMobile(String mobile) {
+        AuthCredentials authCredentials = this.baseMapper.getAuthCredentialsByMobile(mobile);
+        if (authCredentials != null) {
+            Set<String> roles = authCredentials.getRoles();
             // 获取最大范围的数据权限
             Integer dataScope = roleService.getMaximumDataScope(roles);
-            userAuthInfo.setDataScope(dataScope);
+            authCredentials.setDataScope(dataScope);
         }
-        return userAuthInfo;
+        return authCredentials;
     }
 
 

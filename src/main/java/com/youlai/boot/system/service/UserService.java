@@ -3,7 +3,7 @@ package com.youlai.boot.system.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.youlai.boot.common.model.Option;
-import com.youlai.boot.system.model.dto.UserAuthInfo;
+import com.youlai.boot.core.security.model.AuthCredentials;
 import com.youlai.boot.system.model.dto.UserExportDTO;
 import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.query.UserPageQuery;
@@ -69,10 +69,10 @@ public interface UserService extends IService<User> {
      * 根据用户名获取认证信息
      *
      * @param username 用户名
-     * @return {@link UserAuthInfo}
+     * @return {@link AuthCredentials}
      */
 
-    UserAuthInfo getUserAuthInfo(String username);
+    AuthCredentials getAuthCredentialsByUsername(String username);
 
 
     /**
@@ -166,10 +166,10 @@ public interface UserService extends IService<User> {
      * 根据 openid 获取用户认证信息
      *
      * @param username 用户名
-     * @return {@link UserAuthInfo}
+     * @return {@link AuthCredentials}
      */
 
-    UserAuthInfo getUserAuthInfoByOpenId(String username);
+    AuthCredentials getAuthCredentialsByOpenId(String username);
 
     /**
      * 根据微信 OpenID 注册或绑定用户
@@ -182,9 +182,9 @@ public interface UserService extends IService<User> {
      * 根据手机号获取用户认证信息
      *
      * @param mobile 手机号
-     * @return {@link UserAuthInfo}
+     * @return {@link AuthCredentials}
      */
-    UserAuthInfo getUserAuthInfoByMobile(String mobile);
+    AuthCredentials getAuthCredentialsByMobile(String mobile);
 
 
 }

@@ -7,7 +7,7 @@ import com.youlai.boot.system.model.entity.User;
 import com.youlai.boot.system.model.query.UserPageQuery;
 import com.youlai.boot.system.model.form.UserForm;
 import com.youlai.boot.common.annotation.DataPermission;
-import com.youlai.boot.system.model.dto.UserAuthInfo;
+import com.youlai.boot.core.security.model.AuthCredentials;
 import com.youlai.boot.system.model.dto.UserExportDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -46,7 +46,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param username 用户名
      * @return 认证信息
      */
-    UserAuthInfo getUserAuthInfo(String username);
+    AuthCredentials getAuthCredentialsByUsername(String username);
 
     /**
      * 根据微信openid获取用户认证信息
@@ -54,7 +54,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param openid 微信openid
      * @return 认证信息
      */
-    UserAuthInfo getUserAuthInfoByOpenId(String openid);
+    AuthCredentials getAuthCredentialsByOpenId(String openid);
 
     /**
      * 根据手机号获取用户认证信息
@@ -62,7 +62,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param mobile 手机号
      * @return 认证信息
      */
-    UserAuthInfo getUserAuthInfoByMobile(String mobile);
+    AuthCredentials getAuthCredentialsByMobile(String mobile);
 
     /**
      * 获取导出用户列表

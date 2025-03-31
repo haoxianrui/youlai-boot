@@ -1,7 +1,7 @@
 package com.youlai.boot.core.security.service;
 
 import com.youlai.boot.core.security.model.SysUserDetails;
-import com.youlai.boot.system.model.dto.UserAuthInfo;
+import com.youlai.boot.core.security.model.AuthCredentials;
 import com.youlai.boot.system.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,11 +33,11 @@ public class SysUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            UserAuthInfo userAuthInfo = userService.getUserAuthInfo(username);
-            if (userAuthInfo == null) {
+            AuthCredentials authCredentials = userService.getAuthCredentialsByUsername(username);
+            if (authCredentials == null) {
                 throw new UsernameNotFoundException(username);
             }
-            return new SysUserDetails(userAuthInfo);
+            return new SysUserDetails(authCredentials);
         } catch (Exception e) {
             // 记录异常日志
             log.error("认证异常:{}", e.getMessage());
