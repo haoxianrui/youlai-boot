@@ -5,7 +5,7 @@ import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.core.security.model.SysUserDetails;
-import com.youlai.boot.core.security.model.AuthCredentials;
+import com.youlai.boot.core.security.model.UserAuthCredentials;
 import com.youlai.boot.system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -63,27 +63,27 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
         }
 
         // 根据微信 OpenID 查询用户信息
-        AuthCredentials authCredentials = userService.getAuthCredentialsByOpenId(openId);
+        UserAuthCredentials userAuthCredentials = userService.getAuthCredentialsByOpenId(openId);
 
-        if (authCredentials == null) {
+        if (userAuthCredentials == null) {
             // TODO: 用户不存在则注册，这里需要获取用户手机号并与现有用户绑定
             userService.registerOrBindWechatUser(openId);
 
             // 再次查询用户信息，确保用户注册成功
-            authCredentials = userService.getAuthCredentialsByOpenId(openId);
-            if (authCredentials == null) {
+            userAuthCredentials = userService.getAuthCredentialsByOpenId(openId);
+            if (userAuthCredentials == null) {
                 throw new UsernameNotFoundException("用户注册失败，请稍后重试");
             }
         }
 
         // 检查用户状态是否有效
-        if (ObjectUtil.notEqual(authCredentials.getStatus(), 1)) {
+        if (ObjectUtil.notEqual(userAuthCredentials.getStatus(), 1)) {
             throw new DisabledException("用户已被禁用");
         }
         // 这里因为已经根据 code 从微信小程序获取到 openid 不需要再经过系统认证，所以直接生成
 
         // 构建认证后的用户详情信息
-        SysUserDetails userDetails = new SysUserDetails(authCredentials);
+        SysUserDetails userDetails = new SysUserDetails(userAuthCredentials);
 
         // 创建已认证的 WeChatAuthenticationToken
         return WechatAuthenticationToken.authenticated(

@@ -119,7 +119,7 @@
     </select>
 
     <!-- 用户认证信息映射 -->
-    <resultMap id="AuthCredentialsMap" type="com.youlai.boot.core.security.model.AuthCredentials">
+    <resultMap id="AuthCredentialsMap" type="com.youlai.boot.core.security.model.UserAuthCredentials">
         <id property="userId" column="userId" jdbcType="BIGINT"/>
         <result property="username" column="username" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>

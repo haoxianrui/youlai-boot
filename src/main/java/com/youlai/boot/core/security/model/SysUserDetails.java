@@ -64,9 +64,9 @@ public class SysUserDetails implements UserDetails {
     /**
      * 构造函数：根据用户认证信息初始化用户详情对象
      *
-     * @param user 用户认证信息对象 {@link AuthCredentials}
+     * @param user 用户认证信息对象 {@link UserAuthCredentials}
      */
-    public SysUserDetails(AuthCredentials user) {
+    public SysUserDetails(UserAuthCredentials user) {
         this.userId = user.getUserId();
         this.username = user.getUsername();
         this.password = user.getPassword();

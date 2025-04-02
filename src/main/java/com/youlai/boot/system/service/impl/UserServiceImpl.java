@@ -22,7 +22,7 @@ import com.youlai.boot.system.converter.UserConverter;
 import com.youlai.boot.system.enums.DictCodeEnum;
 import com.youlai.boot.system.mapper.UserMapper;
 import com.youlai.boot.system.model.bo.UserBO;
-import com.youlai.boot.core.security.model.AuthCredentials;
+import com.youlai.boot.core.security.model.UserAuthCredentials;
 import com.youlai.boot.system.model.dto.CurrentUserDTO;
 import com.youlai.boot.system.model.dto.UserExportDTO;
 import com.youlai.boot.system.model.entity.DictItem;
@@ -189,57 +189,57 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
-     * 根据用户名获取认证信息
+     * 根据用户名获取认证凭证信息
      *
      * @param username 用户名
-     * @return 用户认证信息 {@link AuthCredentials}
+     * @return 用户认证凭证信息 {@link UserAuthCredentials}
      */
     @Override
-    public AuthCredentials getAuthCredentialsByUsername(String username) {
-        AuthCredentials authCredentials = this.baseMapper.getAuthCredentialsByUsername(username);
-        if (authCredentials != null) {
-            Set<String> roles = authCredentials.getRoles();
+    public UserAuthCredentials getAuthCredentialsByUsername(String username) {
+        UserAuthCredentials userAuthCredentials = this.baseMapper.getAuthCredentialsByUsername(username);
+        if (userAuthCredentials != null) {
+            Set<String> roles = userAuthCredentials.getRoles();
             // 获取最大范围的数据权限
             Integer dataScope = roleService.getMaximumDataScope(roles);
-            authCredentials.setDataScope(dataScope);
+            userAuthCredentials.setDataScope(dataScope);
         }
-        return authCredentials;
+        return userAuthCredentials;
     }
 
     /**
      * 根据 openid 获取用户认证信息
      *
-     * @param openid 微信
-     * @return {@link AuthCredentials}
+     * @param openid 微信 OpenId
+     * @return {@link UserAuthCredentials}
      */
     @Override
-    public AuthCredentials getAuthCredentialsByOpenId(String openid) {
-        AuthCredentials authCredentials = this.baseMapper.getAuthCredentialsByOpenId(openid);
-        if (authCredentials != null) {
-            Set<String> roles = authCredentials.getRoles();
+    public UserAuthCredentials getAuthCredentialsByOpenId(String openid) {
+        UserAuthCredentials userAuthCredentials = this.baseMapper.getAuthCredentialsByOpenId(openid);
+        if (userAuthCredentials != null) {
+            Set<String> roles = userAuthCredentials.getRoles();
             // 获取最大范围的数据权限
             Integer dataScope = roleService.getMaximumDataScope(roles);
-            authCredentials.setDataScope(dataScope);
+            userAuthCredentials.setDataScope(dataScope);
         }
-        return authCredentials;
+        return userAuthCredentials;
     }
 
     /**
-     * 根据手机号获取用户认证信息
+     * 根据手机号获取用户认证凭证信息
      *
      * @param mobile 手机号
-     * @return {@link AuthCredentials}
+     * @return {@link UserAuthCredentials}
      */
     @Override
-    public AuthCredentials getAuthCredentialsByMobile(String mobile) {
-        AuthCredentials authCredentials = this.baseMapper.getAuthCredentialsByMobile(mobile);
-        if (authCredentials != null) {
-            Set<String> roles = authCredentials.getRoles();
+    public UserAuthCredentials getAuthCredentialsByMobile(String mobile) {
+        UserAuthCredentials userAuthCredentials = this.baseMapper.getAuthCredentialsByMobile(mobile);
+        if (userAuthCredentials != null) {
+            Set<String> roles = userAuthCredentials.getRoles();
             // 获取最大范围的数据权限
             Integer dataScope = roleService.getMaximumDataScope(roles);
-            authCredentials.setDataScope(dataScope);
+            userAuthCredentials.setDataScope(dataScope);
         }
-        return authCredentials;
+        return userAuthCredentials;
     }
 
 
@@ -286,7 +286,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         List<UserExportDTO> exportUsers = this.baseMapper.listExportUsers(queryParams);
         if (CollectionUtil.isNotEmpty(exportUsers)) {
-            //获取角色的字典数据
+            //获取性别的字典项
             Map<String, String> genderMap = dictItemService.list(
                             new LambdaQueryWrapper<DictItem>().eq(DictItem::getDictCode,
                                     DictCodeEnum.GENDER.getValue())
@@ -371,7 +371,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         entity.setId(userId);
         return this.updateById(entity);
     }
-
 
     /**
      * 修改用户密码

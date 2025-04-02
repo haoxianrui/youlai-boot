@@ -10,7 +10,7 @@ import java.util.Set;
  * @since 2022/10/22
  */
 @Data
-public class AuthCredentials {
+public class UserAuthCredentials {
 
     /**
      * 用户ID
