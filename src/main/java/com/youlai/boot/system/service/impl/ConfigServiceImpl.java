@@ -35,11 +35,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ConfigServiceImpl extends ServiceImpl<ConfigMapper, Config> implements ConfigService {
 
-
     private final ConfigConverter configConverter;
 
     private final RedisTemplate<String, Object> redisTemplate;
-
 
     /**
      * 系统启动完成后，加载系统配置到缓存

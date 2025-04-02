@@ -66,13 +66,6 @@ public interface DictService extends IService<Dict> {
      */
     void deleteDictByIds(List<String> ids);
 
-    /**
-     * 获取字典项列表
-     *
-     * @param dictCode 字典编码
-     * @return 字典项列表
-     */
-    List<DictItemOptionVO> getDictItems(String dictCode);
 
 
 }

@@ -23,9 +23,9 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 /**
- * WebSocket 自动配置类
+ * WebSocket 配置
  *
- * @author haoxr
+ * @author Ray.Hao
  * @since 2.4.0
  */
 // 启用WebSocket消息代理功能和配置STOMP协议，实现实时双向通信和消息传递

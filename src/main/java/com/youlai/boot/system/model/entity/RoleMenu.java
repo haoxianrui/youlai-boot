@@ -1,11 +1,9 @@
 package com.youlai.boot.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 /**
  * 角色和菜单关联表
@@ -25,6 +23,4 @@ public class RoleMenu {
      */
     private Long menuId;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }

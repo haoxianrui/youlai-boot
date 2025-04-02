@@ -124,7 +124,7 @@ public class DictController {
     public Result<List<DictItemOptionVO>> getDictItems(
             @Parameter(description = "字典编码") @PathVariable String dictCode
     ) {
-        List<DictItemOptionVO> list = dictService.getDictItems(dictCode);
+        List<DictItemOptionVO> list = dictItemService.getDictItems(dictCode);
         return Result.success(list);
     }
 
@@ -147,7 +147,7 @@ public class DictController {
             @PathVariable String dictCode,
             @Parameter(description = "字典项ID") @PathVariable Long itemId
     ) {
-        DictItemForm formData = dictItemService.getDictItemForm(dictCode,itemId);
+        DictItemForm formData = dictItemService.getDictItemForm(itemId);
         return Result.success(formData);
     }
 

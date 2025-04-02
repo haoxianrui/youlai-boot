@@ -17,11 +17,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 
-
 /**
- * 角色菜单业务实现
+ * 角色菜单服务实现类
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2.5.0
  */
 @Service

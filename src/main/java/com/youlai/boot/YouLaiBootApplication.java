@@ -12,7 +12,6 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
  */
 @SpringBootApplication
 @ConfigurationPropertiesScan // 开启配置属性绑定
-// @EnableScheduling // 开启定时任务
 public class YouLaiBootApplication {
 
     public static void main(String[] args) {

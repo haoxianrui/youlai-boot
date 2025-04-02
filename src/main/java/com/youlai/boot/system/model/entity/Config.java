@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 
 /**
- * 系统配置 实体
+ * 系统配置对象
  *
  * @author Theo
  * @since 2024-07-29 11:17:26

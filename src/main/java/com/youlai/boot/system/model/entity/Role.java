@@ -8,7 +8,7 @@ import lombok.Setter;
 /**
  * 角色实体
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2024/6/23
  */
 @TableName("sys_role")

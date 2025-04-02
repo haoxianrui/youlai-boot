@@ -89,7 +89,7 @@ CREATE TABLE `sys_dict_item` (
                                  `update_time` datetime COMMENT '更新时间',
                                  `update_by` bigint COMMENT '修改人ID',
                                  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字典数据表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字典项表';
 
 -- ----------------------------
 -- Records of sys_dict_item

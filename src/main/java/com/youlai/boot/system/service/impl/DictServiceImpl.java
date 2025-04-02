@@ -58,8 +58,8 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     @Override
     public List<Option<String>> getDictList() {
         return this.list(new LambdaQueryWrapper<Dict>().eq(Dict::getStatus, 1))
-                .stream().map(item ->
-                        new Option<>(item.getDictCode(), item.getName()))
+                .stream()
+                .map(item -> new Option<>(item.getDictCode(), item.getName()))
                 .toList();
     }
 
@@ -150,28 +150,6 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         }
     }
 
-
-    /**
-     * 获取字典项列表
-     *
-     * @param dictCode 字典编码
-     */
-    @Override
-    public List<DictItemOptionVO> getDictItems(String dictCode) {
-        return dictItemService.list(
-                        new LambdaQueryWrapper<DictItem>()
-                                .eq(DictItem::getDictCode, dictCode)
-                                .eq(DictItem::getStatus, 1)
-                                .orderByAsc(DictItem::getSort)
-                ).stream()
-                .map(item -> {
-                    DictItemOptionVO dictItemOptionVO = new DictItemOptionVO();
-                    dictItemOptionVO.setLabel(item.getLabel());
-                    dictItemOptionVO.setValue(item.getValue());
-                    dictItemOptionVO.setTagType(item.getTagType());
-                    return dictItemOptionVO;
-                }).toList();
-    }
 }
 
 

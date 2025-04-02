@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
- * IP限流过滤器
+ * IP 限流过滤器
  *
  * @author Theo
  * @since 2024/08/10 14:38

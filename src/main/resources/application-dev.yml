@@ -73,8 +73,8 @@ mybatis-plus:
 # 安全配置
 security:
   session:
-    type: jwt # 会话方式 [jwt|redis-token]
-    access-token-time-to-live: 3600   # 访问令牌 有效期(单位：秒)，默认 1 小时，-1 表示永不过期
+    type: jwt # 会话方式 jwt/redis-token
+    access-token-time-to-live: 60   # 访问令牌 有效期(单位：秒)，默认 1 小时，-1 表示永不过期
     refresh-token-time-to-live: 604800   # 刷新令牌有效期(单位：秒)，默认 7 天，-1 表示永不过期
     jwt:
       secret-key: SecretKey012345678901234567890123456789012345678901234567890123456789 # JWT密钥(HS256算法至少32字符)
