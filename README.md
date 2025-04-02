@@ -121,12 +121,12 @@ youlai-boot
 
 ## 🚀 项目启动
 
-详细参考官方文档: [项目启动](https://www.youlai.tech/youlai-boot/1.%E9%A1%B9%E7%9B%AE%E5%90%AF%E5%8A%A8/)
+📚 完整流程参考: [项目启动](https://www.youlai.tech/youlai-boot/1.%E9%A1%B9%E7%9B%AE%E5%90%AF%E5%8A%A8/)
 
 1. **克隆项目**
 
    ```bash
-   git clone https://gitee.com/youlaiorg/youlai-boot.git
+   git clone https://gitee.com/youlaiorg/youlai-boot-flex.git
    ```
 
 2. **数据库初始化**
@@ -135,7 +135,7 @@ youlai-boot
 
 3. **修改配置**
 
-   [application-dev.yml](src/main/resources/application-dev.yml) 修改MySQL、Redis连接配置；
+   默认连接有来生产环境MySQL/Redis（仅读权限），本地开发时请修改 [application-dev.yml](src/main/resources/application-dev.yml) 中的数据库连接参数。
 
 4. **启动项目**
 
@@ -146,7 +146,7 @@ youlai-boot
 
 ## 🚀 项目部署
 
-参考官方文档: [项目部署](https://www.youlai.tech/youlai-boot/5.%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2/)
+参考官方文档: [项目部署指南](https://www.youlai.tech/youlai-boot/5.%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2/)
 
 
 ## ✅ 项目统计
@@ -160,8 +160,8 @@ Thanks to all the contributors!
 
 ## 💖 加交流群
 
-① 关注【有来技术】公众号，点击菜单栏「交流群」获取加群二维码  
-② 或直接添加微信 **haoxianrui**，备注「前端/后端/全栈」（验证防广告，感谢理解和支持）
+① 关注「有来技术」公众号，点击菜单 **交流群** 获取加群二维码（此举防止广告进群，感谢理解和支持）。
+② 直接添加微信 **`haoxianrui`** 备注「前端/后端/全栈」
 
 
 ![有来技术公众号](https://foruda.gitee.com/images/1737108820762592766/3390ed0d_716974.png)  
