@@ -135,7 +135,7 @@ youlai-boot
 
 3. **修改配置**
 
-   默认连接有来生产环境MySQL/Redis（仅读权限），本地开发时请修改 [application-dev.yml](src/main/resources/application-dev.yml) 中的数据库连接参数。
+   默认连接有来生产环境MySQL/Redis（仅读权限），本地开发时请修改 [application-dev.yml](src/main/resources/application-dev.yml) 中的 MySQL 和 Redis 连接信息。
 
 4. **启动项目**
 
