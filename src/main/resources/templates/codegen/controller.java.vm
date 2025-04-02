@@ -26,7 +26,7 @@ import jakarta.validation.Valid;
  */
 @Tag(name = "${businessName}接口")
 @RestController
-@RequestMapping("/api/v1/${lowerFirstEntityName}s")
+@RequestMapping("/api/v1/${kebabCaseEntityName}")
 @RequiredArgsConstructor
 public class ${entityName}Controller  {
 
@@ -34,7 +34,7 @@ public class ${entityName}Controller  {
 
     @Operation(summary = "$!{businessName}分页列表")
     @GetMapping("/page")
-    @PreAuthorize("@ss.hasPerm('${moduleName}:${lowerFirstEntityName}:query')")
+    @PreAuthorize("@ss.hasPerm('${moduleName}:${kebabCaseEntityName}:query')")
     public PageResult<${entityName}VO> get${entityName}Page(${entityName}Query queryParams ) {
         IPage<${entityName}VO> result = ${lowerFirstEntityName}Service.get${entityName}Page(queryParams);
         return PageResult.success(result);
@@ -42,7 +42,7 @@ public class ${entityName}Controller  {
 
     @Operation(summary = "新增${businessName}")
     @PostMapping
-    @PreAuthorize("@ss.hasPerm('${moduleName}:${lowerFirstEntityName}:add')")
+    @PreAuthorize("@ss.hasPerm('${moduleName}:${kebabCaseEntityName}:add')")
     public Result<Void> save${entityName}(@RequestBody @Valid ${entityName}Form formData ) {
         boolean result = ${lowerFirstEntityName}Service.save${entityName}(formData);
         return Result.judge(result);
@@ -50,7 +50,7 @@ public class ${entityName}Controller  {
 
     @Operation(summary = "获取${businessName}表单数据")
     @GetMapping("/{id}/form")
-    @PreAuthorize("@ss.hasPerm('${moduleName}:${lowerFirstEntityName}:edit')")
+    @PreAuthorize("@ss.hasPerm('${moduleName}:${kebabCaseEntityName}:edit')")
     public Result<${entityName}Form> get${entityName}Form(
         @Parameter(description = "$!{businessName}ID") @PathVariable Long id
     ) {
@@ -60,7 +60,7 @@ public class ${entityName}Controller  {
 
     @Operation(summary = "修改${businessName}")
     @PutMapping(value = "/{id}")
-    @PreAuthorize("@ss.hasPerm('${moduleName}:${lowerFirstEntityName}:edit')")
+    @PreAuthorize("@ss.hasPerm('${moduleName}:${kebabCaseEntityName}:edit')")
     public Result<Void> update${entityName}(
             @Parameter(description = "$!{businessName}ID") @PathVariable Long id,
             @RequestBody @Validated ${entityName}Form formData
@@ -71,7 +71,7 @@ public class ${entityName}Controller  {
 
     @Operation(summary = "删除${businessName}")
     @DeleteMapping("/{ids}")
-    @PreAuthorize("@ss.hasPerm('${moduleName}:${lowerFirstEntityName}:delete')")
+    @PreAuthorize("@ss.hasPerm('${moduleName}:${kebabCaseEntityName}:delete')")
     public Result<Void> delete${entityName}s(
         @Parameter(description = "$!{businessName}ID，多个以英文逗号(,)分割") @PathVariable String ids
     ) {

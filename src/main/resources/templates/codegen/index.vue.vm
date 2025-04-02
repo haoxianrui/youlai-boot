@@ -104,7 +104,7 @@
     <el-card shadow="never">
       <div class="mb-10px">
         <el-button
-            v-hasPerm="['${moduleName}:${lowerFirstEntityName}:add']"
+            v-hasPerm="['${moduleName}:${kebabCaseEntityName}:add']"
             type="success"
             @click="handleOpenDialog()"
         >
@@ -112,7 +112,7 @@
           新增
         </el-button>
         <el-button
-            v-hasPerm="['${moduleName}:${lowerFirstEntityName}:delete']"
+            v-hasPerm="['${moduleName}:${kebabCaseEntityName}:delete']"
             type="danger"
             :disabled="removeIds.length === 0"
             @click="handleDelete()"
@@ -153,7 +153,7 @@
         <el-table-column fixed="right" label="操作" width="220">
           <template #default="scope">
             <el-button
-                v-hasPerm="['${moduleName}:${lowerFirstEntityName}:edit']"
+                v-hasPerm="['${moduleName}:${kebabCaseEntityName}:edit']"
                 type="primary"
                 size="small"
                 link
@@ -163,7 +163,7 @@
               编辑
             </el-button>
             <el-button
-                v-hasPerm="['${moduleName}:${lowerFirstEntityName}:delete']"
+                v-hasPerm="['${moduleName}:${kebabCaseEntityName}:delete']"
                 type="danger"
                 size="small"
                 link
@@ -285,8 +285,8 @@
 
   import ${entityName}API, { ${entityName}PageVO, ${entityName}Form, ${entityName}PageQuery } from "@/api/${moduleName}/${kebabCaseEntityName}";
 
-  const queryFormRef = ref(ElForm);
-  const dataFormRef = ref(ElForm);
+  const queryFormRef = ref();
+  const dataFormRef = ref();
 
   const loading = ref(false);
   const removeIds = ref<number[]>([]);

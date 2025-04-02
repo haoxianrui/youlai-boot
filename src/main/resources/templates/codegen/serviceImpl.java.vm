@@ -51,7 +51,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
      * 获取${businessName}表单数据
      *
      * @param id $!{businessName}ID
-     * @return
+     * @return ${businessName}表单数据
      */
     @Override
     public ${entityName}Form get${entityName}FormData(Long id) {
@@ -63,7 +63,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
      * 新增${businessName}
      *
      * @param formData $!{businessName}表单对象
-     * @return
+     * @return 是否新增成功
      */
     @Override
     public boolean save${entityName}(${entityName}Form formData) {
@@ -76,7 +76,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
      *
      * @param id   $!{businessName}ID
      * @param formData $!{businessName}表单对象
-     * @return
+     * @return 是否修改成功
      */
     @Override
     public boolean update${entityName}(Long id,${entityName}Form formData) {
@@ -88,7 +88,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
      * 删除${businessName}
      *
      * @param ids $!{businessName}ID，多个以英文逗号(,)分割
-     * @return
+     * @return 是否删除成功
      */
     @Override
     public boolean delete${entityName}s(String ids) {
