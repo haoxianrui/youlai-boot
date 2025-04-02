@@ -49,7 +49,7 @@
 
 | 文档名称          | 访问地址                                                                                   |
 |---------------|-------------------------------------------------------------------------------------------|
-| 在线接口文档        | [https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5](https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5) |
+| 在线接口文档        | [https://www.apifox.cn/apidoc](https://www.apifox.cn/apidoc/shared-195e783f-4d85-4235-a038-eec696de4ea5) |
 | 项目介绍与使用指南     | [https://www.youlai.tech/youlai-boot/](https://www.youlai.tech/youlai-boot/)              |
 | 功能详解与操作手册     | [https://youlai.blog.csdn.net/article/details/145178880](https://youlai.blog.csdn.net/article/details/145178880) |
 | 新手入门指南(项目0到1) | [https://youlai.blog.csdn.net/article/details/145177011](https://youlai.blog.csdn.net/article/details/145177011) |
@@ -135,7 +135,7 @@ youlai-boot
 
 3. **修改配置**
 
-   默认连接有来生产环境MySQL/Redis（仅读权限），本地开发时请修改 [application-dev.yml](src/main/resources/application-dev.yml) 中的 MySQL 和 Redis 连接信息。
+   默认连接`有来`线上 MySQL/Redis（仅读权限），本地开发时请修改 [application-dev.yml](src/main/resources/application-dev.yml) 中的 MySQL 和 Redis 连接信息。
 
 4. **启动项目**
 
