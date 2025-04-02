@@ -21,7 +21,7 @@ public interface ${entityName}Mapper extends BaseMapper<${entityName}> {
      *
      * @param page 分页对象
      * @param queryParams 查询参数
-     * @return
+     * @return {@link Page<${entityName}VO>} $!{businessName}分页列表
      */
     Page<${entityName}VO> get${entityName}Page(Page<${entityName}VO> page, ${entityName}Query queryParams);
 

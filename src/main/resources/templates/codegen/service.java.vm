@@ -18,7 +18,7 @@ public interface ${entityName}Service extends IService<${entityName}> {
     /**
      *$!{businessName}分页列表
      *
-     * @return
+     * @return {@link IPage<${entityName}VO>} $!{businessName}分页列表
      */
     IPage<${entityName}VO> get${entityName}Page(${entityName}Query queryParams);
 
@@ -26,7 +26,7 @@ public interface ${entityName}Service extends IService<${entityName}> {
      * 获取${businessName}表单数据
      *
      * @param id $!{businessName}ID
-     * @return
+     * @return ${businessName}表单数据
      */
      ${entityName}Form get${entityName}FormData(Long id);
 
@@ -34,7 +34,7 @@ public interface ${entityName}Service extends IService<${entityName}> {
      * 新增${businessName}
      *
      * @param formData $!{businessName}表单对象
-     * @return
+     * @return 是否新增成功
      */
     boolean save${entityName}(${entityName}Form formData);
 
@@ -43,7 +43,7 @@ public interface ${entityName}Service extends IService<${entityName}> {
      *
      * @param id   $!{businessName}ID
      * @param formData $!{businessName}表单对象
-     * @return
+     * @return 是否修改成功
      */
     boolean update${entityName}(Long id, ${entityName}Form formData);
 
@@ -51,7 +51,7 @@ public interface ${entityName}Service extends IService<${entityName}> {
      * 删除${businessName}
      *
      * @param ids $!{businessName}ID，多个以英文逗号(,)分割
-     * @return
+     * @return 是否删除成功
      */
     boolean delete${entityName}s(String ids);
 
