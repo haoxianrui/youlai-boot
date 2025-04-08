@@ -3,6 +3,7 @@ package com.youlai.boot.core.security.token;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
@@ -117,8 +118,8 @@ public class JwtTokenManager implements TokenManager {
             JSONObject payloads = jwt.getPayloads();
             String jti = payloads.getStr(JWTPayload.JWT_ID);
 
-            // 判断是否在黑名单中，如果在，则返回false 标识Token无效
-            if (Boolean.TRUE.equals(redisTemplate.hasKey(RedisConstants.Auth.BLACKLIST_TOKEN + jti))) {
+            // 判断是否在黑名单中，如果在，则返回 false 标识Token无效
+            if (Boolean.TRUE.equals(redisTemplate.hasKey(StrUtil.format(RedisConstants.Auth.BLACKLIST_TOKEN, jti)))) {
                 return false;
             }
         }
@@ -142,7 +143,7 @@ public class JwtTokenManager implements TokenManager {
         Integer expirationAt = payloads.getInt(JWTPayload.EXPIRES_AT);
 
         // 黑名单Token Key
-        String blacklistTokenKey = RedisConstants.Auth.BLACKLIST_TOKEN + payloads.getStr(JWTPayload.JWT_ID);
+        String blacklistTokenKey = StrUtil.format(RedisConstants.Auth.BLACKLIST_TOKEN, payloads.getStr(JWTPayload.JWT_ID));
 
         if (expirationAt != null) {
             int currentTimeSeconds = Convert.toInt(System.currentTimeMillis() / 1000);
