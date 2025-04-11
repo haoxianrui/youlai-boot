@@ -78,13 +78,13 @@ security:
       secret-key: SecretKey012345678901234567890123456789012345678901234567890123456789 # JWT密钥(HS256算法至少32字符)
     redis-token:
       allow-multi-login: true # 是否允许多设备登录
-  # 安全白名单路径（完全绕过安全过滤器）
+  # 安全白名单路径，仅跳过 AuthorizationFilter 过滤器，还是会走 Spring Security 的其他过滤器(CSRF、CORS等)
   ignore-urls:
     - /api/v1/auth/login/**       # 登录接口(账号密码登录、手机验证码登录和微信登录)
     - /api/v1/auth/captcha        # 验证码获取接口
     - /api/v1/auth/refresh-token  # 刷新令牌接口
     - /ws/**                      # WebSocket接口
-  # 非安全端点路径（允许匿名访问的API）
+  # 非安全端点路径，完全绕过 Spring Security 的过滤器
   unsecured-urls:
     - ${springdoc.swagger-ui.path}
     - /doc.html
