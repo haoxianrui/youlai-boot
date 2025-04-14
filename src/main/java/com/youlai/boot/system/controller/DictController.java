@@ -108,7 +108,7 @@ public class DictController {
     //---------------------------------------------------
     // 字典项相关接口
     //---------------------------------------------------
-    @Operation(summary = "字典项分页")
+    @Operation(summary = "字典项分页列表")
     @GetMapping("/{dictCode}/items/page")
     public PageResult<DictItemPageVO> getDictItemPage(
             @PathVariable String dictCode,

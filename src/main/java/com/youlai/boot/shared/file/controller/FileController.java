@@ -16,10 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 文件控制层
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2022/10/16
  */
-@Tag(name = "08.文件接口")
+@Tag(name = "07.文件接口")
 @RestController
 @RequestMapping("/api/v1/files")
 @RequiredArgsConstructor

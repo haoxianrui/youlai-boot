@@ -17,7 +17,7 @@ import java.security.Principal;
  * <p>
  * 包含点对点/广播发送消息
  *
- * @author Ray
+ * @author Ray.Hao
  * @since 2.3.0
  */
 @RestController
