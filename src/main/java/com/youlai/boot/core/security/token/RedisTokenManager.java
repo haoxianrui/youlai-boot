@@ -116,6 +116,17 @@ public class RedisTokenManager implements TokenManager {
     }
 
     /**
+     * 校验 RefreshToken 是否有效
+     *
+     * @param refreshToken  访问令牌
+     * @return 是否有效
+     */
+    @Override
+    public boolean validateRefreshToken(String refreshToken) {
+        return redisTemplate.hasKey(formatRefreshTokenKey(refreshToken));
+    }
+
+    /**
      * 刷新令牌
      *
      * @param refreshToken 刷新令牌
@@ -253,6 +264,16 @@ public class RedisTokenManager implements TokenManager {
      */
     private String formatTokenKey(String token) {
         return StrUtil.format(RedisConstants.Auth.ACCESS_TOKEN_USER, token);
+    }
+
+    /**
+     * 格式化刷新令牌的 Redis 键
+     *
+     * @param refreshToken 访问令牌
+     * @return 格式化后的 Redis 键
+     */
+    private String formatRefreshTokenKey(String refreshToken) {
+        return StrUtil.format(RedisConstants.Auth.REFRESH_TOKEN_USER, refreshToken);
     }
 
     /**

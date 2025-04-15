@@ -126,6 +126,11 @@ public class JwtTokenManager implements TokenManager {
         return isValid;
     }
 
+    @Override
+    public boolean validateRefreshToken(String refreshToken) {
+        return this.validateToken(refreshToken);
+    }
+
     /**
      * 将令牌加入黑名单
      *
@@ -176,7 +181,7 @@ public class JwtTokenManager implements TokenManager {
         }
 
         Authentication authentication = parseToken(refreshToken);
-        int accessTokenExpiration = securityProperties.getSession().getRefreshTokenTimeToLive();
+        int accessTokenExpiration = securityProperties.getSession().getAccessTokenTimeToLive();
         String newAccessToken = generateToken(authentication, accessTokenExpiration);
 
         return AuthenticationToken.builder()

@@ -39,6 +39,14 @@ public interface TokenManager {
     boolean validateToken(String token);
 
     /**
+     * 校验 刷新 Token 是否有效
+     *
+     * @param refreshToken JWT Token
+     * @return 是否有效
+     */
+    boolean validateRefreshToken(String refreshToken);
+
+    /**
      *  刷新 Token
      *
      * @param token 刷新令牌
