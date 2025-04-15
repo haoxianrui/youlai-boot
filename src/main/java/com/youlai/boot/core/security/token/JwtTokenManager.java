@@ -128,8 +128,7 @@ public class JwtTokenManager implements TokenManager {
 
     @Override
     public boolean validateRefreshToken(String refreshToken) {
-        // TODO 刷新令牌逻辑
-        return false;
+        return this.validateToken(refreshToken);
     }
 
     /**
@@ -182,7 +181,7 @@ public class JwtTokenManager implements TokenManager {
         }
 
         Authentication authentication = parseToken(refreshToken);
-        int accessTokenExpiration = securityProperties.getSession().getRefreshTokenTimeToLive();
+        int accessTokenExpiration = securityProperties.getSession().getAccessTokenTimeToLive();
         String newAccessToken = generateToken(authentication, accessTokenExpiration);
 
         return AuthenticationToken.builder()
