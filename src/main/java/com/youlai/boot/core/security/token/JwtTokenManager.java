@@ -126,6 +126,12 @@ public class JwtTokenManager implements TokenManager {
         return isValid;
     }
 
+    @Override
+    public boolean validateRefreshToken(String refreshToken) {
+        // TODO 刷新令牌逻辑
+        return false;
+    }
+
     /**
      * 将令牌加入黑名单
      *

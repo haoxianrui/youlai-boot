@@ -218,7 +218,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationToken refreshToken(String refreshToken) {
         // 验证刷新令牌
-        boolean isValidate = tokenManager.validateToken(refreshToken);
+        boolean isValidate = tokenManager.validateRefreshToken(refreshToken);
 
         if (!isValidate) {
             throw new BusinessException(ResultCode.REFRESH_TOKEN_INVALID);
