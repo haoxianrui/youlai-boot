@@ -126,7 +126,7 @@ youlai-boot
 1. **克隆项目**
 
    ```bash
-   git clone https://gitee.com/youlaiorg/youlai-boot-flex.git
+   git clone https://gitee.com/youlaiorg/youlai-boot.git
    ```
 
 2. **数据库初始化**
