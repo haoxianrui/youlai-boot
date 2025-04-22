@@ -3,7 +3,7 @@ package com.youlai.boot.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.boot.system.converter.DictDataConverter;
+import com.youlai.boot.system.converter.DictItemConverter;
 import com.youlai.boot.system.mapper.DictItemMapper;
 import com.youlai.boot.system.model.entity.DictItem;
 import com.youlai.boot.system.model.form.DictItemForm;
@@ -27,7 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> implements DictItemService {
 
-    private final DictDataConverter dictDataConverter;
+    private final DictItemConverter dictItemConverter;
 
     /**
      * 获取字典项分页列表
@@ -78,7 +78,7 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
     @Override
     public DictItemForm getDictItemForm( Long itemId) {
         DictItem entity = this.getById(itemId);
-        return dictDataConverter.toForm(entity);
+        return dictItemConverter.toForm(entity);
     }
 
     /**
@@ -89,7 +89,7 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
      */
     @Override
     public boolean saveDictItem(DictItemForm formData) {
-        DictItem entity = dictDataConverter.toEntity(formData);
+        DictItem entity = dictItemConverter.toEntity(formData);
         return this.save(entity);
     }
 
@@ -101,7 +101,7 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
      */
     @Override
     public boolean updateDictItem(DictItemForm formData) {
-        DictItem entity = dictDataConverter.toEntity(formData);
+        DictItem entity = dictItemConverter.toEntity(formData);
         return this.updateById(entity);
     }
 
@@ -112,7 +112,9 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
      */
     @Override
     public void deleteDictItemByIds(String ids) {
-        List<Long> idList = Arrays.stream(ids.split(",")).map(Long::parseLong).toList();
+        List<Long> idList = Arrays.stream(ids.split(","))
+          .map(Long::parseLong)
+          .toList();
         this.removeByIds(idList);
     }
 

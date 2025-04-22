@@ -26,8 +26,8 @@
                           <dict v-model="queryParams.$fieldConfig.fieldName" type="radio" code="$fieldConfig.dictType" />
                         #else
                           <el-radio-group v-model="queryParams.$fieldConfig.fieldName">
-                            <el-radio :key="1" :label="1">选项一</el-radio>
-                            <el-radio :key="2" :label="2">选项二</el-radio>
+                            <el-radio :key="1" :value="1">选项一</el-radio>
+                            <el-radio :key="2" :value="2">选项二</el-radio>
                           </el-radio-group>
                         #end
                     #elseif($fieldConfig.formType == "CHECK_BOX")

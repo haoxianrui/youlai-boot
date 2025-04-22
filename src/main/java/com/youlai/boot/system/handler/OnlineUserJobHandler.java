@@ -1,7 +1,7 @@
-package com.youlai.boot.shared.websocket.handler;
+package com.youlai.boot.system.handler;
 
 
-import com.youlai.boot.shared.websocket.service.OnlineUserService;
+import com.youlai.boot.system.service.UserOnlineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OnlineUserJobHandler {
 
-    private final OnlineUserService onlineUserService;
+    private final UserOnlineService userOnlineService;
     private final SimpMessagingTemplate messagingTemplate;
 
     // 每分钟统计一次在线用户数
@@ -27,7 +27,7 @@ public class OnlineUserJobHandler {
     public void execute() {
         log.info("定时任务：统计在线用户数");
         // 推送在线用户人数
-        messagingTemplate.convertAndSend("/topic/onlineUserCount", onlineUserService.getOnlineUserCount());
+        messagingTemplate.convertAndSend("/topic/onlineUserCount", userOnlineService.getOnlineUserCount());
     }
 
 }
