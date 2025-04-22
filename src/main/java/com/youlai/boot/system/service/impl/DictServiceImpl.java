@@ -12,7 +12,6 @@ import com.youlai.boot.system.model.entity.Dict;
 import com.youlai.boot.system.model.entity.DictItem;
 import com.youlai.boot.system.model.form.DictForm;
 import com.youlai.boot.system.model.query.DictPageQuery;
-import com.youlai.boot.system.model.vo.DictItemOptionVO;
 import com.youlai.boot.system.model.vo.DictPageVO;
 import com.youlai.boot.system.service.DictItemService;
 import com.youlai.boot.system.service.DictService;
@@ -110,20 +109,23 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
      */
     @Override
     public boolean updateDict(Long id, DictForm dictForm) {
-        // 更新字典
-        Dict entity = dictConverter.toEntity(dictForm);
-
-        // 校验 code 是否唯一
-        String dictCode = entity.getDictCode();
-        long count = this.count(new LambdaQueryWrapper<Dict>()
-                .eq(Dict::getDictCode, dictCode)
-                .ne(Dict::getId, id)
-        );
-        if (count > 0) {
-            throw new BusinessException("字典编码已存在");
+        // 获取字典
+        Dict entity = this.getById(id);
+        if (entity == null) {
+            throw new BusinessException("字典不存在");
         }
-
-        return this.updateById(entity);
+        // 校验 code 是否唯一
+        String dictCode = dictForm.getCode();
+        if (!entity.getDictCode().equals(dictCode)) {
+            long count = this.count(new LambdaQueryWrapper<Dict>()
+                    .eq(Dict::getDictCode, dictCode)
+            );
+            Assert.isTrue(count == 0, "字典编码已存在");
+        }
+        // 更新字典
+        Dict dict = dictConverter.toEntity(dictForm);
+        dict.setId(id);
+        return this.updateById(dict);
     }
 
     /**
@@ -131,23 +133,32 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
      *
      * @param ids 字典ID，多个以英文逗号(,)分割
      */
-    @Override
     @Transactional
+    @Override
     public void deleteDictByIds(List<String> ids) {
-        for (String id : ids) {
-            Dict dict = this.getById(id);
-            if (dict != null) {
-                boolean removeResult = this.removeById(id);
-                // 删除字典下的字典项
-                if (removeResult) {
-                    dictItemService.remove(
-                            new LambdaQueryWrapper<DictItem>()
-                                    .eq(DictItem::getDictCode, dict.getDictCode())
-                    );
-                }
+        // 删除字典
+        this.removeByIds(ids);
 
-            }
+        // 删除字典项
+        List<Dict> list = this.listByIds(ids);
+        if (!list.isEmpty()) {
+            List<String> dictCodes = list.stream().map(Dict::getDictCode).toList();
+            dictItemService.remove(new LambdaQueryWrapper<DictItem>()
+                    .in(DictItem::getDictCode, dictCodes)
+            );
         }
+    }
+
+    /**
+     * 根据字典ID列表获取字典编码列表
+     *
+     * @param ids 字典ID列表
+     * @return 字典编码列表
+     */
+    @Override
+    public List<String> getDictCodesByIds(List<String> ids) {
+        List<Dict> dictList = this.listByIds(ids);
+        return dictList.stream().map(Dict::getDictCode).toList();
     }
 
 }

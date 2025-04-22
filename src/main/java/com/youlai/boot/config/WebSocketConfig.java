@@ -3,10 +3,10 @@ package com.youlai.boot.config;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.core.security.model.SysUserDetails;
 import com.youlai.boot.core.security.token.TokenManager;
-import com.youlai.boot.system.event.UserConnectionEvent;
+import com.youlai.boot.system.service.UserOnlineService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.Message;
@@ -27,25 +27,19 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 /**
- * WebSocket 配置
+ * WebSocket配置
  *
- * @author Ray.Hao
- * @since 2.4.0
+ * @author You Lai
+ * @since 3.0.0
  */
-// 启用WebSocket消息代理功能和配置STOMP协议，实现实时双向通信和消息传递
 @EnableWebSocketMessageBroker
 @Configuration
 @Slf4j
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final ApplicationEventPublisher eventPublisher;
-
     private final TokenManager tokenManager;
-
-    public WebSocketConfig(ApplicationEventPublisher eventPublisher, TokenManager tokenManager) {
-        this.eventPublisher = eventPublisher;
-        this.tokenManager = tokenManager;
-    }
+    private final UserOnlineService userOnlineService;
 
     /**
      * 注册一个端点，客户端通过这个端点进行连接
@@ -56,7 +50,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 // 注册 /ws 的端点
                 .addEndpoint("/ws")
                 // 允许跨域
-                .setAllowedOriginPatterns("*");
+                .setAllowedOriginPatterns("*")
+                // 开启SockJS支持，用于不支持WebSocket的浏览器
+                .withSockJS();
     }
 
 
@@ -70,7 +66,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
         // 客户端订阅消息的请求前缀，topic一般用于广播推送，queue用于点对点推送
         registry.enableSimpleBroker("/topic", "/queue");
-
+        
         // 服务端通知客户端的前缀，可以不设置，默认为user
         registry.setUserDestinationPrefix("/user");
     }
@@ -135,8 +131,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         // 绑定用户身份到当前会话（重要：用于@SendToUser等注解）
                         accessor.setUser(authentication);
 
-                        // 发布用户上线事件（示例：可用于更新在线用户列表）
-                        eventPublisher.publishEvent(new UserConnectionEvent(this, username, true));
+                        // 记录用户上线状态
+                        userOnlineService.userConnected(username, accessor.getSessionId());
 
                     }
                     // 处理客户端断开请求
@@ -149,7 +145,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         if (authentication != null && authentication.isAuthenticated()) {
                             String username = ((SysUserDetails) authentication.getPrincipal()).getUsername();
                             log.info("WebSocket连接关闭：用户[{}]", username);
-                            eventPublisher.publishEvent(new UserConnectionEvent(this, username, false));
+                            
+                            // 记录用户下线状态
+                            userOnlineService.userDisconnected(username);
                         }
                     }
                 } catch (AuthenticationException ex) {
@@ -166,5 +164,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             }
         });
     }
-
 }
