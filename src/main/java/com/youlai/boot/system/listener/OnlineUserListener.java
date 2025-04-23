@@ -1,7 +1,7 @@
-package com.youlai.boot.shared.websocket.listener;
+package com.youlai.boot.system.listener;
 
-import com.youlai.boot.shared.websocket.service.OnlineUserService;
 import com.youlai.boot.system.event.UserConnectionEvent;
+import com.youlai.boot.system.service.UserOnlineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 public class OnlineUserListener {
 
     private final SimpMessagingTemplate messagingTemplate;
-    private final OnlineUserService onlineUserService;
+    private final UserOnlineService userOnlineService;
 
     /**
      * 用户连接事件处理
@@ -31,14 +31,14 @@ public class OnlineUserListener {
     public void handleUserConnectionEvent(UserConnectionEvent event) {
         String username = event.getUsername();
         if (event.isConnected()) {
-            onlineUserService.addOnlineUser(username);
+          userOnlineService.userConnected(username,null);
             log.info("User connected: {}", username);
         } else {
-            onlineUserService.removeOnlineUser(username);
+          userOnlineService.userDisconnected(username);
             log.info("User disconnected: {}", username);
         }
         // 推送在线用户人数
-        messagingTemplate.convertAndSend("/topic/onlineUserCount", onlineUserService.getOnlineUserCount());
+        messagingTemplate.convertAndSend("/topic/onlineUserCount", userOnlineService.getOnlineUserCount());
     }
 
 }

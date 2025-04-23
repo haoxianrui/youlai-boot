@@ -4,10 +4,10 @@ import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.core.security.model.SysUserDetails;
 import com.youlai.boot.core.security.token.TokenManager;
 import com.youlai.boot.system.service.UserOnlineService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -35,11 +35,15 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 @Configuration
 @Slf4j
-@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final TokenManager tokenManager;
     private final UserOnlineService userOnlineService;
+
+    public WebSocketConfig(TokenManager tokenManager, @Lazy UserOnlineService userOnlineService) {
+        this.tokenManager = tokenManager;
+        this.userOnlineService = userOnlineService;
+    }
 
     /**
      * 注册一个端点，客户端通过这个端点进行连接

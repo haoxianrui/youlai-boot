@@ -82,8 +82,8 @@ public class DictController {
     public Result<?> saveDict(@Valid @RequestBody DictForm formData) {
         boolean result = dictService.saveDict(formData);
         // 发送字典更新通知
-        if (result && formData.getCode() != null) {
-            webSocketMessageService.sendDictUpdatedEvent(formData.getCode());
+        if (result) {
+            webSocketMessageService.sendDictUpdatedEvent(formData.getDictCode());
         }
         return Result.judge(result);
     }
@@ -97,8 +97,8 @@ public class DictController {
     ) {
         boolean status = dictService.updateDict(id, dictForm);
         // 发送字典更新通知
-        if (status && dictForm.getCode() != null) {
-            webSocketMessageService.sendDictUpdatedEvent(dictForm.getCode());
+        if (status && dictForm.getDictCode() != null) {
+            webSocketMessageService.sendDictUpdatedEvent(dictForm.getDictCode());
         }
         return Result.judge(status);
     }

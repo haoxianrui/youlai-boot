@@ -6,6 +6,7 @@ import com.youlai.boot.core.security.model.SysUserDetails;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -22,24 +23,35 @@ import java.util.stream.Collectors;
  * @since 3.0.0
  */
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class UserOnlineService {
 
     // 在线用户映射表，key为用户名，value为用户在线信息
     private final Map<String, UserOnlineInfo> onlineUsers = new ConcurrentHashMap<>();
     
-    private final SimpMessagingTemplate messagingTemplate;
+    private SimpMessagingTemplate messagingTemplate;
     private final ObjectMapper objectMapper;
+
+    @Autowired
+    public UserOnlineService(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+    
+    @Autowired(required = false)
+    public void setMessagingTemplate(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
 
     /**
      * 用户上线
      *
      * @param username  用户名
-     * @param sessionId WebSocket会话ID
+     * @param sessionId WebSocket会话ID（可选）
      */
     public void userConnected(String username, String sessionId) {
-        UserOnlineInfo info = new UserOnlineInfo(username, sessionId, System.currentTimeMillis());
+        // 生成会话ID（如果未提供）
+        String actualSessionId = sessionId != null ? sessionId : "session-" + System.nanoTime();
+        UserOnlineInfo info = new UserOnlineInfo(username, actualSessionId, System.currentTimeMillis());
         onlineUsers.put(username, info);
         log.info("用户[{}]上线，当前在线用户数：{}", username, onlineUsers.size());
         
@@ -94,6 +106,11 @@ public class UserOnlineService {
      * 通知所有客户端在线用户变更
      */
     private void notifyOnlineUsersChange() {
+        if (messagingTemplate == null) {
+            log.warn("消息模板尚未初始化，无法发送在线用户变更通知");
+            return;
+        }
+        
         try {
             OnlineUsersChangeEvent event = new OnlineUsersChangeEvent();
             event.setType("ONLINE_USERS_CHANGE");

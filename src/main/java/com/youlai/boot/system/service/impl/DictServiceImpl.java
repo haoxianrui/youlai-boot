@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * 数据字典业务实现类
+ * 字典业务实现类
  *
  * @author haoxr
  * @since 2022/10/12
@@ -115,7 +115,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             throw new BusinessException("字典不存在");
         }
         // 校验 code 是否唯一
-        String dictCode = dictForm.getCode();
+        String dictCode = dictForm.getDictCode();
         if (!entity.getDictCode().equals(dictCode)) {
             long count = this.count(new LambdaQueryWrapper<Dict>()
                     .eq(Dict::getDictCode, dictCode)
