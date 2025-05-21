@@ -192,7 +192,7 @@ public class GlobalExceptionHandler {
         log.error(e.getMessage(), e);
         String errorMsg = e.getMessage();
         if (StrUtil.isNotBlank(errorMsg) && errorMsg.contains("denied to user")) {
-            return Result.failed(ResultCode.ACCESS_UNAUTHORIZED);
+            return Result.failed(ResultCode.DATABASE_ACCESS_DENIED);
         } else {
             return Result.failed(e.getMessage());
         }

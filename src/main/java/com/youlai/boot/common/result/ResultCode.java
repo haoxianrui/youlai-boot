@@ -250,6 +250,8 @@ public enum ResultCode implements IResultCode, Serializable {
 
     PRIMARY_KEY_CONFLICT("C0341", "主键冲突"),
 
+    DATABASE_ACCESS_DENIED("C0351", "演示环境已禁用数据库写入功能，请本地部署修改数据库链接或开启Mock模式进行体验"),
+
     /** 二级宏观错误码  */
     THIRD_PARTY_DISASTER_RECOVERY_SYSTEM_TRIGGERED("C0400", "第三方容灾系统被触发"),
     THIRD_PARTY_SYSTEM_RATE_LIMITING("C0401", "第三方系统限流"),
