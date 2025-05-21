@@ -60,6 +60,9 @@ public class LogAspect {
      */
     @Around("logPointcut() && @annotation(logAnnotation)")
     public Object doAround(ProceedingJoinPoint joinPoint, com.youlai.boot.common.annotation.Log logAnnotation) throws Throwable {
+        // 在方法执行前获取用户ID，避免在方法执行过程中清除上下文导致获取不到用户ID
+        Long userId = SecurityUtils.getUserId();
+        
         TimeInterval timer = DateUtil.timer();
         Object result = null;
         Exception exception = null;
@@ -71,7 +74,7 @@ public class LogAspect {
             throw e;
         } finally {
             long executionTime = timer.interval(); // 执行时长
-            this.saveLog(joinPoint, exception, result, logAnnotation, executionTime);
+            this.saveLog(joinPoint, exception, result, logAnnotation, executionTime, userId);
         }
         return result;
     }
@@ -84,8 +87,9 @@ public class LogAspect {
      * @param e             异常
      * @param jsonResult    响应结果
      * @param logAnnotation 日志注解
+     * @param userId        用户ID
      */
-    private void saveLog(final JoinPoint joinPoint, final Exception e, Object jsonResult, com.youlai.boot.common.annotation.Log logAnnotation, long executionTime) {
+    private void saveLog(final JoinPoint joinPoint, final Exception e, Object jsonResult, com.youlai.boot.common.annotation.Log logAnnotation, long executionTime, Long userId) {
         String requestURI = request.getRequestURI();
         // 创建日志记录
         Log log = new Log();
@@ -108,7 +112,6 @@ public class LogAspect {
             }
         }
         log.setRequestUri(requestURI);
-        Long userId = SecurityUtils.getUserId();
         log.setCreateBy(userId);
         String ipAddr = IPUtils.getIpAddr(request);
         if (StrUtil.isNotBlank(ipAddr)) {
