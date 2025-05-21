@@ -78,7 +78,7 @@ public class UserController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "用户表单数据")
+    @Operation(summary = "获取用户表单数据")
     @GetMapping("/{userId}/form")
     @Log(value = "用户表单数据", module = LogModuleEnum.USER)
     public Result<UserForm> getUserForm(
@@ -248,7 +248,7 @@ public class UserController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "用户下拉选项")
+    @Operation(summary = "获取用户下拉选项")
     @GetMapping("/options")
     public Result<List<Option<String>>> listUserOptions() {
         List<Option<String>> list = userService.listUserOptions();

@@ -62,7 +62,7 @@ public class RoleController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "角色表单数据")
+    @Operation(summary = "获取角色表单数据")
     @GetMapping("/{roleId}/form")
     public Result<RoleForm> getRoleForm(
             @Parameter(description = "角色ID") @PathVariable Long roleId
@@ -108,7 +108,7 @@ public class RoleController {
         return Result.success(menuIds);
     }
 
-    @Operation(summary = "分配菜单(包括按钮权限)给角色")
+    @Operation(summary = "角色分配菜单权限")
     @PutMapping("/{roleId}/menus")
     public Result<Void> assignMenusToRole(
             @PathVariable Long roleId,
