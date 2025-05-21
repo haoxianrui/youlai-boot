@@ -107,21 +107,30 @@ public class UserOnlineService {
      */
     private void notifyOnlineUsersChange() {
         if (messagingTemplate == null) {
-            log.warn("消息模板尚未初始化，无法发送在线用户变更通知");
+            log.warn("消息模板尚未初始化，无法发送在线用户数量");
+            return;
+        }
+        
+        // 发送简化版数据（仅数量）
+        sendOnlineUserCount();
+    }
+    
+    /**
+     * 发送在线用户数量（简化版，不包含用户详情）
+     */
+    private void sendOnlineUserCount() {
+        if (messagingTemplate == null) {
+            log.warn("消息模板尚未初始化，无法发送在线用户数量");
             return;
         }
         
         try {
-            OnlineUsersChangeEvent event = new OnlineUsersChangeEvent();
-            event.setType("ONLINE_USERS_CHANGE");
-            event.setCount(onlineUsers.size());
-            event.setUsers(getOnlineUsers());
-            event.setTimestamp(System.currentTimeMillis());
-            
-            String message = objectMapper.writeValueAsString(event);
-            messagingTemplate.convertAndSend("/topic/online-users", message);
-        } catch (JsonProcessingException e) {
-            log.error("Failed to send online users change event", e);
+            // 直接发送数量，更轻量
+            int count = onlineUsers.size();
+            messagingTemplate.convertAndSend("/topic/online-count", count);
+            log.debug("已发送在线用户数量: {}", count);
+        } catch (Exception e) {
+            log.error("发送在线用户数量失败", e);
         }
     }
 
