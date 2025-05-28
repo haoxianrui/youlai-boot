@@ -17,6 +17,13 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+
+/**
+ * 用户角色服务实现类
+ *
+ * @author Ray.Hao
+ * @since 0.0.1
+ */
 @Service
 @RequiredArgsConstructor
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
@@ -29,7 +36,6 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
      *
      * @param userId 用户ID
      * @param roleIds 选择的角色ID集合
-     * @return
      */
     @Override
     public void saveUserRoles(Long userId, List<Long> roleIds) {
@@ -74,7 +80,6 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 
         // 当权限变更时清除登录态
         if (rolesChanged) {
-            // 获取用户所有有效token（根据实际token存储实现）
             String accessToken = SecurityUtils.getTokenFromRequest();
             tokenManager.invalidateToken(accessToken);
         }
