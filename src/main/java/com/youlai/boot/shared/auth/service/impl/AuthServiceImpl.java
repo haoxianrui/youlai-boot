@@ -85,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
      * @return 访问令牌
      */
     @Override
-    public AuthenticationToken loginByWechat(String code) {
+    public AuthenticationToken loginByWechatMiniProgram(String code) {
         // 1. 创建用户微信认证的令牌（未认证）
         WechatAuthenticationToken wechatAuthenticationToken = new WechatAuthenticationToken(code);
 

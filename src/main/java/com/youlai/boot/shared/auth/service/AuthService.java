@@ -46,7 +46,7 @@ public interface AuthService {
      * @param code 微信登录code
      * @return 登录结果
      */
-    AuthenticationToken loginByWechat(String code);
+    AuthenticationToken loginByWechatMiniProgram(String code);
 
     /**
      * 发送短信验证码

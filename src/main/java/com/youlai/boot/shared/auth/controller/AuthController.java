@@ -63,13 +63,13 @@ public class AuthController {
         return Result.success(authenticationToken);
     }
 
-    @Operation(summary = "微信授权登录")
-    @PostMapping("/login/wechat")
+    @Operation(summary = "微信小程序授权登录")
+    @PostMapping("/login/wechat-mini-program")
     @Log(value = "微信登录", module = LogModuleEnum.LOGIN)
-    public Result<AuthenticationToken> loginByWechat(
+    public Result<AuthenticationToken> loginByWechatMiniProgram(
             @Parameter(description = "微信授权码", example = "code") @RequestParam String code
     ) {
-        AuthenticationToken loginResult = authService.loginByWechat(code);
+        AuthenticationToken loginResult = authService.loginByWechatMiniProgram(code);
         return Result.success(loginResult);
     }
 
