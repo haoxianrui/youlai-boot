@@ -41,14 +41,6 @@ public interface AuthService {
     AuthenticationToken refreshToken(String refreshToken);
 
     /**
-     * 微信小程序登录
-     *
-     * @param code 微信登录code
-     * @return 登录结果
-     */
-    AuthenticationToken loginByWechatMiniProgram(String code);
-
-    /**
      * 发送短信验证码
      *
      * @param mobile 手机号
@@ -63,4 +55,20 @@ public interface AuthService {
      * @return 登录结果
      */
     AuthenticationToken loginBySms(String mobile, String code);
+
+    /**
+     * 微信小程序登录
+     *
+     * @param code 微信登录code
+     * @return 登录结果
+     */
+    AuthenticationToken loginByWechatMiniCode(String code);
+
+    /**
+     * 微信小程序登录
+     *
+     * @param code 微信登录code
+     * @return 登录结果
+     */
+    AuthenticationToken loginByWechatMiniPhone( String code,String encryptedData,  String iv);
 }

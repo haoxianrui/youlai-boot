@@ -63,18 +63,37 @@ public class AuthController {
         return Result.success(authenticationToken);
     }
 
-    @Operation(summary = "微信小程序授权登录")
-    @PostMapping("/login/wechat-mini-program")
-    @Log(value = "微信登录", module = LogModuleEnum.LOGIN)
-    public Result<AuthenticationToken> loginByWechatMiniProgram(
-            @Parameter(description = "微信授权码", example = "code") @RequestParam String code
+    @Operation(
+            summary = "微信小程序授权码登录",
+            description = "通过微信临时授权码(code)快速登录，自动注册未绑定用户"
+    )
+    @PostMapping("/wx/miniapp/code-login")
+    @Log(value = "微信授权码登录", module = LogModuleEnum.LOGIN)
+    public Result<AuthenticationToken> loginByWechatMiniCode(
+            @Parameter(description = "微信临时登录凭证", example = "071XHa000ABCdefGHI1234567890XHa3") @RequestParam String code
     ) {
-        AuthenticationToken loginResult = authService.loginByWechatMiniProgram(code);
+        AuthenticationToken loginResult = authService.loginByWechatMiniCode(code);
         return Result.success(loginResult);
     }
 
+    @Operation(
+            summary = "微信小程序手机号一键登录",
+            description = "通过加密数据(encryptedData+iv)获取用户手机号并登录"
+    )
+    @PostMapping("/wx/miniapp/phone-login")
+    @Log(value = "微信手机号一键登录", module = LogModuleEnum.LOGIN)
+    public Result<AuthenticationToken> loginByWechatMiniPhone(
+            @Parameter(description = "微信临时登录凭证", example = "071XHa000ABCdefGHI1234567890XHa3") @RequestParam String code,
+            @Parameter(description = "加密的手机号数据", example = "CiyLU1Aw2KjvrjMdj8YKli...") @RequestParam String encryptedData,
+            @Parameter(description = "解密算法初始向量", example = "r7BXXKkLb8qrSNn05n0qiA==") @RequestParam String iv
+    ) {
+        AuthenticationToken loginResult = authService.loginByWechatMiniPhone(code, encryptedData, iv);
+        return Result.success(loginResult);
+    }
+
+
     @Operation(summary = "发送登录短信验证码")
-    @PostMapping("/login/sms/code")
+    @PostMapping("/sms/code")
     public Result<Void> sendLoginVerifyCode(
             @Parameter(description = "手机号", example = "18812345678") @RequestParam String mobile
     ) {
@@ -83,7 +102,7 @@ public class AuthController {
     }
 
     @Operation(summary = "短信验证码登录")
-    @PostMapping("/login/sms")
+    @PostMapping("/sms")
     @Log(value = "短信验证码登录", module = LogModuleEnum.LOGIN)
     public Result<AuthenticationToken> loginBySms(
             @Parameter(description = "手机号", example = "18812345678") @RequestParam String mobile,

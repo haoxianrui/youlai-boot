@@ -78,26 +78,6 @@ public class AuthServiceImpl implements AuthService {
         return authenticationTokenResponse;
     }
 
-    /**
-     * 微信一键授权登录
-     *
-     * @param code 微信登录code
-     * @return 访问令牌
-     */
-    @Override
-    public AuthenticationToken loginByWechatMiniProgram(String code) {
-        // 1. 创建用户微信认证的令牌（未认证）
-        WechatAuthenticationToken wechatAuthenticationToken = new WechatAuthenticationToken(code);
-
-        // 2. 执行认证（认证中）
-        Authentication authentication = authenticationManager.authenticate(wechatAuthenticationToken);
-
-        // 3. 认证成功后生成 JWT 令牌，并存入 Security 上下文，供登录日志 AOP 使用（已认证）
-        AuthenticationToken authenticationToken = tokenManager.generateToken(authentication);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return authenticationToken;
-    }
 
     /**
      * 发送登录短信验证码
@@ -108,10 +88,8 @@ public class AuthServiceImpl implements AuthService {
     public void sendSmsLoginCode(String mobile) {
 
         // 随机生成4位验证码
-        // String code = String.valueOf((int) ((Math.random() * 9 + 1) * 1000));
-        // TODO 为了方便测试，验证码固定为 1234，实际开发中在配置了厂商短信服务后，可以使用上面的随机验证码
-        String code = "1234";
-
+        String code = String.valueOf((int) ((Math.random() * 9 + 1) * 1000));
+        log.info("【调试模式】手机号 {} 的验证码为：{}", mobile, code);
         // 发送短信验证码
         Map<String, String> templateParams = new HashMap<>();
         templateParams.put("code", code);
@@ -144,6 +122,26 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return authenticationToken;
+    }
+
+    @Override
+    public AuthenticationToken loginByWechatMiniCode(String code) {
+        // 1. 创建用户微信认证的令牌（未认证）
+        WechatAuthenticationToken wechatAuthenticationToken = new WechatAuthenticationToken(code);
+
+        // 2. 执行认证（认证中）
+        Authentication authentication = authenticationManager.authenticate(wechatAuthenticationToken);
+
+        // 3. 认证成功后生成 JWT 令牌，并存入 Security 上下文，供登录日志 AOP 使用（已认证）
+        AuthenticationToken authenticationToken = tokenManager.generateToken(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return authenticationToken;
+    }
+
+    @Override
+    public AuthenticationToken loginByWechatMiniPhone(String code, String encryptedData, String iv) {
+        return null;
     }
 
     /**
