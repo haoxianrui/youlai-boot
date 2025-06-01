@@ -165,18 +165,18 @@ public interface UserService extends IService<User> {
     /**
      * 根据 openid 获取用户认证信息
      *
-     * @param username 用户名
+     * @param openId 用户名
      * @return {@link UserAuthCredentials}
      */
 
-    UserAuthCredentials getAuthCredentialsByOpenId(String username);
+    UserAuthCredentials getAuthCredentialsByOpenId(String openId);
 
     /**
      * 根据微信 OpenID 注册或绑定用户
      *
      * @param openId 微信 OpenID
      */
-    void registerOrBindWechatUser(String openId);
+    boolean registerOrBindWechatUser(String openId);
 
     /**
      * 根据手机号获取用户认证信息
@@ -186,5 +186,22 @@ public interface UserService extends IService<User> {
      */
     UserAuthCredentials getAuthCredentialsByMobile(String mobile);
 
+    /**
+     * 根据手机号和OpenID注册用户
+     *
+     * @param mobile 手机号
+     * @param openId 微信OpenID
+     * @return 是否成功
+     */
+    boolean registerUserByMobileAndOpenId(String mobile, String openId);
+
+    /**
+     * 绑定用户微信OpenID
+     *
+     * @param userId 用户ID
+     * @param openId 微信OpenID
+     * @return 是否成功
+     */
+    boolean bindUserOpenId(Long userId, String openId);
 
 }

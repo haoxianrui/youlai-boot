@@ -1,4 +1,4 @@
-package com.youlai.boot.core.security.extension.wechat;
+package com.youlai.boot.core.security.extension.wx;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
@@ -18,20 +18,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
 /**
- * 微信认证 Provider
+ * 微信小程序Code认证Provider
  *
- * @author Ray.Hao
- * @since 2.17.0
+ * @author 有来技术团队
+ * @since 2.0.0
  */
 @Slf4j
-public class WechatAuthenticationProvider implements AuthenticationProvider {
+public class WxMiniAppCodeAuthenticationProvider implements AuthenticationProvider {
 
     private final UserService userService;
-
     private final WxMaService wxMaService;
 
 
-    public WechatAuthenticationProvider(UserService userService, WxMaService wxMaService) {
+    public WxMiniAppCodeAuthenticationProvider(UserService userService, WxMaService wxMaService) {
         this.userService = userService;
         this.wxMaService = wxMaService;
     }
@@ -66,7 +65,7 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
         UserAuthCredentials userAuthCredentials = userService.getAuthCredentialsByOpenId(openId);
 
         if (userAuthCredentials == null) {
-            // TODO: 用户不存在则注册，这里需要获取用户手机号并与现有用户绑定
+            // 用户不存在则注册
             userService.registerOrBindWechatUser(openId);
 
             // 再次查询用户信息，确保用户注册成功
@@ -80,13 +79,12 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
         if (ObjectUtil.notEqual(userAuthCredentials.getStatus(), 1)) {
             throw new DisabledException("用户已被禁用");
         }
-        // 这里因为已经根据 code 从微信小程序获取到 openid 不需要再经过系统认证，所以直接生成
 
         // 构建认证后的用户详情信息
         SysUserDetails userDetails = new SysUserDetails(userAuthCredentials);
 
-        // 创建已认证的 WeChatAuthenticationToken
-        return WechatAuthenticationToken.authenticated(
+        // 创建已认证的Token
+        return WxMiniAppCodeAuthenticationToken.authenticated(
                 userDetails,
                 userDetails.getAuthorities()
         );
@@ -94,6 +92,6 @@ public class WechatAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return WechatAuthenticationToken.class.isAssignableFrom(authentication);
+        return WxMiniAppCodeAuthenticationToken.class.isAssignableFrom(authentication);
     }
-}
+} 

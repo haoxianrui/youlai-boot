@@ -2,6 +2,8 @@ package com.youlai.boot.shared.auth.service;
 
 import com.youlai.boot.shared.auth.model.CaptchaInfo;
 import com.youlai.boot.core.security.model.AuthenticationToken;
+import com.youlai.boot.shared.auth.model.dto.WxMiniAppCodeLoginDTO;
+import com.youlai.boot.shared.auth.model.dto.WxMiniAppPhoneLoginDTO;
 
 /**
  * 认证服务接口
@@ -47,6 +49,22 @@ public interface AuthService {
      * @return 登录结果
      */
     AuthenticationToken loginByWechat(String code);
+
+    /**
+     * 微信小程序Code登录
+     *
+     * @param loginDTO 登录参数
+     * @return 访问令牌
+     */
+    AuthenticationToken loginByWxMiniAppCode(WxMiniAppCodeLoginDTO loginDTO);
+
+    /**
+     * 微信小程序手机号登录
+     *
+     * @param loginDTO 登录参数
+     * @return 访问令牌
+     */
+    AuthenticationToken loginByWxMiniAppPhone(WxMiniAppPhoneLoginDTO loginDTO);
 
     /**
      * 发送短信验证码

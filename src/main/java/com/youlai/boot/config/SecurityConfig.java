@@ -8,7 +8,8 @@ import com.youlai.boot.core.filter.RateLimiterFilter;
 import com.youlai.boot.core.security.exception.MyAccessDeniedHandler;
 import com.youlai.boot.core.security.exception.MyAuthenticationEntryPoint;
 import com.youlai.boot.core.security.extension.sms.SmsAuthenticationProvider;
-import com.youlai.boot.core.security.extension.wechat.WechatAuthenticationProvider;
+import com.youlai.boot.core.security.extension.wx.WxMiniAppCodeAuthenticationProvider;
+import com.youlai.boot.core.security.extension.wx.WxMiniAppPhoneAuthenticationProvider;
 import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
 import com.youlai.boot.core.security.filter.TokenAuthenticationFilter;
 import com.youlai.boot.core.security.token.TokenManager;
@@ -125,13 +126,20 @@ public class SecurityConfig {
     }
 
     /**
-     * 微信认证 Provider
+     * 微信小程序Code认证Provider
      */
     @Bean
-    public WechatAuthenticationProvider weChatAuthenticationProvider() {
-        return new WechatAuthenticationProvider(userService, wxMaService);
+    public WxMiniAppCodeAuthenticationProvider wxMiniAppCodeAuthenticationProvider() {
+        return new WxMiniAppCodeAuthenticationProvider(userService, wxMaService);
     }
 
+    /**
+     * 微信小程序手机号认证Provider
+     */
+    @Bean
+    public WxMiniAppPhoneAuthenticationProvider wxMiniAppPhoneAuthenticationProvider() {
+        return new WxMiniAppPhoneAuthenticationProvider(userService, wxMaService);
+    }
 
     /**
      * 短信验证码认证 Provider
@@ -147,12 +155,14 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(
             DaoAuthenticationProvider daoAuthenticationProvider,
-            WechatAuthenticationProvider weChatAuthenticationProvider,
+            WxMiniAppCodeAuthenticationProvider wxMiniAppCodeAuthenticationProvider,
+            WxMiniAppPhoneAuthenticationProvider wxMiniAppPhoneAuthenticationProvider,
             SmsAuthenticationProvider smsAuthenticationProvider
     ) {
         return new ProviderManager(
                 daoAuthenticationProvider,
-                weChatAuthenticationProvider,
+                wxMiniAppCodeAuthenticationProvider,
+                wxMiniAppPhoneAuthenticationProvider,
                 smsAuthenticationProvider
         );
     }

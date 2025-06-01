@@ -1,4 +1,4 @@
-package com.youlai.boot.core.security.extension.wechat;
+package com.youlai.boot.core.security.extension.wx;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -7,22 +7,22 @@ import java.io.Serial;
 import java.util.Collection;
 
 /**
- * 微信认证 Token
+ * 微信小程序Code认证Token
  *
- * @author Ray.Hao
- * @since 2024/12/2
+ * @author 有来技术团队
+ * @since 2.0.0
  */
-public class WechatAuthenticationToken extends AbstractAuthenticationToken {
+public class WxMiniAppCodeAuthenticationToken extends AbstractAuthenticationToken {
     @Serial
     private static final long serialVersionUID = 621L;
     private final Object principal;
 
     /**
-     * 微信认证 Token (未认证)
+     * 微信小程序Code认证Token (未认证)
      *
-     * @param principal 微信用户信息
+     * @param principal 微信code
      */
-    public WechatAuthenticationToken(Object principal) {
+    public WxMiniAppCodeAuthenticationToken(Object principal) {
         // 没有授权信息时，设置为 null
         super(null);
         this.principal = principal;
@@ -32,12 +32,12 @@ public class WechatAuthenticationToken extends AbstractAuthenticationToken {
 
 
     /**
-     * 微信认证 Token (已认证)
+     * 微信小程序Code认证Token (已认证)
      *
      * @param principal   微信用户信息
      * @param authorities 授权信息
      */
-    public WechatAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
+    public WxMiniAppCodeAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         // 认证通过
@@ -50,10 +50,10 @@ public class WechatAuthenticationToken extends AbstractAuthenticationToken {
      *
      * @param principal   微信用户信息
      * @param authorities 授权信息
-     * @return
+     * @return 已认证的Token
      */
-    public static WechatAuthenticationToken authenticated(Object principal, Collection<? extends GrantedAuthority> authorities) {
-        return new WechatAuthenticationToken(principal, authorities);
+    public static WxMiniAppCodeAuthenticationToken authenticated(Object principal, Collection<? extends GrantedAuthority> authorities) {
+        return new WxMiniAppCodeAuthenticationToken(principal, authorities);
     }
 
     @Override
@@ -66,4 +66,4 @@ public class WechatAuthenticationToken extends AbstractAuthenticationToken {
     public Object getPrincipal() {
         return this.principal;
     }
-}
+} 

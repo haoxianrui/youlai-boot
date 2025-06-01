@@ -4,14 +4,18 @@ import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.result.Result;
 import com.youlai.boot.shared.auth.service.AuthService;
 import com.youlai.boot.shared.auth.model.CaptchaInfo;
+import com.youlai.boot.shared.auth.model.dto.WxMiniAppCodeLoginDTO;
+import com.youlai.boot.shared.auth.model.dto.WxMiniAppPhoneLoginDTO;
 import com.youlai.boot.core.security.model.AuthenticationToken;
 import com.youlai.boot.common.annotation.Log;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
 
 /**
  * 认证控制层
@@ -91,5 +95,19 @@ public class AuthController {
     ) {
         AuthenticationToken loginResult = authService.loginBySms(mobile, code);
         return Result.success(loginResult);
+    }
+
+    @Operation(summary = "微信小程序Code登录")
+    @PostMapping("/wx/miniapp/code-login")
+    public Result<AuthenticationToken> loginByWxMiniAppCode(@RequestBody @Valid WxMiniAppCodeLoginDTO loginDTO) {
+        AuthenticationToken token = authService.loginByWxMiniAppCode(loginDTO);
+        return Result.success(token);
+    }
+
+    @Operation(summary = "微信小程序手机号登录")
+    @PostMapping("/wx/miniapp/phone-login")
+    public Result<AuthenticationToken> loginByWxMiniAppPhone(@RequestBody @Valid WxMiniAppPhoneLoginDTO loginDTO) {
+        AuthenticationToken token = authService.loginByWxMiniAppPhone(loginDTO);
+        return Result.success(token);
     }
 }

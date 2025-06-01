@@ -11,11 +11,12 @@ import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.common.result.ResultCode;
 import com.youlai.boot.config.property.CaptchaProperties;
 import com.youlai.boot.core.security.extension.sms.SmsAuthenticationToken;
-import com.youlai.boot.core.security.extension.wechat.WechatAuthenticationToken;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.shared.auth.enums.CaptchaTypeEnum;
 import com.youlai.boot.core.security.model.AuthenticationToken;
 import com.youlai.boot.shared.auth.model.CaptchaInfo;
+import com.youlai.boot.shared.auth.model.dto.WxMiniAppCodeLoginDTO;
+import com.youlai.boot.shared.auth.model.dto.WxMiniAppPhoneLoginDTO;
 import com.youlai.boot.shared.auth.service.AuthService;
 import com.youlai.boot.core.security.token.TokenManager;
 import com.youlai.boot.shared.sms.enums.SmsTypeEnum;
@@ -28,6 +29,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import com.youlai.boot.core.security.extension.wx.WxMiniAppCodeAuthenticationToken;
+import com.youlai.boot.core.security.extension.wx.WxMiniAppPhoneAuthenticationToken;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -87,16 +90,16 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationToken loginByWechat(String code) {
         // 1. 创建用户微信认证的令牌（未认证）
-        WechatAuthenticationToken wechatAuthenticationToken = new WechatAuthenticationToken(code);
+        WxMiniAppCodeAuthenticationToken authenticationToken = new WxMiniAppCodeAuthenticationToken(code);
 
         // 2. 执行认证（认证中）
-        Authentication authentication = authenticationManager.authenticate(wechatAuthenticationToken);
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
         // 3. 认证成功后生成 JWT 令牌，并存入 Security 上下文，供登录日志 AOP 使用（已认证）
-        AuthenticationToken authenticationToken = tokenManager.generateToken(authentication);
+        AuthenticationToken token = tokenManager.generateToken(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return authenticationToken;
+        return token;
     }
 
     /**
@@ -227,5 +230,50 @@ public class AuthServiceImpl implements AuthService {
         return tokenManager.refreshToken(refreshToken);
     }
 
+    /**
+     * 微信小程序Code登录
+     *
+     * @param loginDTO 登录参数
+     * @return 访问令牌
+     */
+    @Override
+    public AuthenticationToken loginByWxMiniAppCode(WxMiniAppCodeLoginDTO loginDTO) {
+        // 1. 创建微信小程序认证令牌（未认证）
+        WxMiniAppCodeAuthenticationToken authenticationToken = new WxMiniAppCodeAuthenticationToken(loginDTO.getCode());
+
+        // 2. 执行认证（认证中）
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+        // 3. 认证成功后生成 JWT 令牌，并存入 Security 上下文，供登录日志 AOP 使用（已认证）
+        AuthenticationToken token = tokenManager.generateToken(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return token;
+    }
+
+    /**
+     * 微信小程序手机号登录
+     *
+     * @param loginDTO 登录参数
+     * @return 访问令牌
+     */
+    @Override
+    public AuthenticationToken loginByWxMiniAppPhone(WxMiniAppPhoneLoginDTO loginDTO) {
+        // 创建微信小程序手机号认证Token
+        WxMiniAppPhoneAuthenticationToken authenticationToken = new WxMiniAppPhoneAuthenticationToken(
+                loginDTO.getCode(),
+                loginDTO.getEncryptedData(),
+                loginDTO.getIv()
+        );
+        
+        // 执行认证
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        
+        // 认证成功后生成JWT令牌，并存入Security上下文
+        AuthenticationToken token = tokenManager.generateToken(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        
+        return token;
+    }
 
 }
