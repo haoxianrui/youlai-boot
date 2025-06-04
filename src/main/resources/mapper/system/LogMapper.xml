@@ -55,7 +55,8 @@
         FROM
             sys_log
         WHERE
-            is_deleted = 0
+            create_time BETWEEN #{startDate} AND #{endDate}
+          AND is_deleted = 0
         GROUP BY
             DATE_FORMAT(create_time, '%Y-%m-%d')
     </select>
@@ -68,7 +69,8 @@
         FROM
             sys_log
         WHERE
-            is_deleted = 0
+            create_time BETWEEN #{startDate} AND #{endDate}
+          AND is_deleted = 0
         GROUP BY
             DATE_FORMAT(create_time, '%Y-%m-%d')
     </select>
