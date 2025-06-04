@@ -448,7 +448,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             this.updateById(menu);
 
             // 生成CURD按钮权限
-            String permPrefix = genConfig.getModuleName() + ":" + StrUtil.lowerFirst(entityName) + ":";
+            String permPrefix = genConfig.getModuleName() + ":" + genConfig.getTableName().replace("_", "-") + ":";
             String[] actions = {"查询", "新增", "编辑", "删除"};
             String[] perms = {"query", "add", "edit", "delete"};
 
