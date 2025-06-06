@@ -19,4 +19,6 @@ public class PasswordUpdateForm {
     @Schema(description = "新密码")
     private String newPassword;
 
+    @Schema(description = "确认密码")
+    private String confirmPassword;
 }

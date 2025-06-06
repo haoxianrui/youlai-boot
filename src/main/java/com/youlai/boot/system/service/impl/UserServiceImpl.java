@@ -12,8 +12,9 @@ import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.common.exception.BusinessException;
 import com.youlai.boot.common.model.Option;
-import com.youlai.boot.core.security.token.TokenManager;
+import com.youlai.boot.core.security.model.UserAuthCredentials;
 import com.youlai.boot.core.security.service.PermissionService;
+import com.youlai.boot.core.security.token.TokenManager;
 import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.shared.mail.service.MailService;
 import com.youlai.boot.shared.sms.enums.SmsTypeEnum;
@@ -22,7 +23,6 @@ import com.youlai.boot.system.converter.UserConverter;
 import com.youlai.boot.system.enums.DictCodeEnum;
 import com.youlai.boot.system.mapper.UserMapper;
 import com.youlai.boot.system.model.bo.UserBO;
-import com.youlai.boot.core.security.model.UserAuthCredentials;
 import com.youlai.boot.system.model.dto.CurrentUserDTO;
 import com.youlai.boot.system.model.dto.UserExportDTO;
 import com.youlai.boot.system.model.entity.DictItem;
@@ -508,6 +508,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 新旧密码不能相同
         if (passwordEncoder.matches(data.getNewPassword(), user.getPassword())) {
             throw new BusinessException("新密码不能与原密码相同");
+        }
+
+        // 判断新密码和确认密码是否一致
+        if (passwordEncoder.matches(data.getNewPassword(), data.getConfirmPassword())) {
+            throw new BusinessException("新密码和确认密码不一致");
         }
 
         String newPassword = data.getNewPassword();
