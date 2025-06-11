@@ -3,7 +3,7 @@
    <img alt="logo" width="100" height="100" src="https://foruda.gitee.com/images/1733417239320800627/3c5290fe_716974.png">
    <h2>youlai-boot</h2>
    <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
-   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.3.6-green.svg"/>
+   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.5.0-green.svg"/>
    <a href="https://gitee.com/youlaiorg/youlai-boot" target="_blank">
      <img alt="有来技术" src="https://gitee.com/youlaiorg/youlai-boot/badge/star.svg"/>
    </a>     
@@ -70,6 +70,7 @@ youlai-boot
 ├── sql                                 # SQL脚本
 │   ├── mysql                           # MySQL 脚本
 ├── src                                 # 源码目录
+│   ├── auth                            # 登录认证
 │   ├── common                          # 公共模块
 │   │   ├── annotation                  # 注解定义
 │   │   ├── base                        # 基础类
@@ -86,12 +87,14 @@ youlai-boot
 │   │   ├── filter                      # 过滤器(请求日志、限流)
 │   │   ├── handler                     # 处理器(数据权限、数据填充)
 │   │   └── security                    # Spring Security 安全模块
-│   ├── modules                         # 业务模块
+│   ├── module                          # 业务模块
 │   │   ├── member                      # 会员模块【业务模块演示】
 │   │   ├── order                       # 订单模块【业务模块演示】
 │   │   ├── product                     # 商品模块【业务模块演示】
+│   ├── module                          # 插件扩展
+│   │   ├── knife4j                     # Knife4j 扩展
+│   │   ├── mybatis                     # Mybatis 扩展
 │   ├── shared                          # 共享模块
-│   │   ├── auth                        # 认证模块
 │   │   ├── file                        # 文件模块
 │   │   ├── codegen                     # 代码生成模块
 │   │   ├── mail                        # 邮件模块

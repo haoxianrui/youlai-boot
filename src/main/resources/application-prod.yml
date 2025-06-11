@@ -152,8 +152,8 @@ springdoc:
     - group: '系统管理'
       paths-to-match: "/**"
       packages-to-scan:
+        - com.youlai.boot.auth.controller
         - com.youlai.boot.system.controller
-        - com.youlai.boot.shared.auth.controller
         - com.youlai.boot.shared.file.controller
         - com.youlai.boot.shared.codegen.controller
   default-flat-param-object: true
