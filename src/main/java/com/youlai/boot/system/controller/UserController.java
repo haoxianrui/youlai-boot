@@ -80,6 +80,7 @@ public class UserController {
 
     @Operation(summary = "获取用户表单数据")
     @GetMapping("/{userId}/form")
+    @PreAuthorize("@ss.hasPerm('sys:user:edit')")
     @Log(value = "用户表单数据", module = LogModuleEnum.USER)
     public Result<UserForm> getUserForm(
             @Parameter(description = "用户ID") @PathVariable Long userId
@@ -113,6 +114,7 @@ public class UserController {
 
     @Operation(summary = "修改用户状态")
     @PatchMapping(value = "/{userId}/status")
+    @PreAuthorize("@ss.hasPerm('sys:user:edit')")
     @Log(value = "修改用户状态", module = LogModuleEnum.USER)
     public Result<Void> updateUserStatus(
             @Parameter(description = "用户ID") @PathVariable Long userId,

@@ -102,6 +102,7 @@ public class MenuController {
 
     @Operation(summary = "修改菜单显示状态")
     @PatchMapping("/{menuId}")
+    @PreAuthorize("@ss.hasPerm('sys:menu:edit')")
     public Result<?> updateMenuVisible(
             @Parameter(description = "菜单ID") @PathVariable Long menuId,
             @Parameter(description = "显示状态(1:显示;0:隐藏)") Integer visible
