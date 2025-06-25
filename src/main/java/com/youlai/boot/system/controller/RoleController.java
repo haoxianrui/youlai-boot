@@ -91,6 +91,7 @@ public class RoleController {
 
     @Operation(summary = "修改角色状态")
     @PutMapping(value = "/{roleId}/status")
+    @PreAuthorize("@ss.hasPerm('sys:role:edit')")
     public Result<?> updateRoleStatus(
             @Parameter(description = "角色ID") @PathVariable Long roleId,
             @Parameter(description = "状态(1:启用;0:禁用)") @RequestParam Integer status

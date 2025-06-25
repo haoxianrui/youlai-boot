@@ -7,18 +7,18 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.auth.enums.CaptchaTypeEnum;
 import com.youlai.boot.auth.model.CaptchaInfo;
+import com.youlai.boot.auth.model.dto.WxMiniAppCodeLoginDTO;
 import com.youlai.boot.auth.model.dto.WxMiniAppPhoneLoginDTO;
+import com.youlai.boot.auth.service.AuthService;
 import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SecurityConstants;
-import com.youlai.boot.common.exception.BusinessException;
-import com.youlai.boot.common.result.ResultCode;
 import com.youlai.boot.config.property.CaptchaProperties;
 import com.youlai.boot.core.security.extension.sms.SmsAuthenticationToken;
-import com.youlai.boot.core.security.util.SecurityUtils;
+import com.youlai.boot.core.security.extension.wx.WxMiniAppCodeAuthenticationToken;
+import com.youlai.boot.core.security.extension.wx.WxMiniAppPhoneAuthenticationToken;
 import com.youlai.boot.core.security.model.AuthenticationToken;
-import com.youlai.boot.auth.model.dto.WxMiniAppCodeLoginDTO;
-import com.youlai.boot.auth.service.AuthService;
 import com.youlai.boot.core.security.token.TokenManager;
+import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.shared.sms.enums.SmsTypeEnum;
 import com.youlai.boot.shared.sms.service.SmsService;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +29,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import com.youlai.boot.core.security.extension.wx.WxMiniAppCodeAuthenticationToken;
-import com.youlai.boot.core.security.extension.wx.WxMiniAppPhoneAuthenticationToken;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -220,13 +218,6 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public AuthenticationToken refreshToken(String refreshToken) {
-        // 验证刷新令牌
-        boolean isValidate = tokenManager.validateRefreshToken(refreshToken);
-
-        if (!isValidate) {
-            throw new BusinessException(ResultCode.REFRESH_TOKEN_INVALID);
-        }
-        // 刷新令牌有效，生成新的访问令牌
         return tokenManager.refreshToken(refreshToken);
     }
 
@@ -265,14 +256,14 @@ public class AuthServiceImpl implements AuthService {
                 loginDTO.getEncryptedData(),
                 loginDTO.getIv()
         );
-        
+
         // 执行认证
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        
+
         // 认证成功后生成JWT令牌，并存入Security上下文
         AuthenticationToken token = tokenManager.generateToken(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        
+
         return token;
     }
 

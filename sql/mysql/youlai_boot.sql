@@ -375,7 +375,7 @@ CREATE TABLE `sys_user`  (
                              `is_deleted` tinyint(1) DEFAULT 0 COMMENT '逻辑删除标识(0-未删除 1-已删除)',
                              `openid` char(28) COMMENT '微信 openid',
                              PRIMARY KEY (`id`) USING BTREE,
-                             UNIQUE INDEX `login_name`(`username` ASC) USING BTREE
+                             KEY `login_name` (`username`)
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '用户信息表';
 
 -- ----------------------------
@@ -560,4 +560,4 @@ INSERT INTO `sys_user_notice` VALUES (8, 8, 2, 1, NULL, now(), now(), 0);
 INSERT INTO `sys_user_notice` VALUES (9, 9, 2, 1, NULL, now(), now(), 0);
 INSERT INTO `sys_user_notice` VALUES (10, 10, 2, 1, NULL, now(), now(), 0);
 
-SET FOREIGN_KEY_CHECKS = 1; 
+SET FOREIGN_KEY_CHECKS = 1;
