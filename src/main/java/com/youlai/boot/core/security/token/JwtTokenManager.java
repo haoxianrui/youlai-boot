@@ -16,6 +16,7 @@ import com.youlai.boot.common.result.ResultCode;
 import com.youlai.boot.config.property.SecurityProperties;
 import com.youlai.boot.core.security.model.SysUserDetails;
 import com.youlai.boot.core.security.model.AuthenticationToken;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -138,6 +139,10 @@ public class JwtTokenManager implements TokenManager {
      */
     @Override
     public void invalidateToken(String token) {
+        if(StringUtils.isBlank(token)) {
+            return;
+        }
+
         if (token.startsWith(SecurityConstants.BEARER_TOKEN_PREFIX)) {
             token = token.substring(SecurityConstants.BEARER_TOKEN_PREFIX.length());
         }
