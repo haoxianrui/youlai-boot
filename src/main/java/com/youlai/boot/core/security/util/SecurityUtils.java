@@ -13,10 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -117,7 +114,11 @@ public class SecurityUtils {
      * @return Token 字符串
      */
     public static String getTokenFromRequest() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        ServletRequestAttributes servletRequestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
+        if(Objects.isNull(servletRequestAttributes)) {
+            return null;
+        }
+        HttpServletRequest request = servletRequestAttributes.getRequest();
         return request.getHeader(HttpHeaders.AUTHORIZATION);
     }
 
