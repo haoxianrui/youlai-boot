@@ -64,6 +64,7 @@ public class RoleController {
 
     @Operation(summary = "获取角色表单数据")
     @GetMapping("/{roleId}/form")
+    @PreAuthorize("@ss.hasPerm('sys:role:edit')")
     public Result<RoleForm> getRoleForm(
             @Parameter(description = "角色ID") @PathVariable Long roleId
     ) {

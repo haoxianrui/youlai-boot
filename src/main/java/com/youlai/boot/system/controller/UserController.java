@@ -156,6 +156,7 @@ public class UserController {
 
     @Operation(summary = "导入用户")
     @PostMapping("/import")
+    @PreAuthorize("@ss.hasPerm('sys:user:import')")
     @Log(value = "导入用户", module = LogModuleEnum.USER)
     public Result<ExcelResult> importUsers(MultipartFile file) throws IOException {
         UserImportListener listener = new UserImportListener();
@@ -165,6 +166,7 @@ public class UserController {
 
     @Operation(summary = "导出用户")
     @GetMapping("/export")
+    @PreAuthorize("@ss.hasPerm('sys:user:export')")
     @Log(value = "导出用户", module = LogModuleEnum.USER)
     public void exportUsers(UserPageQuery queryParams, HttpServletResponse response) throws IOException {
         String fileName = "用户列表.xlsx";

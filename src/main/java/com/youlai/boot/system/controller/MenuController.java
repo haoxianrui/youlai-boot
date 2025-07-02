@@ -1,15 +1,14 @@
 package com.youlai.boot.system.controller;
 
-import com.youlai.boot.common.result.Result;
-import com.youlai.boot.common.enums.LogModuleEnum;
+import com.youlai.boot.common.annotation.Log;
 import com.youlai.boot.common.annotation.RepeatSubmit;
+import com.youlai.boot.common.enums.LogModuleEnum;
+import com.youlai.boot.common.model.Option;
+import com.youlai.boot.common.result.Result;
 import com.youlai.boot.system.model.form.MenuForm;
 import com.youlai.boot.system.model.query.MenuQuery;
 import com.youlai.boot.system.model.vo.MenuVO;
-import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.vo.RouteVO;
-import com.youlai.boot.common.annotation.Log;
-import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.system.service.MenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,7 +19,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * 菜单控制层
@@ -64,6 +62,7 @@ public class MenuController {
 
     @Operation(summary = "菜单表单数据")
     @GetMapping("/{id}/form")
+    @PreAuthorize("@ss.hasPerm('sys:menu:edit')")
     public Result<MenuForm> getMenuForm(
             @Parameter(description = "菜单ID") @PathVariable Long id
     ) {
