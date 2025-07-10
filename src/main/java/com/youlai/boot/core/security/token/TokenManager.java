@@ -57,7 +57,7 @@ public interface TokenManager {
     /**
      * 令 Token 失效
      *
-     * @param token JWT Token
+     * @param token Token
      */
     default void invalidateToken(String token) {
         // 默认实现可以是空的，或者抛出不支持的操作异常

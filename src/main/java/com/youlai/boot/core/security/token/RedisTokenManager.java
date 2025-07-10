@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * Redis Token 管理器
  * <p>
- * 用于生成、解析、校验、刷新 JWT Token
+ * 用于生成、解析、校验、刷新 Redis Token
  *
  * @author Ray.Hao
  * @since 2024/11/15
@@ -81,7 +81,7 @@ public class RedisTokenManager implements TokenManager {
     /**
      * 根据 token 解析用户信息
      *
-     * @param token JWT Token
+     * @param token Redis Token
      * @return 构建的 Authentication 对象
      */
     @Override
@@ -107,7 +107,7 @@ public class RedisTokenManager implements TokenManager {
     /**
      * 校验 Token 是否有效
      *
-     * @param token  访问令牌
+     * @param token 访问令牌
      * @return 是否有效
      */
     @Override
@@ -118,7 +118,7 @@ public class RedisTokenManager implements TokenManager {
     /**
      * 校验 RefreshToken 是否有效
      *
-     * @param refreshToken  访问令牌
+     * @param refreshToken 访问令牌
      * @return 是否有效
      */
     @Override
@@ -189,9 +189,9 @@ public class RedisTokenManager implements TokenManager {
     /**
      * 将访问令牌和刷新令牌存储至 Redis
      *
-     * @param accessToken 访问令牌
+     * @param accessToken  访问令牌
      * @param refreshToken 刷新令牌
-     * @param onlineUser 在线用户信息
+     * @param onlineUser   在线用户信息
      */
     private void storeTokensInRedis(String accessToken, String refreshToken, OnlineUser onlineUser) {
         // 访问令牌 -> 用户信息
@@ -210,7 +210,7 @@ public class RedisTokenManager implements TokenManager {
     /**
      * 处理单设备登录控制
      *
-     * @param userId 用户ID
+     * @param userId      用户ID
      * @param accessToken 新生成的访问令牌
      */
     private void handleSingleDeviceLogin(Long userId, String accessToken) {
@@ -231,7 +231,7 @@ public class RedisTokenManager implements TokenManager {
      * 存储新的访问令牌
      *
      * @param newAccessToken 新访问令牌
-     * @param onlineUser 在线用户信息
+     * @param onlineUser     在线用户信息
      */
     private void storeAccessToken(String newAccessToken, OnlineUser onlineUser) {
         setRedisValue(StrUtil.format(RedisConstants.Auth.ACCESS_TOKEN_USER, newAccessToken), onlineUser, securityProperties.getSession().getAccessTokenTimeToLive());
@@ -242,7 +242,7 @@ public class RedisTokenManager implements TokenManager {
     /**
      * 构建用户详情对象
      *
-     * @param onlineUser 在线用户信息
+     * @param onlineUser  在线用户信息
      * @param authorities 权限集合
      * @return SysUserDetails 用户详情
      */
