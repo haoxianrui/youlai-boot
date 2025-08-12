@@ -209,11 +209,16 @@ INSERT INTO `sys_menu` VALUES (140, 4, '0,1,4', '菜单查询', 4, NULL, '', NUL
 INSERT INTO `sys_menu` VALUES (141, 5, '0,1,5', '部门查询', 4, NULL, '', NULL, 'sys:dept:query', NULL, NULL, 1, 1, '', NULL, now(), now(), NULL);
 INSERT INTO `sys_menu` VALUES (142, 6, '0,1,6', '字典查询', 4, NULL, '', NULL, 'sys:dict:query', NULL, NULL, 1, 1, '', NULL, now(), now(), NULL);
 INSERT INTO `sys_menu` VALUES (143, 135, '0,1,135', '字典项查询', 4, NULL, '', NULL, 'sys:dict-item:query', NULL, NULL, 1, 1, '', NULL, now(), now(), NULL);
-INSERT INTO `sys_menu` VALUES (144, 26, '0,26', '后端文档', 3, NULL, 'https://youlai.blog.csdn.net/article/details/145178880', '', NULL, NULL, NULL, 1, 3, 'document', '', '2024-10-05 23:36:03', '2024-10-05 23:36:03', NULL);
-INSERT INTO `sys_menu` VALUES (145, 26, '0,26', '移动端文档', 3, NULL, 'https://youlai.blog.csdn.net/article/details/143222890', '', NULL, NULL, NULL, 1, 4, 'document', '', '2024-10-05 23:36:03', '2024-10-05 23:36:03', NULL);
-INSERT INTO `sys_menu` VALUES (146, 36, '0,36', '拖拽组件', 1, NULL, 'drag', 'demo/drag', NULL, NULL, NULL, 1, 5, '', '', '2025-03-31 14:14:45', '2025-03-31 14:14:52', NULL);
-INSERT INTO `sys_menu` VALUES (147, 36, '0,36', '滚动文本', 1, NULL, 'text-scroll', 'demo/text-scroll', NULL, NULL, NULL, 1, 6, '', '', '2025-03-31 14:14:49', '2025-03-31 14:14:56', NULL);
-INSERT INTO `sys_menu` VALUES (148, 89, '0,89', '字典实时同步', 1, NULL, 'dict-sync', 'demo/dict-sync', NULL, NULL, NULL, 1, 3, '', '', '2025-03-31 14:14:49', '2025-03-31 14:14:56', NULL);
+INSERT INTO `sys_menu` VALUES (144, 26, '0,26', '后端文档', 3, NULL, 'https://youlai.blog.csdn.net/article/details/145178880', '', NULL, NULL, NULL, 1, 3, 'document', '', now(), now(), NULL);
+INSERT INTO `sys_menu` VALUES (145, 26, '0,26', '移动端文档', 3, NULL, 'https://youlai.blog.csdn.net/article/details/143222890', '', NULL, NULL, NULL, 1, 4, 'document', '', now(), now(), NULL);
+INSERT INTO `sys_menu` VALUES (146, 36, '0,36', '拖拽组件', 1, NULL, 'drag', 'demo/drag', NULL, NULL, NULL, 1, 5, '', '', now(), now(), NULL);
+INSERT INTO `sys_menu` VALUES (147, 36, '0,36', '滚动文本', 1, NULL, 'text-scroll', 'demo/text-scroll', NULL, NULL, NULL, 1, 6, '', '', now(), now(), NULL);
+INSERT INTO `sys_menu` VALUES (148, 89, '0,89', '字典实时同步', 1, NULL, 'dict-sync', 'demo/dict-sync', NULL, NULL, NULL, 1, 3, '', '', now(), now(), NULL);
+INSERT INTO `sys_menu` VALUES (149, 89, '0,89', 'VxeTable', 1, NULL, 'vxe-table', 'demo/vxe-table/index', NULL, NULL, 1, 1, 0, 'el-icon-MagicStick', '', now(), now(), NULL);
+INSERT INTO `sys_menu` VALUES (150, 36, '0,36', '自适应表格操作列', 1, 'AutoOpreationColumn', 'opreation-column', 'demo/auto-opreation-column', NULL, NULL, 1, 1, 1, '', '', now(), now(), NULL);
+INSERT INTO `sys_menu` VALUES (151, 89, '0,89', 'PDF预览', 1, NULL, 'pdf-preview', 'demo/pdf-preview', NULL, NULL, 1, 1, 7, 'el-icon-Reading', '', now(), now(), NULL);
+
+
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -352,6 +357,9 @@ INSERT INTO `sys_role_menu` VALUES (2, 145);
 INSERT INTO `sys_role_menu` VALUES (2, 146);
 INSERT INTO `sys_role_menu` VALUES (2, 147);
 INSERT INTO `sys_role_menu` VALUES (2, 148);
+INSERT INTO `sys_role_menu` VALUES (2, 149);
+INSERT INTO `sys_role_menu` VALUES (2, 150);
+INSERT INTO `sys_role_menu` VALUES (2, 151);
 
 -- ----------------------------
 -- Table structure for sys_user
