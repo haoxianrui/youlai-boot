@@ -2,6 +2,7 @@ package com.youlai.boot.shared.codegen.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.template.Template;
@@ -72,7 +73,7 @@ public class CodegenServiceImpl implements CodegenService {
      * @return 预览数据
      */
     @Override
-    public List<CodegenPreviewVO> getCodegenPreviewData(String tableName) {
+    public List<CodegenPreviewVO> getCodegenPreviewData(String tableName, String pageType) {
 
         List<CodegenPreviewVO> list = new ArrayList<>();
 
@@ -124,7 +125,9 @@ public class CodegenServiceImpl implements CodegenService {
 
             /* 3. 生成文件内容 */
             // 将模板文件中的变量替换为具体的值 生成代码内容
-            String content = getCodeContent(templateConfig, genConfig, fieldConfigs);
+            // 优先使用保存的 ui，没有则使用请求参数
+            String finalType = StrUtil.blankToDefault(genConfig.getPageType(), pageType);
+            String content = getCodeContent(templateConfig, genConfig, fieldConfigs, finalType);
             previewVO.setContent(content);
 
             list.add(previewVO);
@@ -146,7 +149,8 @@ public class CodegenServiceImpl implements CodegenService {
         } else if ("MapperXml".equals(templateName)) {
             return entityName + "Mapper" + extension;
         } else if ("API".equals(templateName)) {
-            return StrUtil.toSymbolCase(entityName, '-') + extension;
+            // 生成 user-api.ts 命名
+            return StrUtil.toSymbolCase(entityName, '-') + "-api" + extension;
         } else if ("VIEW".equals(templateName)) {
             return "index.vue";
         }
@@ -211,7 +215,7 @@ public class CodegenServiceImpl implements CodegenService {
      * @param fieldConfigs   字段配置
      * @return 代码内容
      */
-    private String getCodeContent(CodegenProperties.TemplateConfig templateConfig, GenConfig genConfig, List<GenFieldConfig> fieldConfigs) {
+    private String getCodeContent(CodegenProperties.TemplateConfig templateConfig, GenConfig genConfig, List<GenFieldConfig> fieldConfigs, String pageType) {
 
         Map<String, Object> bindMap = new HashMap<>();
 
@@ -252,7 +256,15 @@ public class CodegenServiceImpl implements CodegenService {
         bindMap.put("hasRequiredField", hasRequiredField);
 
         TemplateEngine templateEngine = TemplateUtil.createEngine(new TemplateConfig("templates", TemplateConfig.ResourceMode.CLASSPATH));
-        Template template = templateEngine.getTemplate(templateConfig.getTemplatePath());
+        // 根据 ui 选择不同的前端页面模板：默认 index.vue.vm；封装版使用 index.curd.vue.vm
+        String path = templateConfig.getTemplatePath();
+        if ("VIEW".equals(FileNameUtil.mainName(path))) {
+            // 无法通过文件名区分时，依据子包名与扩展名判断
+        }
+        if ("curd".equalsIgnoreCase(pageType) && path.endsWith("index.vue.vm")) {
+            path = path.replace("index.vue.vm", "index.curd.vue.vm");
+        }
+        Template template = templateEngine.getTemplate(path);
 
         return template.render(bindMap);
     }
@@ -264,13 +276,13 @@ public class CodegenServiceImpl implements CodegenService {
      * @return 压缩文件字节数组
      */
     @Override
-    public byte[] downloadCode(String[] tableNames) {
+    public byte[] downloadCode(String[] tableNames, String ui) {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
              ZipOutputStream zip = new ZipOutputStream(outputStream)) {
 
             // 遍历每个表名，生成对应的代码并压缩到 zip 文件中
             for (String tableName : tableNames) {
-                generateAndZipCode(tableName, zip);
+                generateAndZipCode(tableName, zip, ui);
             }
             // 确保所有压缩数据写入输出流，避免数据残留在内存缓冲区引发的数据不完整
             zip.finish();
@@ -288,8 +300,8 @@ public class CodegenServiceImpl implements CodegenService {
      * @param tableName 表名
      * @param zip       压缩文件输出流
      */
-    private void generateAndZipCode(String tableName, ZipOutputStream zip) {
-        List<CodegenPreviewVO> codePreviewList = getCodegenPreviewData(tableName);
+    private void generateAndZipCode(String tableName, ZipOutputStream zip, String ui) {
+        List<CodegenPreviewVO> codePreviewList = getCodegenPreviewData(tableName, ui);
 
         for (CodegenPreviewVO codePreview : codePreviewList) {
             String fileName = codePreview.getFileName();

@@ -1,0 +1,119 @@
+<template>
+  <div class="app-container h-full flex flex-1 flex-col">
+    <!-- 搜索 -->
+    <page-search
+      ref="searchRef"
+      :search-config="searchConfig"
+      @query-click="handleQueryClick"
+      @reset-click="handleResetClick"
+    />
+
+    <!-- 列表 -->
+    <page-content
+      ref="contentRef"
+      :content-config="contentConfig"
+      @add-click="handleAddClick"
+      @operate-click="handleOperateClick"
+    >
+      #foreach($fieldConfig in $fieldConfigs)
+        #if($fieldConfig.isShowInList == 1 && $fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
+        <template #$fieldConfig.fieldName="scope">
+          <DictLabel v-model="scope.row[scope.prop]" code="$fieldConfig.dictType" />
+        </template>
+        #end
+      #end
+    </page-content>
+
+    <!-- 新增/编辑 -->
+    <page-modal ref="modalRef" :modal-config="modalConfig" @submit-click="handleSubmitClick">
+      #foreach($fieldConfig in $fieldConfigs)
+        #if($fieldConfig.isShowInForm == 1 && $fieldConfig.formType != "HIDDEN" && $fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
+        <template #$fieldConfig.fieldName="scope">
+          <Dict v-model="scope.formData[scope.prop]" code="$fieldConfig.dictType" v-bind="scope.attrs" />
+        </template>
+        #end
+      #end
+    </page-modal>
+  </div>
+</template>
+
+<script setup lang="ts">
+defineOptions({ name: "$entityName" });
+
+import ${entityName}API, { ${entityName}PageVO, ${entityName}Form, ${entityName}PageQuery } from "@/api/${moduleName}/${kebabCaseEntityName}-api";
+import type { IObject, PageModalInstance } from "@/components/CURD/types";
+import usePage from "@/components/CURD/usePage";
+
+// 组合式 CRUD
+const {
+  searchRef,
+  contentRef,
+  addModalRef: modalRef,
+  handleQueryClick,
+  handleResetClick,
+  handleAddClick,
+  handleEditClick,
+  handleSubmitClick,
+} = usePage<${entityName}PageQuery, ${entityName}PageVO, ${entityName}Form>();
+
+// 搜索配置
+const searchConfig = {
+  formItems: [
+    #foreach($fieldConfig in $fieldConfigs)
+      #if($fieldConfig.isShowInQuery == 1)
+      {
+        type: "$!{fieldConfig.formType.toLowerCase()}",
+        label: "$fieldConfig.fieldComment",
+        field: "$fieldConfig.fieldName",
+        placeholder: "$fieldConfig.fieldComment",
+      },
+      #end
+    #end
+  ],
+};
+
+// 列表配置
+const contentConfig = {
+  api: {
+    page: ${entityName}API.getPage,
+    deleteByIds: ${entityName}API.deleteByIds,
+  },
+  table: {
+    columns: [
+      { type: "selection", width: 55, align: "center" },
+      #foreach($fieldConfig in $fieldConfigs)
+        #if($fieldConfig.isShowInList == 1)
+        { label: "$fieldConfig.fieldComment", prop: "$fieldConfig.fieldName", slot: "$fieldConfig.fieldName" },
+        #end
+      #end
+      { label: "操作", prop: "operation", width: 220 }
+    ],
+    operate: [
+      { name: "edit", type: "primary", text: "编辑" },
+      { name: "delete", type: "danger", text: "删除" },
+    ],
+  },
+};
+
+// 弹窗配置
+const modalConfig = {
+  api: {
+    create: ${entityName}API.create,
+    update: ${entityName}API.update,
+  },
+  formItems: [
+    #foreach($fieldConfig in $fieldConfigs)
+      #if($fieldConfig.isShowInForm == 1 && $fieldConfig.formType != "HIDDEN")
+      {
+        type: "$!{fieldConfig.formType.toLowerCase()}",
+        label: "$fieldConfig.fieldComment",
+        prop: "$fieldConfig.fieldName",
+        attrs: { placeholder: "$fieldConfig.fieldComment" },
+      },
+      #end
+    #end
+  ],
+};
+
+</script>
+

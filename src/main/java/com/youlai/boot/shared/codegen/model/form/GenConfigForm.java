@@ -50,6 +50,12 @@ public class GenConfigForm {
     @Schema(description = "前端应用名")
     private String frontendAppName;
 
+    @Schema(description = "页面类型 classic|curd", example = "classic")
+    private String pageType;
+
+    @Schema(description = "要移除的表前缀，如: sys_", example = "sys_")
+    private String removeTablePrefix;
+
     @Schema(description = "字段配置")
     @Data
     public static class FieldConfig {

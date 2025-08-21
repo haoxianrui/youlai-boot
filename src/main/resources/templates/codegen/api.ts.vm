@@ -29,11 +29,11 @@ const ${entityName}API = {
      *
      *  @param data ${businessName}表单数据
      */
-    add(data: ${entityName}Form) {
+    create(data: ${entityName}Form) {
         return request({
             url: `${${entityName.toUpperCase()}_BASE_URL}`,
             method: "post",
-            data: data,
+            data,
         });
     },
 
@@ -43,11 +43,11 @@ const ${entityName}API = {
      * @param id ${businessName}ID
      * @param data ${businessName}表单数据
      */
-     update(id: number, data: ${entityName}Form) {
+     update(id: string, data: ${entityName}Form) {
         return request({
             url: `${${entityName.toUpperCase()}_BASE_URL}/${id}`,
             method: "put",
-            data: data,
+            data,
         });
     },
 

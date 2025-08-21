@@ -51,4 +51,14 @@ public class GenConfig extends BaseEntity {
      * 作者
      */
     private String author;
+
+    /**
+     * 页面类型 classic|curd
+     */
+    private String pageType;
+
+    /**
+     * 要移除的表前缀，如: sys_
+     */
+    private String removeTablePrefix;
 }

@@ -2,9 +2,9 @@
   <div class="app-container">
     <div class="search-container">
       <el-form ref="queryFormRef" :model="queryParams" :inline="true">
-          #foreach($fieldConfig in $fieldConfigs)
-              #if($fieldConfig.isShowInQuery == 1)
-                <el-form-item label="$fieldConfig.fieldComment" prop="$fieldConfig.fieldName">
+        #foreach($fieldConfig in $fieldConfigs)
+          #if($fieldConfig.isShowInQuery == 1)
+            <el-form-item label="$fieldConfig.fieldComment" prop="$fieldConfig.fieldName">
                     #if($fieldConfig.formType == "INPUT")
                       <el-input
                           v-model="queryParams.$fieldConfig.fieldName"
@@ -14,7 +14,7 @@
                       />
                     #elseif($fieldConfig.formType == "SELECT")
                         #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
-                          <dict v-model="queryParams.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
+                          <Dict v-model="queryParams.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
                         #else
                           <el-select v-model="queryParams.$fieldConfig.fieldName" placeholder="请选择$fieldConfig.fieldComment">
                             <el-option :key="1" :value="1" label="选项一"/>
@@ -23,7 +23,7 @@
                         #end
                     #elseif($fieldConfig.formType == "RADIO")
                         #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
-                          <dict v-model="queryParams.$fieldConfig.fieldName" type="radio" code="$fieldConfig.dictType" />
+                          <Dict v-model="queryParams.$fieldConfig.fieldName" type="radio" code="$fieldConfig.dictType" />
                         #else
                           <el-radio-group v-model="queryParams.$fieldConfig.fieldName">
                             <el-radio :key="1" :value="1">选项一</el-radio>
@@ -32,7 +32,7 @@
                         #end
                     #elseif($fieldConfig.formType == "CHECK_BOX")
                         #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
-                          <dict v-model="queryParams.$fieldConfig.fieldName" type="checkbox" code="$fieldConfig.dictType" />
+                          <Dict v-model="queryParams.$fieldConfig.fieldName" type="checkbox" code="$fieldConfig.dictType" />
                         #else
                           <el-checkbox-group v-model="queryParams.$fieldConfig.fieldName">
                             <el-checkbox :key="1" :label="1">选项一</el-checkbox>
@@ -85,18 +85,12 @@
                           value-format="YYYY-MM-DD"
                       />
                     #end
-                </el-form-item>
-              #end
+            </el-form-item>
           #end
-        <el-form-item>
-          <el-button type="primary" @click="handleQuery">
-            <template #icon><Search /></template>
-            搜索
-          </el-button>
-          <el-button @click="handleResetQuery">
-            <template #icon><Refresh /></template>
-            重置
-          </el-button>
+        #end
+        <el-form-item class="search-buttons">
+          <el-button type="primary" icon="search" @click="handleQuery">搜索</el-button>
+          <el-button icon="refresh" @click="handleResetQuery">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -106,50 +100,46 @@
         <el-button
             v-hasPerm="['${moduleName}:${kebabCaseEntityName}:add']"
             type="success"
+            icon="plus"
             @click="handleOpenDialog()"
-        >
-          <template #icon><Plus /></template>
-          新增
-        </el-button>
+        >新增</el-button>
         <el-button
             v-hasPerm="['${moduleName}:${kebabCaseEntityName}:delete']"
             type="danger"
             :disabled="removeIds.length === 0"
+            icon="delete"
             @click="handleDelete()"
-        >
-          <template #icon><Delete /></template>
-          删除
-        </el-button>
+        >删除</el-button>
       </div>
 
       <el-table
-          ref="dataTableRef"
-          v-loading="loading"
-          :data="pageData"
-          highlight-current-row
-          border
-          @selection-change="handleSelectionChange"
+        ref="dataTableRef"
+        v-loading="loading"
+        :data="pageData"
+        highlight-current-row
+        border
+        @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" align="center" />
-          #foreach($fieldConfig in $fieldConfigs)
-              #if($fieldConfig.isShowInList == 1)
-                  #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
-                    <el-table-column label="$fieldConfig.fieldComment" width="150" align="center">
-                      <template #default="scope">
-                        <DictLabel v-model="scope.row.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
-                      </template>
-                    </el-table-column>
-                  #else
-                    <el-table-column
-                        key="$fieldConfig.fieldName"
-                        label="$fieldConfig.fieldComment"
-                        prop="$fieldConfig.fieldName"
-                        min-width="150"
-                        align="center"
-                    />
-                  #end
-              #end
+        #foreach($fieldConfig in $fieldConfigs)
+          #if($fieldConfig.isShowInList == 1)
+            #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
+              <el-table-column label="$fieldConfig.fieldComment" width="150" align="center">
+                <template #default="scope">
+                  <DictLabel v-model="scope.row.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
+                </template>
+              </el-table-column>
+            #else
+              <el-table-column
+                key="$fieldConfig.fieldName"
+                label="$fieldConfig.fieldComment"
+                prop="$fieldConfig.fieldName"
+                min-width="150"
+                align="center"
+              />
+            #end
           #end
+        #end
         <el-table-column fixed="right" label="操作" width="220">
           <template #default="scope">
             <el-button
@@ -157,9 +147,9 @@
                 type="primary"
                 size="small"
                 link
+                icon="edit"
                 @click="handleOpenDialog(scope.row.id)"
             >
-              <template #icon><Edit /></template>
               编辑
             </el-button>
             <el-button
@@ -167,9 +157,9 @@
                 type="danger"
                 size="small"
                 link
+                icon="delete"
                 @click="handleDelete(scope.row.id)"
             >
-              <template #icon><Delete /></template>
               删除
             </el-button>
           </template>
@@ -203,7 +193,7 @@
                       />
                     #elseif($fieldConfig.formType == "SELECT")
                         #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
-                          <dict v-model="formData.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
+                          <Dict v-model="formData.$fieldConfig.fieldName" code="$fieldConfig.dictType" />
                         #else
                           <el-select v-model="formData.$fieldConfig.fieldName" placeholder="请选择$fieldConfig.fieldComment">
                             <el-option :value="0" label="选项一"/>
@@ -212,7 +202,7 @@
                         #end
                     #elseif($fieldConfig.formType == "RADIO")
                         #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
-                          <dict v-model="queryParams.$fieldConfig.fieldName" type="radio" code="$fieldConfig.dictType" />
+                          <Dict v-model="queryParams.$fieldConfig.fieldName" type="radio" code="$fieldConfig.dictType" />
                         #else
                           <el-radio-group v-model="formData.$fieldConfig.fieldName">
                             <el-radio :value="0">选项一</el-radio>
@@ -221,7 +211,7 @@
                         #end
                     #elseif($fieldConfig.formType == "CHECK_BOX")
                         #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
-                          <dict v-model="queryParams.$fieldConfig.fieldName" type="checkbox" code="$fieldConfig.dictType" />
+                          <Dict v-model="queryParams.$fieldConfig.fieldName" type="checkbox" code="$fieldConfig.dictType" />
                         #else
                           <el-checkbox-group v-model="formData.$fieldConfig.fieldName">
                             <el-checkbox :value="0">选项一</el-checkbox>
@@ -283,7 +273,7 @@
     inheritAttrs: false,
   });
 
-  import ${entityName}API, { ${entityName}PageVO, ${entityName}Form, ${entityName}PageQuery } from "@/api/${moduleName}/${kebabCaseEntityName}";
+  import ${entityName}API, { ${entityName}PageVO, ${entityName}Form, ${entityName}PageQuery } from "@/api/${moduleName}/${kebabCaseEntityName}-api";
 
   const queryFormRef = ref();
   const dataFormRef = ref();

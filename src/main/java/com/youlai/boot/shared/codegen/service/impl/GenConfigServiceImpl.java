@@ -83,8 +83,13 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
             if (StrUtil.isNotBlank(tableComment)) {
                 genConfig.setBusinessName(tableComment.replace("表", "").trim());
             }
-            //  根据表名生成实体类名 例如：sys_user -> SysUser
-            genConfig.setEntityName(StrUtil.toCamelCase(StrUtil.upperFirst(StrUtil.toCamelCase(tableName))));
+            //  根据表名生成实体类名，支持去除前缀 例如：sys_user -> SysUser
+            String removePrefix = genConfig.getRemoveTablePrefix();
+            String processedTable = tableName;
+            if (StrUtil.isNotBlank(removePrefix) && StrUtil.startWith(tableName, removePrefix)) {
+                processedTable = StrUtil.removePrefix(tableName, removePrefix);
+            }
+            genConfig.setEntityName(StrUtil.toCamelCase(StrUtil.upperFirst(StrUtil.toCamelCase(processedTable))));
 
             genConfig.setPackageName(YouLaiBootApplication.class.getPackageName());
             genConfig.setModuleName(codegenProperties.getDefaultConfig().getModuleName()); // 默认模块名

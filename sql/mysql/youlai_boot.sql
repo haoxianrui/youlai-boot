@@ -451,9 +451,11 @@ CREATE TABLE `gen_config` (
                               `entity_name` varchar(100) NOT NULL COMMENT '实体类名',
                               `author` varchar(50) NOT NULL COMMENT '作者',
                               `parent_menu_id` bigint COMMENT '上级菜单ID，对应sys_menu的id ',
+                              `remove_table_prefix` varchar(20) COMMENT '要移除的表前缀，如: sys_',
+                              `page_type` varchar(20) COMMENT '页面类型(classic|curd)',
                               `create_time` datetime COMMENT '创建时间',
                               `update_time` datetime COMMENT '更新时间',
-                              `is_deleted` bit(1) DEFAULT b'0' COMMENT '是否删除',
+                              `is_deleted` tinyint(4) DEFAULT 0 COMMENT '是否删除',
                               PRIMARY KEY (`id`),
                               UNIQUE KEY `uk_tablename` (`table_name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='代码生成基础配置表';

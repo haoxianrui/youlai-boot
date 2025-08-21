@@ -23,6 +23,8 @@ public interface CodegenConverter {
     @Mapping(source = "genConfig.packageName", target = "packageName")
     @Mapping(source = "genConfig.entityName", target = "entityName")
     @Mapping(source = "genConfig.author", target = "author")
+    @Mapping(source = "genConfig.pageType", target = "pageType")
+    @Mapping(source = "genConfig.removeTablePrefix", target = "removeTablePrefix")
     @Mapping(source = "fieldConfigs", target = "fieldConfigs")
     GenConfigForm toGenConfigForm(GenConfig genConfig, List<GenFieldConfig> fieldConfigs);
 
