@@ -64,8 +64,10 @@ const searchConfig = {
       {
         type: "$!{fieldConfig.formType.toLowerCase()}",
         label: "$fieldConfig.fieldComment",
-        field: "$fieldConfig.fieldName",
-        placeholder: "$fieldConfig.fieldComment",
+        prop: "$fieldConfig.fieldName",
+        attrs: {
+          placeholder: "$fieldConfig.fieldComment",
+        },
       },
       #end
     #end
@@ -74,46 +76,126 @@ const searchConfig = {
 
 // 列表配置
 const contentConfig = {
-  api: {
-    page: ${entityName}API.getPage,
-    deleteByIds: ${entityName}API.deleteByIds,
+  // 权限前缀
+  permPrefix: "${moduleName}:${kebabCaseEntityName}",
+  // 主键
+  pk: "id",
+  // 列表查询接口
+  indexAction: ${entityName}API.getPage,
+  // 删除接口
+  deleteAction: ${entityName}API.deleteByIds,
+  // 数据解析函数
+  parseData(res: any) {
+    return {
+      total: res.total,
+      list: res.list,
+    };
   },
-  table: {
-    columns: [
-      { type: "selection", width: 55, align: "center" },
-      #foreach($fieldConfig in $fieldConfigs)
-        #if($fieldConfig.isShowInList == 1)
-        { label: "$fieldConfig.fieldComment", prop: "$fieldConfig.fieldName", slot: "$fieldConfig.fieldName" },
+  // 分页配置
+  pagination: {
+    background: true,
+    layout: "total, sizes, prev, pager, next, jumper",
+    pageSize: 20,
+    pageSizes: [10, 20, 30, 50],
+  },
+  // 工具栏配置
+  toolbar: ["add", "delete"],
+  defaultToolbar: ["refresh", "filter"],
+  // 表格列配置
+  cols: [
+    { type: "selection", width: 55, align: "center" },
+    #foreach($fieldConfig in $fieldConfigs)
+      #if($fieldConfig.isShowInList == 1)
+        #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
+    { 
+      label: "$fieldConfig.fieldComment", 
+      prop: "$fieldConfig.fieldName", 
+      templet: "custom",
+      slotName: "$fieldConfig.fieldName" 
+    },
+        #else
+    { label: "$fieldConfig.fieldComment", prop: "$fieldConfig.fieldName" },
         #end
       #end
-      { label: "操作", prop: "operation", width: 220 }
-    ],
-    operate: [
-      { name: "edit", type: "primary", text: "编辑" },
-      { name: "delete", type: "danger", text: "删除" },
-    ],
-  },
+    #end
+    { 
+      label: "操作", 
+      prop: "operation", 
+      width: 220,
+      templet: "tool",
+      operat: [
+        { name: "edit", text: "编辑", attrs: { type: "primary", icon: "edit" } },
+        { name: "delete", text: "删除", attrs: { type: "danger", icon: "delete" } },
+      ],
+    }
+  ],
 };
 
 // 弹窗配置
 const modalConfig = {
-  api: {
-    create: ${entityName}API.create,
-    update: ${entityName}API.update,
+  // 权限前缀
+  permPrefix: "${moduleName}:${kebabCaseEntityName}",
+  // 主键
+  pk: "id",
+  // 弹窗配置
+  dialog: {
+    title: "新增${entityComment}",
+    width: 800,
+    draggable: true,
   },
+  // 表单项配置
   formItems: [
     #foreach($fieldConfig in $fieldConfigs)
       #if($fieldConfig.isShowInForm == 1 && $fieldConfig.formType != "HIDDEN")
-      {
-        type: "$!{fieldConfig.formType.toLowerCase()}",
-        label: "$fieldConfig.fieldComment",
-        prop: "$fieldConfig.fieldName",
-        attrs: { placeholder: "$fieldConfig.fieldComment" },
+        #if($fieldConfig.dictType && $fieldConfig.dictType.trim() != "")
+    {
+      type: "custom",
+      label: "$fieldConfig.fieldComment",
+      prop: "$fieldConfig.fieldName",
+      slotName: "$fieldConfig.fieldName",
+      attrs: { 
+        placeholder: "$fieldConfig.fieldComment",
+        style: { width: "100%" }
       },
+        #if($fieldConfig.isRequired == 1)
+      rules: [{ required: true, message: "$fieldConfig.fieldComment不能为空", trigger: "change" }],
+        #end
+    },
+        #else
+    {
+      type: "$!{fieldConfig.formType.toLowerCase()}",
+      label: "$fieldConfig.fieldComment",
+      prop: "$fieldConfig.fieldName",
+      attrs: { 
+        placeholder: "$fieldConfig.fieldComment" 
+      },
+        #if($fieldConfig.isRequired == 1)
+      rules: [{ required: true, message: "$fieldConfig.fieldComment不能为空", trigger: "blur" }],
+        #end
+    },
+        #end
       #end
     #end
   ],
+  // 提交函数
+  formAction: (data: ${entityName}Form) => {
+    if (data.id) {
+      // 编辑
+      return ${entityName}API.update(data.id as string, data);
+    } else {
+      // 新增
+      return ${entityName}API.create(data);
+    }
+  },
+};
+
+// 处理操作按钮点击
+const handleOperateClick = (data: IObject) => {
+  if (data.name === "edit") {
+    handleEditClick(data.row, async () => {
+      return await ${entityName}API.getFormData(data.row.id);
+    });
+  }
 };
 
 </script>
-
