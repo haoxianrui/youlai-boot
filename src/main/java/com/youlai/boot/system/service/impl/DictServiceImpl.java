@@ -108,6 +108,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
      * @param dictForm 字典表单
      */
     @Override
+    @Transactional
     public boolean updateDict(Long id, DictForm dictForm) {
         // 获取字典
         Dict entity = this.getById(id);
@@ -125,7 +126,25 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         // 更新字典
         Dict dict = dictConverter.toEntity(dictForm);
         dict.setId(id);
-        return this.updateById(dict);
+        boolean result = this.updateById(dict);
+        if (result) {
+            // 更新字典数据
+            List<DictItem> dictItemList = dictItemService.list(
+                    new LambdaQueryWrapper<DictItem>()
+                            .eq(DictItem::getDictCode, entity.getDictCode())
+                            .select(DictItem::getId)
+            );
+            if (!dictItemList.isEmpty()){
+                List<Long> dictItemIds = dictItemList.stream().map(DictItem::getId).toList();
+                DictItem dictItem = new DictItem();
+                dictItem.setDictCode(dict.getDictCode());
+                dictItemService.update(dictItem,
+                        new LambdaQueryWrapper<DictItem>()
+                                .in(DictItem::getId, dictItemIds)
+                );
+            }
+        }
+        return result;
     }
 
     /**
