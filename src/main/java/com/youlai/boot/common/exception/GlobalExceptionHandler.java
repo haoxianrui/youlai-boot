@@ -4,6 +4,9 @@ import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.youlai.boot.common.result.Result;
 import com.youlai.boot.common.result.ResultCode;
+import jakarta.servlet.ServletException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -21,10 +24,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import jakarta.servlet.ServletException;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.SQLSyntaxErrorException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -207,7 +207,20 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public <T> Result<T> processSQLSyntaxErrorException(SQLSyntaxErrorException e) {
         log.error(e.getMessage(), e);
-        return Result.failed(e.getMessage());
+        return Result.failed(ResultCode.DATABASE_EXECUTION_SYNTAX_ERROR);
+    }
+
+
+    /**
+     * 处理 SQL 违反了完整性约束
+     * <p>
+     * 当 SQL 违反了完整性约束时，会抛出 SQLIntegrityConstraintViolationException 异常。
+     */
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public <T> Result<T> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e) {
+        log.error(e.getMessage(), e);
+        return Result.failed(ResultCode.INTEGRITY_CONSTRAINT_VIOLATION);
     }
 
     /**
