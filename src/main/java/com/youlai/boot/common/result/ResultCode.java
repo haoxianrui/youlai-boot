@@ -243,12 +243,14 @@ public enum ResultCode implements IResultCode, Serializable {
 
     TABLE_NOT_EXIST("C0311", "表不存在"),
     COLUMN_NOT_EXIST("C0312", "列不存在"),
+    DATABASE_EXECUTION_SYNTAX_ERROR("C0313", "数据库执行语法错误"),
 
     MULTIPLE_SAME_NAME_COLUMNS_IN_MULTI_TABLE_ASSOCIATION("C0321", "多表关联中存在多个相同名称的列"),
 
     DATABASE_DEADLOCK("C0331", "数据库死锁"),
 
     PRIMARY_KEY_CONFLICT("C0341", "主键冲突"),
+    INTEGRITY_CONSTRAINT_VIOLATION("C0342", "违反了完整性约束"),
 
     DATABASE_ACCESS_DENIED("C0351", "演示环境已禁用数据库写入功能，请本地部署修改数据库链接或开启Mock模式进行体验"),
 
