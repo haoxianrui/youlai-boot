@@ -5,6 +5,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -139,16 +140,16 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     /**
-     * 获取菜单路由列表
+     * 获取当前用户的菜单路由列表
      */
     @Override
-    public List<RouteVO> getCurrentUserRoutes() {
-
+    public List<RouteVO> listCurrentUserRoutes() {
         Set<String> roleCodes = SecurityUtils.getRoles();
 
         if (CollectionUtil.isEmpty(roleCodes)) {
             return Collections.emptyList();
         }
+
         List<Menu> menuList;
         if (SecurityUtils.isRoot()) {
             // 超级管理员获取所有菜单
@@ -161,6 +162,21 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         }
         return buildRoutes(SystemConstants.ROOT_NODE_ID, menuList);
     }
+
+    /**
+     * 获取当前用户的菜单路由列表（指定数据源）
+     * 
+     * @param datasource 数据源名称
+     *                   - master: 主库菜单数据
+     *                   - naiveui: NaiveUI项目菜单数据  
+     *                   - template: 模板项目菜单数据
+     */
+    @Override
+    @DS("#datasource")
+    public List<RouteVO> listCurrentUserRoutes(String datasource) {
+        return listCurrentUserRoutes();
+    }
+
 
     /**
      * 递归生成菜单路由层级列表

@@ -37,26 +37,36 @@ public class MenuController {
 
     @Operation(summary = "菜单列表")
     @GetMapping
-    @Log( value = "菜单列表",module = LogModuleEnum.MENU)
-    public Result<List<MenuVO>> listMenus(MenuQuery queryParams) {
+    @Log(value = "菜单列表", module = LogModuleEnum.MENU)
+    public Result<List<MenuVO>> getMenus(MenuQuery queryParams) {
         List<MenuVO> menuList = menuService.listMenus(queryParams);
         return Result.success(menuList);
     }
 
     @Operation(summary = "菜单下拉列表")
     @GetMapping("/options")
-    public Result<List<Option<Long>>> listMenuOptions(
-          @Parameter(description = "是否只查询父级菜单")
-          @RequestParam(required = false, defaultValue = "false") boolean onlyParent
+    public Result<List<Option<Long>>> getMenuOptions(
+            @Parameter(description = "是否只查询父级菜单")
+            @RequestParam(required = false, defaultValue = "false") boolean onlyParent
     ) {
         List<Option<Long>> menus = menuService.listMenuOptions(onlyParent);
         return Result.success(menus);
     }
 
-    @Operation(summary = "菜单路由列表")
+    @Operation(summary = "当前用户菜单路由列表")
     @GetMapping("/routes")
     public Result<List<RouteVO>> getCurrentUserRoutes() {
-        List<RouteVO> routeList = menuService.getCurrentUserRoutes();
+        List<RouteVO> routeList = menuService.listCurrentUserRoutes();
+        return Result.success(routeList);
+    }
+
+    @Operation(summary = "获取指定数据源的菜单路由列表")
+    @GetMapping("/routes/{datasource}")
+    public Result<List<RouteVO>> getCurrentUserRoutesByDatasource(
+            @Parameter(description = "数据源名称，如：master(主库)、naiveui(NaiveUI数据库)、template(模板数据库)")
+            @PathVariable String datasource
+    ) {
+        List<RouteVO> routeList = menuService.listCurrentUserRoutes(datasource);
         return Result.success(routeList);
     }
 

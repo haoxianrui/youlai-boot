@@ -40,9 +40,16 @@ public interface MenuService extends IService<Menu> {
     boolean saveMenu(MenuForm menuForm);
 
     /**
-     * 获取路由列表
+     * 获取当前用户的菜单路由列表
      */
-    List<RouteVO> getCurrentUserRoutes();
+    List<RouteVO> listCurrentUserRoutes();
+
+    /**
+     * 获取当前用户的菜单路由列表（指定数据源）
+     *
+     * @param datasource 数据源名称，如：master(主库)、naiveui(NaiveUI数据库)、template(模板数据库)
+     */
+    List<RouteVO> listCurrentUserRoutes(String datasource);
 
     /**
      * 修改菜单显示状态
