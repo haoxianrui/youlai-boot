@@ -216,7 +216,7 @@ INSERT INTO `sys_menu` VALUES (147, 36, '0,36', '滚动文本', 1, 'TextScroll',
 INSERT INTO `sys_menu` VALUES (148, 89, '0,89', '字典实时同步', 1, 'DictSync', 'dict-sync', 'demo/dict-sync', NULL, NULL, NULL, 1, 3, '', '', now(), now(), NULL);
 INSERT INTO `sys_menu` VALUES (149, 89, '0,89', 'VxeTable', 1, 'VxeTable', 'vxe-table', 'demo/vxe-table/index', NULL, NULL, 1, 1, 0, 'el-icon-MagicStick', '', now(), now(), NULL);
 INSERT INTO `sys_menu` VALUES (150, 36, '0,36', '自适应表格操作列', 1, 'AutoOperationColumn', 'operation-column', 'demo/auto-operation-column', NULL, NULL, 1, 1, 1, '', '', now(), now(), NULL);
-INSERT INTO `sys_menu` VALUES (151, 89, '0,89', 'CURD单文件', 1, 'CurdDemo', 'curd-demo', 'demo/curd-demo', NULL, NULL, 1, 1, 7, 'el-icon-Reading', '', now(),now(), NULL);
+INSERT INTO `sys_menu` VALUES (151, 89, '0,89', 'CURD单文件', 1, 'CurdDemo', 'curd-demo', 'demo/curd-single', NULL, NULL, 1, 1, 7, 'el-icon-Reading', '', now(),now(), NULL);
 
 
 -- ----------------------------
