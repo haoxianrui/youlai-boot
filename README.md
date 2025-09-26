@@ -3,7 +3,10 @@
    <img alt="logo" width="100" height="100" src="https://foruda.gitee.com/images/1733417239320800627/3c5290fe_716974.png">
    <h2>youlai-boot</h2>
    <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
-   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.5.0-green.svg"/>
+   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.5.5-green.svg"/>
+   <a href="https://gitcode.com/youlai/youlai-boot" target="_blank">
+    <img alt="有来技术" src="https://gitcode.com/youlai/youlai-boot/star/badge.svg"/>
+   </a>
    <a href="https://gitee.com/youlaiorg/youlai-boot" target="_blank">
      <img alt="有来技术" src="https://gitee.com/youlaiorg/youlai-boot/badge/star.svg"/>
    </a>     
@@ -37,8 +40,8 @@
 
 ## 🌈 项目源码
 
-| 项目类型       | Gitee                                                         | Github                                                        | GitCode                                                      |
-| --------------| ------------------------------------------------------------  |  ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 项目类型       | Gitee             | Github                                   | GitCode                                 |
+| --------------| -------------------------  |  ------------------------------- | ------------------------------------- |
 | ✅ Java 后端  | [youlai-boot](https://gitee.com/youlaiorg/youlai-boot)       | [youlai-boot](https://github.com/haoxianrui/youlai-boot)    | [youlai-boot](https://gitcode.com/youlai/youlai-boot)        |
 | vue3 前端     | [vue3-element-admin](https://gitee.com/youlaiorg/vue3-element-admin) | [vue3-element-admin](https://github.com/youlaitech/vue3-element-admin) | [vue3-element-admin](https://gitcode.com/youlai/vue3-element-admin) |
 | uni-app 移动端 | [vue-uniapp-template](https://gitee.com/youlaiorg/vue-uniapp-template) | [vue-uniapp-template](https://github.com/youlaitech/vue-uniapp-template) | [vue-uniapp-template](https://gitcode.com/youlai/vue-uniapp-template) |
