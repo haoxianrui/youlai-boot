@@ -261,11 +261,11 @@
         </dependency>
 
         <!-- 动态多数据源 -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
             <version>${dynamic-datasource.version}</version>
-        </dependency>
+        </dependency>-->
 
     </dependencies>
 

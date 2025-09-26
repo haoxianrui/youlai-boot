@@ -5,7 +5,6 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -172,7 +171,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      *                   - template: 模板项目菜单数据
      */
     @Override
-    @DS("#datasource")
     public List<RouteVO> listCurrentUserRoutes(String datasource) {
         return listCurrentUserRoutes();
     }
