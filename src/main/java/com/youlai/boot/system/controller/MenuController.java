@@ -60,16 +60,6 @@ public class MenuController {
         return Result.success(routeList);
     }
 
-    @Operation(summary = "获取指定数据源的菜单路由列表")
-    @GetMapping("/routes/{datasource}")
-    public Result<List<RouteVO>> getCurrentUserRoutesByDatasource(
-            @Parameter(description = "数据源名称，如：master(主库)、naiveui(NaiveUI数据库)、template(模板数据库)")
-            @PathVariable String datasource
-    ) {
-        List<RouteVO> routeList = menuService.listCurrentUserRoutes(datasource);
-        return Result.success(routeList);
-    }
-
     @Operation(summary = "菜单表单数据")
     @GetMapping("/{id}/form")
     @PreAuthorize("@ss.hasPerm('sys:menu:edit')")
