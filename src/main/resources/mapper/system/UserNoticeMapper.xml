@@ -21,6 +21,9 @@
         <if test="queryParams.title != null and queryParams.title != ''">
             AND t2.title LIKE CONCAT('%',#{queryParams.title},'%')
         </if>
+        <if test="queryParams.isRead != null">
+            AND t1.is_read = #{queryParams.isRead}
+        </if>
         ORDER BY
             t2.publish_time DESC,
             t2.create_time DESC

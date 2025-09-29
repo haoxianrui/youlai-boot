@@ -648,7 +648,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // 获取缓存的验证码
         String email = form.getEmail();
-        String redisCacheKey = RedisConstants.Captcha.EMAIL_CODE + email;
+        String redisCacheKey = StrUtil.format(RedisConstants.Captcha.EMAIL_CODE, email);
         String cachedVerifyCode = redisTemplate.opsForValue().get(redisCacheKey);
 
         if (StrUtil.isBlank(cachedVerifyCode)) {
