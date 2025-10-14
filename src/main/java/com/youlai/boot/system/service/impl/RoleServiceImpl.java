@@ -7,7 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.boot.common.exception.BusinessException;
+import com.youlai.boot.core.exception.BusinessException;
 import com.youlai.boot.system.converter.RoleConverter;
 import com.youlai.boot.system.mapper.RoleMapper;
 import com.youlai.boot.system.model.entity.Role;

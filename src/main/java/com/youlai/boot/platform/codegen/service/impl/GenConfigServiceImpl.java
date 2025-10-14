@@ -10,7 +10,7 @@ import com.youlai.boot.common.enums.EnvEnum;
 import com.youlai.boot.platform.codegen.enums.FormTypeEnum;
 import com.youlai.boot.platform.codegen.enums.JavaTypeEnum;
 import com.youlai.boot.platform.codegen.enums.QueryTypeEnum;
-import com.youlai.boot.common.exception.BusinessException;
+import com.youlai.boot.core.exception.BusinessException;
 import com.youlai.boot.config.property.CodegenProperties;
 import com.youlai.boot.platform.codegen.converter.CodegenConverter;
 import com.youlai.boot.platform.codegen.mapper.DatabaseMapper;

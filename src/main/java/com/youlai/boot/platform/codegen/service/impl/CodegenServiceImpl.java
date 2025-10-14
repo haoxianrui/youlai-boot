@@ -16,7 +16,7 @@ import com.youlai.boot.config.property.CodegenProperties;
 import com.youlai.boot.platform.codegen.service.GenConfigService;
 import com.youlai.boot.platform.codegen.service.GenFieldConfigService;
 import com.youlai.boot.platform.codegen.service.CodegenService;
-import com.youlai.boot.common.exception.BusinessException;
+import com.youlai.boot.core.exception.BusinessException;
 import com.youlai.boot.platform.codegen.mapper.DatabaseMapper;
 import com.youlai.boot.platform.codegen.model.entity.GenConfig;
 import com.youlai.boot.platform.codegen.model.entity.GenFieldConfig;

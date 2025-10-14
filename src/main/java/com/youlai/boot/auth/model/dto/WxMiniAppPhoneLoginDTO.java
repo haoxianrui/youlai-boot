@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 /**
  * 微信小程序手机号登录请求参数
  *
- * @author 有来技术团队
+ * @author Ray.Hao
  * @since 2.0.0
  */
 @Schema(description = "微信小程序手机号登录请求参数")

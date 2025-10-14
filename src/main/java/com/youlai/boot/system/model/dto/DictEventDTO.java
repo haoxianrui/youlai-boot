@@ -1,15 +1,15 @@
-package com.youlai.boot.system.model.event;
+package com.youlai.boot.system.model.dto;
 
 import lombok.Data;
 
 /**
- * 字典更新事件
+ * 字典更新事件消息
  *
  * @author Ray.Hao
  * @since 3.0.0
  */
 @Data
-public class DictEvent {
+public class DictEventDTO {
     /**
      * 字典编码
      */
@@ -20,8 +20,9 @@ public class DictEvent {
      */
     private long timestamp;
 
-    public DictEvent(String dictCode) {
+    public DictEventDTO(String dictCode) {
         this.dictCode = dictCode;
         this.timestamp = System.currentTimeMillis();
     }
-} 
+}
+

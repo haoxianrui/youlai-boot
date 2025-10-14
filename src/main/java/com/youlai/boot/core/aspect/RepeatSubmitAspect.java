@@ -5,7 +5,7 @@ import cn.hutool.crypto.digest.DigestUtil;
 import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.core.web.ResultCode;
-import com.youlai.boot.common.exception.BusinessException;
+import com.youlai.boot.core.exception.BusinessException;
 import com.youlai.boot.common.annotation.RepeatSubmit;
 import com.youlai.boot.common.util.IPUtils;
 import jakarta.servlet.http.HttpServletRequest;

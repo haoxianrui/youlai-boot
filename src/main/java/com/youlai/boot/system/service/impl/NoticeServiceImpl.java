@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.boot.common.exception.BusinessException;
+import com.youlai.boot.core.exception.BusinessException;
 import com.youlai.boot.security.util.SecurityUtils;
 import com.youlai.boot.system.converter.NoticeConverter;
 import com.youlai.boot.system.enums.NoticePublishStatusEnum;

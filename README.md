@@ -3,7 +3,7 @@
    <img alt="logo" width="100" height="100" src="https://foruda.gitee.com/images/1733417239320800627/3c5290fe_716974.png">
    <h2>youlai-boot</h2>
    <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
-   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.5.5-green.svg"/>
+   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.5.6-green.svg"/>
    <a href="https://gitcode.com/youlai/youlai-boot" target="_blank">
     <img alt="有来技术" src="https://gitcode.com/youlai/youlai-boot/star/badge.svg"/>
    </a>
@@ -73,50 +73,55 @@ youlai-boot
 ├── sql                                 # SQL脚本
 │   ├── mysql                           # MySQL 脚本
 ├── src                                 # 源码目录
-│   ├── auth                            # 登录认证
+│   ├── auth                            # 认证模块（登录入口）
 │   ├── common                          # 公共模块
 │   │   ├── annotation                  # 注解定义
 │   │   ├── base                        # 基础类
 │   │   ├── constant                    # 常量
 │   │   ├── enums                       # 枚举类型
-│   │   ├── exception                   # 异常处理
 │   │   ├── model                       # 数据模型
-│   │   ├── result                      # 结果封装
 │   │   └── util                        # 工具类
 │   ├── config                          # 自动装配配置
 │   │   └── property                    # 配置属性目录
-│   ├── core                            # 核心功能
+│   ├── core                            # 核心框架
 │   │   ├── aspect                      # 切面(日志、防重提交)
+│   │   ├── exception                   # 异常处理
 │   │   ├── filter                      # 过滤器(请求日志、限流)
-│   │   ├── handler                     # 处理器(数据权限、数据填充)
-│   │   └── security                    # Spring Security 安全模块
-│   ├── module                          # 业务模块
-│   │   ├── member                      # 会员模块【业务模块演示】
-│   │   ├── order                       # 订单模块【业务模块演示】
-│   │   ├── product                     # 商品模块【业务模块演示】
-│   ├── module                          # 插件扩展
-│   │   ├── knife4j                     # Knife4j 扩展
-│   │   ├── mybatis                     # Mybatis 扩展
-│   ├── shared                          # 共享模块
-│   │   ├── file                        # 文件模块
+│   │   ├── validator                   # 验证器
+│   │   └── web                         # Web响应封装(Result、PageResult等)
+│   ├── platform                        # 平台服务（通用服务）
 │   │   ├── codegen                     # 代码生成模块
-│   │   ├── mail                        # 邮件模块
-│   │   ├── sms                         # 短信模块
-│   │   └── websocket                   # WebSocket 模块
+│   │   ├── file                        # 文件服务
+│   │   ├── mail                        # 邮件服务
+│   │   ├── sms                         # 短信服务
+│   │   └── websocket                   # WebSocket服务
+│   ├── plugin                          # 插件扩展
+│   │   ├── knife4j                     # Knife4j 扩展
+│   │   └── mybatis                     # Mybatis 扩展
+│   ├── security                        # 安全框架（Spring Security）
+│   │   ├── exception                   # 安全异常
+│   │   ├── filter                      # 安全过滤器
+│   │   ├── handler                     # 安全处理器
+│   │   ├── model                       # 安全模型
+│   │   ├── provider                    # 认证提供者
+│   │   ├── service                     # 安全服务
+│   │   ├── token                       # Token管理
+│   │   └── util                        # 安全工具类
 │   ├── system                          # 系统模块
 │   │   ├── controller                  # 控制层
 │   │   ├── converter                   # MapStruct 转换器
-│   │   ├── event                       # 事件处理
+│   │   ├── enums                       # 枚举
 │   │   ├── handler                     # 处理器
 │   │   ├── listener                    # 监听器
+│   │   ├── mapper                      # 数据库访问层
 │   │   ├── model                       # 模型层
 │   │   │   ├── bo                      # 业务对象
 │   │   │   ├── dto                     # 数据传输对象
 │   │   │   ├── entity                  # 实体对象
+│   │   │   ├── event                   # 事件对象
 │   │   │   ├── form                    # 表单对象
 │   │   │   ├── query                   # 查询参数对象
 │   │   │   └── vo                      # 视图对象
-│   │   ├── mapper                      # 数据库访问层
 │   │   └── service                     # 业务逻辑层
 │   └── YouLaiBootApplication           # 启动类
 └── end                             

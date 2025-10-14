@@ -2,7 +2,7 @@ package com.youlai.boot.system.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.youlai.boot.system.model.event.DictEvent;
+import com.youlai.boot.system.model.dto.DictEventDTO;
 import com.youlai.boot.system.service.WebSocketService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -192,7 +192,7 @@ public class WebSocketServiceImpl implements WebSocketService {
      */
     @Override
     public void broadcastDictChange(String dictCode) {
-        DictEvent event = new DictEvent(dictCode);
+        DictEventDTO event = new DictEventDTO(dictCode);
         sendDictEvent(event);
     }
 
@@ -201,7 +201,7 @@ public class WebSocketServiceImpl implements WebSocketService {
      *
      * @param event 字典事件
      */
-    private void sendDictEvent(DictEvent event) {
+    private void sendDictEvent(DictEventDTO event) {
         if (messagingTemplate == null) {
             log.warn("消息模板尚未初始化，无法发送字典更新通知");
             return;
