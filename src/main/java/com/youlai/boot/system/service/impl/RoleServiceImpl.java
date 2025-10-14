@@ -17,7 +17,7 @@ import com.youlai.boot.system.model.query.RolePageQuery;
 import com.youlai.boot.system.model.vo.RolePageVO;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.common.model.Option;
-import com.youlai.boot.core.security.util.SecurityUtils;
+import com.youlai.boot.security.util.SecurityUtils;
 import com.youlai.boot.system.service.RoleMenuService;
 import com.youlai.boot.system.service.RoleService;
 import com.youlai.boot.system.service.UserRoleService;

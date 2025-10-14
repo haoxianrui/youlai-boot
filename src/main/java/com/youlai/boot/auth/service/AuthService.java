@@ -1,8 +1,8 @@
 package com.youlai.boot.auth.service;
 
-import com.youlai.boot.auth.model.CaptchaInfo;
+import com.youlai.boot.auth.model.vo.CaptchaVO;
 import com.youlai.boot.auth.model.dto.WxMiniAppPhoneLoginDTO;
-import com.youlai.boot.core.security.model.AuthenticationToken;
+import com.youlai.boot.security.model.AuthenticationToken;
 import com.youlai.boot.auth.model.dto.WxMiniAppCodeLoginDTO;
 
 /**
@@ -32,7 +32,7 @@ public interface AuthService {
      *
      * @return 验证码
      */
-    CaptchaInfo getCaptcha();
+    CaptchaVO getCaptcha();
 
     /**
      * 刷新令牌

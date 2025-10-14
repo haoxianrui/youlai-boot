@@ -5,15 +5,15 @@ import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.util.ArrayUtil;
 import com.youlai.boot.config.property.SecurityProperties;
 import com.youlai.boot.core.filter.RateLimiterFilter;
-import com.youlai.boot.core.security.exception.MyAccessDeniedHandler;
-import com.youlai.boot.core.security.exception.MyAuthenticationEntryPoint;
-import com.youlai.boot.core.security.extension.sms.SmsAuthenticationProvider;
-import com.youlai.boot.core.security.extension.wx.WxMiniAppCodeAuthenticationProvider;
-import com.youlai.boot.core.security.extension.wx.WxMiniAppPhoneAuthenticationProvider;
-import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
-import com.youlai.boot.core.security.filter.TokenAuthenticationFilter;
-import com.youlai.boot.core.security.token.TokenManager;
-import com.youlai.boot.core.security.service.SysUserDetailsService;
+import com.youlai.boot.security.filter.CaptchaValidationFilter;
+import com.youlai.boot.security.filter.TokenAuthenticationFilter;
+import com.youlai.boot.security.handler.MyAccessDeniedHandler;
+import com.youlai.boot.security.handler.MyAuthenticationEntryPoint;
+import com.youlai.boot.security.provider.SmsAuthenticationProvider;
+import com.youlai.boot.security.provider.WxMiniAppCodeAuthenticationProvider;
+import com.youlai.boot.security.provider.WxMiniAppPhoneAuthenticationProvider;
+import com.youlai.boot.security.token.TokenManager;
+import com.youlai.boot.security.service.SysUserDetailsService;
 import com.youlai.boot.system.service.ConfigService;
 import com.youlai.boot.system.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -119,9 +119,8 @@ public class SecurityConfig {
      */
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         return daoAuthenticationProvider;
     }
 

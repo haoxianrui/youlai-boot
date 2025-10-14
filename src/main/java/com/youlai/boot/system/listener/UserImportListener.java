@@ -11,7 +11,7 @@ import cn.idev.excel.event.AnalysisEventListener;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.youlai.boot.common.constant.SystemConstants;
 import com.youlai.boot.common.enums.StatusEnum;
-import com.youlai.boot.common.result.ExcelResult;
+import com.youlai.boot.core.web.ExcelResult;
 import com.youlai.boot.system.converter.UserConverter;
 import com.youlai.boot.system.enums.DictCodeEnum;
 import com.youlai.boot.system.model.dto.UserImportDTO;

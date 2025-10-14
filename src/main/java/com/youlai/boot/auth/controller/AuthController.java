@@ -1,13 +1,13 @@
 package com.youlai.boot.auth.controller;
 
-import com.youlai.boot.auth.model.CaptchaInfo;
+import com.youlai.boot.auth.model.vo.CaptchaVO;
 import com.youlai.boot.auth.model.dto.WxMiniAppPhoneLoginDTO;
 import com.youlai.boot.common.enums.LogModuleEnum;
-import com.youlai.boot.common.result.Result;
+import com.youlai.boot.core.web.Result;
 import com.youlai.boot.auth.service.AuthService;
 import com.youlai.boot.auth.model.dto.WxMiniAppCodeLoginDTO;
-import com.youlai.boot.core.security.model.AuthenticationToken;
 import com.youlai.boot.common.annotation.Log;
+import com.youlai.boot.security.model.AuthenticationToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,8 +34,8 @@ public class AuthController {
 
     @Operation(summary = "获取验证码")
     @GetMapping("/captcha")
-    public Result<CaptchaInfo> getCaptcha() {
-        CaptchaInfo captcha = authService.getCaptcha();
+    public Result<CaptchaVO> getCaptcha() {
+        CaptchaVO captcha = authService.getCaptcha();
         return Result.success(captcha);
     }
 

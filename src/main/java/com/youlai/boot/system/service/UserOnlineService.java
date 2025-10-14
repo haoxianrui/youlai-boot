@@ -2,7 +2,7 @@ package com.youlai.boot.system.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.youlai.boot.core.security.model.SysUserDetails;
+import com.youlai.boot.security.model.SysUserDetails;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

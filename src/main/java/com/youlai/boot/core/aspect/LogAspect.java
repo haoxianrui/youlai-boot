@@ -10,7 +10,7 @@ import cn.hutool.json.JSONUtil;
 import com.aliyun.oss.HttpMethod;
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.util.IPUtils;
-import com.youlai.boot.core.security.util.SecurityUtils;
+import com.youlai.boot.security.util.SecurityUtils;
 import com.youlai.boot.system.model.entity.Log;
 import com.youlai.boot.system.service.LogService;
 import jakarta.servlet.http.HttpServletRequest;

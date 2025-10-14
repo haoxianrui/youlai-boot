@@ -6,21 +6,21 @@ import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.auth.enums.CaptchaTypeEnum;
-import com.youlai.boot.auth.model.CaptchaInfo;
+import com.youlai.boot.auth.model.vo.CaptchaVO;
 import com.youlai.boot.auth.model.dto.WxMiniAppCodeLoginDTO;
 import com.youlai.boot.auth.model.dto.WxMiniAppPhoneLoginDTO;
 import com.youlai.boot.auth.service.AuthService;
 import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SecurityConstants;
 import com.youlai.boot.config.property.CaptchaProperties;
-import com.youlai.boot.core.security.extension.sms.SmsAuthenticationToken;
-import com.youlai.boot.core.security.extension.wx.WxMiniAppCodeAuthenticationToken;
-import com.youlai.boot.core.security.extension.wx.WxMiniAppPhoneAuthenticationToken;
-import com.youlai.boot.core.security.model.AuthenticationToken;
-import com.youlai.boot.core.security.token.TokenManager;
-import com.youlai.boot.core.security.util.SecurityUtils;
-import com.youlai.boot.shared.sms.enums.SmsTypeEnum;
-import com.youlai.boot.shared.sms.service.SmsService;
+import com.youlai.boot.security.model.AuthenticationToken;
+import com.youlai.boot.security.model.SmsAuthenticationToken;
+import com.youlai.boot.security.model.WxMiniAppCodeAuthenticationToken;
+import com.youlai.boot.security.model.WxMiniAppPhoneAuthenticationToken;
+import com.youlai.boot.security.token.TokenManager;
+import com.youlai.boot.security.util.SecurityUtils;
+import com.youlai.boot.platform.sms.enums.SmsTypeEnum;
+import com.youlai.boot.platform.sms.service.SmsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -168,7 +168,7 @@ public class AuthServiceImpl implements AuthService {
      * @return 验证码
      */
     @Override
-    public CaptchaInfo getCaptcha() {
+    public CaptchaVO getCaptcha() {
 
         String captchaType = captchaProperties.getType();
         int width = captchaProperties.getWidth();
@@ -204,7 +204,7 @@ public class AuthServiceImpl implements AuthService {
                 TimeUnit.SECONDS
         );
 
-        return CaptchaInfo.builder()
+        return CaptchaVO.builder()
                 .captchaKey(captchaKey)
                 .captchaBase64(imageBase64Data)
                 .build();

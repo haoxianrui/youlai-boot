@@ -1,8 +1,8 @@
 package com.youlai.boot.config;
 
 import cn.hutool.core.util.StrUtil;
-import com.youlai.boot.core.security.model.SysUserDetails;
-import com.youlai.boot.core.security.token.TokenManager;
+import com.youlai.boot.security.model.SysUserDetails;
+import com.youlai.boot.security.token.TokenManager;
 import com.youlai.boot.system.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
