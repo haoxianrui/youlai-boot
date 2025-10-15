@@ -1,4 +1,4 @@
-package com.youlai.boot.core.exception;
+package com.youlai.boot.security.exception;
 
 import org.springframework.security.core.AuthenticationException;
 

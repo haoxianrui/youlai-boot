@@ -1,4 +1,4 @@
-package com.youlai.boot.pulgin.knife4j;
+package com.youlai.boot.plugin.knife4j;
 
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;

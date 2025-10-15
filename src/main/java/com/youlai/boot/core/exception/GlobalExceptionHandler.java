@@ -1,8 +1,7 @@
-package com.youlai.boot.common.exception;
+package com.youlai.boot.core.exception;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.youlai.boot.core.exception.BusinessException;
 import com.youlai.boot.core.web.Result;
 import com.youlai.boot.core.web.ResultCode;
 import jakarta.servlet.ServletException;

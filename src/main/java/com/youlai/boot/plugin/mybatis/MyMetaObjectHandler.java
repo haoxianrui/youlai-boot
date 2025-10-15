@@ -1,4 +1,4 @@
-package com.youlai.boot.pulgin.mybatis;
+package com.youlai.boot.plugin.mybatis;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;

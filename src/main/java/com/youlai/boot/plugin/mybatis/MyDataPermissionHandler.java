@@ -1,4 +1,4 @@
-package com.youlai.boot.pulgin.mybatis;
+package com.youlai.boot.plugin.mybatis;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;

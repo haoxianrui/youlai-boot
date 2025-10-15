@@ -1,4 +1,4 @@
-package com.youlai.boot.auth.enums;
+package com.youlai.boot.common.enums;
 
 /**
  * EasyCaptcha 验证码类型枚举
