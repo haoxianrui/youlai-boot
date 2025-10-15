@@ -3,7 +3,7 @@ package com.youlai.boot.security.provider;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.youlai.boot.common.constant.RedisConstants;
-import com.youlai.boot.core.exception.CaptchaValidationException;
+import com.youlai.boot.security.exception.CaptchaValidationException;
 import com.youlai.boot.security.model.SmsAuthenticationToken;
 import com.youlai.boot.security.model.SysUserDetails;
 import com.youlai.boot.security.model.UserAuthCredentials;
