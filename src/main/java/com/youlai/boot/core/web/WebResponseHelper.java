@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Web响应辅助类
  * <p>
@@ -40,7 +42,7 @@ public class WebResponseHelper {
             // 设置HTTP状态码
             int httpStatus = mapHttpStatus(resultCode);
             response.setStatus(httpStatus);
-
+            response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
             // 构建响应对象
             Result<?> result = message == null
                     ? Result.failed(resultCode)
