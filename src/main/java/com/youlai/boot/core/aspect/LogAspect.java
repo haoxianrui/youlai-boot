@@ -138,6 +138,9 @@ public class LogAspect {
             log.setBrowser(userAgent.getBrowser().getName());
             log.setBrowserVersion(userAgent.getBrowser().getVersion(userAgentString));
         }
+        //获取方法名
+        String methodName = joinPoint.getSignature().getName();
+        log.setMethod(methodName);
         // 保存日志到数据库
         logService.save(log);
     }
