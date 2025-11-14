@@ -1,7 +1,14 @@
 package com.youlai.boot.platform.ai.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.youlai.boot.core.web.PageResult;
 import com.youlai.boot.core.web.Result;
-import com.youlai.boot.platform.ai.model.dto.*;
+import com.youlai.boot.platform.ai.model.dto.AiExecuteRequestDTO;
+import com.youlai.boot.platform.ai.model.dto.AiParseRequestDTO;
+import com.youlai.boot.platform.ai.model.dto.AiParseResponseDTO;
+import com.youlai.boot.platform.ai.model.query.AiCommandPageQuery;
+import com.youlai.boot.platform.ai.model.vo.AiCommandRecordVO;
+import com.youlai.boot.platform.ai.service.AiCommandRecordService;
 import com.youlai.boot.platform.ai.service.AiCommandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,9 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-
 /**
- * AI 命令控制器
+ * AI 命令控制器（基于 Spring AI）
  *
  * @author Ray.Hao
  * @since 3.0.0
@@ -25,75 +31,60 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AiCommandController {
 
-    private final AiCommandService aiCommandService;
+  private final AiCommandService aiCommandService;
+  private final AiCommandRecordService recordService;
 
-    @Operation(summary = "解析自然语言命令")
-    @PostMapping("/parse")
-    public Result<AiCommandResponseDTO> parseCommand(
-            @RequestBody AiCommandRequestDTO request,
-            HttpServletRequest httpRequest
-    ) {
-        log.info("收到AI命令解析请求: {}", request.getCommand());
+  @Operation(summary = "解析自然语言命令")
+  @PostMapping("/parse")
+  public Result<AiParseResponseDTO> parseCommand(
+    @RequestBody AiParseRequestDTO request,
+    HttpServletRequest httpRequest
+  ) {
+    log.info("收到AI命令解析请求: {}", request.getCommand());
 
-        try {
-            AiCommandResponseDTO response = aiCommandService.parseCommand(request, httpRequest);
-            return Result.success(response);
-        } catch (Exception e) {
-            log.error("命令解析失败", e);
-            return Result.success(AiCommandResponseDTO.builder()
-                    .success(false)
-                    .error(e.getMessage())
-                    .build());
-        }
+    try {
+      AiParseResponseDTO response = aiCommandService.parseCommand(request, httpRequest);
+      return Result.success(response);
+    } catch (Exception e) {
+      log.error("命令解析失败", e);
+      return Result.success(AiParseResponseDTO.builder()
+        .success(false)
+        .error(e.getMessage())
+        .build());
     }
+  }
 
-    @Operation(summary = "执行已解析的命令")
-    @PostMapping("/execute")
-    public Result<AiExecuteResponseDTO> executeCommand(
-            @RequestBody AiExecuteRequestDTO request,
-            HttpServletRequest httpRequest
-    ) {
-        log.info("收到AI命令执行请求: {}", request.getFunctionCall().getName());
-
-        try {
-            AiExecuteResponseDTO response = aiCommandService.executeCommand(request, httpRequest);
-            return Result.success(response);
-        } catch (Exception e) {
-            log.error("命令执行失败", e);
-            return Result.success(AiExecuteResponseDTO.builder()
-                    .success(false)
-                    .error(e.getMessage())
-                    .build());
-        }
+  @Operation(summary = "执行已解析的命令")
+  @PostMapping("/execute")
+  public Result<Object> executeCommand(
+    @RequestBody AiExecuteRequestDTO request,
+    HttpServletRequest httpRequest
+  ) {
+    log.info("收到AI命令执行请求: {}", request.getFunctionCall().getName());
+    try {
+      Object result = aiCommandService.executeCommand(request, httpRequest);
+      return Result.success(result);
+    } catch (Exception e) {
+      log.error("命令执行失败", e);
+      return Result.failed(e.getMessage());
     }
+  }
 
-    @Operation(summary = "获取命令执行历史")
-    @GetMapping("/history")
-    public Result<?> getCommandHistory(
-            @Parameter(description = "页码") @RequestParam(defaultValue = "1") Integer page,
-            @Parameter(description = "每页数量") @RequestParam(defaultValue = "10") Integer size
-    ) {
-        return Result.success(aiCommandService.getCommandHistory(page, size));
-    }
+  @Operation(summary = "获取AI命令记录分页列表")
+  @GetMapping("/records")
+  public PageResult<AiCommandRecordVO> getRecordPage(AiCommandPageQuery queryParams) {
+    IPage<AiCommandRecordVO> page = recordService.getRecordPage(queryParams);
+    return PageResult.success(page);
+  }
 
-    @Operation(summary = "获取可用的函数列表")
-    @GetMapping("/functions")
-    public Result<?> getAvailableFunctions() {
-        return Result.success(aiCommandService.getAvailableFunctions());
-    }
+  @Operation(summary = "撤销命令执行")
+  @PostMapping("/rollback/{recordId}")
+  public Result<?> rollbackCommand(
+    @Parameter(description = "记录ID") @PathVariable String recordId
+  ) {
+    recordService.rollbackCommand(recordId);
+    return Result.success("撤销成功");
+  }
 
-    @Operation(summary = "撤销命令执行")
-    @PostMapping("/rollback/{auditId}")
-    public Result<?> rollbackCommand(
-            @Parameter(description = "审计ID") @PathVariable String auditId
-    ) {
-        aiCommandService.rollbackCommand(auditId);
-        return Result.success("撤销成功");
-    }
 }
-
-
-
-
-
 

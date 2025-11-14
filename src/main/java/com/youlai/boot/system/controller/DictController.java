@@ -16,7 +16,7 @@ import com.youlai.boot.system.model.form.DictForm;
 import com.youlai.boot.common.annotation.Log;
 import com.youlai.boot.system.service.DictItemService;
 import com.youlai.boot.system.service.DictService;
-import com.youlai.boot.system.service.WebSocketService;
+import com.youlai.boot.platform.websocket.service.WebSocketService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;

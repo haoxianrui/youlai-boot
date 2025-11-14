@@ -217,6 +217,8 @@ INSERT INTO `sys_menu` VALUES (148, 89, '0,89', '字典实时同步', 1, 'DictSy
 INSERT INTO `sys_menu` VALUES (149, 89, '0,89', 'VxeTable', 1, 'VxeTable', 'vxe-table', 'demo/vxe-table/index', NULL, NULL, 1, 1, 0, 'el-icon-MagicStick', '', now(), now(), NULL);
 INSERT INTO `sys_menu` VALUES (150, 36, '0,36', '自适应表格操作列', 1, 'AutoOperationColumn', 'operation-column', 'demo/auto-operation-column', NULL, NULL, 1, 1, 1, '', '', now(), now(), NULL);
 INSERT INTO `sys_menu` VALUES (151, 89, '0,89', 'CURD单文件', 1, 'CurdSingle', 'curd-single', 'demo/curd-single', NULL, NULL, 1, 1, 7, 'el-icon-Reading', '', now(),now(), NULL);
+INSERT INTO `sys_menu` VALUES (152, 0, '0', 'AI助手', 2, NULL, '/platform', 'Layout', NULL, NULL, NULL, 1, 13, 'platform', '', now(), now(), NULL);
+INSERT INTO `sys_menu` VALUES (153, 152, '0,152', 'AI命令记录', 1, 'AiCommandRecord', 'command-record', 'ai/command-record/index', NULL, NULL, 1, 1, 1, 'document', NULL, now(), now(), NULL);
 
 
 -- ----------------------------
@@ -568,5 +570,57 @@ INSERT INTO `sys_user_notice` VALUES (7, 7, 2, 1, NULL, now(), now(), 0);
 INSERT INTO `sys_user_notice` VALUES (8, 8, 2, 1, NULL, now(), now(), 0);
 INSERT INTO `sys_user_notice` VALUES (9, 9, 2, 1, NULL, now(), now(), 0);
 INSERT INTO `sys_user_notice` VALUES (10, 10, 2, 1, NULL, now(), now(), 0);
+
+-- ----------------------------
+-- AI 命令记录表
+-- ----------------------------
+DROP TABLE IF EXISTS `ai_command_record`;
+CREATE TABLE `ai_command_record` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `user_id` bigint DEFAULT NULL COMMENT '用户ID',
+  `username` varchar(64) DEFAULT NULL COMMENT '用户名',
+  `original_command` text COMMENT '原始命令',
+  -- 解析相关字段
+  `provider` varchar(32) DEFAULT NULL COMMENT 'AI供应商(qwen/openai/deepseek/gemini等)',
+  `model` varchar(64) DEFAULT NULL COMMENT 'AI模型(qwen-plus/qwen-max/gpt-4-turbo等)',
+  `parse_success` tinyint(1) DEFAULT NULL COMMENT '解析是否成功(0-失败, 1-成功)',
+  `function_calls` text COMMENT '解析出的函数调用列表(JSON)',
+  `explanation` varchar(500) DEFAULT NULL COMMENT 'AI的理解说明',
+  `confidence` decimal(3,2) DEFAULT NULL COMMENT '置信度(0.00-1.00)',
+  `parse_error_message` text COMMENT '解析错误信息',
+  `input_tokens` int DEFAULT NULL COMMENT '输入Token数量',
+  `output_tokens` int DEFAULT NULL COMMENT '输出Token数量',
+  `total_tokens` int DEFAULT NULL COMMENT '总Token数量',
+  `parse_time` bigint DEFAULT NULL COMMENT '解析耗时(毫秒)',
+  -- 执行相关字段
+  `function_name` varchar(255) DEFAULT NULL COMMENT '执行的函数名称',
+  `function_arguments` text COMMENT '函数参数(JSON)',
+  `execute_status` varchar(20) DEFAULT NULL COMMENT '执行状态(pending-待执行, success-成功, failed-失败)',
+  `execute_result` text COMMENT '执行结果(JSON)',
+  `execute_error_message` text COMMENT '执行错误信息',
+  `affected_rows` int DEFAULT NULL COMMENT '影响的记录数',
+  `is_dangerous` tinyint(1) DEFAULT '0' COMMENT '是否危险操作(0-否, 1-是)',
+  `requires_confirmation` tinyint(1) DEFAULT '0' COMMENT '是否需要确认(0-否, 1-是)',
+  `user_confirmed` tinyint(1) DEFAULT NULL COMMENT '用户是否确认(0-否, 1-是)',
+  `idempotency_key` varchar(128) DEFAULT NULL COMMENT '幂等性令牌(防止重复执行)',
+  `execution_time` bigint DEFAULT NULL COMMENT '执行耗时(毫秒)',
+  -- 通用字段
+  `ip_address` varchar(128) DEFAULT NULL COMMENT 'IP地址',
+  `user_agent` varchar(512) DEFAULT NULL COMMENT '用户代理',
+  `current_route` varchar(255) DEFAULT NULL COMMENT '当前页面路由',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_idempotency_key` (`idempotency_key`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_create_time` (`create_time`),
+  KEY `idx_provider` (`provider`),
+  KEY `idx_model` (`model`),
+  KEY `idx_parse_success` (`parse_success`),
+  KEY `idx_execute_status` (`execute_status`),
+  KEY `idx_is_dangerous` (`is_dangerous`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='AI命令记录表';
+
 
 SET FOREIGN_KEY_CHECKS = 1;

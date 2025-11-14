@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.Map;
 
 /**
- * 函数调用 DTO
+ * AI 函数调用 DTO
  *
  * @author Ray.Hao
  * @since 3.0.0
@@ -16,7 +16,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FunctionCallDTO {
+public class AiFunctionCallDTO {
 
     /**
      * 函数名称
@@ -33,6 +33,4 @@ public class FunctionCallDTO {
      */
     private Map<String, Object> arguments;
 }
-
-
 

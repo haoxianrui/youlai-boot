@@ -11,7 +11,6 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
  * @since 0.0.1
  */
 @SpringBootApplication
-@ConfigurationPropertiesScan // 开启配置属性绑定
 public class YouLaiBootApplication {
 
     public static void main(String[] args) {

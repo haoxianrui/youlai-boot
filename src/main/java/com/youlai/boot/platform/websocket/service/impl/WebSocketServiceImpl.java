@@ -1,9 +1,9 @@
-package com.youlai.boot.system.service.impl;
+package com.youlai.boot.platform.websocket.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.youlai.boot.system.model.dto.DictEventDTO;
-import com.youlai.boot.system.service.WebSocketService;
+import com.youlai.boot.platform.websocket.service.WebSocketService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

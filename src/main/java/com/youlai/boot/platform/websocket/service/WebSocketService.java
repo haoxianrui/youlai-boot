@@ -1,4 +1,4 @@
-package com.youlai.boot.system.service;
+package com.youlai.boot.platform.websocket.service;
 
 /**
  * WebSocket服务接口

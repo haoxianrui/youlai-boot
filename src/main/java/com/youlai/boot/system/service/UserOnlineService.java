@@ -1,10 +1,7 @@
 package com.youlai.boot.system.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.youlai.boot.security.model.SysUserDetails;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -30,13 +27,7 @@ public class UserOnlineService {
     private final Map<String, UserOnlineInfo> onlineUsers = new ConcurrentHashMap<>();
     
     private SimpMessagingTemplate messagingTemplate;
-    private final ObjectMapper objectMapper;
 
-    @Autowired
-    public UserOnlineService(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-    
     @Autowired(required = false)
     public void setMessagingTemplate(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;

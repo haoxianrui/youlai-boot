@@ -4,13 +4,13 @@ import lombok.Data;
 import java.util.Map;
 
 /**
- * AI 命令请求 DTO
+ * AI 解析请求 DTO
  *
  * @author Ray.Hao
  * @since 3.0.0
  */
 @Data
-public class AiCommandRequestDTO {
+public class AiParseRequestDTO {
 
     /**
      * 用户输入的自然语言命令
@@ -32,6 +32,4 @@ public class AiCommandRequestDTO {
      */
     private Map<String, Object> context;
 }
-
-
 

@@ -20,7 +20,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <hutool.version>5.8.34</hutool.version>
+        <hutool.version>5.8.41</hutool.version>
 
         <mysql-connector-j.version>9.1.0</mysql-connector-j.version>
         <druid.version>1.2.24</druid.version>
@@ -266,6 +266,13 @@
             <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
             <version>${dynamic-datasource.version}</version>
         </dependency>-->
+
+        <!-- Spring AI OpenAI（兼容通义千问、DeepSeek等） -->
+      <dependency>
+        <groupId>org.springframework.ai</groupId>
+        <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
+        <version>1.0.0-M6</version>
+      </dependency>
 
     </dependencies>
 

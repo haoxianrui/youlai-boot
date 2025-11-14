@@ -43,9 +43,9 @@ public class AiExecuteResponseDTO {
     private String error;
 
     /**
-     * 审计ID（用于追踪）
+     * 记录ID（用于追踪）
      */
-    private String auditId;
+    private Long recordId;
 
     /**
      * 需要用户确认
