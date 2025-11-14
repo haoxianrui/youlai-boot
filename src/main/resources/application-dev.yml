@@ -51,6 +51,28 @@ spring:
             enable: true
     # 邮件发送者
     from: youlaitech@163.com
+  #  Spring AI 配置
+  ai:
+    openai:
+      # API Key
+      api-key: ${DASHSCOPE_API_KEY:sk-c2941d05bf2f411ca80424fxxxxxxxx}
+
+      # Base URL
+      base-url: https://dashscope.aliyuncs.com/compatible-mode
+
+      # Chat 模型配置
+      chat:
+        enabled: true
+        options:
+          # 模型名称（qwen-plus、qwen-turbo、qwen-max、qwen-long）
+          model: qwen-plus
+
+          # Temperature（0.0-1.0，值越高回答越随机）
+          temperature: 0.7
+
+          # JSON 输出格式（确保模型返回合法 JSON）
+          response-format:
+            type: json_object
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
@@ -223,66 +245,3 @@ wx:
   miniapp:
     app-id: xxxxxx
     app-secret: xxxxxx
-
-# ==================== AI 命令系统配置 ====================
-ai:
-  # 是否启用 AI 功能
-  enabled: false
-
-  # 当前使用的提供商：qwen、deepseek、openai
-  provider: qwen
-
-  # 所有提供商配置（统一管理，扩展性强）
-  providers:
-    # 阿里通义千问（推荐：有免费额度）
-    qwen:
-      # API Key（https://bailian.console.aliyun.com/ 获取）
-      api-key: ${QWEN_API_KEY:sk-c2941d05bf2f411ca80424fcxxxxxxxx}
-
-      # Base URL（OpenAI 兼容端点）
-      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
-
-      # 模型：qwen-plus（推荐）、qwen-turbo、qwen-max、qwen-long
-      model: qwen-plus
-
-      # 显示名称
-      display-name: 阿里通义千问
-
-      # 超时时间（秒）
-      timeout: 30
-
-    # DeepSeek
-    deepseek:
-      api-key: ${DEEPSEEK_API_KEY:}
-      base-url: https://api.deepseek.com/v1
-      model: deepseek-chat
-      display-name: DeepSeek
-      timeout: 30
-
-    # OpenAI（添加新提供商只需配置，无需修改代码）
-    openai:
-      api-key: ${OPENAI_API_KEY:}
-      base-url: https://api.openai.com/v1
-      model: gpt-4
-      display-name: OpenAI GPT-4
-      timeout: 60
-
-  # 安全配置
-  security:
-    enable-audit: true
-    dangerous-operations-confirm: true
-    function-whitelist:
-      - deleteUser
-      - updateUser
-      - queryUsers
-      - assignRole
-    sensitive-params:
-      - password
-      - idCard
-      - bankCard
-      - token
-
-  # 限流配置
-  rate-limit:
-    max-executions-per-minute: 10
-    max-executions-per-day: 100
