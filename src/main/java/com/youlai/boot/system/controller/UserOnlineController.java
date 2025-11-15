@@ -1,6 +1,6 @@
 package com.youlai.boot.system.controller;
 
-import com.youlai.boot.common.result.Result;
+import com.youlai.boot.core.web.Result;
 import com.youlai.boot.system.service.UserOnlineService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

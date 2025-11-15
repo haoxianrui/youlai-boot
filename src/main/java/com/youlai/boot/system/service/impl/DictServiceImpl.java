@@ -116,11 +116,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             throw new BusinessException("字典不存在");
         }
         // 校验 code 是否唯一
-<<<<<<< HEAD
-        String dictCode = dictForm.getCode();
-=======
         String dictCode = dictForm.getDictCode();
->>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
         if (!entity.getDictCode().equals(dictCode)) {
             long count = this.count(new LambdaQueryWrapper<Dict>()
                     .eq(Dict::getDictCode, dictCode)
@@ -130,9 +126,6 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         // 更新字典
         Dict dict = dictConverter.toEntity(dictForm);
         dict.setId(id);
-<<<<<<< HEAD
-        return this.updateById(dict);
-=======
         boolean result = this.updateById(dict);
         if (result) {
             // 更新字典数据
@@ -152,7 +145,6 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             }
         }
         return result;
->>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
     }
 
     /**
