@@ -108,7 +108,7 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
                 .orderByAsc(Dept::getSort)
         );
         if (CollectionUtil.isEmpty(deptList)) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         Set<Long> deptIds = deptList.stream()
@@ -238,10 +238,11 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
         if (StrUtil.isNotBlank(ids)) {
             String[] menuIds = ids.split(",");
             for (String deptId : menuIds) {
+                String patten = "%," + deptId + ",%";
                 this.update(new LambdaUpdateWrapper<Dept>()
                         .eq(Dept::getId, deptId)
                         .or()
-                        .apply("CONCAT (',',tree_path,',') LIKE CONCAT('%,',{0},',%')", deptId)
+                        .apply("CONCAT (',',tree_path,',') LIKE {0}", patten)
                         .set(Dept::getIsDeleted, 1)
                         .set(Dept::getUpdateBy, SecurityUtils.getUserId())
                 );
