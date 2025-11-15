@@ -2,10 +2,18 @@ package com.youlai.boot.system.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+<<<<<<< HEAD
 import com.youlai.boot.core.security.model.SysUserDetails;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+=======
+import com.youlai.boot.security.model.SysUserDetails;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,28 +26,60 @@ import java.util.stream.Collectors;
  * 用户在线状态服务
  * 负责维护用户的在线状态和相关统计
  *
+<<<<<<< HEAD
  * @author You Lai
  * @since 3.0.0
  */
 @Service
 @RequiredArgsConstructor
+=======
+ * @author Ray.Hao
+ * @since 3.0.0
+ */
+@Service
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
 @Slf4j
 public class UserOnlineService {
 
     // 在线用户映射表，key为用户名，value为用户在线信息
     private final Map<String, UserOnlineInfo> onlineUsers = new ConcurrentHashMap<>();
     
+<<<<<<< HEAD
     private final SimpMessagingTemplate messagingTemplate;
     private final ObjectMapper objectMapper;
 
+=======
+    private SimpMessagingTemplate messagingTemplate;
+    private final ObjectMapper objectMapper;
+
+    @Autowired
+    public UserOnlineService(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+    
+    @Autowired(required = false)
+    public void setMessagingTemplate(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
+
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
     /**
      * 用户上线
      *
      * @param username  用户名
+<<<<<<< HEAD
      * @param sessionId WebSocket会话ID
      */
     public void userConnected(String username, String sessionId) {
         UserOnlineInfo info = new UserOnlineInfo(username, sessionId, System.currentTimeMillis());
+=======
+     * @param sessionId WebSocket会话ID（可选）
+     */
+    public void userConnected(String username, String sessionId) {
+        // 生成会话ID（如果未提供）
+        String actualSessionId = sessionId != null ? sessionId : "session-" + System.nanoTime();
+        UserOnlineInfo info = new UserOnlineInfo(username, actualSessionId, System.currentTimeMillis());
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
         onlineUsers.put(username, info);
         log.info("用户[{}]上线，当前在线用户数：{}", username, onlineUsers.size());
         
@@ -94,6 +134,7 @@ public class UserOnlineService {
      * 通知所有客户端在线用户变更
      */
     private void notifyOnlineUsersChange() {
+<<<<<<< HEAD
         try {
             OnlineUsersChangeEvent event = new OnlineUsersChangeEvent();
             event.setType("ONLINE_USERS_CHANGE");
@@ -105,6 +146,33 @@ public class UserOnlineService {
             messagingTemplate.convertAndSend("/topic/online-users", message);
         } catch (JsonProcessingException e) {
             log.error("Failed to send online users change event", e);
+=======
+        if (messagingTemplate == null) {
+            log.warn("消息模板尚未初始化，无法发送在线用户数量");
+            return;
+        }
+        
+        // 发送简化版数据（仅数量）
+        sendOnlineUserCount();
+    }
+    
+    /**
+     * 发送在线用户数量（简化版，不包含用户详情）
+     */
+    private void sendOnlineUserCount() {
+        if (messagingTemplate == null) {
+            log.warn("消息模板尚未初始化，无法发送在线用户数量");
+            return;
+        }
+        
+        try {
+            // 直接发送数量，更轻量
+            int count = onlineUsers.size();
+            messagingTemplate.convertAndSend("/topic/online-count", count);
+            log.debug("已发送在线用户数量: {}", count);
+        } catch (Exception e) {
+            log.error("发送在线用户数量失败", e);
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
         }
     }
 

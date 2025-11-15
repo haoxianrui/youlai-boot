@@ -1,8 +1,8 @@
 package com.youlai.boot.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.boot.common.result.PageResult;
-import com.youlai.boot.common.result.Result;
+import com.youlai.boot.core.web.PageResult;
+import com.youlai.boot.core.web.Result;
 import com.youlai.boot.system.model.query.LogPageQuery;
 import com.youlai.boot.system.model.vo.LogPageVO;
 import com.youlai.boot.system.model.vo.VisitStatsVO;

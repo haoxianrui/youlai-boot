@@ -37,7 +37,7 @@ services:
       - youlai-boot
 
   minio:
-    image: minio/minio:latest
+    image: minio/minio:RELEASE.2024-07-16T23-46-41Z
     container_name: minio
     restart: unless-stopped
     command: server /data --console-address ":9001"

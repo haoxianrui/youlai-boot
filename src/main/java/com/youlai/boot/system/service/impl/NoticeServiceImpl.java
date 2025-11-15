@@ -7,9 +7,8 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.boot.common.exception.BusinessException;
-import com.youlai.boot.core.security.util.SecurityUtils;
-import com.youlai.boot.shared.websocket.service.OnlineUserService;
+import com.youlai.boot.core.exception.BusinessException;
+import com.youlai.boot.security.util.SecurityUtils;
 import com.youlai.boot.system.converter.NoticeConverter;
 import com.youlai.boot.system.enums.NoticePublishStatusEnum;
 import com.youlai.boot.system.enums.NoticeTargetEnum;
@@ -26,6 +25,7 @@ import com.youlai.boot.system.model.vo.UserNoticePageVO;
 import com.youlai.boot.system.model.vo.NoticeDetailVO;
 import com.youlai.boot.system.service.NoticeService;
 import com.youlai.boot.system.service.UserNoticeService;
+import com.youlai.boot.system.service.UserOnlineService;
 import com.youlai.boot.system.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -53,7 +53,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
     private final UserNoticeService userNoticeService;
     private final UserService userService;
     private final SimpMessagingTemplate messagingTemplate;
-    private final OnlineUserService onlineUserService;
+    private final UserOnlineService userOnlineService;
 
     /**
      * 获取通知公告分页列表
@@ -213,7 +213,9 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
 
             Set<String> receivers = targetUserList.stream().map(User::getUsername).collect(Collectors.toSet());
 
-            Set<String> allOnlineUsers = onlineUserService.getAllOnlineUsers();
+            Set<String> allOnlineUsers = userOnlineService.getOnlineUsers().stream()
+              .map(UserOnlineService.UserOnlineDTO::getUsername)
+              .collect(Collectors.toSet());
 
             // 找出在线用户的通知接收者
             Set<String> onlineReceivers = new HashSet<>(CollectionUtil.intersection(receivers, allOnlineUsers));

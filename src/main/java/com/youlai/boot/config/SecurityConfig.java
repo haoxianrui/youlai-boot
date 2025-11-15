@@ -5,14 +5,15 @@ import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.util.ArrayUtil;
 import com.youlai.boot.config.property.SecurityProperties;
 import com.youlai.boot.core.filter.RateLimiterFilter;
-import com.youlai.boot.core.security.exception.MyAccessDeniedHandler;
-import com.youlai.boot.core.security.exception.MyAuthenticationEntryPoint;
-import com.youlai.boot.core.security.extension.sms.SmsAuthenticationProvider;
-import com.youlai.boot.core.security.extension.wechat.WechatAuthenticationProvider;
-import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
-import com.youlai.boot.core.security.filter.TokenAuthenticationFilter;
-import com.youlai.boot.core.security.token.TokenManager;
-import com.youlai.boot.core.security.service.SysUserDetailsService;
+import com.youlai.boot.security.filter.CaptchaValidationFilter;
+import com.youlai.boot.security.filter.TokenAuthenticationFilter;
+import com.youlai.boot.security.handler.MyAccessDeniedHandler;
+import com.youlai.boot.security.handler.MyAuthenticationEntryPoint;
+import com.youlai.boot.security.provider.SmsAuthenticationProvider;
+import com.youlai.boot.security.provider.WxMiniAppCodeAuthenticationProvider;
+import com.youlai.boot.security.provider.WxMiniAppPhoneAuthenticationProvider;
+import com.youlai.boot.security.token.TokenManager;
+import com.youlai.boot.security.service.SysUserDetailsService;
 import com.youlai.boot.system.service.ConfigService;
 import com.youlai.boot.system.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -118,20 +119,26 @@ public class SecurityConfig {
      */
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         return daoAuthenticationProvider;
     }
 
     /**
-     * 微信认证 Provider
+     * 微信小程序Code认证Provider
      */
     @Bean
-    public WechatAuthenticationProvider weChatAuthenticationProvider() {
-        return new WechatAuthenticationProvider(userService, wxMaService);
+    public WxMiniAppCodeAuthenticationProvider wxMiniAppCodeAuthenticationProvider() {
+        return new WxMiniAppCodeAuthenticationProvider(userService, wxMaService);
     }
 
+    /**
+     * 微信小程序手机号认证Provider
+     */
+    @Bean
+    public WxMiniAppPhoneAuthenticationProvider wxMiniAppPhoneAuthenticationProvider() {
+        return new WxMiniAppPhoneAuthenticationProvider(userService, wxMaService);
+    }
 
     /**
      * 短信验证码认证 Provider
@@ -147,12 +154,14 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(
             DaoAuthenticationProvider daoAuthenticationProvider,
-            WechatAuthenticationProvider weChatAuthenticationProvider,
+            WxMiniAppCodeAuthenticationProvider wxMiniAppCodeAuthenticationProvider,
+            WxMiniAppPhoneAuthenticationProvider wxMiniAppPhoneAuthenticationProvider,
             SmsAuthenticationProvider smsAuthenticationProvider
     ) {
         return new ProviderManager(
                 daoAuthenticationProvider,
-                weChatAuthenticationProvider,
+                wxMiniAppCodeAuthenticationProvider,
+                wxMiniAppPhoneAuthenticationProvider,
                 smsAuthenticationProvider
         );
     }

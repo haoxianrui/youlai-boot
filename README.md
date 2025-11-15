@@ -1,9 +1,34 @@
+<div align="center">
+
+## 🎉 正在参加 Gitee 2025 最受欢迎开源软件评选
+
+<a href="https://gitee.com/activity/2025opensource?ident=I6VXEH" target="_blank">
+  <img src="https://img.shields.io/badge/🗳️_立即投票-支持本项目-ff6b35?style=for-the-badge&logo=gitee" alt="投票" height="50"/>
+</a>
+
+<p>
+  <strong>一票就够，不用每天投 🙏 您的支持是我们持续更新的最大动力！</strong>
+</p>
+
+<p>
+  <a href="https://gitee.com/activity/2025opensource?ident=I6VXEH" target="_blank">
+    <strong>👉 点击徽章或这里投票 👈</strong>
+  </a>
+</p>
+
+</div>
+
+![](https://foruda.gitee.com/images/1708618984641188532/a7cca095_716974.png "rainbow.png")
+
 
 <div align="center">
    <img alt="logo" width="100" height="100" src="https://foruda.gitee.com/images/1733417239320800627/3c5290fe_716974.png">
    <h2>youlai-boot</h2>
    <img alt="有来技术" src="https://img.shields.io/badge/Java -17-brightgreen.svg"/>
-   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.3.6-green.svg"/>
+   <img alt="有来技术" src="https://img.shields.io/badge/SpringBoot-3.5.6-green.svg"/>
+   <a href="https://gitcode.com/youlai/youlai-boot" target="_blank">
+    <img alt="有来技术" src="https://gitcode.com/youlai/youlai-boot/star/badge.svg"/>
+   </a>
    <a href="https://gitee.com/youlaiorg/youlai-boot" target="_blank">
      <img alt="有来技术" src="https://gitee.com/youlaiorg/youlai-boot/badge/star.svg"/>
    </a>     
@@ -37,8 +62,8 @@
 
 ## 🌈 项目源码
 
-| 项目类型       | Gitee                                                         | Github                                                        | GitCode                                                      |
-| --------------| ------------------------------------------------------------  |  ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 项目类型       | Gitee             | Github                                   | GitCode                                 |
+| --------------| -------------------------  |  ------------------------------- | ------------------------------------- |
 | ✅ Java 后端  | [youlai-boot](https://gitee.com/youlaiorg/youlai-boot)       | [youlai-boot](https://github.com/haoxianrui/youlai-boot)    | [youlai-boot](https://gitcode.com/youlai/youlai-boot)        |
 | vue3 前端     | [vue3-element-admin](https://gitee.com/youlaiorg/vue3-element-admin) | [vue3-element-admin](https://github.com/youlaitech/vue3-element-admin) | [vue3-element-admin](https://gitcode.com/youlai/vue3-element-admin) |
 | uni-app 移动端 | [vue-uniapp-template](https://gitee.com/youlaiorg/vue-uniapp-template) | [vue-uniapp-template](https://github.com/youlaitech/vue-uniapp-template) | [vue-uniapp-template](https://gitcode.com/youlai/vue-uniapp-template) |
@@ -70,47 +95,55 @@ youlai-boot
 ├── sql                                 # SQL脚本
 │   ├── mysql                           # MySQL 脚本
 ├── src                                 # 源码目录
+│   ├── auth                            # 认证模块（登录入口）
 │   ├── common                          # 公共模块
 │   │   ├── annotation                  # 注解定义
 │   │   ├── base                        # 基础类
 │   │   ├── constant                    # 常量
 │   │   ├── enums                       # 枚举类型
-│   │   ├── exception                   # 异常处理
 │   │   ├── model                       # 数据模型
-│   │   ├── result                      # 结果封装
 │   │   └── util                        # 工具类
 │   ├── config                          # 自动装配配置
 │   │   └── property                    # 配置属性目录
-│   ├── core                            # 核心功能
+│   ├── core                            # 核心框架
 │   │   ├── aspect                      # 切面(日志、防重提交)
+│   │   ├── exception                   # 异常处理
 │   │   ├── filter                      # 过滤器(请求日志、限流)
-│   │   ├── handler                     # 处理器(数据权限、数据填充)
-│   │   └── security                    # Spring Security 安全模块
-│   ├── modules                         # 业务模块
-│   │   ├── member                      # 会员模块【业务模块演示】
-│   │   ├── order                       # 订单模块【业务模块演示】
-│   │   ├── product                     # 商品模块【业务模块演示】
-│   ├── shared                          # 共享模块
-│   │   ├── auth                        # 认证模块
-│   │   ├── file                        # 文件模块
+│   │   ├── validator                   # 验证器
+│   │   └── web                         # Web响应封装(Result、PageResult等)
+│   ├── platform                        # 平台服务（通用服务）
 │   │   ├── codegen                     # 代码生成模块
-│   │   ├── mail                        # 邮件模块
-│   │   ├── sms                         # 短信模块
-│   │   └── websocket                   # WebSocket 模块
+│   │   ├── file                        # 文件服务
+│   │   ├── mail                        # 邮件服务
+│   │   ├── sms                         # 短信服务
+│   │   └── websocket                   # WebSocket服务
+│   ├── plugin                          # 插件扩展
+│   │   ├── knife4j                     # Knife4j 扩展
+│   │   └── mybatis                     # Mybatis 扩展
+│   ├── security                        # 安全框架（Spring Security）
+│   │   ├── exception                   # 安全异常
+│   │   ├── filter                      # 安全过滤器
+│   │   ├── handler                     # 安全处理器
+│   │   ├── model                       # 安全模型
+│   │   ├── provider                    # 认证提供者
+│   │   ├── service                     # 安全服务
+│   │   ├── token                       # Token管理
+│   │   └── util                        # 安全工具类
 │   ├── system                          # 系统模块
 │   │   ├── controller                  # 控制层
 │   │   ├── converter                   # MapStruct 转换器
-│   │   ├── event                       # 事件处理
+│   │   ├── enums                       # 枚举
 │   │   ├── handler                     # 处理器
 │   │   ├── listener                    # 监听器
+│   │   ├── mapper                      # 数据库访问层
 │   │   ├── model                       # 模型层
 │   │   │   ├── bo                      # 业务对象
 │   │   │   ├── dto                     # 数据传输对象
 │   │   │   ├── entity                  # 实体对象
+│   │   │   ├── event                   # 事件对象
 │   │   │   ├── form                    # 表单对象
 │   │   │   ├── query                   # 查询参数对象
 │   │   │   └── vo                      # 视图对象
-│   │   ├── mapper                      # 数据库访问层
 │   │   └── service                     # 业务逻辑层
 │   └── YouLaiBootApplication           # 启动类
 └── end                             

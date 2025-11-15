@@ -8,11 +8,11 @@ import com.youlai.boot.common.annotation.Log;
 import com.youlai.boot.common.annotation.RepeatSubmit;
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.model.Option;
-import com.youlai.boot.common.result.ExcelResult;
-import com.youlai.boot.common.result.PageResult;
-import com.youlai.boot.common.result.Result;
+import com.youlai.boot.core.web.ExcelResult;
+import com.youlai.boot.core.web.PageResult;
+import com.youlai.boot.core.web.Result;
 import com.youlai.boot.common.util.ExcelUtils;
-import com.youlai.boot.core.security.util.SecurityUtils;
+import com.youlai.boot.security.util.SecurityUtils;
 import com.youlai.boot.system.listener.UserImportListener;
 import com.youlai.boot.system.model.dto.UserExportDTO;
 import com.youlai.boot.system.model.dto.UserImportDTO;
@@ -78,8 +78,9 @@ public class UserController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "用户表单数据")
+    @Operation(summary = "获取用户表单数据")
     @GetMapping("/{userId}/form")
+    @PreAuthorize("@ss.hasPerm('sys:user:edit')")
     @Log(value = "用户表单数据", module = LogModuleEnum.USER)
     public Result<UserForm> getUserForm(
             @Parameter(description = "用户ID") @PathVariable Long userId
@@ -113,6 +114,7 @@ public class UserController {
 
     @Operation(summary = "修改用户状态")
     @PatchMapping(value = "/{userId}/status")
+    @PreAuthorize("@ss.hasPerm('sys:user:edit')")
     @Log(value = "修改用户状态", module = LogModuleEnum.USER)
     public Result<Void> updateUserStatus(
             @Parameter(description = "用户ID") @PathVariable Long userId,
@@ -154,6 +156,7 @@ public class UserController {
 
     @Operation(summary = "导入用户")
     @PostMapping("/import")
+    @PreAuthorize("@ss.hasPerm('sys:user:import')")
     @Log(value = "导入用户", module = LogModuleEnum.USER)
     public Result<ExcelResult> importUsers(MultipartFile file) throws IOException {
         UserImportListener listener = new UserImportListener();
@@ -163,6 +166,7 @@ public class UserController {
 
     @Operation(summary = "导出用户")
     @GetMapping("/export")
+    @PreAuthorize("@ss.hasPerm('sys:user:export')")
     @Log(value = "导出用户", module = LogModuleEnum.USER)
     public void exportUsers(UserPageQuery queryParams, HttpServletResponse response) throws IOException {
         String fileName = "用户列表.xlsx";
@@ -248,7 +252,7 @@ public class UserController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "用户下拉选项")
+    @Operation(summary = "获取用户下拉选项")
     @GetMapping("/options")
     public Result<List<Option<String>>> listUserOptions() {
         List<Option<String>> list = userService.listUserOptions();

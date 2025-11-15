@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.annotation.RepeatSubmit;
 import com.youlai.boot.common.model.Option;
-import com.youlai.boot.common.result.PageResult;
-import com.youlai.boot.common.result.Result;
+import com.youlai.boot.core.web.PageResult;
+import com.youlai.boot.core.web.Result;
 import com.youlai.boot.system.model.form.RoleForm;
 import com.youlai.boot.system.model.query.RolePageQuery;
 import com.youlai.boot.system.model.vo.RolePageVO;
@@ -62,8 +62,9 @@ public class RoleController {
         return Result.judge(result);
     }
 
-    @Operation(summary = "角色表单数据")
+    @Operation(summary = "获取角色表单数据")
     @GetMapping("/{roleId}/form")
+    @PreAuthorize("@ss.hasPerm('sys:role:edit')")
     public Result<RoleForm> getRoleForm(
             @Parameter(description = "角色ID") @PathVariable Long roleId
     ) {
@@ -91,6 +92,7 @@ public class RoleController {
 
     @Operation(summary = "修改角色状态")
     @PutMapping(value = "/{roleId}/status")
+    @PreAuthorize("@ss.hasPerm('sys:role:edit')")
     public Result<?> updateRoleStatus(
             @Parameter(description = "角色ID") @PathVariable Long roleId,
             @Parameter(description = "状态(1:启用;0:禁用)") @RequestParam Integer status
@@ -108,7 +110,7 @@ public class RoleController {
         return Result.success(menuIds);
     }
 
-    @Operation(summary = "分配菜单(包括按钮权限)给角色")
+    @Operation(summary = "角色分配菜单权限")
     @PutMapping("/{roleId}/menus")
     public Result<Void> assignMenusToRole(
             @PathVariable Long roleId,

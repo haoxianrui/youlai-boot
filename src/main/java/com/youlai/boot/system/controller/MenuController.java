@@ -1,15 +1,14 @@
 package com.youlai.boot.system.controller;
 
-import com.youlai.boot.common.result.Result;
-import com.youlai.boot.common.enums.LogModuleEnum;
+import com.youlai.boot.common.annotation.Log;
 import com.youlai.boot.common.annotation.RepeatSubmit;
+import com.youlai.boot.common.enums.LogModuleEnum;
+import com.youlai.boot.common.model.Option;
+import com.youlai.boot.core.web.Result;
 import com.youlai.boot.system.model.form.MenuForm;
 import com.youlai.boot.system.model.query.MenuQuery;
 import com.youlai.boot.system.model.vo.MenuVO;
-import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.model.vo.RouteVO;
-import com.youlai.boot.common.annotation.Log;
-import com.youlai.boot.core.security.util.SecurityUtils;
 import com.youlai.boot.system.service.MenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,7 +19,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * 菜单控制层
@@ -39,31 +37,32 @@ public class MenuController {
 
     @Operation(summary = "菜单列表")
     @GetMapping
-    @Log( value = "菜单列表",module = LogModuleEnum.MENU)
-    public Result<List<MenuVO>> listMenus(MenuQuery queryParams) {
+    @Log(value = "菜单列表", module = LogModuleEnum.MENU)
+    public Result<List<MenuVO>> getMenus(MenuQuery queryParams) {
         List<MenuVO> menuList = menuService.listMenus(queryParams);
         return Result.success(menuList);
     }
 
     @Operation(summary = "菜单下拉列表")
     @GetMapping("/options")
-    public Result<List<Option<Long>>> listMenuOptions(
-          @Parameter(description = "是否只查询父级菜单")
-          @RequestParam(required = false, defaultValue = "false") boolean onlyParent
+    public Result<List<Option<Long>>> getMenuOptions(
+            @Parameter(description = "是否只查询父级菜单")
+            @RequestParam(required = false, defaultValue = "false") boolean onlyParent
     ) {
         List<Option<Long>> menus = menuService.listMenuOptions(onlyParent);
         return Result.success(menus);
     }
 
-    @Operation(summary = "菜单路由列表")
+    @Operation(summary = "当前用户菜单路由列表")
     @GetMapping("/routes")
     public Result<List<RouteVO>> getCurrentUserRoutes() {
-        List<RouteVO> routeList = menuService.getCurrentUserRoutes();
+        List<RouteVO> routeList = menuService.listCurrentUserRoutes();
         return Result.success(routeList);
     }
 
     @Operation(summary = "菜单表单数据")
     @GetMapping("/{id}/form")
+    @PreAuthorize("@ss.hasPerm('sys:menu:edit')")
     public Result<MenuForm> getMenuForm(
             @Parameter(description = "菜单ID") @PathVariable Long id
     ) {
@@ -102,6 +101,7 @@ public class MenuController {
 
     @Operation(summary = "修改菜单显示状态")
     @PatchMapping("/{menuId}")
+    @PreAuthorize("@ss.hasPerm('sys:menu:edit')")
     public Result<?> updateMenuVisible(
             @Parameter(description = "菜单ID") @PathVariable Long menuId,
             @Parameter(description = "显示状态(1:显示;0:隐藏)") Integer visible

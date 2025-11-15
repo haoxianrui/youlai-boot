@@ -15,7 +15,7 @@ public interface UserRoleService extends IService<UserRole> {
      * @param roleIds
      * @return
      */
-    boolean saveUserRoles(Long userId, List<Long> roleIds);
+    void saveUserRoles(Long userId, List<Long> roleIds);
 
     /**
      * 判断角色是否存在绑定的用户

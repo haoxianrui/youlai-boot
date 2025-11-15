@@ -3,7 +3,7 @@ package com.youlai.boot.system.controller;
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.common.annotation.RepeatSubmit;
 import com.youlai.boot.common.model.Option;
-import com.youlai.boot.common.result.Result;
+import com.youlai.boot.core.web.Result;
 import com.youlai.boot.system.model.form.DeptForm;
 import com.youlai.boot.system.model.query.DeptQuery;
 import com.youlai.boot.system.model.vo.DeptVO;
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * 部门控制器
  *
- * @author haoxr
+ * @author Ray.Hao
  * @since 2020/11/6
  */
 @Tag(name = "05.部门接口")

@@ -2,8 +2,8 @@ package com.youlai.boot.system.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.youlai.boot.common.model.Option;
-import com.youlai.boot.common.result.PageResult;
-import com.youlai.boot.common.result.Result;
+import com.youlai.boot.core.web.PageResult;
+import com.youlai.boot.core.web.Result;
 import com.youlai.boot.common.enums.LogModuleEnum;
 import com.youlai.boot.system.model.form.DictItemForm;
 import com.youlai.boot.system.model.query.DictItemPageQuery;
@@ -16,7 +16,11 @@ import com.youlai.boot.system.model.form.DictForm;
 import com.youlai.boot.common.annotation.Log;
 import com.youlai.boot.system.service.DictItemService;
 import com.youlai.boot.system.service.DictService;
+<<<<<<< HEAD
 import com.youlai.boot.system.service.WebSocketMessageService;
+=======
+import com.youlai.boot.system.service.WebSocketService;
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,7 +47,11 @@ public class DictController {
 
     private final DictService dictService;
     private final DictItemService dictItemService;
+<<<<<<< HEAD
     private final WebSocketMessageService webSocketMessageService;
+=======
+    private final WebSocketService webSocketService;
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
 
     //---------------------------------------------------
     // 字典相关接口
@@ -66,7 +74,7 @@ public class DictController {
         return Result.success(list);
     }
 
-    @Operation(summary = "字典表单数据")
+    @Operation(summary = "获取字典表单数据")
     @GetMapping("/{id}/form")
     public Result<DictForm> getDictForm(
             @Parameter(description = "字典ID") @PathVariable Long id
@@ -82,8 +90,13 @@ public class DictController {
     public Result<?> saveDict(@Valid @RequestBody DictForm formData) {
         boolean result = dictService.saveDict(formData);
         // 发送字典更新通知
+<<<<<<< HEAD
         if (result && formData.getCode() != null) {
             webSocketMessageService.sendDictUpdatedEvent(formData.getCode());
+=======
+        if (result) {
+            webSocketService.broadcastDictChange(formData.getDictCode());
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
         }
         return Result.judge(result);
     }
@@ -97,8 +110,13 @@ public class DictController {
     ) {
         boolean status = dictService.updateDict(id, dictForm);
         // 发送字典更新通知
+<<<<<<< HEAD
         if (status && dictForm.getCode() != null) {
             webSocketMessageService.sendDictUpdatedEvent(dictForm.getCode());
+=======
+        if (status && dictForm.getDictCode() != null) {
+          webSocketService.broadcastDictChange(dictForm.getDictCode());
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
         }
         return Result.judge(status);
     }
@@ -116,7 +134,11 @@ public class DictController {
         
         // 发送字典删除通知
         for (String dictCode : dictCodes) {
+<<<<<<< HEAD
             webSocketMessageService.sendDictDeletedEvent(dictCode);
+=======
+          webSocketService.broadcastDictChange(dictCode);
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
         }
         
         return Result.success();
@@ -159,7 +181,11 @@ public class DictController {
         
         // 发送字典更新通知
         if (result) {
+<<<<<<< HEAD
             webSocketMessageService.sendDictUpdatedEvent(dictCode);
+=======
+          webSocketService.broadcastDictChange(dictCode);
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
         }
         
         return Result.judge(result);
@@ -190,7 +216,11 @@ public class DictController {
         
         // 发送字典更新通知
         if (status) {
+<<<<<<< HEAD
             webSocketMessageService.sendDictUpdatedEvent(dictCode);
+=======
+            webSocketService.broadcastDictChange(dictCode);
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
         }
         
         return Result.judge(status);
@@ -206,7 +236,11 @@ public class DictController {
         dictItemService.deleteDictItemByIds(itemIds);
         
         // 发送字典更新通知
+<<<<<<< HEAD
         webSocketMessageService.sendDictUpdatedEvent(dictCode);
+=======
+        webSocketService.broadcastDictChange(dictCode);
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
         
         return Result.success();
     }

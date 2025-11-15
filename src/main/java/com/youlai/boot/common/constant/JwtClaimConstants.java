@@ -11,6 +11,11 @@ package com.youlai.boot.common.constant;
 public interface JwtClaimConstants {
 
     /**
+     * 令牌类型
+     */
+    String TOKEN_TYPE = "tokenType";
+
+    /**
      * 用户ID
      */
     String USER_ID = "userId";

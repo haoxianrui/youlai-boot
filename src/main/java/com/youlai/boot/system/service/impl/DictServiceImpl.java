@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.boot.common.exception.BusinessException;
+import com.youlai.boot.core.exception.BusinessException;
 import com.youlai.boot.common.model.Option;
 import com.youlai.boot.system.converter.DictConverter;
 import com.youlai.boot.system.mapper.DictMapper;
@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * 数据字典业务实现类
+ * 字典业务实现类
  *
  * @author haoxr
  * @since 2022/10/12
@@ -108,6 +108,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
      * @param dictForm 字典表单
      */
     @Override
+    @Transactional
     public boolean updateDict(Long id, DictForm dictForm) {
         // 获取字典
         Dict entity = this.getById(id);
@@ -115,7 +116,11 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             throw new BusinessException("字典不存在");
         }
         // 校验 code 是否唯一
+<<<<<<< HEAD
         String dictCode = dictForm.getCode();
+=======
+        String dictCode = dictForm.getDictCode();
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
         if (!entity.getDictCode().equals(dictCode)) {
             long count = this.count(new LambdaQueryWrapper<Dict>()
                     .eq(Dict::getDictCode, dictCode)
@@ -125,7 +130,29 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
         // 更新字典
         Dict dict = dictConverter.toEntity(dictForm);
         dict.setId(id);
+<<<<<<< HEAD
         return this.updateById(dict);
+=======
+        boolean result = this.updateById(dict);
+        if (result) {
+            // 更新字典数据
+            List<DictItem> dictItemList = dictItemService.list(
+                    new LambdaQueryWrapper<DictItem>()
+                            .eq(DictItem::getDictCode, entity.getDictCode())
+                            .select(DictItem::getId)
+            );
+            if (!dictItemList.isEmpty()){
+                List<Long> dictItemIds = dictItemList.stream().map(DictItem::getId).toList();
+                DictItem dictItem = new DictItem();
+                dictItem.setDictCode(dict.getDictCode());
+                dictItemService.update(dictItem,
+                        new LambdaQueryWrapper<DictItem>()
+                                .in(DictItem::getId, dictItemIds)
+                );
+            }
+        }
+        return result;
+>>>>>>> 95412501fc69777ad7db6fef970b479c9651984d
     }
 
     /**

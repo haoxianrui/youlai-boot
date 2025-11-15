@@ -13,7 +13,7 @@ import com.youlai.boot.system.model.form.ConfigForm;
 import com.youlai.boot.system.model.query.ConfigPageQuery;
 import com.youlai.boot.system.model.vo.ConfigVO;
 import com.youlai.boot.system.service.ConfigService;
-import com.youlai.boot.core.security.util.SecurityUtils;
+import com.youlai.boot.security.util.SecurityUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;

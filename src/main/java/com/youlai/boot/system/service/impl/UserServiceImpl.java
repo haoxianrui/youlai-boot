@@ -10,19 +10,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.youlai.boot.common.constant.RedisConstants;
 import com.youlai.boot.common.constant.SystemConstants;
-import com.youlai.boot.common.exception.BusinessException;
+import com.youlai.boot.core.exception.BusinessException;
 import com.youlai.boot.common.model.Option;
-import com.youlai.boot.core.security.token.TokenManager;
-import com.youlai.boot.core.security.service.PermissionService;
-import com.youlai.boot.core.security.util.SecurityUtils;
-import com.youlai.boot.shared.mail.service.MailService;
-import com.youlai.boot.shared.sms.enums.SmsTypeEnum;
-import com.youlai.boot.shared.sms.service.SmsService;
+import com.youlai.boot.platform.sms.enums.SmsTypeEnum;
+import com.youlai.boot.platform.sms.service.SmsService;
+import com.youlai.boot.security.model.UserAuthCredentials;
+import com.youlai.boot.security.service.PermissionService;
+import com.youlai.boot.security.token.TokenManager;
+import com.youlai.boot.security.util.SecurityUtils;
+import com.youlai.boot.platform.mail.service.MailService;
 import com.youlai.boot.system.converter.UserConverter;
 import com.youlai.boot.system.enums.DictCodeEnum;
 import com.youlai.boot.system.mapper.UserMapper;
 import com.youlai.boot.system.model.bo.UserBO;
-import com.youlai.boot.core.security.model.UserAuthCredentials;
 import com.youlai.boot.system.model.dto.CurrentUserDTO;
 import com.youlai.boot.system.model.dto.UserExportDTO;
 import com.youlai.boot.system.model.entity.DictItem;
@@ -34,11 +34,13 @@ import com.youlai.boot.system.model.vo.UserPageVO;
 import com.youlai.boot.system.model.vo.UserProfileVO;
 import com.youlai.boot.system.service.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -51,6 +53,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     private final PasswordEncoder passwordEncoder;
@@ -128,6 +131,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 设置默认加密密码
         String defaultEncryptPwd = passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD);
         entity.setPassword(defaultEncryptPwd);
+        entity.setCreateBy(SecurityUtils.getUserId());
 
         // 新增用户
         boolean result = this.save(entity);
@@ -160,6 +164,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // form -> entity
         User entity = userConverter.toEntity(userForm);
+        entity.setUpdateBy(SecurityUtils.getUserId());
 
         // 修改用户
         boolean result = this.updateById(entity);
@@ -207,14 +212,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
-     * 根据 openid 获取用户认证信息
+     * 根据OpenID获取用户认证信息
      *
-     * @param openid 微信 OpenId
-     * @return {@link UserAuthCredentials}
+     * @param openId 微信OpenID
+     * @return 用户认证信息
      */
     @Override
-    public UserAuthCredentials getAuthCredentialsByOpenId(String openid) {
-        UserAuthCredentials userAuthCredentials = this.baseMapper.getAuthCredentialsByOpenId(openid);
+    public UserAuthCredentials getAuthCredentialsByOpenId(String openId) {
+        if (StrUtil.isBlank(openId)) {
+            return null;
+        }
+        UserAuthCredentials userAuthCredentials = this.baseMapper.getAuthCredentialsByOpenId(openId);
         if (userAuthCredentials != null) {
             Set<String> roles = userAuthCredentials.getRoles();
             // 获取最大范围的数据权限
@@ -225,13 +233,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
-     * 根据手机号获取用户认证凭证信息
+     * 根据手机号获取用户认证信息
      *
      * @param mobile 手机号
-     * @return {@link UserAuthCredentials}
+     * @return 用户认证信息
      */
     @Override
     public UserAuthCredentials getAuthCredentialsByMobile(String mobile) {
+        if (StrUtil.isBlank(mobile)) {
+            return null;
+        }
         UserAuthCredentials userAuthCredentials = this.baseMapper.getAuthCredentialsByMobile(mobile);
         if (userAuthCredentials != null) {
             Set<String> roles = userAuthCredentials.getRoles();
@@ -242,34 +253,135 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userAuthCredentials;
     }
 
-
     /**
-     * 根据微信 OpenID 注册或绑定用户
-     * <p>
-     * TODO 根据手机号绑定用户
+     * 注册或绑定微信用户
      *
-     * @param openId 微信 OpenID
+     * @param openId 微信OpenID
+     * @return 是否成功
      */
     @Override
-    public void registerOrBindWechatUser(String openId) {
-        User user = this.getOne(
-                new LambdaQueryWrapper<User>().eq(User::getOpenid, openId)
-        );
-        if (user == null) {
-            user = new User();
-            user.setNickname("微信用户");  // 默认昵称
-            user.setUsername(openId);      // TODO 后续替换为手机号
-            user.setOpenid(openId);
-            user.setGender(0); // 保密
-            user.setUpdateBy(SecurityUtils.getUserId());
-            user.setPassword(SystemConstants.DEFAULT_PASSWORD);
-            this.save(user);
-            // 为了默认系统管理员角色，这里按需调整，实际情况绑定已存在的系统用户，另一种情况是给默认游客角色，然后由系统管理员设置用户的角色
-            UserRole userRole = new UserRole();
-            userRole.setUserId(user.getId());
-            userRole.setRoleId(1L);  // TODO 系统管理员
-            userRoleService.save(userRole);
+    @Transactional(rollbackFor = Exception.class)
+    public boolean registerOrBindWechatUser(String openId) {
+        if (StrUtil.isBlank(openId)) {
+            return false;
         }
+
+        // 查询是否已存在该openId的用户
+        User existUser = this.getOne(
+                new LambdaQueryWrapper<User>()
+                        .eq(User::getOpenid, openId)
+        );
+
+        if (existUser != null) {
+            // 用户已存在，不需要注册
+            return true;
+        }
+
+        // 创建新用户
+        User newUser = new User();
+        newUser.setNickname("微信用户");  // 默认昵称
+        newUser.setUsername(openId);      // TODO 后续替换为手机号
+        newUser.setOpenid(openId);
+        newUser.setGender(0); // 保密
+        newUser.setUpdateBy(SecurityUtils.getUserId());
+        newUser.setPassword(SystemConstants.DEFAULT_PASSWORD);
+        newUser.setCreateTime(LocalDateTime.now());
+        newUser.setUpdateTime(LocalDateTime.now());
+        this.save(newUser);
+        // 为了默认系统管理员角色，这里按需调整，实际情况绑定已存在的系统用户，另一种情况是给默认游客角色，然后由系统管理员设置用户的角色
+        UserRole userRole = new UserRole();
+        userRole.setUserId(newUser.getId());
+        userRole.setRoleId(1L);  // TODO 系统管理员
+        userRoleService.save(userRole);
+        return true;
+    }
+
+    /**
+     * 根据手机号和OpenID注册用户
+     *
+     * @param mobile 手机号
+     * @param openId 微信OpenID
+     * @return 是否成功
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean registerUserByMobileAndOpenId(String mobile, String openId) {
+        if (StrUtil.isBlank(mobile) || StrUtil.isBlank(openId)) {
+            return false;
+        }
+
+        // 先查询是否已存在手机号对应的用户
+        User existingUser = this.getOne(
+                new LambdaQueryWrapper<User>()
+                        .eq(User::getMobile, mobile)
+        );
+
+        if (existingUser != null) {
+            // 如果存在用户但没绑定openId，则绑定openId
+            if (StrUtil.isBlank(existingUser.getOpenid())) {
+                return bindUserOpenId(existingUser.getId(), openId);
+            }
+            // 如果已经绑定了其他openId，则判断是否需要更新
+            else if (!openId.equals(existingUser.getOpenid())) {
+                return bindUserOpenId(existingUser.getId(), openId);
+            }
+            // 如果已经绑定了相同的openId，则不需要任何操作
+            return true;
+        }
+
+        // 不存在用户，创建新用户
+        User newUser = new User();
+        newUser.setMobile(mobile);
+        newUser.setOpenid(openId);
+        newUser.setUsername(mobile); // 使用手机号作为用户名
+        newUser.setNickname("微信用户_" + mobile.substring(mobile.length() - 4)); // 使用手机号后4位作为昵称
+        newUser.setPassword(SystemConstants.DEFAULT_PASSWORD); // 使用加密的openId作为初始密码
+        newUser.setGender(0); // 保密
+        newUser.setCreateTime(LocalDateTime.now());
+        newUser.setUpdateTime(LocalDateTime.now());
+        this.save(newUser);
+        // 为了默认系统管理员角色，这里按需调整，实际情况绑定已存在的系统用户，另一种情况是给默认游客角色，然后由系统管理员设置用户的角色
+        UserRole userRole = new UserRole();
+        userRole.setUserId(newUser.getId());
+        userRole.setRoleId(1L);  // TODO 系统管理员
+        userRoleService.save(userRole);
+        return true;
+    }
+
+    /**
+     * 绑定用户微信OpenID
+     *
+     * @param userId 用户ID
+     * @param openId 微信OpenID
+     * @return 是否成功
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean bindUserOpenId(Long userId, String openId) {
+        if (userId == null || StrUtil.isBlank(openId)) {
+            return false;
+        }
+
+        // 检查是否已有其他用户绑定了此openId
+        User existingUser = this.getOne(
+                new LambdaQueryWrapper<User>()
+                        .eq(User::getOpenid, openId)
+                        .ne(User::getId, userId)
+        );
+
+        if (existingUser != null) {
+            log.warn("OpenID {} 已被用户 {} 绑定，无法为用户 {} 绑定", openId, existingUser.getId(), userId);
+            return false;
+        }
+
+        // 更新用户openId
+        boolean updated = this.update(
+                new LambdaUpdateWrapper<User>()
+                        .eq(User::getId, userId)
+                        .set(User::getOpenid, openId)
+                        .set(User::getUpdateTime, LocalDateTime.now())
+        );
+        return updated ;
     }
 
     /**
@@ -396,6 +508,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 新旧密码不能相同
         if (passwordEncoder.matches(data.getNewPassword(), user.getPassword())) {
             throw new BusinessException("新密码不能与原密码相同");
+        }
+
+        // 判断新密码和确认密码是否一致
+        if (passwordEncoder.matches(data.getNewPassword(), data.getConfirmPassword())) {
+            throw new BusinessException("新密码和确认密码不一致");
         }
 
         String newPassword = data.getNewPassword();
@@ -531,7 +648,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // 获取缓存的验证码
         String email = form.getEmail();
-        String redisCacheKey = RedisConstants.Captcha.EMAIL_CODE + email;
+        String redisCacheKey = StrUtil.format(RedisConstants.Captcha.EMAIL_CODE, email);
         String cachedVerifyCode = redisTemplate.opsForValue().get(redisCacheKey);
 
         if (StrUtil.isBlank(cachedVerifyCode)) {

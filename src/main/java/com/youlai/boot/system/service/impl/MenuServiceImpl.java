@@ -10,10 +10,10 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.youlai.boot.core.security.util.SecurityUtils;
+import com.youlai.boot.platform.codegen.model.entity.GenConfig;
+import com.youlai.boot.security.util.SecurityUtils;
 import com.youlai.boot.system.converter.MenuConverter;
 import com.youlai.boot.system.mapper.MenuMapper;
-import com.youlai.boot.shared.codegen.model.entity.GenConfig;
 import com.youlai.boot.system.model.entity.Menu;
 import com.youlai.boot.system.model.form.MenuForm;
 import com.youlai.boot.system.model.query.MenuQuery;
@@ -139,16 +139,16 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     /**
-     * 获取菜单路由列表
+     * 获取当前用户的菜单路由列表
      */
     @Override
-    public List<RouteVO> getCurrentUserRoutes() {
-
+    public List<RouteVO> listCurrentUserRoutes() {
         Set<String> roleCodes = SecurityUtils.getRoles();
 
         if (CollectionUtil.isEmpty(roleCodes)) {
             return Collections.emptyList();
         }
+
         List<Menu> menuList;
         if (SecurityUtils.isRoot()) {
             // 超级管理员获取所有菜单
@@ -161,6 +161,20 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         }
         return buildRoutes(SystemConstants.ROOT_NODE_ID, menuList);
     }
+
+    /**
+     * 获取当前用户的菜单路由列表（指定数据源）
+     * 
+     * @param datasource 数据源名称
+     *                   - master: 主库菜单数据
+     *                   - naiveui: NaiveUI项目菜单数据  
+     *                   - template: 模板项目菜单数据
+     */
+    @Override
+    public List<RouteVO> listCurrentUserRoutes(String datasource) {
+        return listCurrentUserRoutes();
+    }
+
 
     /**
      * 递归生成菜单路由层级列表
@@ -448,7 +462,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             this.updateById(menu);
 
             // 生成CURD按钮权限
-            String permPrefix = genConfig.getModuleName() + ":" + StrUtil.lowerFirst(entityName) + ":";
+            String permPrefix = genConfig.getModuleName() + ":" + genConfig.getTableName().replace("_", "-") + ":";
             String[] actions = {"查询", "新增", "编辑", "删除"};
             String[] perms = {"query", "add", "edit", "delete"};
 

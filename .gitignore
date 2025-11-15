@@ -16,3 +16,4 @@ logs
 docker/*/data/
 docker/minio/config
 docker/xxljob/logs
+application-youlai.yml
